@@ -7,8 +7,7 @@ import '../../ui/notes/pages/notes_page.dart';
 class AppRoutes {
   static const String notes = '/notes';
   static const String noteDetails = '/notes/:id';
-  static const String search = '/search';
-  static const String profile = '/profile';
+  static const String settings = '/settings';
 }
 
 final _routerKey = GlobalKey<NavigatorState>();
@@ -43,23 +42,19 @@ final GoRouter mainRouter = GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
-                name: "Search",
-                path: AppRoutes.search,
-                builder: (context, state) => const Center(child: Text("Search Page")),
-                routes: []
+                name: "Settings",
+                path: AppRoutes.settings,
+                builder: (context, state) => const Center(child: Text("Settings")),
+                routes: [
+                  GoRoute(
+                    name: "Categories",
+                    path: '/categories',
+                    builder: (context, state) => const Center(child: Text("Categories"))
+                  ),
+                ]
             )
           ]
         ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-                name: "Profile",
-                path: AppRoutes.profile,
-                builder: (context, state) => const Center(child: Text("Profile Page")),
-                routes: []
-            )
-          ]
-        )
       ]
     ),
     GoRoute(
