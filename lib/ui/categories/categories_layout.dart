@@ -1,5 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:jampa_flutter/ui/categories/widgets/categories_list_widget.dart';
 
 class CategoriesLayout extends StatelessWidget {
   const CategoriesLayout({super.key});
@@ -7,22 +9,10 @@ class CategoriesLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        TextButton(
-          onPressed: () {
-            // Navigate to categories details or perform an action
-          },
-          child: const Text("Categories Page"),
-        ),
-        SizedBox(height: 10,),
-        TextButton(
-          onPressed: () {
-            // Navigate to another page or perform an action
-          },
-          child: const Text("Test Page"),
-        )
+        Expanded(child: CategoriesListWidget())
       ],
     );
   }

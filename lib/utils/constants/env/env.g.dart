@@ -11,17 +11,17 @@ part of 'env.dart';
 // generated_from: properties.env
 final class _Env {
   static const List<int> _enviedkeytest = <int>[
-    3831358171,
-    1614816905,
-    294630674,
-    418679744,
+    198251456,
+    2169863049,
+    3813243914,
+    810475571,
   ];
 
   static const List<int> _envieddatatest = <int>[
-    3831358127,
-    1614817004,
-    294630753,
-    418679732,
+    198251412,
+    2169863116,
+    3813243993,
+    810475623,
   ];
 
   static final String test = String.fromCharCodes(

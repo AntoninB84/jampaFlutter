@@ -1,0 +1,25 @@
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../bloc/categories/categories_bloc.dart';
+import '../../repository/categories_repository.dart';
+import 'categories_layout.dart';
+
+class CategoriesPage extends StatelessWidget {
+  const CategoriesPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return RepositoryProvider(
+        create: (context) => CategoriesRepository(),
+        child: BlocProvider<CategoriesBloc>(
+          create: (context) => CategoriesBloc(
+              categoriesRepository: context.read<CategoriesRepository>()
+          )..add(GetCategories()),
+
+          child: const CategoriesLayout(),
+        )
+    );
+  }
+}

@@ -9,8 +9,8 @@ class AppLocalizationsFr extends AppLocalizations {
   AppLocalizationsFr([String locale = 'fr']) : super(locale);
 
   @override
-  String get home_title => 'Bienvenue dans Jampa';
+  String get notes => 'Notes';
 
   @override
-  String get test => 'Test';
+  String get settings => 'Paramètres';
 }

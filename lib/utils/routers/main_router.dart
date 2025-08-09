@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jampa_flutter/ui/categories/categories_page.dart';
 
 import '../../ui/home/home_page.dart';
 import '../../ui/notes/pages/notes_page.dart';
@@ -44,12 +46,12 @@ final GoRouter mainRouter = GoRouter(
             GoRoute(
                 name: "Settings",
                 path: AppRoutes.settings,
-                builder: (context, state) => const Center(child: Text("Settings")),
+                builder: (context, state) => Center(child: TextButton(onPressed: () { context.pushNamed("Categories"); }, child: Text("Settings"),)),
                 routes: [
                   GoRoute(
                     name: "Categories",
                     path: '/categories',
-                    builder: (context, state) => const Center(child: Text("Categories"))
+                    builder: (context, state) => const CategoriesPage()
                   ),
                 ]
             )

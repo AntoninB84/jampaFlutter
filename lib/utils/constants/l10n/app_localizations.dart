@@ -94,17 +94,17 @@ abstract class AppLocalizations {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[Locale('fr')];
 
-  /// No description provided for @home_title.
+  /// No description provided for @notes.
   ///
   /// In fr, this message translates to:
-  /// **'Bienvenue dans Jampa'**
-  String get home_title;
+  /// **'Notes'**
+  String get notes;
 
-  /// No description provided for @test.
+  /// No description provided for @settings.
   ///
   /// In fr, this message translates to:
-  /// **'Test'**
-  String get test;
+  /// **'Paramètres'**
+  String get settings;
 }
 
 class _AppLocalizationsDelegate

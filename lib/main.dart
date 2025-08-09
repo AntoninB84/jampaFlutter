@@ -5,6 +5,7 @@ import 'package:jampa_flutter/data/dao/category_dao.dart';
 import 'package:jampa_flutter/data/models/category.dart';
 import 'package:jampa_flutter/repository/auth_repository.dart';
 import 'package:jampa_flutter/repository/user_repository.dart';
+import 'package:jampa_flutter/utils/constants/l10n/app_localizations.dart';
 import 'package:jampa_flutter/utils/routers/auth_router.dart';
 import 'package:jampa_flutter/utils/routers/main_router.dart';
 
@@ -38,6 +39,16 @@ class MyApp extends StatelessWidget {
           builder: (context, state) {
             return MaterialApp.router(
               title: 'Jampa Flutter',
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              localeResolutionCallback: (locale, supportedLocales) {
+                for (final supportedLocale in supportedLocales) {
+                  if (supportedLocale.languageCode == locale?.languageCode) {
+                    return supportedLocale;
+                  }
+                }
+                return const Locale('fr');
+              },
               theme: ThemeData(
                 colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
               ),
