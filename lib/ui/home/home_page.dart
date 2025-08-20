@@ -20,7 +20,7 @@ class HomePage extends StatelessWidget {
           listener: (context, state) {
             navigationShell.goBranch(state);
           },
-          child: navigationShell
+          child: SafeArea(child: navigationShell)
         ),
         bottomNavigationBar: BlocBuilder<BottomNavigationBarBloc, int>(
           builder: (context, currentIndex) {

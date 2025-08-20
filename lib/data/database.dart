@@ -32,6 +32,7 @@ class AppDatabase extends _$AppDatabase {
     return MigrationStrategy(
       onCreate: (Migrator m) async {
         await m.createAll();
+        // Initial data can be inserted here if needed
       },
       onUpgrade: (Migrator m, int from, int to) async {
         if (from < 2) {

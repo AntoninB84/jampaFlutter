@@ -32,4 +32,16 @@ class CategoriesRepository {
       }
       return result;
   }
+
+  Future<CategoryEntity?> getCategoryById(int id) async {
+    return await CategoryDao.getCategoryById(id);
+  }
+
+  Future<CategoryEntity?> getCategoryByName(String name) async {
+    return await CategoryDao.getCategoryByName(name);
+  }
+
+  Future<void> saveCategory(CategoryEntity category) async {
+    await CategoryDao.saveSingleCategory(category);
+  }
 }

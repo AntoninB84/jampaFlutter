@@ -1,6 +1,7 @@
 import 'package:jampa_flutter/data/dao/category_dao.dart';
 import 'package:jampa_flutter/data/models/note.dart';
 import 'package:jampa_flutter/data/models/note_category.dart';
+import 'package:jampa_flutter/utils/service_locator.dart';
 
 import '../database.dart';
 import '../models/category.dart';
@@ -8,7 +9,7 @@ import 'note_category_dao.dart';
 
 class NoteDao {
   static Future<void> saveSingleNote(NoteEntity note) async {
-    AppDatabase db = AppDatabase.instance();
+    AppDatabase db = serviceLocator<AppDatabase>();
     await db.into(db.noteTable).insertOnConflictUpdate(note.toCompanion());
     await NoteCategoryDao.cleanRelationshipsByNoteId(note.id!);
     // If the note has categories, save the relationships
@@ -30,7 +31,7 @@ class NoteDao {
   }
   
   static Future<List<NoteEntity>> getAllNotes() async {
-    AppDatabase db = AppDatabase.instance();
+    AppDatabase db = serviceLocator<AppDatabase>();
     List<NoteEntity> noteEntities =  await db.select(db.noteTable).get();
     await Future.forEach(noteEntities, (noteEntity) async {
       // Fetch categories for each note
@@ -48,19 +49,19 @@ class NoteDao {
   }
   
   static Future<NoteEntity?> getNoteById(int id) async {
-    AppDatabase db = AppDatabase.instance();
+    AppDatabase db = serviceLocator<AppDatabase>();
     return await (db.select(db.noteTable)..where((note) => note.id.equals(id))).getSingleOrNull();
   }
   static Future<void> deleteNoteById(int id) async {
-    AppDatabase db = AppDatabase.instance();
+    AppDatabase db = serviceLocator<AppDatabase>();
     await (db.delete(db.noteTable)..where((note) => note.id.equals(id))).go();
   }
   static Future<List<NoteEntity>> getAllNotesByTypeId(int noteTypeId) async {
-    AppDatabase db = AppDatabase.instance();
+    AppDatabase db = serviceLocator<AppDatabase>();
     return await (db.select(db.noteTable)..where((note) => note.noteTypeId.equals(noteTypeId))).get();
   }
   static Future<List<NoteEntity>> getAllNotesByUserId(int userId) async {
-    AppDatabase db = AppDatabase.instance();
+    AppDatabase db = serviceLocator<AppDatabase>();
     return await (db.select(db.noteTable)..where((note) => note.userId.equals(userId))).get();
   }
 }

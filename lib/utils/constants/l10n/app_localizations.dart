@@ -105,6 +105,60 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Paramètres'**
   String get settings;
+
+  /// No description provided for @generic_error_message.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une erreur s\'est produite'**
+  String get generic_error_message;
+
+  /// No description provided for @create_category_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer une catégorie'**
+  String get create_category_title;
+
+  /// No description provided for @create_category_name_field_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom de la catégorie'**
+  String get create_category_name_field_title;
+
+  /// No description provided for @create_category_name_field_hint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrez le nom de la catégorie'**
+  String get create_category_name_field_hint;
+
+  /// No description provided for @create_category_name_exists_already.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette catégorie existe déjà'**
+  String get create_category_name_exists_already;
+
+  /// No description provided for @create_category_name_invalid_length.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le nom de la catégorie doit comporter entre 3 et 50 caractères'**
+  String get create_category_name_invalid_length;
+
+  /// No description provided for @create_category_create_button_label.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer'**
+  String get create_category_create_button_label;
+
+  /// No description provided for @create_category_cancel_button_label.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler'**
+  String get create_category_cancel_button_label;
+
+  /// No description provided for @create_category_success_feedback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie créée avec succès'**
+  String get create_category_success_feedback;
 }
 
 class _AppLocalizationsDelegate
