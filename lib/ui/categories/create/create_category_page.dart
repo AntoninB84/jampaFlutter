@@ -6,7 +6,9 @@ import 'package:jampa_flutter/repository/categories_repository.dart';
 import 'package:jampa_flutter/ui/categories/create/create_category_layout.dart';
 
 class CreateCategoryPage extends StatelessWidget {
-  const CreateCategoryPage({super.key});
+  const CreateCategoryPage({super.key, this.categoryId});
+
+  final String? categoryId;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,7 @@ class CreateCategoryPage extends StatelessWidget {
         child: BlocProvider<CreateCategoryCubit>(
           create: (context) => CreateCategoryCubit(
               categoriesRepository: context.read<CategoriesRepository>()
-          ),
+          )..fetchCategoryForUpdate(categoryId),
           child: const CreateCategoryLayout(),
         )
     );

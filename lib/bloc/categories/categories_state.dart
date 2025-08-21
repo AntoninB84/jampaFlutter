@@ -7,7 +7,7 @@ enum CategoriesListStatus {
   loading,
 }
 
-extension CategoriesStatusX on CategoriesListStatus {
+extension CategoriesListStatusX on CategoriesListStatus {
   bool get isInitial => this == CategoriesListStatus.initial;
   bool get isSuccess => this == CategoriesListStatus.success;
   bool get isError => this == CategoriesListStatus.error;
@@ -17,26 +17,32 @@ extension CategoriesStatusX on CategoriesListStatus {
 class CategoriesState extends Equatable {
 
   const CategoriesState({
-    this.status = CategoriesListStatus.initial,
+    this.listStatus = CategoriesListStatus.initial,
     List<CategoryEntity>? categories,
+    this.deletionError = false,
+    this.deletionSuccess = false,
   }) : categories = categories ?? const [];
 
-  final CategoriesListStatus status;
+  final CategoriesListStatus listStatus;
   final List<CategoryEntity> categories;
+  final bool deletionError;
+  final bool deletionSuccess;
 
 
   @override
-  List<Object?> get props => [status, categories];
+  List<Object?> get props => [listStatus, categories, deletionError, deletionSuccess];
 
   CategoriesState copyWith({
     List<CategoryEntity>? categories,
-    CategoriesListStatus? status,
-    bool? displayDeleteConfirmation,
-    CategoryEntity? categoryToDelete,
+    CategoriesListStatus? listStatus,
+    bool? deletionError,
+    bool? deletionSuccess,
   }) {
     return CategoriesState(
       categories: categories ?? this.categories,
-      status: status ?? this.status,
+      listStatus: listStatus ?? this.listStatus,
+      deletionError: deletionError ?? this.deletionError,
+      deletionSuccess: deletionSuccess ?? this.deletionSuccess,
     );
   }
 }

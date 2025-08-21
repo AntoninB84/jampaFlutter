@@ -5,6 +5,11 @@ enum NameValidationError {
   invalidLength
 }
 
+extension NameValidationErrorX on NameValidationError {
+  bool get isEmpty => this == NameValidationError.empty;
+  bool get isInvalidLength => this == NameValidationError.invalidLength;
+}
+
 class NameValidator extends FormzInput<String, NameValidationError> {
   const NameValidator.pure() : super.pure('');
   const NameValidator.dirty([String value = '']) : super.dirty(value);

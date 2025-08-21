@@ -3,10 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jampa_flutter/ui/widgets/custom_text_field.dart';
-import 'package:jampa_flutter/ui/widgets/error_text.dart';
+import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
-import 'package:jampa_flutter/utils/forms/name_validator.dart';
+import 'package:jampa_flutter/ui/categories/widgets/category_name_text_field.dart';
 
 import '../../../bloc/categories/create/create_category_cubit.dart';
 
@@ -15,73 +14,44 @@ class CreateCategoryLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CreateCategoryCubit, CreateCategoryState>(
+    return BlocConsumer<CreateCategoryCubit, CreateCategoryState>(
       listener: (context, state) {
         if (state.isError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(context.strings.generic_error_message),
-              backgroundColor: Colors.red,
-            ),
-          );
+          SnackBarX.showError(context, context.strings.generic_error_message);
         } else if (state.isSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(context.strings.create_category_success_feedback),
-              backgroundColor: Colors.green,
-            ),
-          );
+          SnackBarX.showSuccess(context,
+              state.category != null ?
+                context.strings.edit_category_success_feedback
+                  : context.strings.create_category_success_feedback);
           // Back to the previous screen after success
           context.pop();
         }
       },
-      child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                context.strings.create_category_title,
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              const SizedBox(height: 16),
-              CategoryNameTextField(),
-              const SizedBox(height: 16),
-              SubmitCategoryButton(),
-              const SizedBox(height: 16),
-              CancelButton(),
-            ],
-          ),
-        ),
-      )
-    );
-  }
-}
-
-class CategoryNameTextField extends StatelessWidget {
-  const CategoryNameTextField({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<CreateCategoryCubit, CreateCategoryState>(
       builder: (context, state) {
-        return CustomTextField(
-            onChanged: (value) => context.read<CreateCategoryCubit>().onNameChanged(value),
-            hintText: context.strings.create_category_name_field_hint,
-            errorWidget: (!state.isValidName || state.existsAlready) ? ErrorText(
-                errorText: (){
-                  if (state.name.displayError == NameValidationError.empty || state.name.displayError == NameValidationError.invalidLength) {
-                    return context.strings.create_category_name_invalid_length;
-                  }else if (state.existsAlready) {
-                    return context.strings.create_category_name_exists_already;
-                  }
-                  return context.strings.generic_error_message;
-                }()
-            ) : null
+        return Scaffold(
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  state.category != null ?
+                    context.strings.edit_category_title
+                      : context.strings.create_category_title,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                const SizedBox(height: 16),
+                CategoryNameTextField(),
+                const SizedBox(height: 16),
+                SubmitCategoryButton(),
+                const SizedBox(height: 16),
+                CancelButton(),
+              ],
+            ),
+          ),
         );
-      },
+      }
     );
   }
 }
@@ -99,7 +69,7 @@ class SubmitCategoryButton extends StatelessWidget {
               : null,
           child: state.isLoading
               ? const CupertinoActivityIndicator()
-              : Text(context.strings.create_category_create_button_label),
+              : Text(state.category != null ? context.strings.edit : context.strings.create),
         );
       },
     );
@@ -113,7 +83,7 @@ class CancelButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () => context.pop(),
-      child: Text(context.strings.create_category_cancel_button_label),
+      child: Text(context.strings.cancel),
     );
   }
 }

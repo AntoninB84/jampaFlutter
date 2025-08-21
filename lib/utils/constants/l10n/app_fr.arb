@@ -5,6 +5,7 @@
     "confirm": "Confirmer",
     "cancel": "Annuler",
     "delete": "Supprimer",
+    "create": "Créer",
     "edit": "Modifier",
     "save": "Enregistrer",
     "search": "Rechercher",
@@ -14,10 +15,14 @@
     "create_category_name_field_hint": "Entrez le nom de la catégorie",
     "create_category_name_exists_already": "Cette catégorie existe déjà",
     "create_category_name_invalid_length": "Le nom de la catégorie doit comporter entre 3 et 50 caractères",
-    "create_category_create_button_label": "Créer",
     "create_category_cancel_button_label": "Annuler",
     "create_category_success_feedback": "Catégorie créée avec succès",
+    "@edit_category": {},
+    "edit_category_title": "Modifier la catégorie",
+    "edit_category_success_feedback": "Catégorie modifiée avec succès",
     "@delete_category": {},
     "delete_category_confirmation_title": "Supprimer la catégorie",
-    "delete_category_confirmation_message": "Êtes-vous sûr de vouloir supprimer la catégorie: {categoryName}?"
+    "delete_category_confirmation_message": "Êtes-vous sûr de vouloir supprimer la catégorie: {categoryName}?",
+    "delete_category_error_message": "Une erreur s'est produite lors de la suppression de la catégorie",
+    "delete_category_success_feedback": "Catégorie supprimée avec succès"
 }

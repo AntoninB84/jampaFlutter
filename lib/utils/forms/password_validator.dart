@@ -9,6 +9,15 @@ enum PasswordValidationError {
   noSpecialCharacter,
 }
 
+extension PasswordValidationErrorX on PasswordValidationError {
+  bool get isEmpty => this == PasswordValidationError.empty;
+  bool get isTooShort => this == PasswordValidationError.tooShort;
+  bool get hasNoUppercase => this == PasswordValidationError.noUppercase;
+  bool get hasNoLowercase => this == PasswordValidationError.noLowercase;
+  bool get hasNoNumber => this == PasswordValidationError.noNumber;
+  bool get hasNoSpecialCharacter => this == PasswordValidationError.noSpecialCharacter;
+}
+
 class PasswordValidator extends FormzInput<String, PasswordValidationError> {
   const PasswordValidator.pure() : super.pure('');
   const PasswordValidator.dirty([String value = '']) : super.dirty(value);

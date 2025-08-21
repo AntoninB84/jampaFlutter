@@ -27,6 +27,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get delete => 'Supprimer';
 
   @override
+  String get create => 'Créer';
+
+  @override
   String get edit => 'Modifier';
 
   @override
@@ -53,13 +56,16 @@ class AppLocalizationsFr extends AppLocalizations {
       'Le nom de la catégorie doit comporter entre 3 et 50 caractères';
 
   @override
-  String get create_category_create_button_label => 'Créer';
-
-  @override
   String get create_category_cancel_button_label => 'Annuler';
 
   @override
   String get create_category_success_feedback => 'Catégorie créée avec succès';
+
+  @override
+  String get edit_category_title => 'Modifier la catégorie';
+
+  @override
+  String get edit_category_success_feedback => 'Catégorie modifiée avec succès';
 
   @override
   String get delete_category_confirmation_title => 'Supprimer la catégorie';
@@ -68,4 +74,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String delete_category_confirmation_message(Object categoryName) {
     return 'Êtes-vous sûr de vouloir supprimer la catégorie: $categoryName?';
   }
+
+  @override
+  String get delete_category_error_message =>
+      'Une erreur s\'est produite lors de la suppression de la catégorie';
+
+  @override
+  String get delete_category_success_feedback =>
+      'Catégorie supprimée avec succès';
 }

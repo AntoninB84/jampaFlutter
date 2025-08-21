@@ -13,6 +13,7 @@ class AppRoutes {
   static const String settings = '/settings';
   static const String categories = '/categories';
   static const String createCategory = '/categories/create';
+  static const String editCategory = '/categories/edit/:id';
 }
 
 final _routerKey = GlobalKey<NavigatorState>();
@@ -64,6 +65,11 @@ final GoRouter mainRouter = GoRouter(
                         name: "CreateCategory",
                         path: AppRoutes.createCategory,
                         builder: (context, state) => const CreateCategoryPage(),
+                      ),
+                      GoRoute(
+                        name: "EditCategory",
+                        path: AppRoutes.editCategory,
+                        builder: (context, state) => CreateCategoryPage(categoryId: state.pathParameters['id'],)
                       )
                     ]
                   ),

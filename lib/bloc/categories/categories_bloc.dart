@@ -19,18 +19,18 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
   final CategoriesRepository categoriesRepository;
   
   void _mapGetCategoriesEventToState(GetCategories event, Emitter<CategoriesState> emit) async {
-    emit(state.copyWith(status: CategoriesListStatus.loading));
+    emit(state.copyWith(listStatus: CategoriesListStatus.loading));
     try{
       final categories = await categoriesRepository.getCategories();
       emit(
         state.copyWith(
-            status: CategoriesListStatus.success,
+            listStatus: CategoriesListStatus.success,
             categories: categories
         )
       );
     } catch (error, stacktrace) {
       debugPrintStack(stackTrace: stacktrace);
-      emit(state.copyWith(status: CategoriesListStatus.error));
+      emit(state.copyWith(listStatus: CategoriesListStatus.error));
     }
   }
 
@@ -40,23 +40,25 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
         onData: (data) {
           emit(
             state.copyWith(
-              status: CategoriesListStatus.success,
+              listStatus: CategoriesListStatus.success,
               categories: data
             )
           );
         },
       onError: (error, stackTrace) {
         debugPrint("Error listening to categories: $error");
-        emit(state.copyWith(status: CategoriesListStatus.error));
+        emit(state.copyWith(listStatus: CategoriesListStatus.error));
       }
     );
   }
 
   void _deleteCategory(DeleteCategory event, Emitter<CategoriesState> emit) async {
+    emit(state.copyWith(deletionError: false));
     try {
       int categoryId = event.selectedCategoryId;
       await categoriesRepository.deleteCategory(categoryId);
     } catch (error) {
+      emit(state.copyWith(deletionError: true));
       debugPrint("Error deleting category: $error");
     }
   }

@@ -5,6 +5,11 @@ enum EmailValidationError {
   invalidFormat,
 }
 
+extension EmailValidationErrorX on EmailValidationError {
+  bool get isEmpty => this == EmailValidationError.empty;
+  bool get isInvalidFormat => this == EmailValidationError.invalidFormat;
+}
+
 class EmailValidator extends FormzInput<String, EmailValidationError> {
   const EmailValidator.pure() : super.pure('');
   const EmailValidator.dirty([String value = '']) : super.dirty(value);

@@ -1,5 +1,6 @@
 
 import 'package:drift/drift.dart';
+import 'package:equatable/equatable.dart';
 
 import '../database.dart';
 
@@ -11,7 +12,7 @@ class CategoryTable extends Table {
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
 }
 
-class CategoryEntity {
+class CategoryEntity extends Equatable {
   int? id;
   String name;
   DateTime createdAt;
@@ -25,8 +26,25 @@ class CategoryEntity {
   });
 
   @override
+  List<Object?> get props => [id, name, createdAt, updatedAt];
+
+  @override
   String toString() {
     return 'CategoryEntity{id: $id, name: $name, createdAt: $createdAt, updatedAt: $updatedAt}';
+  }
+
+  CategoryEntity copyWith({
+    int? id,
+    String? name,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return CategoryEntity(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
   }
 
   CategoryTableCompanion toCompanion() {

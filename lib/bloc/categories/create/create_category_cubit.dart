@@ -15,6 +15,35 @@ class CreateCategoryCubit extends Cubit<CreateCategoryState> {
 
   final CategoriesRepository categoriesRepository;
 
+  void fetchCategoryForUpdate(String? categoryId) {
+    if(categoryId != null){
+      try {
+        int? id = int.tryParse(categoryId);
+        if(id != null){
+          // Fetch the category by ID and update the state
+          categoriesRepository.getCategoryById(id)
+            .then((category) {
+              if (category != null) {
+                emit(state.copyWith(
+                  category: category,
+                  name: NameValidator.dirty(category.name),
+                  isValidName: Formz.validate([NameValidator.dirty(category.name)]),
+                ));
+              } else {
+                emit(state.copyWith(isError: true));
+              }
+            }).catchError((error) {
+              emit(state.copyWith(isError: true));
+              debugPrint('Error fetching category for update: $error');
+            });
+        }
+      } catch (e) {
+        emit(state.copyWith(isError: true));
+        debugPrint('Error initializing fetchCategoryForUpdate: $e');
+      }
+    }
+  }
+
   void onNameChanged(String value) {
     final name = NameValidator.dirty(value);
     emit(
@@ -52,11 +81,21 @@ class CreateCategoryCubit extends Cubit<CreateCategoryState> {
           // If the category already exists, emit a state indicating it
           emit(state.copyWith(existsAlready: true, isLoading: false));
         } else {
-          CategoryEntity category = CategoryEntity(
+          late CategoryEntity category;
+          if(state.category != null){
+            category = state.category!.copyWith(
               name: state.name.value,
-              createdAt: DateTime.now(),
+              createdAt: state.category!.createdAt,
               updatedAt: DateTime.now()
-          );
+            );
+          }else{
+            category = CategoryEntity(
+                name: state.name.value,
+                createdAt: DateTime.now(),
+                updatedAt: DateTime.now()
+            );
+          }
+
           // If the category does not exist, save it
           categoriesRepository
               .saveCategory(category)

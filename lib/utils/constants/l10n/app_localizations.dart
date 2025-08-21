@@ -130,6 +130,12 @@ abstract class AppLocalizations {
   /// **'Supprimer'**
   String get delete;
 
+  /// No description provided for @create.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer'**
+  String get create;
+
   /// No description provided for @edit.
   ///
   /// In fr, this message translates to:
@@ -178,12 +184,6 @@ abstract class AppLocalizations {
   /// **'Le nom de la catégorie doit comporter entre 3 et 50 caractères'**
   String get create_category_name_invalid_length;
 
-  /// No description provided for @create_category_create_button_label.
-  ///
-  /// In fr, this message translates to:
-  /// **'Créer'**
-  String get create_category_create_button_label;
-
   /// No description provided for @create_category_cancel_button_label.
   ///
   /// In fr, this message translates to:
@@ -196,6 +196,18 @@ abstract class AppLocalizations {
   /// **'Catégorie créée avec succès'**
   String get create_category_success_feedback;
 
+  /// No description provided for @edit_category_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier la catégorie'**
+  String get edit_category_title;
+
+  /// No description provided for @edit_category_success_feedback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie modifiée avec succès'**
+  String get edit_category_success_feedback;
+
   /// No description provided for @delete_category_confirmation_title.
   ///
   /// In fr, this message translates to:
@@ -207,6 +219,18 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Êtes-vous sûr de vouloir supprimer la catégorie: {categoryName}?'**
   String delete_category_confirmation_message(Object categoryName);
+
+  /// No description provided for @delete_category_error_message.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une erreur s\'est produite lors de la suppression de la catégorie'**
+  String get delete_category_error_message;
+
+  /// No description provided for @delete_category_success_feedback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie supprimée avec succès'**
+  String get delete_category_success_feedback;
 }
 
 class _AppLocalizationsDelegate

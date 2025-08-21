@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/bloc/categories/categories_bloc.dart';
 import 'package:jampa_flutter/ui/widgets/confirmation_dialog.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
-import 'package:jampa_flutter/utils/extensions/strings_extension.dart';
 
 class CategoriesListWidget extends StatefulWidget {
   const CategoriesListWidget({super.key});
@@ -21,7 +20,7 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget> {
   Widget build(BuildContext context) {
     return BlocBuilder<CategoriesBloc, CategoriesState>(
         builder: (context, state) {
-          switch(state.status){
+          switch(state.listStatus){
             case CategoriesListStatus.initial:
             case CategoriesListStatus.loading:
               return const Center(child: CircularProgressIndicator());

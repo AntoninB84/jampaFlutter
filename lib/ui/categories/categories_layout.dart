@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/bloc/categories/categories_bloc.dart';
 import 'package:jampa_flutter/ui/categories/widgets/categories_list_widget.dart';
+import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 class CategoriesLayout extends StatelessWidget {
@@ -15,13 +16,10 @@ class CategoriesLayout extends StatelessWidget {
     return BlocConsumer<CategoriesBloc, CategoriesState>(
       bloc: context.read<CategoriesBloc>(),
       listener: (context, state) {
-        if (state.status == CategoriesListStatus.error) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(context.strings.generic_error_message),
-              backgroundColor: Colors.red,
-            ),
-          );
+        if (state.deletionError) {
+          SnackBarX.showError(context, context.strings.delete_category_error_message);
+        } else if (state.deletionSuccess) {
+          SnackBarX.showSuccess(context, context.strings.delete_category_success_feedback);
         }
       },
       builder: (context, asyncSnapshot) {
