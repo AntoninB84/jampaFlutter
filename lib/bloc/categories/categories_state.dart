@@ -1,44 +1,42 @@
 part of 'categories_bloc.dart';
 
-enum CategoriesStatus {
+enum CategoriesListStatus {
   initial,
   success,
   error,
   loading,
 }
 
-extension CategoriesStatusX on CategoriesStatus {
-  bool get isInitial => this == CategoriesStatus.initial;
-  bool get isSuccess => this == CategoriesStatus.success;
-  bool get isError => this == CategoriesStatus.error;
-  bool get isLoading => this == CategoriesStatus.loading;
+extension CategoriesStatusX on CategoriesListStatus {
+  bool get isInitial => this == CategoriesListStatus.initial;
+  bool get isSuccess => this == CategoriesListStatus.success;
+  bool get isError => this == CategoriesListStatus.error;
+  bool get isLoading => this == CategoriesListStatus.loading;
 }
 
 class CategoriesState extends Equatable {
 
   const CategoriesState({
-    this.status = CategoriesStatus.initial,
+    this.status = CategoriesListStatus.initial,
     List<CategoryEntity>? categories,
-    int idSelected = 0,
-  }) : categories = categories ?? const [],
-        idSelected = idSelected;
+  }) : categories = categories ?? const [];
 
-  final CategoriesStatus status;
+  final CategoriesListStatus status;
   final List<CategoryEntity> categories;
-  final int idSelected;
+
 
   @override
-  List<Object?> get props => [status, categories, idSelected];
+  List<Object?> get props => [status, categories];
 
   CategoriesState copyWith({
     List<CategoryEntity>? categories,
-    CategoriesStatus? status,
-    int? idSelected,
+    CategoriesListStatus? status,
+    bool? displayDeleteConfirmation,
+    CategoryEntity? categoryToDelete,
   }) {
     return CategoriesState(
       categories: categories ?? this.categories,
       status: status ?? this.status,
-      idSelected: idSelected ?? this.idSelected,
     );
   }
 }

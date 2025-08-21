@@ -18,6 +18,24 @@ class AppLocalizationsFr extends AppLocalizations {
   String get generic_error_message => 'Une erreur s\'est produite';
 
   @override
+  String get confirm => 'Confirmer';
+
+  @override
+  String get cancel => 'Annuler';
+
+  @override
+  String get delete => 'Supprimer';
+
+  @override
+  String get edit => 'Modifier';
+
+  @override
+  String get save => 'Enregistrer';
+
+  @override
+  String get search => 'Rechercher';
+
+  @override
   String get create_category_title => 'Créer une catégorie';
 
   @override
@@ -42,4 +60,12 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get create_category_success_feedback => 'Catégorie créée avec succès';
+
+  @override
+  String get delete_category_confirmation_title => 'Supprimer la catégorie';
+
+  @override
+  String delete_category_confirmation_message(Object categoryName) {
+    return 'Êtes-vous sûr de vouloir supprimer la catégorie: $categoryName?';
+  }
 }

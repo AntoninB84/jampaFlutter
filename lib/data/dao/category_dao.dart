@@ -1,4 +1,5 @@
 
+import 'package:drift/drift.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
 import '../database.dart';
@@ -23,8 +24,13 @@ class CategoryDao {
 
   static Future<List<CategoryEntity>> getAllCategories() async {
     AppDatabase db = serviceLocator<AppDatabase>();
-    return await db.select(db.categoryTable).get();
+    return await (db.select(db.categoryTable)..orderBy([(t)=>OrderingTerm(expression: t.name)])).get();
   }
+  static Stream<List<CategoryEntity>> getAllCategoriesStream() {
+    AppDatabase db = serviceLocator<AppDatabase>();
+    return (db.select(db.categoryTable)..orderBy([(t)=>OrderingTerm(expression: t.name)])).watch();
+  }
+
   static Future<CategoryEntity?> getCategoryById(int id) async {
     AppDatabase db = serviceLocator<AppDatabase>();
     return await (db.select(db.categoryTable)..where((category) => category.id.equals(id))).getSingleOrNull();

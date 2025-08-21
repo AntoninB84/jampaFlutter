@@ -112,6 +112,42 @@ abstract class AppLocalizations {
   /// **'Une erreur s\'est produite'**
   String get generic_error_message;
 
+  /// No description provided for @confirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Confirmer'**
+  String get confirm;
+
+  /// No description provided for @cancel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler'**
+  String get cancel;
+
+  /// No description provided for @delete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer'**
+  String get delete;
+
+  /// No description provided for @edit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier'**
+  String get edit;
+
+  /// No description provided for @save.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer'**
+  String get save;
+
+  /// No description provided for @search.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher'**
+  String get search;
+
   /// No description provided for @create_category_title.
   ///
   /// In fr, this message translates to:
@@ -159,6 +195,18 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Catégorie créée avec succès'**
   String get create_category_success_feedback;
+
+  /// No description provided for @delete_category_confirmation_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer la catégorie'**
+  String get delete_category_confirmation_title;
+
+  /// No description provided for @delete_category_confirmation_message.
+  ///
+  /// In fr, this message translates to:
+  /// **'Êtes-vous sûr de vouloir supprimer la catégorie: {categoryName}?'**
+  String delete_category_confirmation_message(Object categoryName);
 }
 
 class _AppLocalizationsDelegate

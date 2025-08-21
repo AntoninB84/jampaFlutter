@@ -6,13 +6,13 @@ class CategoriesEvent extends Equatable {
 }
 
 final class GetCategories extends CategoriesEvent {}
+final class ListenCategories extends CategoriesEvent {}
 
-class SelectCategory extends CategoriesEvent {
-  SelectCategory({
-    required this.idSelected,
-  });
-  final int idSelected;
+final class DeleteCategory extends CategoriesEvent {
+  final int selectedCategoryId;
+
+  DeleteCategory(this.selectedCategoryId);
 
   @override
-  List<Object?> get props => [idSelected];
+  List<Object?> get props => [selectedCategoryId];
 }

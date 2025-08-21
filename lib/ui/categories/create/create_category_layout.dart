@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/ui/widgets/custom_text_field.dart';
 import 'package:jampa_flutter/ui/widgets/error_text.dart';
-import 'package:jampa_flutter/utils/extensions/AppContextExtension.dart';
+import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:jampa_flutter/utils/forms/name_validator.dart';
 
 import '../../../bloc/categories/create/create_category_cubit.dart';
@@ -31,8 +31,8 @@ class CreateCategoryLayout extends StatelessWidget {
               backgroundColor: Colors.green,
             ),
           );
-          // Pop the context with a success result
-          context.pop(true);
+          // Back to the previous screen after success
+          context.pop();
         }
       },
       child: Scaffold(

@@ -16,7 +16,7 @@ class CategoriesPage extends StatelessWidget {
         child: BlocProvider<CategoriesBloc>(
           create: (context) => CategoriesBloc(
               categoriesRepository: context.read<CategoriesRepository>()
-          )..add(GetCategories()),
+          )..add(ListenCategories()),
 
           child: const CategoriesLayout(),
         )

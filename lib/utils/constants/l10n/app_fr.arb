@@ -2,7 +2,12 @@
     "notes": "Notes",
     "settings": "Paramètres",
     "generic_error_message": "Une erreur s'est produite",
-
+    "confirm": "Confirmer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "save": "Enregistrer",
+    "search": "Rechercher",
     "@create_category": {},
     "create_category_title": "Créer une catégorie",
     "create_category_name_field_title": "Nom de la catégorie",
@@ -11,5 +16,8 @@
     "create_category_name_invalid_length": "Le nom de la catégorie doit comporter entre 3 et 50 caractères",
     "create_category_create_button_label": "Créer",
     "create_category_cancel_button_label": "Annuler",
-    "create_category_success_feedback": "Catégorie créée avec succès"
+    "create_category_success_feedback": "Catégorie créée avec succès",
+    "@delete_category": {},
+    "delete_category_confirmation_title": "Supprimer la catégorie",
+    "delete_category_confirmation_message": "Êtes-vous sûr de vouloir supprimer la catégorie: {categoryName}?"
 }

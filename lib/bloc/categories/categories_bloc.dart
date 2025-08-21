@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jampa_flutter/repository/categories_repository.dart';
 
@@ -12,22 +13,51 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
     required this.categoriesRepository
   }) : super(const CategoriesState()) {
     on<GetCategories>(_mapGetCategoriesEventToState);
+    on<ListenCategories>(_listenCategories);
+    on<DeleteCategory>(_deleteCategory);
   }
   final CategoriesRepository categoriesRepository;
   
   void _mapGetCategoriesEventToState(GetCategories event, Emitter<CategoriesState> emit) async {
-    emit(state.copyWith(status: CategoriesStatus.loading));
+    emit(state.copyWith(status: CategoriesListStatus.loading));
     try{
       final categories = await categoriesRepository.getCategories();
       emit(
         state.copyWith(
-            status: CategoriesStatus.success,
+            status: CategoriesListStatus.success,
             categories: categories
         )
       );
     } catch (error, stacktrace) {
-      print(stacktrace);
-      emit(state.copyWith(status: CategoriesStatus.error));
+      debugPrintStack(stackTrace: stacktrace);
+      emit(state.copyWith(status: CategoriesListStatus.error));
+    }
+  }
+
+  void _listenCategories(ListenCategories event, Emitter<CategoriesState> emit) async {
+    await emit.onEach(
+        categoriesRepository.getCategoriesStream(),
+        onData: (data) {
+          emit(
+            state.copyWith(
+              status: CategoriesListStatus.success,
+              categories: data
+            )
+          );
+        },
+      onError: (error, stackTrace) {
+        debugPrint("Error listening to categories: $error");
+        emit(state.copyWith(status: CategoriesListStatus.error));
+      }
+    );
+  }
+
+  void _deleteCategory(DeleteCategory event, Emitter<CategoriesState> emit) async {
+    try {
+      int categoryId = event.selectedCategoryId;
+      await categoriesRepository.deleteCategory(categoryId);
+    } catch (error) {
+      debugPrint("Error deleting category: $error");
     }
   }
 }
