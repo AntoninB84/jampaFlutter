@@ -1,12 +1,14 @@
 
 import 'package:drift/drift.dart';
+import 'package:jampa_flutter/data/models/category.dart';
+import 'package:jampa_flutter/data/models/note.dart';
 
 import '../database.dart';
 
 @UseRowClass(NoteCategoryEntity)
 class NoteCategoryTable extends Table {
-  IntColumn get noteId => integer()();
-  IntColumn get categoryId => integer()();
+  IntColumn get noteId => integer().references(NoteTable, #id)();
+  IntColumn get categoryId => integer().references(CategoryTable, #id)();
 }
 
 class NoteCategoryEntity {

@@ -154,6 +154,12 @@ abstract class AppLocalizations {
   /// **'Rechercher'**
   String get search;
 
+  /// No description provided for @no_results_found.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun résultat trouvé'**
+  String get no_results_found;
+
   /// No description provided for @create_category_title.
   ///
   /// In fr, this message translates to:
@@ -181,7 +187,7 @@ abstract class AppLocalizations {
   /// No description provided for @create_category_name_invalid_length.
   ///
   /// In fr, this message translates to:
-  /// **'Le nom de la catégorie doit comporter entre 3 et 50 caractères'**
+  /// **'Le nom de la catégorie doit comporter entre 3 et 120 caractères'**
   String get create_category_name_invalid_length;
 
   /// No description provided for @create_category_success_feedback.
@@ -253,7 +259,7 @@ abstract class AppLocalizations {
   /// No description provided for @create_note_type_name_invalid_length.
   ///
   /// In fr, this message translates to:
-  /// **'Le nom du type de note doit comporter entre 3 et 50 caractères'**
+  /// **'Le nom du type de note doit comporter entre 3 et 120 caractères'**
   String get create_note_type_name_invalid_length;
 
   /// No description provided for @create_note_type_success_feedback.
@@ -297,6 +303,90 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Type de note supprimé avec succès'**
   String get delete_note_type_success_feedback;
+
+  /// No description provided for @create_note_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer une note'**
+  String get create_note_title;
+
+  /// No description provided for @create_note_title_field_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Titre de la note'**
+  String get create_note_title_field_title;
+
+  /// No description provided for @create_note_title_field_hint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrez le titre de la note'**
+  String get create_note_title_field_hint;
+
+  /// No description provided for @create_note_title_invalid_length.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le titre de la note doit comporter entre 3 et 120 caractères'**
+  String get create_note_title_invalid_length;
+
+  /// No description provided for @create_note_content_field_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contenu de la note'**
+  String get create_note_content_field_title;
+
+  /// No description provided for @create_note_content_field_hint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrez le contenu de la note'**
+  String get create_note_content_field_hint;
+
+  /// No description provided for @create_note_content_invalid_length.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le contenu de la note ne peut pas être vide'**
+  String get create_note_content_invalid_length;
+
+  /// No description provided for @create_note_success_feedback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Note créée avec succès'**
+  String get create_note_success_feedback;
+
+  /// No description provided for @edit_note_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier la note'**
+  String get edit_note_title;
+
+  /// No description provided for @edit_note_success_feedback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Note modifiée avec succès'**
+  String get edit_note_success_feedback;
+
+  /// No description provided for @delete_note_confirmation_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer la note'**
+  String get delete_note_confirmation_title;
+
+  /// No description provided for @delete_note_confirmation_message.
+  ///
+  /// In fr, this message translates to:
+  /// **'Êtes-vous sûr de vouloir supprimer la note: {noteTitle}?'**
+  String delete_note_confirmation_message(Object noteTitle);
+
+  /// No description provided for @delete_note_error_message.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une erreur s\'est produite lors de la suppression de la note'**
+  String get delete_note_error_message;
+
+  /// No description provided for @delete_note_success_feedback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Note supprimée avec succès'**
+  String get delete_note_success_feedback;
 }
 
 class _AppLocalizationsDelegate

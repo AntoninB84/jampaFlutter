@@ -25,6 +25,10 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget> {
             case CategoriesListStatus.loading:
               return const Center(child: CircularProgressIndicator());
             case CategoriesListStatus.success:
+
+              if(state.categories.isEmpty){
+                return Center(child: Text(context.strings.no_results_found));
+              }
               return ListView.builder(
                 controller: scrollController,
                 itemCount: state.categories.length,

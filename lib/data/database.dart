@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'models/note_category.dart';
 import 'models/user.dart';
+import 'models/views/note_list_view.dart';
 
 part 'database.g.dart';
 
@@ -18,7 +19,12 @@ part 'database.g.dart';
     NoteTypeTable,
     NoteTable,
     UserTable,
-  ])
+  ],
+  // views: [
+    // NoteListView
+  // ],
+  include: {'models/views/note_list_view.drift'},
+)
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 

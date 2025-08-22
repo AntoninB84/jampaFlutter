@@ -1,17 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jampa_flutter/ui/categories/categories_page.dart';
 import 'package:jampa_flutter/ui/categories/create/create_category_page.dart';
+import 'package:jampa_flutter/ui/categories/index/categories_page.dart';
+import 'package:jampa_flutter/ui/home/home_page.dart';
 import 'package:jampa_flutter/ui/note_types/create/create_note_type_page.dart';
-import 'package:jampa_flutter/ui/note_types/note_types_page.dart';
+import 'package:jampa_flutter/ui/note_types/index/note_types_page.dart';
+import 'package:jampa_flutter/ui/notes/create/create_note_page.dart';
+import 'package:jampa_flutter/ui/notes/index/notes_page.dart';
 
-import '../../ui/home/home_page.dart';
-import '../../ui/notes/pages/notes_page.dart';
 
 class AppRoutes {
   static const String notes = '/notes';
   static const String noteDetails = '/notes/:id';
+  static const String createNote = '/notes/create';
+  static const String editNote = '/notes/edit/:id';
   static const String settings = '/settings';
   static const String categories = '/categories';
   static const String createCategory = '/categories/create';
@@ -39,6 +42,11 @@ final GoRouter mainRouter = GoRouter(
               path: AppRoutes.notes,
               builder: (context, state) => const NotesPage(),
               routes: [
+                GoRoute(
+                  name: "CreateNote",
+                  path: AppRoutes.createNote,
+                  builder: (context, state) => const CreateNotePage(),
+                ),
                 GoRoute(
                   name: "NoteDetails",
                   path: AppRoutes.noteDetails,
@@ -110,10 +118,5 @@ final GoRouter mainRouter = GoRouter(
         ),
       ]
     ),
-    GoRoute(
-      name: "Test",
-      builder: (context, state) => Center(child: Text("Test")),
-      path: '/test'
-    )
   ],
 );

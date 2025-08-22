@@ -1,16 +1,15 @@
-import 'package:jampa_flutter/data/dao/category_dao.dart';
+import 'package:drift/drift.dart';
 import 'package:jampa_flutter/data/models/note.dart';
 import 'package:jampa_flutter/data/models/note_category.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
 import '../database.dart';
-import '../models/category.dart';
 import 'note_category_dao.dart';
 
 class NoteDao {
   static Future<void> saveSingleNote(NoteEntity note) async {
     AppDatabase db = serviceLocator<AppDatabase>();
-    await db.into(db.noteTable).insertOnConflictUpdate(note.toCompanion());
+    note.id = await db.into(db.noteTable).insertOnConflictUpdate(note.toCompanion());
     await NoteCategoryDao.cleanRelationshipsByNoteId(note.id!);
     // If the note has categories, save the relationships
     if(note.categories != null && note.categories!.isNotEmpty) {
@@ -29,23 +28,49 @@ class NoteDao {
       await saveSingleNote(noteEntity);
     });
   }
-  
-  static Future<List<NoteEntity>> getAllNotes() async {
-    AppDatabase db = serviceLocator<AppDatabase>();
-    List<NoteEntity> noteEntities =  await db.select(db.noteTable).get();
-    await Future.forEach(noteEntities, (noteEntity) async {
-      // Fetch categories for each note
-      List<NoteCategoryEntity> noteCategories = await NoteCategoryDao.getNoteCategoriesByNoteId(noteEntity.id!);
-      List<CategoryEntity> categories = [];
-      await Future.forEach(noteCategories, (noteCategory) async {
-        CategoryEntity? category = await CategoryDao.getCategoryById(noteCategory.categoryId);
-        if (category != null) {
-          categories.add(category);
+
+  static Stream<List<NoteEntity>> watchFilteredNotes(int userId, int? noteTypeId, List<int>? categoryIds) {
+    final db = serviceLocator<AppDatabase>();
+    final query = db.select(db.noteTable).join([
+      leftOuterJoin(
+        db.noteCategoryTable,
+        db.noteCategoryTable.noteId.equalsExp(db.noteTable.id),
+      ),
+      leftOuterJoin(
+        db.categoryTable,
+        db.categoryTable.id.equalsExp(db.noteCategoryTable.categoryId),
+      ),
+      leftOuterJoin(
+        db.noteTypeTable,
+        db.noteTypeTable.id.equalsExp(db.noteTable.noteTypeId)
+      )
+    ])
+      // ..where(db.noteTable.userId.equals(userId))
+      ..where(db.noteTable.noteTypeId.equalsNullable(noteTypeId));
+    if(categoryIds != null && categoryIds.isNotEmpty) {
+      query.where(db.noteCategoryTable.categoryId.isIn(categoryIds));
+    }
+
+    return query.watch().map((rows) {
+      final noteMap = <int, NoteEntity>{};
+      for (final row in rows) {
+        final note = row.readTable(db.noteTable);
+        final noteType = row.readTableOrNull(db.noteTypeTable);
+        final category = row.readTableOrNull(db.categoryTable);
+
+        // If the note is not already in the map,
+        // add it with an empty categories list and the noteType
+        if (!noteMap.containsKey(note.id)) {
+          noteMap[note.id!] = note
+            ..noteType = noteType
+            ..categories = [];
         }
-      });
-      noteEntity.categories = categories;
+        if (category != null) {
+          noteMap[note.id]!.categories!.add(category);
+        }
+      }
+      return noteMap.values.toList();
     });
-    return noteEntities;
   }
   
   static Future<NoteEntity?> getNoteById(int id) async {

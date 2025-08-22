@@ -39,6 +39,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get search => 'Rechercher';
 
   @override
+  String get no_results_found => 'Aucun résultat trouvé';
+
+  @override
   String get create_category_title => 'Créer une catégorie';
 
   @override
@@ -53,7 +56,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get create_category_name_invalid_length =>
-      'Le nom de la catégorie doit comporter entre 3 et 50 caractères';
+      'Le nom de la catégorie doit comporter entre 3 et 120 caractères';
 
   @override
   String get create_category_success_feedback => 'Catégorie créée avec succès';
@@ -96,7 +99,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get create_note_type_name_invalid_length =>
-      'Le nom du type de note doit comporter entre 3 et 50 caractères';
+      'Le nom du type de note doit comporter entre 3 et 120 caractères';
 
   @override
   String get create_note_type_success_feedback =>
@@ -124,4 +127,51 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get delete_note_type_success_feedback =>
       'Type de note supprimé avec succès';
+
+  @override
+  String get create_note_title => 'Créer une note';
+
+  @override
+  String get create_note_title_field_title => 'Titre de la note';
+
+  @override
+  String get create_note_title_field_hint => 'Entrez le titre de la note';
+
+  @override
+  String get create_note_title_invalid_length =>
+      'Le titre de la note doit comporter entre 3 et 120 caractères';
+
+  @override
+  String get create_note_content_field_title => 'Contenu de la note';
+
+  @override
+  String get create_note_content_field_hint => 'Entrez le contenu de la note';
+
+  @override
+  String get create_note_content_invalid_length =>
+      'Le contenu de la note ne peut pas être vide';
+
+  @override
+  String get create_note_success_feedback => 'Note créée avec succès';
+
+  @override
+  String get edit_note_title => 'Modifier la note';
+
+  @override
+  String get edit_note_success_feedback => 'Note modifiée avec succès';
+
+  @override
+  String get delete_note_confirmation_title => 'Supprimer la note';
+
+  @override
+  String delete_note_confirmation_message(Object noteTitle) {
+    return 'Êtes-vous sûr de vouloir supprimer la note: $noteTitle?';
+  }
+
+  @override
+  String get delete_note_error_message =>
+      'Une erreur s\'est produite lors de la suppression de la note';
+
+  @override
+  String get delete_note_success_feedback => 'Note supprimée avec succès';
 }

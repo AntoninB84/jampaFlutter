@@ -18,7 +18,7 @@ class NameValidator extends FormzInput<String, NameValidationError> {
   NameValidationError? validator(String? value) {
     if (value == null || value.isEmpty) {
       return NameValidationError.empty;
-    } else if (value.length < 3 || value.length > 50) {
+    } else if (value.length < 3 || value.length > 120) {
       return NameValidationError.invalidLength;
     }
     return null;

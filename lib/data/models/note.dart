@@ -1,6 +1,8 @@
 import 'package:drift/drift.dart';
 import 'package:jampa_flutter/data/database.dart';
 import 'package:jampa_flutter/data/models/category.dart';
+import 'package:jampa_flutter/data/models/note_type.dart';
+import 'package:jampa_flutter/data/models/user.dart';
 
 @UseRowClass(NoteEntity)
 class NoteTable extends Table {
@@ -9,8 +11,8 @@ class NoteTable extends Table {
   TextColumn get content => text().withLength(min: 1)();
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
-  IntColumn get noteTypeId => integer().nullable()();
-  IntColumn get userId => integer().nullable()();
+  IntColumn get noteTypeId => integer().references(NoteTypeTable, #id).nullable()();
+  IntColumn get userId => integer().references(UserTable, #id).nullable()();
 }
 
 class NoteEntity {
@@ -20,6 +22,7 @@ class NoteEntity {
   DateTime createdAt;
   DateTime updatedAt;
   int? noteTypeId;
+  NoteTypeEntity? noteType;
   int? userId;
   List<CategoryEntity>? categories;
 
@@ -31,13 +34,9 @@ class NoteEntity {
     required this.updatedAt,
     this.userId,
     this.noteTypeId,
+    this.noteType,
     this.categories
   });
-
-  @override
-  String toString() {
-    return 'NoteEntity{id: $id, title: $title, content: $content, createdAt: $createdAt, updatedAt: $updatedAt, noteTypeId: $noteTypeId, userId: $userId, categories: $categories}';
-  }
 
   NoteTableCompanion toCompanion() {
     return NoteTableCompanion(
@@ -48,6 +47,35 @@ class NoteEntity {
       updatedAt: Value(updatedAt),
       noteTypeId: noteTypeId == null ? Value.absent() : Value(noteTypeId!),
       userId: Value(userId),
+    );
+  }
+
+  @override
+  String toString() {
+    return 'NoteEntity{id: $id, title: $title, content: $content, createdAt: $createdAt, updatedAt: $updatedAt, noteTypeId: $noteTypeId, userId: $userId, categories: $categories}';
+  }
+
+  NoteEntity copyWith({
+    int? id,
+    String? title,
+    String? content,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    int? noteTypeId,
+    NoteTypeEntity? noteType,
+    int? userId,
+    List<CategoryEntity>? categories
+  }) {
+    return NoteEntity(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      content: content ?? this.content,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      noteTypeId: noteTypeId ?? this.noteTypeId,
+      noteType: noteType ?? this.noteType,
+      userId: userId ?? this.userId,
+      categories: categories ?? this.categories
     );
   }
 
