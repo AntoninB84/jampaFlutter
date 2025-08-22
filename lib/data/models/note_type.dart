@@ -28,6 +28,20 @@ class NoteTypeEntity {
     return 'NoteTypeEntity{id: $id, name: $name, createdAt: $createdAt, updatedAt: $updatedAt}';
   }
 
+  NoteTypeEntity copyWith({
+    int? id,
+    String? name,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return NoteTypeEntity(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
   NoteTypeTableCompanion toCompanion() {
     return NoteTypeTableCompanion(
       id: id == null ? Value.absent() : Value(id!),

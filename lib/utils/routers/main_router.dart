@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/ui/categories/categories_page.dart';
 import 'package:jampa_flutter/ui/categories/create/create_category_page.dart';
+import 'package:jampa_flutter/ui/note_types/create/create_note_type_page.dart';
+import 'package:jampa_flutter/ui/note_types/note_types_page.dart';
 
 import '../../ui/home/home_page.dart';
 import '../../ui/notes/pages/notes_page.dart';
@@ -14,6 +16,9 @@ class AppRoutes {
   static const String categories = '/categories';
   static const String createCategory = '/categories/create';
   static const String editCategory = '/categories/edit/:id';
+  static const String noteTypes = '/note_types';
+  static const String createNoteType = '/note_types/create';
+  static const String editNoteType = '/note_types/edit/:id';
 }
 
 final _routerKey = GlobalKey<NavigatorState>();
@@ -51,9 +56,18 @@ final GoRouter mainRouter = GoRouter(
                 name: "Settings",
                 path: AppRoutes.settings,
                 builder: (context, state) => Center(
-                    child: TextButton(
-                      onPressed: () {context.pushNamed("Categories");},
-                      child: Text("Categories"),)
+                    child: Column(
+                      children: [
+                        TextButton(
+                          onPressed: () {context.pushNamed("Categories");},
+                          child: Text("Categories"),
+                        ),
+                        TextButton(
+                          onPressed: () {context.pushNamed("NoteTypes");},
+                          child: Text("Note Types"),
+                        ),
+                      ],
+                    )
                 ),
                 routes: [
                   GoRoute(
@@ -73,6 +87,23 @@ final GoRouter mainRouter = GoRouter(
                       )
                     ]
                   ),
+                  GoRoute(
+                    name: "NoteTypes",
+                    path: AppRoutes.noteTypes,
+                    builder: (context, state) => const NoteTypesPage(),
+                    routes: [
+                      GoRoute(
+                        name: "CreateNoteType",
+                        path: AppRoutes.createNoteType,
+                        builder: (context, state) => const CreateNoteTypePage(),
+                      ),
+                      GoRoute(
+                        name: "EditNoteType",
+                        path: AppRoutes.editNoteType,
+                        builder: (context, state) => CreateNoteTypePage(noteTypeId: state.pathParameters['id'],)
+                      )
+                    ]
+                  )
                 ]
             )
           ]

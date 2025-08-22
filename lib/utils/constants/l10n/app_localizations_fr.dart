@@ -56,9 +56,6 @@ class AppLocalizationsFr extends AppLocalizations {
       'Le nom de la catégorie doit comporter entre 3 et 50 caractères';
 
   @override
-  String get create_category_cancel_button_label => 'Annuler';
-
-  @override
   String get create_category_success_feedback => 'Catégorie créée avec succès';
 
   @override
@@ -82,4 +79,49 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get delete_category_success_feedback =>
       'Catégorie supprimée avec succès';
+
+  @override
+  String get create_note_type_title => 'Créer un type de note';
+
+  @override
+  String get create_note_type_name_field_title => 'Nom du type de note';
+
+  @override
+  String get create_note_type_name_field_hint =>
+      'Entrez le nom du type de note';
+
+  @override
+  String get create_note_type_name_exists_already =>
+      'Ce type de note existe déjà';
+
+  @override
+  String get create_note_type_name_invalid_length =>
+      'Le nom du type de note doit comporter entre 3 et 50 caractères';
+
+  @override
+  String get create_note_type_success_feedback =>
+      'Type de note créé avec succès';
+
+  @override
+  String get edit_note_type_title => 'Modifier le type de note';
+
+  @override
+  String get edit_note_type_success_feedback =>
+      'Type de note modifié avec succès';
+
+  @override
+  String get delete_note_type_confirmation_title => 'Supprimer le type de note';
+
+  @override
+  String delete_note_type_confirmation_message(Object noteTypeName) {
+    return 'Êtes-vous sûr de vouloir supprimer le type de note: $noteTypeName?';
+  }
+
+  @override
+  String get delete_note_type_error_message =>
+      'Une erreur s\'est produite lors de la suppression du type de note';
+
+  @override
+  String get delete_note_type_success_feedback =>
+      'Type de note supprimé avec succès';
 }

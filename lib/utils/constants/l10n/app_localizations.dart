@@ -184,12 +184,6 @@ abstract class AppLocalizations {
   /// **'Le nom de la catégorie doit comporter entre 3 et 50 caractères'**
   String get create_category_name_invalid_length;
 
-  /// No description provided for @create_category_cancel_button_label.
-  ///
-  /// In fr, this message translates to:
-  /// **'Annuler'**
-  String get create_category_cancel_button_label;
-
   /// No description provided for @create_category_success_feedback.
   ///
   /// In fr, this message translates to:
@@ -231,6 +225,78 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Catégorie supprimée avec succès'**
   String get delete_category_success_feedback;
+
+  /// No description provided for @create_note_type_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer un type de note'**
+  String get create_note_type_title;
+
+  /// No description provided for @create_note_type_name_field_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom du type de note'**
+  String get create_note_type_name_field_title;
+
+  /// No description provided for @create_note_type_name_field_hint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrez le nom du type de note'**
+  String get create_note_type_name_field_hint;
+
+  /// No description provided for @create_note_type_name_exists_already.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce type de note existe déjà'**
+  String get create_note_type_name_exists_already;
+
+  /// No description provided for @create_note_type_name_invalid_length.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le nom du type de note doit comporter entre 3 et 50 caractères'**
+  String get create_note_type_name_invalid_length;
+
+  /// No description provided for @create_note_type_success_feedback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Type de note créé avec succès'**
+  String get create_note_type_success_feedback;
+
+  /// No description provided for @edit_note_type_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier le type de note'**
+  String get edit_note_type_title;
+
+  /// No description provided for @edit_note_type_success_feedback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Type de note modifié avec succès'**
+  String get edit_note_type_success_feedback;
+
+  /// No description provided for @delete_note_type_confirmation_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer le type de note'**
+  String get delete_note_type_confirmation_title;
+
+  /// No description provided for @delete_note_type_confirmation_message.
+  ///
+  /// In fr, this message translates to:
+  /// **'Êtes-vous sûr de vouloir supprimer le type de note: {noteTypeName}?'**
+  String delete_note_type_confirmation_message(Object noteTypeName);
+
+  /// No description provided for @delete_note_type_error_message.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une erreur s\'est produite lors de la suppression du type de note'**
+  String get delete_note_type_error_message;
+
+  /// No description provided for @delete_note_type_success_feedback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Type de note supprimé avec succès'**
+  String get delete_note_type_success_feedback;
 }
 
 class _AppLocalizationsDelegate
