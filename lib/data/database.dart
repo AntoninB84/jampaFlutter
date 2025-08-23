@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart' hide Category;
 import 'package:jampa_flutter/data/models/note.dart';
 import 'package:jampa_flutter/data/models/category.dart' ;
 import 'package:jampa_flutter/data/models/note_type.dart';
+import 'package:jampa_flutter/utils/constants/data/initial_data.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'models/note_category.dart';
@@ -39,6 +40,12 @@ class AppDatabase extends _$AppDatabase {
       onCreate: (Migrator m) async {
         await m.createAll();
         // Initial data can be inserted here if needed
+        for(var category in InitialData.categories) {
+          await into(categoryTable).insert(category.toCompanion());
+        }
+        for(var noteType in InitialData.noteTypes) {
+          await into(noteTypeTable).insert(noteType.toCompanion());
+        }
       },
       onUpgrade: (Migrator m, int from, int to) async {
         if (from < 2) {

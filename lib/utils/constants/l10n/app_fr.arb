@@ -48,6 +48,8 @@
     "create_note_content_field_title": "Contenu de la note",
     "create_note_content_field_hint": "Entrez le contenu de la note",
     "create_note_content_invalid_length": "Le contenu de la note ne peut pas être vide",
+    "create_note_categories_field_title": "Catégories",
+    "create_note_type_field_title": "Type de note",
     "create_note_success_feedback": "Note créée avec succès",
     "@edit_note": {},
     "edit_note_title": "Modifier la note",

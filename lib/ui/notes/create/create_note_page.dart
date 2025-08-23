@@ -16,7 +16,7 @@ class CreateNotePage extends StatelessWidget {
         create: (context) => NotesRepository(),
         child: BlocProvider<CreateNoteCubit>(
           create: (context) => CreateNoteCubit(
-              notesRepository: context.read<NotesRepository>()
+              notesRepository: context.read<NotesRepository>(),
           )..fetchNoteForUpdate(noteId),
           child: const CreateNoteLayout(),
         )

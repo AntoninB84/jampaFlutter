@@ -12,7 +12,7 @@ class NoteTypesBloc extends Bloc<NoteTypesEvent, NoteTypesState> {
     required this.noteTypesRepository
   }) : super(const NoteTypesState()) {
     on<GetNoteTypes>(_mapGetNoteTypesEventToState);
-    on<ListenNoteTypes>(_listenNoteTypes);
+    on<WatchNoteTypes>(_watchNoteTypes);
     on<DeleteNoteType>(_deleteNoteType);
   }
   final NoteTypesRepository noteTypesRepository;
@@ -33,9 +33,9 @@ class NoteTypesBloc extends Bloc<NoteTypesEvent, NoteTypesState> {
     }
   }
 
-  void _listenNoteTypes(ListenNoteTypes event, Emitter<NoteTypesState> emit) async {
+  void _watchNoteTypes(WatchNoteTypes event, Emitter<NoteTypesState> emit) async {
     await emit.onEach(
-        noteTypesRepository.getNoteTypesStream(),
+        noteTypesRepository.watchAllNotesTypes(),
         onData: (data) {
           emit(
               state.copyWith(

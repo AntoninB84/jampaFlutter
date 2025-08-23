@@ -346,6 +346,18 @@ abstract class AppLocalizations {
   /// **'Le contenu de la note ne peut pas être vide'**
   String get create_note_content_invalid_length;
 
+  /// No description provided for @create_note_categories_field_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégories'**
+  String get create_note_categories_field_title;
+
+  /// No description provided for @create_note_type_field_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Type de note'**
+  String get create_note_type_field_title;
+
   /// No description provided for @create_note_success_feedback.
   ///
   /// In fr, this message translates to:

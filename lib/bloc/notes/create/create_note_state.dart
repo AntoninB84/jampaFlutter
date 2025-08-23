@@ -7,6 +7,9 @@ class CreateNoteState extends Equatable {
     this.isValidTitle = true,
     this.content = const ContentValidator.pure(),
     this.isValidContent = true,
+    this.selectedNoteType,
+    this.selectedCategories = const [],
+
     this.isLoading = false,
     this.isError = false,
     this.isSuccess = false,
@@ -18,6 +21,8 @@ class CreateNoteState extends Equatable {
   final bool isValidTitle;
   final ContentValidator content;
   final bool isValidContent;
+  final NoteTypeEntity? selectedNoteType;
+  final List<CategoryEntity> selectedCategories;
   
   final bool isLoading;
   final bool isError;
@@ -30,6 +35,8 @@ class CreateNoteState extends Equatable {
     isValidTitle,
     content,
     isValidContent,
+    selectedNoteType,
+    selectedCategories,
     isLoading,
     isError,
     isSuccess
@@ -41,6 +48,8 @@ class CreateNoteState extends Equatable {
     bool? isValidTitle,
     ContentValidator? content,
     bool? isValidContent,
+    NoteTypeEntity? selectedNoteType,
+    List<CategoryEntity>? selectedCategories,
     bool? isLoading,
     bool? isError,
     bool? isSuccess,
@@ -51,6 +60,8 @@ class CreateNoteState extends Equatable {
       isValidTitle: isValidTitle ?? this.isValidTitle,
       content: content ?? this.content,
       isValidContent: isValidContent ?? this.isValidContent,
+      selectedNoteType: selectedNoteType ?? this.selectedNoteType,
+      selectedCategories: selectedCategories ?? this.selectedCategories,
       isLoading: isLoading ?? this.isLoading,
       isError: isError ?? this.isError,
       isSuccess: isSuccess ?? this.isSuccess,

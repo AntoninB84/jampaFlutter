@@ -29,7 +29,7 @@ class NoteTypeDao {
     return await (db.select(db.noteTypeTable)..orderBy([(t) => OrderingTerm(expression: t.name)])).get();
   }
 
-  static Stream<List<NoteTypeEntity>> getAllNoteTypesStream() {
+  static Stream<List<NoteTypeEntity>> watchAllNoteTypes() {
     AppDatabase db = serviceLocator<AppDatabase>();
     return (db.select(db.noteTypeTable)..orderBy([(t) => OrderingTerm(expression: t.name)])).watch();
   }

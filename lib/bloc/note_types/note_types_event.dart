@@ -7,7 +7,7 @@ class NoteTypesEvent extends Equatable {
 
 final class GetNoteTypes extends NoteTypesEvent {}
 
-final class ListenNoteTypes extends NoteTypesEvent {}
+final class WatchNoteTypes extends NoteTypesEvent {}
 
 final class DeleteNoteType extends NoteTypesEvent {
   final int selectedNoteTypeId;

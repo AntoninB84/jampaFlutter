@@ -8,8 +8,8 @@ class NoteTypesRepository {
   Future<List<NoteTypeEntity>> getNoteTypes() async {
       return await NoteTypeDao.getAllNoteTypes();
   }
-  Stream<List<NoteTypeEntity>> getNoteTypesStream() {
-    return NoteTypeDao.getAllNoteTypesStream();
+  Stream<List<NoteTypeEntity>> watchAllNotesTypes() {
+    return NoteTypeDao.watchAllNoteTypes();
   }
 
   Future<NoteTypeEntity?> getNoteTypeById(int id) async {

@@ -2,7 +2,10 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:jampa_flutter/data/models/category.dart';
 import 'package:jampa_flutter/data/models/note.dart';
+import 'package:jampa_flutter/data/models/note_type.dart';
+import 'package:jampa_flutter/repository/categories_repository.dart';
 import 'package:jampa_flutter/utils/forms/content_validator.dart';
 import 'package:jampa_flutter/utils/forms/name_validator.dart';
 import 'package:jampa_flutter/repository/notes_repository.dart';
@@ -71,7 +74,23 @@ class CreateNoteCubit extends Cubit<CreateNoteState> {
     );
   }
 
-  void onSubmit() {
+  void onSelectedCategoriesChanged(List<CategoryEntity> categories) {
+    emit(
+        state.copyWith(
+          selectedCategories: categories,
+        )
+    );
+  }
+
+  void onSelectedNoteTypeChanged(NoteTypeEntity? noteType) {
+    emit(
+        state.copyWith(
+          selectedNoteType: noteType,
+        )
+    );
+  }
+
+  Future<void> onSubmit() async {
     final title = NameValidator.dirty(state.title.value);
     final content = ContentValidator.dirty(state.content.value);
     emit(
@@ -96,15 +115,19 @@ class CreateNoteCubit extends Cubit<CreateNoteState> {
       late NoteEntity note;
       if(state.note != null){
         note = state.note!.copyWith(
-          title: state.title.value,
-          content: state.content.value,
-          createdAt: state.note!.createdAt,
-          updatedAt: DateTime.now()
+            title: state.title.value,
+            content: state.content.value,
+            noteTypeId: state.selectedNoteType?.id,
+            categories: state.selectedCategories,
+            createdAt: state.note!.createdAt,
+            updatedAt: DateTime.now()
         );
       }else{
         note = NoteEntity(
             title: state.title.value,
             content: state.content.value,
+            noteTypeId: state.selectedNoteType?.id,
+            categories: state.selectedCategories,
             createdAt: DateTime.now(),
             updatedAt: DateTime.now()
         );
@@ -112,15 +135,15 @@ class CreateNoteCubit extends Cubit<CreateNoteState> {
 
       // If the note does not exist, save it
       notesRepository.saveNote(note)
-        .then((_) {
-          // If the note is saved successfully, emit a success state
-          emit(state.copyWith(isSuccess: true, isLoading: false));
-        })
-        .catchError((error){
-          // If an error occurs while saving, emit a state indicating an error
-          emit(state.copyWith(isError: true, isLoading: false));
-          debugPrint('Error saving note: $error');
-        });
+      .then((_) {
+        // If the note is saved successfully, emit a success state
+        emit(state.copyWith(isSuccess: true, isLoading: false));
+      })
+      .catchError((error){
+        // If an error occurs while saving, emit a state indicating an error
+        emit(state.copyWith(isError: true, isLoading: false));
+        debugPrint('Error saving note: $error');
+      });
     }
   }
 }

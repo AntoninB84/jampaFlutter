@@ -152,6 +152,12 @@ class AppLocalizationsFr extends AppLocalizations {
       'Le contenu de la note ne peut pas être vide';
 
   @override
+  String get create_note_categories_field_title => 'Catégories';
+
+  @override
+  String get create_note_type_field_title => 'Type de note';
+
+  @override
   String get create_note_success_feedback => 'Note créée avec succès';
 
   @override

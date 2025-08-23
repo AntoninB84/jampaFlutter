@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jampa_flutter/bloc/auth/auth_bloc.dart';
-import 'package:jampa_flutter/data/dao/category_dao.dart';
-import 'package:jampa_flutter/data/models/category.dart';
 import 'package:jampa_flutter/repository/auth_repository.dart';
 import 'package:jampa_flutter/repository/user_repository.dart';
 import 'package:jampa_flutter/utils/constants/l10n/app_localizations.dart';
-import 'package:jampa_flutter/utils/routers/auth_router.dart';
 import 'package:jampa_flutter/utils/routers/main_router.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 

@@ -22,6 +22,11 @@ class CategoryDao {
     });
   }
 
+  static Future<List<CategoryEntity>> getCategoriesByIds(List<int> ids) async {
+    AppDatabase db = serviceLocator<AppDatabase>();
+    return await (db.select(db.categoryTable)..where((category) => category.id.isIn(ids))..orderBy([(t)=>OrderingTerm(expression: t.name)])).get();
+  }
+
   static Future<List<CategoryEntity>> getAllCategories() async {
     AppDatabase db = serviceLocator<AppDatabase>();
     return await (db.select(db.categoryTable)..orderBy([(t)=>OrderingTerm(expression: t.name)])).get();

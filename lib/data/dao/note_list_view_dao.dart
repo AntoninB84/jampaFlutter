@@ -8,8 +8,11 @@ class NoteListViewDao {
   static Stream<List<NoteListViewData>> watchAllNotesWithFilters(int? noteTypeId, List<int>? categoryIds) {
     final db = serviceLocator<AppDatabase>();
     final query = db.select(db.noteListView)
-      ..where((tbl) => tbl.noteId.isNotNull())
-      ..where((tbl) => tbl.noteTypeId.equalsNullable(noteTypeId));
+      ..where((tbl) => tbl.noteId.isNotNull());
+
+    if(noteTypeId != null){
+      query.where((tbl) => tbl.noteTypeId.equalsNullable(noteTypeId));
+    }
 
     if(categoryIds != null && categoryIds.isNotEmpty) {
       for (final id in categoryIds) {

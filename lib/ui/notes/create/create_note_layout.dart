@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jampa_flutter/ui/notes/widgets/note_type_selector.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:jampa_flutter/ui/notes/widgets/note_title_text_field.dart';
@@ -47,6 +48,8 @@ class CreateNoteLayout extends StatelessWidget {
                 const SizedBox(height: 16),
                 NoteContentTextField(),
                 const SizedBox(height: 16),
+                NoteTypeSelector(),
+                const SizedBox(height: 32),
                 SubmitNoteButton(),
                 const SizedBox(height: 16),
                 CancelButton(),

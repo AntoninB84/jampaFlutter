@@ -11,6 +11,9 @@ class CategoriesRepository {
   Stream<List<CategoryEntity>> getCategoriesStream() {
     return CategoryDao.getAllCategoriesStream();
   }
+  Future<List<CategoryEntity>> getCategoriesByIds(List<int> ids) async {
+    return await CategoryDao.getCategoriesByIds(ids);
+  }
 
   Future<CategoryEntity?> getCategoryById(int id) async {
     return await CategoryDao.getCategoryById(id);
