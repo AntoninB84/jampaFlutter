@@ -31,7 +31,7 @@ class CategoryDao {
     AppDatabase db = serviceLocator<AppDatabase>();
     return await (db.select(db.categoryTable)..orderBy([(t)=>OrderingTerm(expression: t.name)])).get();
   }
-  static Stream<List<CategoryEntity>> getAllCategoriesStream() {
+  static Stream<List<CategoryEntity>> watchAllCategories() {
     AppDatabase db = serviceLocator<AppDatabase>();
     return (db.select(db.categoryTable)..orderBy([(t)=>OrderingTerm(expression: t.name)])).watch();
   }

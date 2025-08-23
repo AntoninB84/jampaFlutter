@@ -8,8 +8,8 @@ class CategoriesRepository {
   Future<List<CategoryEntity>> getCategories() async {
       return await CategoryDao.getAllCategories();
   }
-  Stream<List<CategoryEntity>> getCategoriesStream() {
-    return CategoryDao.getAllCategoriesStream();
+  Stream<List<CategoryEntity>> watchAllCategories() {
+    return CategoryDao.watchAllCategories();
   }
   Future<List<CategoryEntity>> getCategoriesByIds(List<int> ids) async {
     return await CategoryDao.getCategoriesByIds(ids);

@@ -7,7 +7,7 @@ class CategoriesEvent extends Equatable {
 
 final class GetCategories extends CategoriesEvent {}
 
-final class ListenCategories extends CategoriesEvent {}
+final class WatchCategories extends CategoriesEvent {}
 
 final class DeleteCategory extends CategoriesEvent {
   final int selectedCategoryId;

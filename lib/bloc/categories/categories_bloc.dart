@@ -13,7 +13,7 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
     required this.categoriesRepository
   }) : super(const CategoriesState()) {
     on<GetCategories>(_mapGetCategoriesEventToState);
-    on<ListenCategories>(_listenCategories);
+    on<WatchCategories>(_watchCategories);
     on<DeleteCategory>(_deleteCategory);
   }
   final CategoriesRepository categoriesRepository;
@@ -34,9 +34,9 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
     }
   }
 
-  void _listenCategories(ListenCategories event, Emitter<CategoriesState> emit) async {
+  void _watchCategories(WatchCategories event, Emitter<CategoriesState> emit) async {
     await emit.onEach(
-        categoriesRepository.getCategoriesStream(),
+        categoriesRepository.watchAllCategories(),
         onData: (data) {
           emit(
             state.copyWith(
