@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jampa_flutter/bloc/note_types/note_types_bloc.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_cubit.dart';
 import 'package:jampa_flutter/data/models/note_type.dart';
+import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 import '../../../repository/note_types_repository.dart';
@@ -18,40 +19,43 @@ class NoteTypeSelector extends StatelessWidget {
       create: (context) => NoteTypesBloc(
           noteTypesRepository: context.read<NoteTypesRepository>()
       )..add(WatchNoteTypes()),
-      child: BlocConsumer<NoteTypesBloc, NoteTypesState>(
-        listener: (context, state) {
-          if (state.listStatus.isError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(context.strings.generic_error_message))
-            );
+      child: BlocConsumer<CreateNoteCubit, CreateNoteState>(
+        listener: (context, state){
+          if(state.note != null){
+            context.read<CreateNoteCubit>()
+                .onSelectedNoteTypeChanged(state.note!.noteType);
           }
         },
-        builder: (context, state) {
-          List<NoteTypeEntity> noteTypes = state.noteTypes;
+        listenWhen: (previous, current) {
+          // Only listen for changes in the note
+          return (previous.note != current.note);
+        },
+        builder: (context, createNoteState) {
 
-          NoteTypeEntity? selectedType = noteTypes.isNotEmpty ? noteTypes.first : null;
+          NoteTypeEntity? selectedTypeFromState;
 
-          return BlocConsumer<CreateNoteCubit, CreateNoteState>(
-            listener: (context, state){
-              if(state.note != null){
-                selectedType = noteTypes.isNotEmpty ?
-                    noteTypes.firstWhere(
-                      (noteType) => noteType == state.selectedNoteType,
-                      orElse: () => noteTypes.first)
-                    : null;
+          return BlocConsumer<NoteTypesBloc, NoteTypesState>(
+            listener: (context, state) {
+              if (state.listStatus.isError) {
+                SnackBarX.showError(context, context.strings.generic_error_message);
               }
             },
             listenWhen: (previous, current) {
-              // Only listen for changes in the note
-              return previous.note != current.note;
+              // Only listen for changes in the listStatus
+              return previous.listStatus != current.listStatus;
             },
-            builder: (context, state) {
+            builder: (context, noteTypesState) {
+              List<NoteTypeEntity> noteTypes = noteTypesState.noteTypes;
+              if(noteTypes.isNotEmpty) {
+                selectedTypeFromState = createNoteState.selectedNoteType;
+              }
+
               return DropdownButtonFormField<NoteTypeEntity>(
                 decoration: InputDecoration(
                   labelText: context.strings.create_note_type_field_title,
                   border: OutlineInputBorder(),
                 ),
-                value: selectedType,
+                value: selectedTypeFromState,
                 items: noteTypes.map((noteType) {
                   return DropdownMenuItem<NoteTypeEntity>(
                     value: noteType,

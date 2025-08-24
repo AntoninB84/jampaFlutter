@@ -42,6 +42,17 @@ class NoteTypeEntity {
     );
   }
 
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is NoteTypeEntity &&
+        other.id == id &&
+        other.name == name &&
+        other.createdAt == createdAt &&
+        other.updatedAt == updatedAt;
+  }
+
   NoteTypeTableCompanion toCompanion() {
     return NoteTypeTableCompanion(
       id: id == null ? Value.absent() : Value(id!),

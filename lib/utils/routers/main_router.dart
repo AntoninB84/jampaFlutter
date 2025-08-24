@@ -8,20 +8,21 @@ import 'package:jampa_flutter/ui/note_types/create/create_note_type_page.dart';
 import 'package:jampa_flutter/ui/note_types/index/note_types_page.dart';
 import 'package:jampa_flutter/ui/notes/create/create_note_page.dart';
 import 'package:jampa_flutter/ui/notes/index/notes_page.dart';
+import 'package:jampa_flutter/ui/notes/show/show_note_page.dart';
 
 
 class AppRoutes {
   static const String notes = '/notes';
-  static const String noteDetails = '/notes/:id';
-  static const String createNote = '/notes/create';
-  static const String editNote = '/notes/edit/:id';
+  static const String noteDetails = '/:id';
+  static const String createNote = '/create';
+  static const String editNote = '/edit';
   static const String settings = '/settings';
   static const String categories = '/categories';
-  static const String createCategory = '/categories/create';
-  static const String editCategory = '/categories/edit/:id';
+  static const String createCategory = '/create';
+  static const String editCategory = '/edit/:id';
   static const String noteTypes = '/note_types';
-  static const String createNoteType = '/note_types/create';
-  static const String editNoteType = '/note_types/edit/:id';
+  static const String createNoteType = '/create';
+  static const String editNoteType = '/edit/:id';
 }
 
 final _routerKey = GlobalKey<NavigatorState>();
@@ -50,9 +51,18 @@ final GoRouter mainRouter = GoRouter(
                 GoRoute(
                   name: "NoteDetails",
                   path: AppRoutes.noteDetails,
-                  builder: (context, state) => Center(
-                    child: Text("Note Details Page for ID: ${state.pathParameters['id']}"),
-                  )
+                  builder: (context, state) => ShowNotePage(
+                      noteId: state.pathParameters['id']
+                  ),
+                  routes: [
+                    GoRoute(
+                      name: "EditNote",
+                      path: AppRoutes.editNote,
+                      builder: (context, state) => CreateNotePage(
+                        noteId: state.pathParameters['id'],
+                      )
+                    )
+                  ]
                 )
               ]
             )
@@ -91,7 +101,9 @@ final GoRouter mainRouter = GoRouter(
                       GoRoute(
                         name: "EditCategory",
                         path: AppRoutes.editCategory,
-                        builder: (context, state) => CreateCategoryPage(categoryId: state.pathParameters['id'],)
+                        builder: (context, state) => CreateCategoryPage(
+                          categoryId: state.pathParameters['id'],
+                        )
                       )
                     ]
                   ),
@@ -108,7 +120,9 @@ final GoRouter mainRouter = GoRouter(
                       GoRoute(
                         name: "EditNoteType",
                         path: AppRoutes.editNoteType,
-                        builder: (context, state) => CreateNoteTypePage(noteTypeId: state.pathParameters['id'],)
+                        builder: (context, state) => CreateNoteTypePage(
+                          noteTypeId: state.pathParameters['id'],
+                        )
                       )
                     ]
                   )

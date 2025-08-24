@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jampa_flutter/repository/notes_repository.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 import '../../bloc/bottom_navigation_bar/bottom_navigation_bar_bloc.dart';
@@ -26,7 +27,10 @@ class HomePage extends StatelessWidget {
         ),
         RepositoryProvider(
           create: (context) => NotesListViewRepository(),
-        )
+        ),
+        RepositoryProvider(
+          create: (context) => NotesRepository(),
+        ),
       ],
       child: BlocProvider(
         create: (context) => BottomNavigationBarBloc(),

@@ -4,9 +4,6 @@ import 'package:jampa_flutter/data/models/note.dart';
 class NotesRepository {
   const NotesRepository();
 
-  Stream<List<NoteEntity>> watchNotesWithFilters(int userId, int? noteTypeId, List<int>? categoryIds) {
-    return NoteDao.watchFilteredNotes(userId, noteTypeId, categoryIds);
-  }
 
   Future<void> saveNote(NoteEntity note) async {
     await NoteDao.saveSingleNote(note);
@@ -20,6 +17,9 @@ class NotesRepository {
     await NoteDao.deleteNoteById(id);
   }
 
+  Stream<NoteEntity?> watchNoteById(int id)  {
+    return NoteDao.watchNoteById(id);
+  }
   Future<NoteEntity?> getNoteById(int id) async {
     return await NoteDao.getNoteById(id);
   }
