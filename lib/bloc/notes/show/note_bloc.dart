@@ -30,7 +30,9 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
             if(note != null) {
               emit(state.copyWith(status: NoteStatus.success, note: note));
             } else {
-              emit(state.copyWith(status: NoteStatus.failure));
+              if(!state.deletionSuccess){
+                emit(state.copyWith(status: NoteStatus.failure));
+              }
             }
           },
           onError: (error, stackTrace) {

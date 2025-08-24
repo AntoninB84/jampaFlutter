@@ -16,10 +16,8 @@ class ShowNoteLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<NoteBloc, NoteState>(
       listener: (context, state) {
-        if(state.status == NoteStatus.failure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(context.strings.generic_error_message))
-          );
+        if(state.status.isFailure) {
+          SnackBarX.showError(context, context.strings.generic_error_message);
           context.pop();
         }else{
           if(state.deletionSuccess) {
@@ -59,6 +57,7 @@ class ShowNoteLayout extends StatelessWidget {
                           cancelButtonText: context.strings.cancel,
                           onConfirm: (){
                             context.read<NoteBloc>().add(DeleteNoteById(state.note?.id));
+                            context.pop();
                           },
                           onCancel: (){dialogContext.pop();}
                       );

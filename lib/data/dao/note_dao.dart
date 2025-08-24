@@ -59,7 +59,7 @@ class NoteDao {
   static NoteEntity? _mapNoteWithRelations(AppDatabase db, rows) {
     if(rows.isEmpty) return null;
     final note = rows.first.readTable(db.noteTable);
-    final noteType = rows.first.readTable(db.noteTypeTable);
+    final noteType = rows.first.readTableOrNull(db.noteTypeTable);
     final categories = rows
         .map((row) => row?.readTableOrNull(db.categoryTable))
         .where((cat) => cat != null && cat.id != null)
