@@ -18,62 +18,57 @@ class NoteCategoriesMultiSelector extends StatefulWidget{
 }
 
 class _NoteCategoriesMultiSelectorState extends State<NoteCategoriesMultiSelector>{
-  final controller = MultiSelectController<CategoryEntity>();
-
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider(
-      create: (context) => CategoriesRepository(),
-      child: BlocProvider<CategoriesBloc>(
-          create: (context) => CategoriesBloc(
-              categoriesRepository: context.read<CategoriesRepository>()
-          )..add(WatchCategories()),
-          child: BlocConsumer<CategoriesBloc, CategoriesState>(
-              listener: (context, state) {
-                if (state.listStatus.isError) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(context.strings.generic_error_message))
-                  );
-                }
-              },
-              builder: (context, state) {
-                List<CategoryEntity> categories = state.categories;
-
-                List<CategoryEntity> selectedCategories = [];
-
-                return BlocConsumer<CreateNoteCubit, CreateNoteState>(
-                    listener: (context, state){
-                      if(state.note != null){
-                        context.read<CreateNoteCubit>()
-                            .onSelectedCategoriesChanged(state.note!.categories ?? []);
-                      }
-                    },
-                    listenWhen: (previous, current) {
-                      // Only listen for changes in the note
-                      return previous.note != current.note;
-                    },
-                    builder: (context, state) {
-                      selectedCategories = state.selectedCategories;
-
-                      return MultiDropdown(
-                        controller: controller,
-                        enabled: true,
-                        onSelectionChange: (values) =>
-                            context.read<CreateNoteCubit>()
-                                .onSelectedCategoriesChanged(values),
-                        items: categories.map((category) {
-                          return DropdownItem<CategoryEntity>(
-                            value: category,
-                            label: category.name,
-                            selected: selectedCategories.contains(category),
-                          );
-                        }).toList(),
-                      );
-                    }
+    return BlocProvider<CategoriesBloc>(
+        create: (context) => CategoriesBloc(
+            categoriesRepository: context.read<CategoriesRepository>()
+        )..add(WatchCategories()),
+        child: BlocConsumer<CategoriesBloc, CategoriesState>(
+            listener: (context, state) {
+              if (state.listStatus.isError) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(context.strings.generic_error_message))
                 );
               }
-          )
-      ),
+            },
+            builder: (context, state) {
+              List<CategoryEntity> categories = state.categories;
+
+              List<CategoryEntity> selectedCategories = [];
+
+              return BlocConsumer<CreateNoteCubit, CreateNoteState>(
+                  listener: (context, state){
+                    if(state.note != null){
+                      context.read<CreateNoteCubit>()
+                          .onSelectedCategoriesChanged(state.note!.categories ?? []);
+                    }
+                  },
+                  listenWhen: (previous, current) {
+                    // Only listen for changes in the note
+                    return previous.note != current.note;
+                  },
+                  builder: (context, state) {
+                    selectedCategories = state.selectedCategories;
+
+                    return MultiDropdown(
+                      key: UniqueKey(),
+                      enabled: true,
+                      onSelectionChange: (values) =>
+                          context.read<CreateNoteCubit>()
+                              .onSelectedCategoriesChanged(values),
+                      items: categories.map((category) {
+                        return DropdownItem<CategoryEntity>(
+                          value: category,
+                          label: category.name,
+                          selected: selectedCategories.contains(category),
+                        );
+                      }).toList(),
+                    );
+                  }
+              );
+            }
+        )
     );
   }
 }

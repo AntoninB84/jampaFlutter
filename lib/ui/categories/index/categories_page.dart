@@ -11,15 +11,12 @@ class CategoriesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider(
-        create: (context) => CategoriesRepository(),
-        child: BlocProvider<CategoriesBloc>(
-          create: (context) => CategoriesBloc(
-              categoriesRepository: context.read<CategoriesRepository>()
-          )..add(WatchCategories()),
+    return BlocProvider<CategoriesBloc>(
+      create: (context) => CategoriesBloc(
+          categoriesRepository: context.read<CategoriesRepository>()
+      )..add(WatchCategories()),
 
-          child: const CategoriesLayout(),
-        )
+      child: const CategoriesLayout(),
     );
   }
 }

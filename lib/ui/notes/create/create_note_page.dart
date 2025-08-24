@@ -12,14 +12,11 @@ class CreateNotePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider(
-        create: (context) => NotesRepository(),
-        child: BlocProvider<CreateNoteCubit>(
-          create: (context) => CreateNoteCubit(
-              notesRepository: context.read<NotesRepository>(),
-          )..fetchNoteForUpdate(noteId),
-          child: const CreateNoteLayout(),
-        )
+    return BlocProvider<CreateNoteCubit>(
+      create: (context) => CreateNoteCubit(
+          notesRepository: context.read<NotesRepository>(),
+      )..fetchNoteForUpdate(noteId),
+      child: const CreateNoteLayout(),
     );
   }
 }

@@ -10,15 +10,12 @@ class NoteTypesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider(
-        create: (context) => NoteTypesRepository(),
-        child: BlocProvider<NoteTypesBloc>(
-          create: (context) => NoteTypesBloc(
-              noteTypesRepository: context.read<NoteTypesRepository>()
-          )..add(WatchNoteTypes()),
+    return BlocProvider<NoteTypesBloc>(
+      create: (context) => NoteTypesBloc(
+          noteTypesRepository: context.read<NoteTypesRepository>()
+      )..add(WatchNoteTypes()),
 
-          child: const NoteTypesLayout(),
-        )
+      child: const NoteTypesLayout(),
     );
   }
 }

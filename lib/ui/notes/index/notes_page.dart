@@ -10,14 +10,11 @@ class NotesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider(
-      create: (context) => NotesListViewRepository(),
-      child: BlocProvider<NotesListViewBloc>(
-        create: (context) => NotesListViewBloc(
-            notesListViewRepository: context.read<NotesListViewRepository>()
-        )..add(WatchNotes()),
-        child: const NotesLayout(),
-      ),
+    return BlocProvider<NotesListViewBloc>(
+      create: (context) => NotesListViewBloc(
+          notesListViewRepository: context.read<NotesListViewRepository>()
+      )..add(WatchNotes()),
+      child: const NotesLayout(),
     );
   }
 }

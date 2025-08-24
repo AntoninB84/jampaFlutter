@@ -11,7 +11,7 @@ SELECT
   n.note_type_id AS note_type_id,
   nt.name AS note_type_name,
   GROUP_CONCAT(c.id) AS categories_ids,
-  GROUP_CONCAT(c.name) AS categories_names
+  GROUP_CONCAT(c.name, ', ') AS categories_names
 FROM note_table n
 LEFT JOIN note_type_table nt ON nt.id = n.note_type_id
 LEFT JOIN note_category_table nc ON nc.note_id = n.id

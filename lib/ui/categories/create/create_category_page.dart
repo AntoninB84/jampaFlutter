@@ -12,14 +12,11 @@ class CreateCategoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider(
-        create: (context) => CategoriesRepository(),
-        child: BlocProvider<CreateCategoryCubit>(
-          create: (context) => CreateCategoryCubit(
-              categoriesRepository: context.read<CategoriesRepository>()
-          )..fetchCategoryForUpdate(categoryId),
-          child: const CreateCategoryLayout(),
-        )
+    return BlocProvider<CreateCategoryCubit>(
+      create: (context) => CreateCategoryCubit(
+          categoriesRepository: context.read<CategoriesRepository>()
+      )..fetchCategoryForUpdate(categoryId),
+      child: const CreateCategoryLayout(),
     );
   }
 }

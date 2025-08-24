@@ -34,29 +34,29 @@ class CreateNoteLayout extends StatelessWidget {
         return Scaffold(
           body: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  state.note != null ?
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Text(
+                    state.note != null ?
                     context.strings.edit_note_title
-                      : context.strings.create_note_title,
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                const SizedBox(height: 16),
-                NoteTitleTextField(),
-                const SizedBox(height: 16),
-                NoteContentTextField(),
-                const SizedBox(height: 16),
-                NoteTypeSelector(),
-                const SizedBox(height: 16),
-                NoteCategoriesMultiSelector(),
-                const SizedBox(height: 32),
-                SubmitNoteButton(),
-                const SizedBox(height: 16),
-                CancelButton(),
-              ],
+                        : context.strings.create_note_title,
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                  const SizedBox(height: 16),
+                  NoteTitleTextField(),
+                  const SizedBox(height: 16),
+                  NoteContentTextField(),
+                  const SizedBox(height: 16),
+                  NoteTypeSelector(),
+                  const SizedBox(height: 16),
+                  NoteCategoriesMultiSelector(),
+                  const SizedBox(height: 32),
+                  SubmitNoteButton(),
+                  const SizedBox(height: 16),
+                  CancelButton(),
+                ],
+              ),
             ),
           ),
         );
