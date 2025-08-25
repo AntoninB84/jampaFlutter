@@ -1392,6 +1392,662 @@ class NoteListView extends ViewInfo<NoteListView, NoteListViewData>
   };
 }
 
+class $ScheduleTableTable extends ScheduleTable
+    with TableInfo<$ScheduleTableTable, ScheduleEntity> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ScheduleTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _noteIdMeta = const VerificationMeta('noteId');
+  @override
+  late final GeneratedColumn<int> noteId = GeneratedColumn<int>(
+    'note_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL REFERENCES note_table(id) ON DELETE CASCADE',
+  );
+  static const VerificationMeta _dateMeta = const VerificationMeta('date');
+  @override
+  late final GeneratedColumn<DateTime> date = GeneratedColumn<DateTime>(
+    'date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _endDateMeta = const VerificationMeta(
+    'endDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> endDate = GeneratedColumn<DateTime>(
+    'end_date',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _recurrenceTypeMeta = const VerificationMeta(
+    'recurrenceType',
+  );
+  @override
+  late final GeneratedColumn<String> recurrenceType = GeneratedColumn<String>(
+    'recurrence_type',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _recurrenceIntervalMeta =
+      const VerificationMeta('recurrenceInterval');
+  @override
+  late final GeneratedColumn<int> recurrenceInterval = GeneratedColumn<int>(
+    'recurrence_interval',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _recurrenceDayMeta = const VerificationMeta(
+    'recurrenceDay',
+  );
+  @override
+  late final GeneratedColumn<int> recurrenceDay = GeneratedColumn<int>(
+    'recurrence_day',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    noteId,
+    date,
+    endDate,
+    createdAt,
+    updatedAt,
+    recurrenceType,
+    recurrenceInterval,
+    recurrenceDay,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'schedule_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ScheduleEntity> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('note_id')) {
+      context.handle(
+        _noteIdMeta,
+        noteId.isAcceptableOrUnknown(data['note_id']!, _noteIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_noteIdMeta);
+    }
+    if (data.containsKey('date')) {
+      context.handle(
+        _dateMeta,
+        date.isAcceptableOrUnknown(data['date']!, _dateMeta),
+      );
+    }
+    if (data.containsKey('end_date')) {
+      context.handle(
+        _endDateMeta,
+        endDate.isAcceptableOrUnknown(data['end_date']!, _endDateMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    if (data.containsKey('recurrence_type')) {
+      context.handle(
+        _recurrenceTypeMeta,
+        recurrenceType.isAcceptableOrUnknown(
+          data['recurrence_type']!,
+          _recurrenceTypeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('recurrence_interval')) {
+      context.handle(
+        _recurrenceIntervalMeta,
+        recurrenceInterval.isAcceptableOrUnknown(
+          data['recurrence_interval']!,
+          _recurrenceIntervalMeta,
+        ),
+      );
+    }
+    if (data.containsKey('recurrence_day')) {
+      context.handle(
+        _recurrenceDayMeta,
+        recurrenceDay.isAcceptableOrUnknown(
+          data['recurrence_day']!,
+          _recurrenceDayMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ScheduleEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ScheduleEntity(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      noteId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}note_id'],
+      )!,
+      date: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}date'],
+      )!,
+      endDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}end_date'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      recurrenceType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}recurrence_type'],
+      ),
+      recurrenceInterval: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}recurrence_interval'],
+      ),
+      recurrenceDay: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}recurrence_day'],
+      ),
+    );
+  }
+
+  @override
+  $ScheduleTableTable createAlias(String alias) {
+    return $ScheduleTableTable(attachedDatabase, alias);
+  }
+}
+
+class ScheduleTableCompanion extends UpdateCompanion<ScheduleEntity> {
+  final Value<int> id;
+  final Value<int> noteId;
+  final Value<DateTime> date;
+  final Value<DateTime?> endDate;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  final Value<String?> recurrenceType;
+  final Value<int?> recurrenceInterval;
+  final Value<int?> recurrenceDay;
+  const ScheduleTableCompanion({
+    this.id = const Value.absent(),
+    this.noteId = const Value.absent(),
+    this.date = const Value.absent(),
+    this.endDate = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.recurrenceType = const Value.absent(),
+    this.recurrenceInterval = const Value.absent(),
+    this.recurrenceDay = const Value.absent(),
+  });
+  ScheduleTableCompanion.insert({
+    this.id = const Value.absent(),
+    required int noteId,
+    this.date = const Value.absent(),
+    this.endDate = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.recurrenceType = const Value.absent(),
+    this.recurrenceInterval = const Value.absent(),
+    this.recurrenceDay = const Value.absent(),
+  }) : noteId = Value(noteId);
+  static Insertable<ScheduleEntity> custom({
+    Expression<int>? id,
+    Expression<int>? noteId,
+    Expression<DateTime>? date,
+    Expression<DateTime>? endDate,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+    Expression<String>? recurrenceType,
+    Expression<int>? recurrenceInterval,
+    Expression<int>? recurrenceDay,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (noteId != null) 'note_id': noteId,
+      if (date != null) 'date': date,
+      if (endDate != null) 'end_date': endDate,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (recurrenceType != null) 'recurrence_type': recurrenceType,
+      if (recurrenceInterval != null) 'recurrence_interval': recurrenceInterval,
+      if (recurrenceDay != null) 'recurrence_day': recurrenceDay,
+    });
+  }
+
+  ScheduleTableCompanion copyWith({
+    Value<int>? id,
+    Value<int>? noteId,
+    Value<DateTime>? date,
+    Value<DateTime?>? endDate,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<String?>? recurrenceType,
+    Value<int?>? recurrenceInterval,
+    Value<int?>? recurrenceDay,
+  }) {
+    return ScheduleTableCompanion(
+      id: id ?? this.id,
+      noteId: noteId ?? this.noteId,
+      date: date ?? this.date,
+      endDate: endDate ?? this.endDate,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      recurrenceType: recurrenceType ?? this.recurrenceType,
+      recurrenceInterval: recurrenceInterval ?? this.recurrenceInterval,
+      recurrenceDay: recurrenceDay ?? this.recurrenceDay,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (noteId.present) {
+      map['note_id'] = Variable<int>(noteId.value);
+    }
+    if (date.present) {
+      map['date'] = Variable<DateTime>(date.value);
+    }
+    if (endDate.present) {
+      map['end_date'] = Variable<DateTime>(endDate.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (recurrenceType.present) {
+      map['recurrence_type'] = Variable<String>(recurrenceType.value);
+    }
+    if (recurrenceInterval.present) {
+      map['recurrence_interval'] = Variable<int>(recurrenceInterval.value);
+    }
+    if (recurrenceDay.present) {
+      map['recurrence_day'] = Variable<int>(recurrenceDay.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ScheduleTableCompanion(')
+          ..write('id: $id, ')
+          ..write('noteId: $noteId, ')
+          ..write('date: $date, ')
+          ..write('endDate: $endDate, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('recurrenceType: $recurrenceType, ')
+          ..write('recurrenceInterval: $recurrenceInterval, ')
+          ..write('recurrenceDay: $recurrenceDay')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $AlarmTableTable extends AlarmTable
+    with TableInfo<$AlarmTableTable, AlarmEntity> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $AlarmTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _scheduleIdMeta = const VerificationMeta(
+    'scheduleId',
+  );
+  @override
+  late final GeneratedColumn<int> scheduleId = GeneratedColumn<int>(
+    'schedule_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints:
+        'NOT NULL REFERENCES schedule_table(id) ON DELETE CASCADE',
+  );
+  static const VerificationMeta _offsetTimeInMinutesMeta =
+      const VerificationMeta('offsetTimeInMinutes');
+  @override
+  late final GeneratedColumn<int> offsetTimeInMinutes = GeneratedColumn<int>(
+    'offset_time_in_minutes',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _isSilentMeta = const VerificationMeta(
+    'isSilent',
+  );
+  @override
+  late final GeneratedColumn<bool> isSilent = GeneratedColumn<bool>(
+    'is_silent',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_silent" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    scheduleId,
+    offsetTimeInMinutes,
+    isSilent,
+    createdAt,
+    updatedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'alarm_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<AlarmEntity> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('schedule_id')) {
+      context.handle(
+        _scheduleIdMeta,
+        scheduleId.isAcceptableOrUnknown(data['schedule_id']!, _scheduleIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_scheduleIdMeta);
+    }
+    if (data.containsKey('offset_time_in_minutes')) {
+      context.handle(
+        _offsetTimeInMinutesMeta,
+        offsetTimeInMinutes.isAcceptableOrUnknown(
+          data['offset_time_in_minutes']!,
+          _offsetTimeInMinutesMeta,
+        ),
+      );
+    }
+    if (data.containsKey('is_silent')) {
+      context.handle(
+        _isSilentMeta,
+        isSilent.isAcceptableOrUnknown(data['is_silent']!, _isSilentMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  AlarmEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return AlarmEntity(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      scheduleId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}schedule_id'],
+      )!,
+      offsetTimeInMinutes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}offset_time_in_minutes'],
+      ),
+      isSilent: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_silent'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+    );
+  }
+
+  @override
+  $AlarmTableTable createAlias(String alias) {
+    return $AlarmTableTable(attachedDatabase, alias);
+  }
+}
+
+class AlarmTableCompanion extends UpdateCompanion<AlarmEntity> {
+  final Value<int> id;
+  final Value<int> scheduleId;
+  final Value<int?> offsetTimeInMinutes;
+  final Value<bool> isSilent;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  const AlarmTableCompanion({
+    this.id = const Value.absent(),
+    this.scheduleId = const Value.absent(),
+    this.offsetTimeInMinutes = const Value.absent(),
+    this.isSilent = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+  });
+  AlarmTableCompanion.insert({
+    this.id = const Value.absent(),
+    required int scheduleId,
+    this.offsetTimeInMinutes = const Value.absent(),
+    this.isSilent = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+  }) : scheduleId = Value(scheduleId);
+  static Insertable<AlarmEntity> custom({
+    Expression<int>? id,
+    Expression<int>? scheduleId,
+    Expression<int>? offsetTimeInMinutes,
+    Expression<bool>? isSilent,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (scheduleId != null) 'schedule_id': scheduleId,
+      if (offsetTimeInMinutes != null)
+        'offset_time_in_minutes': offsetTimeInMinutes,
+      if (isSilent != null) 'is_silent': isSilent,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+    });
+  }
+
+  AlarmTableCompanion copyWith({
+    Value<int>? id,
+    Value<int>? scheduleId,
+    Value<int?>? offsetTimeInMinutes,
+    Value<bool>? isSilent,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+  }) {
+    return AlarmTableCompanion(
+      id: id ?? this.id,
+      scheduleId: scheduleId ?? this.scheduleId,
+      offsetTimeInMinutes: offsetTimeInMinutes ?? this.offsetTimeInMinutes,
+      isSilent: isSilent ?? this.isSilent,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (scheduleId.present) {
+      map['schedule_id'] = Variable<int>(scheduleId.value);
+    }
+    if (offsetTimeInMinutes.present) {
+      map['offset_time_in_minutes'] = Variable<int>(offsetTimeInMinutes.value);
+    }
+    if (isSilent.present) {
+      map['is_silent'] = Variable<bool>(isSilent.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AlarmTableCompanion(')
+          ..write('id: $id, ')
+          ..write('scheduleId: $scheduleId, ')
+          ..write('offsetTimeInMinutes: $offsetTimeInMinutes, ')
+          ..write('isSilent: $isSilent, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -1402,6 +2058,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $NoteCategoryTableTable noteCategoryTable =
       $NoteCategoryTableTable(this);
   late final NoteListView noteListView = NoteListView(this);
+  late final $ScheduleTableTable scheduleTable = $ScheduleTableTable(this);
+  late final $AlarmTableTable alarmTable = $AlarmTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1413,7 +2071,26 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     categoryTable,
     noteCategoryTable,
     noteListView,
+    scheduleTable,
+    alarmTable,
   ];
+  @override
+  StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'note_table',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('schedule_table', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'schedule_table',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('alarm_table', kind: UpdateKind.delete)],
+    ),
+  ]);
 }
 
 typedef $$NoteTypeTableTableCreateCompanionBuilder =
@@ -2099,6 +2776,24 @@ final class $$NoteTableTableReferences
       manager.$state.copyWith(prefetchedData: cache),
     );
   }
+
+  static MultiTypedResultKey<$ScheduleTableTable, List<ScheduleEntity>>
+  _scheduleTableRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.scheduleTable,
+    aliasName: $_aliasNameGenerator(db.noteTable.id, db.scheduleTable.noteId),
+  );
+
+  $$ScheduleTableTableProcessedTableManager get scheduleTableRefs {
+    final manager = $$ScheduleTableTableTableManager(
+      $_db,
+      $_db.scheduleTable,
+    ).filter((f) => f.noteId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_scheduleTableRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $$NoteTableTableFilterComposer
@@ -2197,6 +2892,31 @@ class $$NoteTableTableFilterComposer
           }) => $$NoteCategoryTableTableFilterComposer(
             $db: $db,
             $table: $db.noteCategoryTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> scheduleTableRefs(
+    Expression<bool> Function($$ScheduleTableTableFilterComposer f) f,
+  ) {
+    final $$ScheduleTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.scheduleTable,
+      getReferencedColumn: (t) => t.noteId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ScheduleTableTableFilterComposer(
+            $db: $db,
+            $table: $db.scheduleTable,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -2383,6 +3103,31 @@ class $$NoteTableTableAnnotationComposer
         );
     return f(composer);
   }
+
+  Expression<T> scheduleTableRefs<T extends Object>(
+    Expression<T> Function($$ScheduleTableTableAnnotationComposer a) f,
+  ) {
+    final $$ScheduleTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.scheduleTable,
+      getReferencedColumn: (t) => t.noteId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ScheduleTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.scheduleTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$NoteTableTableTableManager
@@ -2402,6 +3147,7 @@ class $$NoteTableTableTableManager
             bool noteTypeId,
             bool userId,
             bool noteCategoryTableRefs,
+            bool scheduleTableRefs,
           })
         > {
   $$NoteTableTableTableManager(_$AppDatabase db, $NoteTableTable table)
@@ -2464,11 +3210,13 @@ class $$NoteTableTableTableManager
                 noteTypeId = false,
                 userId = false,
                 noteCategoryTableRefs = false,
+                scheduleTableRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
                   explicitlyWatchedTables: [
                     if (noteCategoryTableRefs) db.noteCategoryTable,
+                    if (scheduleTableRefs) db.scheduleTable,
                   ],
                   addJoins:
                       <
@@ -2538,6 +3286,27 @@ class $$NoteTableTableTableManager
                               ),
                           typedResults: items,
                         ),
+                      if (scheduleTableRefs)
+                        await $_getPrefetchedData<
+                          NoteEntity,
+                          $NoteTableTable,
+                          ScheduleEntity
+                        >(
+                          currentTable: table,
+                          referencedTable: $$NoteTableTableReferences
+                              ._scheduleTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$NoteTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).scheduleTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.noteId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -2562,6 +3331,7 @@ typedef $$NoteTableTableProcessedTableManager =
         bool noteTypeId,
         bool userId,
         bool noteCategoryTableRefs,
+        bool scheduleTableRefs,
       })
     >;
 typedef $$CategoryTableTableCreateCompanionBuilder =
@@ -3224,6 +3994,830 @@ typedef $$NoteCategoryTableTableProcessedTableManager =
       NoteCategoryEntity,
       PrefetchHooks Function({bool noteId, bool categoryId})
     >;
+typedef $$ScheduleTableTableCreateCompanionBuilder =
+    ScheduleTableCompanion Function({
+      Value<int> id,
+      required int noteId,
+      Value<DateTime> date,
+      Value<DateTime?> endDate,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<String?> recurrenceType,
+      Value<int?> recurrenceInterval,
+      Value<int?> recurrenceDay,
+    });
+typedef $$ScheduleTableTableUpdateCompanionBuilder =
+    ScheduleTableCompanion Function({
+      Value<int> id,
+      Value<int> noteId,
+      Value<DateTime> date,
+      Value<DateTime?> endDate,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<String?> recurrenceType,
+      Value<int?> recurrenceInterval,
+      Value<int?> recurrenceDay,
+    });
+
+final class $$ScheduleTableTableReferences
+    extends BaseReferences<_$AppDatabase, $ScheduleTableTable, ScheduleEntity> {
+  $$ScheduleTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $NoteTableTable _noteIdTable(_$AppDatabase db) =>
+      db.noteTable.createAlias(
+        $_aliasNameGenerator(db.scheduleTable.noteId, db.noteTable.id),
+      );
+
+  $$NoteTableTableProcessedTableManager get noteId {
+    final $_column = $_itemColumn<int>('note_id')!;
+
+    final manager = $$NoteTableTableTableManager(
+      $_db,
+      $_db.noteTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_noteIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<$AlarmTableTable, List<AlarmEntity>>
+  _alarmTableRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.alarmTable,
+    aliasName: $_aliasNameGenerator(
+      db.scheduleTable.id,
+      db.alarmTable.scheduleId,
+    ),
+  );
+
+  $$AlarmTableTableProcessedTableManager get alarmTableRefs {
+    final manager = $$AlarmTableTableTableManager(
+      $_db,
+      $_db.alarmTable,
+    ).filter((f) => f.scheduleId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_alarmTableRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$ScheduleTableTableFilterComposer
+    extends Composer<_$AppDatabase, $ScheduleTableTable> {
+  $$ScheduleTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get date => $composableBuilder(
+    column: $table.date,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get endDate => $composableBuilder(
+    column: $table.endDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get recurrenceType => $composableBuilder(
+    column: $table.recurrenceType,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get recurrenceInterval => $composableBuilder(
+    column: $table.recurrenceInterval,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get recurrenceDay => $composableBuilder(
+    column: $table.recurrenceDay,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$NoteTableTableFilterComposer get noteId {
+    final $$NoteTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.noteId,
+      referencedTable: $db.noteTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$NoteTableTableFilterComposer(
+            $db: $db,
+            $table: $db.noteTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<bool> alarmTableRefs(
+    Expression<bool> Function($$AlarmTableTableFilterComposer f) f,
+  ) {
+    final $$AlarmTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.alarmTable,
+      getReferencedColumn: (t) => t.scheduleId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AlarmTableTableFilterComposer(
+            $db: $db,
+            $table: $db.alarmTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$ScheduleTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $ScheduleTableTable> {
+  $$ScheduleTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get date => $composableBuilder(
+    column: $table.date,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get endDate => $composableBuilder(
+    column: $table.endDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get recurrenceType => $composableBuilder(
+    column: $table.recurrenceType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get recurrenceInterval => $composableBuilder(
+    column: $table.recurrenceInterval,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get recurrenceDay => $composableBuilder(
+    column: $table.recurrenceDay,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$NoteTableTableOrderingComposer get noteId {
+    final $$NoteTableTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.noteId,
+      referencedTable: $db.noteTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$NoteTableTableOrderingComposer(
+            $db: $db,
+            $table: $db.noteTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ScheduleTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ScheduleTableTable> {
+  $$ScheduleTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get date =>
+      $composableBuilder(column: $table.date, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get endDate =>
+      $composableBuilder(column: $table.endDate, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<String> get recurrenceType => $composableBuilder(
+    column: $table.recurrenceType,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get recurrenceInterval => $composableBuilder(
+    column: $table.recurrenceInterval,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get recurrenceDay => $composableBuilder(
+    column: $table.recurrenceDay,
+    builder: (column) => column,
+  );
+
+  $$NoteTableTableAnnotationComposer get noteId {
+    final $$NoteTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.noteId,
+      referencedTable: $db.noteTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$NoteTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.noteTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<T> alarmTableRefs<T extends Object>(
+    Expression<T> Function($$AlarmTableTableAnnotationComposer a) f,
+  ) {
+    final $$AlarmTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.alarmTable,
+      getReferencedColumn: (t) => t.scheduleId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AlarmTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.alarmTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$ScheduleTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ScheduleTableTable,
+          ScheduleEntity,
+          $$ScheduleTableTableFilterComposer,
+          $$ScheduleTableTableOrderingComposer,
+          $$ScheduleTableTableAnnotationComposer,
+          $$ScheduleTableTableCreateCompanionBuilder,
+          $$ScheduleTableTableUpdateCompanionBuilder,
+          (ScheduleEntity, $$ScheduleTableTableReferences),
+          ScheduleEntity,
+          PrefetchHooks Function({bool noteId, bool alarmTableRefs})
+        > {
+  $$ScheduleTableTableTableManager(_$AppDatabase db, $ScheduleTableTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ScheduleTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ScheduleTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ScheduleTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> noteId = const Value.absent(),
+                Value<DateTime> date = const Value.absent(),
+                Value<DateTime?> endDate = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<String?> recurrenceType = const Value.absent(),
+                Value<int?> recurrenceInterval = const Value.absent(),
+                Value<int?> recurrenceDay = const Value.absent(),
+              }) => ScheduleTableCompanion(
+                id: id,
+                noteId: noteId,
+                date: date,
+                endDate: endDate,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                recurrenceType: recurrenceType,
+                recurrenceInterval: recurrenceInterval,
+                recurrenceDay: recurrenceDay,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int noteId,
+                Value<DateTime> date = const Value.absent(),
+                Value<DateTime?> endDate = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<String?> recurrenceType = const Value.absent(),
+                Value<int?> recurrenceInterval = const Value.absent(),
+                Value<int?> recurrenceDay = const Value.absent(),
+              }) => ScheduleTableCompanion.insert(
+                id: id,
+                noteId: noteId,
+                date: date,
+                endDate: endDate,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                recurrenceType: recurrenceType,
+                recurrenceInterval: recurrenceInterval,
+                recurrenceDay: recurrenceDay,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$ScheduleTableTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({noteId = false, alarmTableRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [if (alarmTableRefs) db.alarmTable],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (noteId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.noteId,
+                                referencedTable: $$ScheduleTableTableReferences
+                                    ._noteIdTable(db),
+                                referencedColumn: $$ScheduleTableTableReferences
+                                    ._noteIdTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (alarmTableRefs)
+                    await $_getPrefetchedData<
+                      ScheduleEntity,
+                      $ScheduleTableTable,
+                      AlarmEntity
+                    >(
+                      currentTable: table,
+                      referencedTable: $$ScheduleTableTableReferences
+                          ._alarmTableRefsTable(db),
+                      managerFromTypedResult: (p0) =>
+                          $$ScheduleTableTableReferences(
+                            db,
+                            table,
+                            p0,
+                          ).alarmTableRefs,
+                      referencedItemsForCurrentItem: (item, referencedItems) =>
+                          referencedItems.where((e) => e.scheduleId == item.id),
+                      typedResults: items,
+                    ),
+                ];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$ScheduleTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ScheduleTableTable,
+      ScheduleEntity,
+      $$ScheduleTableTableFilterComposer,
+      $$ScheduleTableTableOrderingComposer,
+      $$ScheduleTableTableAnnotationComposer,
+      $$ScheduleTableTableCreateCompanionBuilder,
+      $$ScheduleTableTableUpdateCompanionBuilder,
+      (ScheduleEntity, $$ScheduleTableTableReferences),
+      ScheduleEntity,
+      PrefetchHooks Function({bool noteId, bool alarmTableRefs})
+    >;
+typedef $$AlarmTableTableCreateCompanionBuilder =
+    AlarmTableCompanion Function({
+      Value<int> id,
+      required int scheduleId,
+      Value<int?> offsetTimeInMinutes,
+      Value<bool> isSilent,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+    });
+typedef $$AlarmTableTableUpdateCompanionBuilder =
+    AlarmTableCompanion Function({
+      Value<int> id,
+      Value<int> scheduleId,
+      Value<int?> offsetTimeInMinutes,
+      Value<bool> isSilent,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+    });
+
+final class $$AlarmTableTableReferences
+    extends BaseReferences<_$AppDatabase, $AlarmTableTable, AlarmEntity> {
+  $$AlarmTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $ScheduleTableTable _scheduleIdTable(_$AppDatabase db) =>
+      db.scheduleTable.createAlias(
+        $_aliasNameGenerator(db.alarmTable.scheduleId, db.scheduleTable.id),
+      );
+
+  $$ScheduleTableTableProcessedTableManager get scheduleId {
+    final $_column = $_itemColumn<int>('schedule_id')!;
+
+    final manager = $$ScheduleTableTableTableManager(
+      $_db,
+      $_db.scheduleTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_scheduleIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$AlarmTableTableFilterComposer
+    extends Composer<_$AppDatabase, $AlarmTableTable> {
+  $$AlarmTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get offsetTimeInMinutes => $composableBuilder(
+    column: $table.offsetTimeInMinutes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isSilent => $composableBuilder(
+    column: $table.isSilent,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$ScheduleTableTableFilterComposer get scheduleId {
+    final $$ScheduleTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.scheduleId,
+      referencedTable: $db.scheduleTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ScheduleTableTableFilterComposer(
+            $db: $db,
+            $table: $db.scheduleTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$AlarmTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $AlarmTableTable> {
+  $$AlarmTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get offsetTimeInMinutes => $composableBuilder(
+    column: $table.offsetTimeInMinutes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isSilent => $composableBuilder(
+    column: $table.isSilent,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$ScheduleTableTableOrderingComposer get scheduleId {
+    final $$ScheduleTableTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.scheduleId,
+      referencedTable: $db.scheduleTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ScheduleTableTableOrderingComposer(
+            $db: $db,
+            $table: $db.scheduleTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$AlarmTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $AlarmTableTable> {
+  $$AlarmTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get offsetTimeInMinutes => $composableBuilder(
+    column: $table.offsetTimeInMinutes,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get isSilent =>
+      $composableBuilder(column: $table.isSilent, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  $$ScheduleTableTableAnnotationComposer get scheduleId {
+    final $$ScheduleTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.scheduleId,
+      referencedTable: $db.scheduleTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ScheduleTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.scheduleTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$AlarmTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $AlarmTableTable,
+          AlarmEntity,
+          $$AlarmTableTableFilterComposer,
+          $$AlarmTableTableOrderingComposer,
+          $$AlarmTableTableAnnotationComposer,
+          $$AlarmTableTableCreateCompanionBuilder,
+          $$AlarmTableTableUpdateCompanionBuilder,
+          (AlarmEntity, $$AlarmTableTableReferences),
+          AlarmEntity,
+          PrefetchHooks Function({bool scheduleId})
+        > {
+  $$AlarmTableTableTableManager(_$AppDatabase db, $AlarmTableTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$AlarmTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AlarmTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AlarmTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> scheduleId = const Value.absent(),
+                Value<int?> offsetTimeInMinutes = const Value.absent(),
+                Value<bool> isSilent = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+              }) => AlarmTableCompanion(
+                id: id,
+                scheduleId: scheduleId,
+                offsetTimeInMinutes: offsetTimeInMinutes,
+                isSilent: isSilent,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int scheduleId,
+                Value<int?> offsetTimeInMinutes = const Value.absent(),
+                Value<bool> isSilent = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+              }) => AlarmTableCompanion.insert(
+                id: id,
+                scheduleId: scheduleId,
+                offsetTimeInMinutes: offsetTimeInMinutes,
+                isSilent: isSilent,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$AlarmTableTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({scheduleId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (scheduleId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.scheduleId,
+                                referencedTable: $$AlarmTableTableReferences
+                                    ._scheduleIdTable(db),
+                                referencedColumn: $$AlarmTableTableReferences
+                                    ._scheduleIdTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$AlarmTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $AlarmTableTable,
+      AlarmEntity,
+      $$AlarmTableTableFilterComposer,
+      $$AlarmTableTableOrderingComposer,
+      $$AlarmTableTableAnnotationComposer,
+      $$AlarmTableTableCreateCompanionBuilder,
+      $$AlarmTableTableUpdateCompanionBuilder,
+      (AlarmEntity, $$AlarmTableTableReferences),
+      AlarmEntity,
+      PrefetchHooks Function({bool scheduleId})
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -3238,4 +4832,8 @@ class $AppDatabaseManager {
       $$CategoryTableTableTableManager(_db, _db.categoryTable);
   $$NoteCategoryTableTableTableManager get noteCategoryTable =>
       $$NoteCategoryTableTableTableManager(_db, _db.noteCategoryTable);
+  $$ScheduleTableTableTableManager get scheduleTable =>
+      $$ScheduleTableTableTableManager(_db, _db.scheduleTable);
+  $$AlarmTableTableTableManager get alarmTable =>
+      $$AlarmTableTableTableManager(_db, _db.alarmTable);
 }

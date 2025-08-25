@@ -52,7 +52,16 @@ class NoteEntity {
 
   @override
   String toString() {
-    return 'NoteEntity{id: $id, title: $title, content: $content, createdAt: $createdAt, updatedAt: $updatedAt, noteTypeId: $noteTypeId, userId: $userId, categories: $categories}';
+    return 'NoteEntity{'
+        'id: $id, '
+        'title: $title, '
+        'content: $content, '
+        'createdAt: $createdAt, '
+        'updatedAt: $updatedAt, '
+        'noteTypeId: $noteTypeId, '
+        'userId: $userId, '
+        'categories: $categories'
+      '}';
   }
 
   NoteEntity copyWith({
