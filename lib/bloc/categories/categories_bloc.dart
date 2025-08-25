@@ -12,27 +12,11 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
   CategoriesBloc({
     required this.categoriesRepository
   }) : super(const CategoriesState()) {
-    on<GetCategories>(_mapGetCategoriesEventToState);
     on<WatchCategories>(_watchCategories);
+    on<WatchCategoriesWithCount>(_watchCategoriesWithCount);
     on<DeleteCategory>(_deleteCategory);
   }
   final CategoriesRepository categoriesRepository;
-  
-  void _mapGetCategoriesEventToState(GetCategories event, Emitter<CategoriesState> emit) async {
-    emit(state.copyWith(listStatus: CategoriesListStatus.loading));
-    try{
-      final categories = await categoriesRepository.getCategories();
-      emit(
-        state.copyWith(
-            listStatus: CategoriesListStatus.success,
-            categories: categories
-        )
-      );
-    } catch (error, stacktrace) {
-      debugPrintStack(stackTrace: stacktrace);
-      emit(state.copyWith(listStatus: CategoriesListStatus.error));
-    }
-  }
 
   void _watchCategories(WatchCategories event, Emitter<CategoriesState> emit) async {
     await emit.onEach(
@@ -49,6 +33,24 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
         debugPrint("Error listening to categories: $error");
         emit(state.copyWith(listStatus: CategoriesListStatus.error));
       }
+    );
+  }
+
+  void _watchCategoriesWithCount(WatchCategoriesWithCount event, Emitter<CategoriesState> emit) async {
+    await emit.onEach(
+        categoriesRepository.watchCategoriesWithUseCount(),
+        onData: (data) {
+          emit(
+              state.copyWith(
+                  listStatus: CategoriesListStatus.success,
+                  categoriesWithCount: data
+              )
+          );
+        },
+        onError: (error, stackTrace) {
+          debugPrint("Error listening to categories with count: $error");
+          emit(state.copyWith(listStatus: CategoriesListStatus.error));
+        }
     );
   }
 

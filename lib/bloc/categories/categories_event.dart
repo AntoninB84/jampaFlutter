@@ -5,9 +5,8 @@ class CategoriesEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-final class GetCategories extends CategoriesEvent {}
-
 final class WatchCategories extends CategoriesEvent {}
+final class WatchCategoriesWithCount extends CategoriesEvent {}
 
 final class DeleteCategory extends CategoriesEvent {
   final int selectedCategoryId;

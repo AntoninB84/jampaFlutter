@@ -33,6 +33,30 @@ class NoteTypeDao {
     AppDatabase db = serviceLocator<AppDatabase>();
     return (db.select(db.noteTypeTable)..orderBy([(t) => OrderingTerm(expression: t.name)])).watch();
   }
+  static Stream<List<NoteTypeWithCount>> watchAllNoteTypesWithCount() {
+    AppDatabase db = serviceLocator<AppDatabase>();
+    final noteTypeAlias = db.alias(db.noteTypeTable, 'nt');
+    final noteAlias = db.alias(db.noteTable, 'n');
+
+    final query = (db.select(noteTypeAlias)
+      ..orderBy([(t) => OrderingTerm.asc(t.name)]))
+      .join([
+        leftOuterJoin(
+          noteAlias,
+          noteAlias.noteTypeId.equalsExp(noteTypeAlias.id),
+        ),
+      ])
+      ..addColumns([noteAlias.id.count()])
+      ..groupBy([noteTypeAlias.id]);
+
+    return query.watch().map((rows) {
+      return rows.map((row) {
+        final noteType = row.readTable(noteTypeAlias);
+        final count = row.read(noteAlias.id.count());
+        return NoteTypeWithCount(noteType: noteType, noteCount: count ?? 0);
+      }).toList();
+    });
+  }
 
   static Future<NoteTypeEntity?> getNoteTypeById(int id) async {
     AppDatabase db = serviceLocator<AppDatabase>();

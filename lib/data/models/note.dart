@@ -4,11 +4,19 @@ import 'package:jampa_flutter/data/models/category.dart';
 import 'package:jampa_flutter/data/models/note_type.dart';
 import 'package:jampa_flutter/data/models/user.dart';
 
+enum NoteStatus {
+  todo,
+  inProgress,
+  done,
+}
+
 @UseRowClass(NoteEntity)
 class NoteTable extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get title => text().withLength(min: 1, max: 100)();
   TextColumn get content => text().withLength(min: 1)();
+  BoolColumn get isImportant => boolean().withDefault(const Constant(false))();
+  TextColumn get status => text().withDefault(Constant(NoteStatus.todo.name))();
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
   IntColumn get noteTypeId => integer().references(NoteTypeTable, #id).nullable()();
@@ -19,6 +27,8 @@ class NoteEntity {
   int? id;
   String title;
   String content;
+  bool isImportant;
+  String status;
   DateTime createdAt;
   DateTime updatedAt;
   int? noteTypeId;
@@ -30,6 +40,8 @@ class NoteEntity {
     this.id,
     required this.title,
     required this.content,
+    this.isImportant = false,
+    this.status = 'todo',
     required this.createdAt,
     required this.updatedAt,
     this.userId,
@@ -43,6 +55,8 @@ class NoteEntity {
       id: id == null ? Value.absent() : Value(id!),
       title: Value(title),
       content: Value(content),
+      isImportant: Value(isImportant),
+      status: Value(status),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
       noteTypeId: noteTypeId == null ? Value.absent() : Value(noteTypeId!),
@@ -56,6 +70,8 @@ class NoteEntity {
         'id: $id, '
         'title: $title, '
         'content: $content, '
+        'isImportant: $isImportant, '
+        'state: $status, '
         'createdAt: $createdAt, '
         'updatedAt: $updatedAt, '
         'noteTypeId: $noteTypeId, '
@@ -68,6 +84,8 @@ class NoteEntity {
     int? id,
     String? title,
     String? content,
+    bool? isImportant,
+    String? status,
     DateTime? createdAt,
     DateTime? updatedAt,
     int? noteTypeId,
@@ -79,6 +97,8 @@ class NoteEntity {
       id: id ?? this.id,
       title: title ?? this.title,
       content: content ?? this.content,
+      isImportant: isImportant ?? this.isImportant,
+      status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       noteTypeId: noteTypeId ?? this.noteTypeId,
@@ -92,6 +112,8 @@ class NoteEntity {
     : id = json['id'] as int?,
       title = json['title'] as String,
       content = json['content'] as String,
+      isImportant = json['isImportant'] as bool? ?? false,
+      status = json['status'] as String? ?? NoteStatus.todo.name,
       createdAt = DateTime.parse(json['createdAt'] as String),
       updatedAt = DateTime.parse(json['updatedAt'] as String),
       noteTypeId = json['noteTypeId'] as int?,

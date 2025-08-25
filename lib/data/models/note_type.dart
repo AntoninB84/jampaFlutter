@@ -2,6 +2,16 @@
 import 'package:drift/drift.dart';
 import '../database.dart';
 
+class NoteTypeWithCount {
+  final NoteTypeEntity noteType;
+  final int noteCount;
+
+  NoteTypeWithCount({
+    required this.noteType,
+    required this.noteCount,
+  });
+}
+
 @UseRowClass(NoteTypeEntity)
 class NoteTypeTable extends Table {
   IntColumn get id => integer().autoIncrement()();

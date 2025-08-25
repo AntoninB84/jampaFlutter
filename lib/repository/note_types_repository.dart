@@ -11,6 +11,9 @@ class NoteTypesRepository {
   Stream<List<NoteTypeEntity>> watchAllNotesTypes() {
     return NoteTypeDao.watchAllNoteTypes();
   }
+  Stream<List<NoteTypeWithCount>> watchAllNotesTypesWithCount() {
+    return NoteTypeDao.watchAllNoteTypesWithCount();
+  }
 
   Future<NoteTypeEntity?> getNoteTypeById(int id) async {
     return await NoteTypeDao.getNoteTypeById(id);

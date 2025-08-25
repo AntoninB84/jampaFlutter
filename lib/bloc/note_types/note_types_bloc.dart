@@ -11,27 +11,11 @@ class NoteTypesBloc extends Bloc<NoteTypesEvent, NoteTypesState> {
   NoteTypesBloc({
     required this.noteTypesRepository
   }) : super(const NoteTypesState()) {
-    on<GetNoteTypes>(_mapGetNoteTypesEventToState);
     on<WatchNoteTypes>(_watchNoteTypes);
+    on<WatchNoteTypesWithCount>(_watchNoteTypesWithCount);
     on<DeleteNoteType>(_deleteNoteType);
   }
   final NoteTypesRepository noteTypesRepository;
-
-  void _mapGetNoteTypesEventToState(GetNoteTypes event, Emitter<NoteTypesState> emit) async {
-    emit(state.copyWith(listStatus: NoteTypesListStatus.loading));
-    try{
-      final noteTypes = await noteTypesRepository.getNoteTypes();
-      emit(
-          state.copyWith(
-              listStatus: NoteTypesListStatus.success,
-              noteTypes: noteTypes
-          )
-      );
-    } catch (error, stacktrace) {
-      debugPrintStack(stackTrace: stacktrace);
-      emit(state.copyWith(listStatus: NoteTypesListStatus.error));
-    }
-  }
 
   void _watchNoteTypes(WatchNoteTypes event, Emitter<NoteTypesState> emit) async {
     await emit.onEach(
@@ -46,6 +30,24 @@ class NoteTypesBloc extends Bloc<NoteTypesEvent, NoteTypesState> {
         },
         onError: (error, stackTrace) {
           debugPrint("Error listening to noteTypes: $error");
+          emit(state.copyWith(listStatus: NoteTypesListStatus.error));
+        }
+    );
+  }
+
+  void _watchNoteTypesWithCount(WatchNoteTypesWithCount event, Emitter<NoteTypesState> emit) async {
+    await emit.onEach(
+        noteTypesRepository.watchAllNotesTypesWithCount(),
+        onData: (data) {
+          emit(
+              state.copyWith(
+                  listStatus: NoteTypesListStatus.success,
+                  noteTypesWithCount: data
+              )
+          );
+        },
+        onError: (error, stackTrace) {
+          debugPrint("Error listening to noteTypes with count: $error");
           emit(state.copyWith(listStatus: NoteTypesListStatus.error));
         }
     );

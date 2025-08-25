@@ -1,13 +1,10 @@
-# jampa_flutter
+## Inside
 
-Jampa remake in Flutter.
+- SQLite database with Drift.
+- GetIt for dependency injection.
+- State management with Bloc/Cubit.
+- Routing with GoRouter.
 
-## Planned Features
-- Todo list
-- Notes
-- Calendar
-- Connection
-- ...
 
 ## l10n
 

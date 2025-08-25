@@ -1,34 +1,18 @@
 import 'package:drift/drift.dart';
 import 'package:jampa_flutter/data/models/note.dart';
-import 'package:jampa_flutter/data/models/note_category.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
 import '../database.dart';
 import '../models/category.dart';
-import 'note_category_dao.dart';
 
 class NoteDao {
-  static Future<void> saveSingleNote(NoteEntity note) async {
+  static Future<NoteEntity> saveSingleNote(NoteEntity note) async {
     AppDatabase db = serviceLocator<AppDatabase>();
-    // Extract categories before inserting the note
-    List<CategoryEntity> categories = note.categories ?? [];
     // Insert or update the note
-    note = await db.into(db.noteTable).insertReturning(
+    return await db.into(db.noteTable).insertReturning(
       note.toCompanion(),
       onConflict: DoUpdate((old) => note.toCompanion())
     );
-    // Clean existing relationships for the note
-    await NoteCategoryDao.cleanRelationshipsByNoteId(note.id!);
-    // Then, re-establish relationships
-    if(categories.isNotEmpty) {
-      List<NoteCategoryEntity> noteCategories = categories.map((category) {
-        return NoteCategoryEntity(
-          noteId: note.id!,
-          categoryId: category.id!,
-        );
-      }).toList();
-      await NoteCategoryDao.saveMultipleNoteCategories(noteCategories);
-    }
   }
 
   static Future<void> saveListOfNotes(List<NoteEntity> notes) async {

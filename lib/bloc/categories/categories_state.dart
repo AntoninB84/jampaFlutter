@@ -18,27 +18,32 @@ class CategoriesState extends Equatable {
 
   const CategoriesState({
     this.listStatus = CategoriesListStatus.initial,
+    List<CategoryWithCount>? categoriesWithCount,
     List<CategoryEntity>? categories,
     this.deletionError = false,
     this.deletionSuccess = false,
-  }) : categories = categories ?? const [];
+  }) : categoriesWithCount = categoriesWithCount ?? const [],
+       categories = categories ?? const [];
 
   final CategoriesListStatus listStatus;
+  final List<CategoryWithCount> categoriesWithCount;
   final List<CategoryEntity> categories;
   final bool deletionError;
   final bool deletionSuccess;
 
 
   @override
-  List<Object?> get props => [listStatus, categories, deletionError, deletionSuccess];
+  List<Object?> get props => [listStatus, categoriesWithCount, categories, deletionError, deletionSuccess];
 
   CategoriesState copyWith({
+    List<CategoryWithCount>? categoriesWithCount,
     List<CategoryEntity>? categories,
     CategoriesListStatus? listStatus,
     bool? deletionError,
     bool? deletionSuccess,
   }) {
     return CategoriesState(
+      categoriesWithCount: categoriesWithCount ?? this.categoriesWithCount,
       categories: categories ?? this.categories,
       listStatus: listStatus ?? this.listStatus,
       deletionError: deletionError ?? this.deletionError,

@@ -11,6 +11,10 @@ class CategoriesRepository {
   Stream<List<CategoryEntity>> watchAllCategories() {
     return CategoryDao.watchAllCategories();
   }
+  Stream<List<CategoryWithCount>> watchCategoriesWithUseCount() {
+    return CategoryDao().watchCategoriesWithUseCount();
+  }
+
   Future<List<CategoryEntity>> getCategoriesByIds(List<int> ids) async {
     return await CategoryDao.getCategoriesByIds(ids);
   }

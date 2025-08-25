@@ -539,6 +539,31 @@ class $NoteTableTable extends NoteTable
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _isImportantMeta = const VerificationMeta(
+    'isImportant',
+  );
+  @override
+  late final GeneratedColumn<bool> isImportant = GeneratedColumn<bool>(
+    'is_important',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_important" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+    'status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: Constant(NoteStatus.todo.name),
+  );
   static const VerificationMeta _createdAtMeta = const VerificationMeta(
     'createdAt',
   );
@@ -594,6 +619,8 @@ class $NoteTableTable extends NoteTable
     id,
     title,
     content,
+    isImportant,
+    status,
     createdAt,
     updatedAt,
     noteTypeId,
@@ -629,6 +656,21 @@ class $NoteTableTable extends NoteTable
       );
     } else if (isInserting) {
       context.missing(_contentMeta);
+    }
+    if (data.containsKey('is_important')) {
+      context.handle(
+        _isImportantMeta,
+        isImportant.isAcceptableOrUnknown(
+          data['is_important']!,
+          _isImportantMeta,
+        ),
+      );
+    }
+    if (data.containsKey('status')) {
+      context.handle(
+        _statusMeta,
+        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
+      );
     }
     if (data.containsKey('created_at')) {
       context.handle(
@@ -678,6 +720,14 @@ class $NoteTableTable extends NoteTable
         DriftSqlType.string,
         data['${effectivePrefix}content'],
       )!,
+      isImportant: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_important'],
+      )!,
+      status: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}status'],
+      )!,
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
@@ -707,6 +757,8 @@ class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
   final Value<int> id;
   final Value<String> title;
   final Value<String> content;
+  final Value<bool> isImportant;
+  final Value<String> status;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
   final Value<int?> noteTypeId;
@@ -715,6 +767,8 @@ class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
     this.id = const Value.absent(),
     this.title = const Value.absent(),
     this.content = const Value.absent(),
+    this.isImportant = const Value.absent(),
+    this.status = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.noteTypeId = const Value.absent(),
@@ -724,6 +778,8 @@ class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
     this.id = const Value.absent(),
     required String title,
     required String content,
+    this.isImportant = const Value.absent(),
+    this.status = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.noteTypeId = const Value.absent(),
@@ -734,6 +790,8 @@ class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
     Expression<int>? id,
     Expression<String>? title,
     Expression<String>? content,
+    Expression<bool>? isImportant,
+    Expression<String>? status,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
     Expression<int>? noteTypeId,
@@ -743,6 +801,8 @@ class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
       if (id != null) 'id': id,
       if (title != null) 'title': title,
       if (content != null) 'content': content,
+      if (isImportant != null) 'is_important': isImportant,
+      if (status != null) 'status': status,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
       if (noteTypeId != null) 'note_type_id': noteTypeId,
@@ -754,6 +814,8 @@ class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
     Value<int>? id,
     Value<String>? title,
     Value<String>? content,
+    Value<bool>? isImportant,
+    Value<String>? status,
     Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
     Value<int?>? noteTypeId,
@@ -763,6 +825,8 @@ class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
       id: id ?? this.id,
       title: title ?? this.title,
       content: content ?? this.content,
+      isImportant: isImportant ?? this.isImportant,
+      status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       noteTypeId: noteTypeId ?? this.noteTypeId,
@@ -781,6 +845,12 @@ class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
     }
     if (content.present) {
       map['content'] = Variable<String>(content.value);
+    }
+    if (isImportant.present) {
+      map['is_important'] = Variable<bool>(isImportant.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
     }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
@@ -803,6 +873,8 @@ class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
           ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('content: $content, ')
+          ..write('isImportant: $isImportant, ')
+          ..write('status: $status, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('noteTypeId: $noteTypeId, ')
@@ -2697,6 +2769,8 @@ typedef $$NoteTableTableCreateCompanionBuilder =
       Value<int> id,
       required String title,
       required String content,
+      Value<bool> isImportant,
+      Value<String> status,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
       Value<int?> noteTypeId,
@@ -2707,6 +2781,8 @@ typedef $$NoteTableTableUpdateCompanionBuilder =
       Value<int> id,
       Value<String> title,
       Value<String> content,
+      Value<bool> isImportant,
+      Value<String> status,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
       Value<int?> noteTypeId,
@@ -2817,6 +2893,16 @@ class $$NoteTableTableFilterComposer
 
   ColumnFilters<String> get content => $composableBuilder(
     column: $table.content,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isImportant => $composableBuilder(
+    column: $table.isImportant,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get status => $composableBuilder(
+    column: $table.status,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2951,6 +3037,16 @@ class $$NoteTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<bool> get isImportant => $composableBuilder(
+    column: $table.isImportant,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
     column: $table.createdAt,
     builder: (column) => ColumnOrderings(column),
@@ -3025,6 +3121,14 @@ class $$NoteTableTableAnnotationComposer
 
   GeneratedColumn<String> get content =>
       $composableBuilder(column: $table.content, builder: (column) => column);
+
+  GeneratedColumn<bool> get isImportant => $composableBuilder(
+    column: $table.isImportant,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -3166,6 +3270,8 @@ class $$NoteTableTableTableManager
                 Value<int> id = const Value.absent(),
                 Value<String> title = const Value.absent(),
                 Value<String> content = const Value.absent(),
+                Value<bool> isImportant = const Value.absent(),
+                Value<String> status = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<int?> noteTypeId = const Value.absent(),
@@ -3174,6 +3280,8 @@ class $$NoteTableTableTableManager
                 id: id,
                 title: title,
                 content: content,
+                isImportant: isImportant,
+                status: status,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
                 noteTypeId: noteTypeId,
@@ -3184,6 +3292,8 @@ class $$NoteTableTableTableManager
                 Value<int> id = const Value.absent(),
                 required String title,
                 required String content,
+                Value<bool> isImportant = const Value.absent(),
+                Value<String> status = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<int?> noteTypeId = const Value.absent(),
@@ -3192,6 +3302,8 @@ class $$NoteTableTableTableManager
                 id: id,
                 title: title,
                 content: content,
+                isImportant: isImportant,
+                status: status,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
                 noteTypeId: noteTypeId,

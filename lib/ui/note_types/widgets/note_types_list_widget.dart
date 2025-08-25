@@ -27,9 +27,11 @@ class _NoteTypesListWidgetState extends State<NoteTypesListWidget> {
             case NoteTypesListStatus.success:
               return ListView.builder(
                 controller: scrollController,
-                itemCount: state.noteTypes.length,
+                itemCount: state.noteTypesWithCount.length,
                 itemBuilder: (context, index) {
-                  final noteType = state.noteTypes[index];
+                  final noteType = state.noteTypesWithCount[index].noteType;
+                  final usageCount = state.noteTypesWithCount[index].noteCount;
+
                   return ListTile(
                     title: Text(noteType.name),
                     trailing: Row(
@@ -43,7 +45,7 @@ class _NoteTypesListWidgetState extends State<NoteTypesListWidget> {
                         ),
                         IconButton(
                           icon: const Icon(Icons.delete),
-                          onPressed: () {
+                          onPressed: (usageCount > 0) ? null : () {
                             showDialog(context: context, builder: (BuildContext dialogContext){
                               return ConfirmationDialog(
                                   title: context.strings.delete_note_type_confirmation_title,

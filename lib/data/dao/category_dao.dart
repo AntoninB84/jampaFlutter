@@ -36,6 +36,28 @@ class CategoryDao {
     return (db.select(db.categoryTable)..orderBy([(t)=>OrderingTerm(expression: t.name)])).watch();
   }
 
+  Stream<List<CategoryWithCount>> watchCategoriesWithUseCount() {
+    AppDatabase db = serviceLocator<AppDatabase>();
+    final query = (db.select(db.categoryTable)
+      ..orderBy([(t) => OrderingTerm.asc(t.name)]))
+        .join([
+          leftOuterJoin(
+            db.noteCategoryTable,
+            db.noteCategoryTable.categoryId.equalsExp(db.categoryTable.id),
+          ),
+        ])
+      ..addColumns([db.noteCategoryTable.noteId.count()])
+      ..groupBy([db.categoryTable.id]);
+
+    return query.watch().map((rows) {
+      return rows.map((row) {
+        final category = row.readTable(db.categoryTable);
+        final count = row.read(db.noteCategoryTable.noteId.count());
+        return CategoryWithCount(category: category, noteCount: count ?? 0);
+      }).toList();
+    });
+  }
+
   static Future<CategoryEntity?> getCategoryById(int id) async {
     AppDatabase db = serviceLocator<AppDatabase>();
     return await (db.select(db.categoryTable)..where((category) => category.id.equals(id))).getSingleOrNull();

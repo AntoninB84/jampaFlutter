@@ -4,6 +4,21 @@ import 'package:equatable/equatable.dart';
 
 import '../database.dart';
 
+class CategoryWithCount {
+  final CategoryEntity category;
+  final int noteCount;
+
+  CategoryWithCount({
+    required this.category,
+    required this.noteCount,
+  });
+
+  @override
+  String toString() {
+    return 'CategoryWithCount{category: $category, noteCount: $noteCount}';
+  }
+}
+
 @UseRowClass(CategoryEntity)
 class CategoryTable extends Table {
   IntColumn get id => integer().autoIncrement()();

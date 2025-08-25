@@ -14,7 +14,7 @@ class CategoriesPage extends StatelessWidget {
     return BlocProvider<CategoriesBloc>(
       create: (context) => CategoriesBloc(
           categoriesRepository: context.read<CategoriesRepository>()
-      )..add(WatchCategories()),
+      )..add(WatchCategoriesWithCount()),
 
       child: const CategoriesLayout(),
     );

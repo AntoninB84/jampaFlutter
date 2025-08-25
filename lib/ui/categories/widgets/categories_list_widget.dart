@@ -26,14 +26,16 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget> {
               return const Center(child: CircularProgressIndicator());
             case CategoriesListStatus.success:
 
-              if(state.categories.isEmpty){
+              if(state.categoriesWithCount.isEmpty){
                 return Center(child: Text(context.strings.no_results_found));
               }
               return ListView.builder(
                 controller: scrollController,
-                itemCount: state.categories.length,
+                itemCount: state.categoriesWithCount.length,
                 itemBuilder: (context, index) {
-                  final category = state.categories[index];
+                  final category = state.categoriesWithCount[index].category;
+                  final usageCount = state.categoriesWithCount[index].noteCount;
+
                   return ListTile(
                     title: Text(category.name),
                     trailing: Row(
@@ -47,7 +49,7 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget> {
                         ),
                         IconButton(
                           icon: const Icon(Icons.delete),
-                          onPressed: () {
+                          onPressed: (usageCount > 0) ? null : () {
                             showDialog(context: context, builder: (BuildContext dialogContext){
                               return ConfirmationDialog(
                                   title: context.strings.delete_category_confirmation_title,

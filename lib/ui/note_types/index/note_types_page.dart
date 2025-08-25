@@ -13,7 +13,7 @@ class NoteTypesPage extends StatelessWidget {
     return BlocProvider<NoteTypesBloc>(
       create: (context) => NoteTypesBloc(
           noteTypesRepository: context.read<NoteTypesRepository>()
-      )..add(WatchNoteTypes()),
+      )..add(WatchNoteTypesWithCount()),
 
       child: const NoteTypesLayout(),
     );
