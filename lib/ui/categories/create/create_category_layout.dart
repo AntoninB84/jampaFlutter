@@ -8,6 +8,7 @@ import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:jampa_flutter/ui/categories/widgets/category_name_text_field.dart';
 
 import '../../../bloc/categories/create/create_category_cubit.dart';
+import '../../widgets/cancel_button.dart';
 
 class CreateCategoryLayout extends StatelessWidget {
   const CreateCategoryLayout({super.key});
@@ -75,16 +76,3 @@ class SubmitCategoryButton extends StatelessWidget {
     );
   }
 }
-
-class CancelButton extends StatelessWidget {
-  const CancelButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () => context.pop(),
-      child: Text(context.strings.cancel),
-    );
-  }
-}
-

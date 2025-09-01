@@ -358,11 +358,77 @@ abstract class AppLocalizations {
   /// **'Type de note'**
   String get create_note_type_field_title;
 
+  /// No description provided for @create_note_single_date_count.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucune date} one{1 date} other{{count} dates}}'**
+  String create_note_single_date_count(num count);
+
+  /// No description provided for @create_note_recurrent_date_count.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucune date récurrente} one{1 date récurrente} other{{count} dates récurrentes}}'**
+  String create_note_recurrent_date_count(num count);
+
+  /// No description provided for @create_note_add_single_date_button.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter une date'**
+  String get create_note_add_single_date_button;
+
+  /// No description provided for @create_note_add_recurrent_date_button.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter une date récurrente'**
+  String get create_note_add_recurrent_date_button;
+
   /// No description provided for @create_note_success_feedback.
   ///
   /// In fr, this message translates to:
   /// **'Note créée avec succès'**
   String get create_note_success_feedback;
+
+  /// No description provided for @create_date_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter une date'**
+  String get create_date_title;
+
+  /// No description provided for @create_start_date_field_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date de début'**
+  String get create_start_date_field_title;
+
+  /// No description provided for @create_end_date_field_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date de fin (optionnelle)'**
+  String get create_end_date_field_title;
+
+  /// No description provided for @create_date_timeline_error.
+  ///
+  /// In fr, this message translates to:
+  /// **'La date de fin ne peut pas être antérieure à la date de départ'**
+  String get create_date_timeline_error;
+
+  /// No description provided for @delete_date_confirmation_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'{isRecurrent, select, true{Supprimer la date récurrente} other{Supprimer la date}}'**
+  String delete_date_confirmation_title(String isRecurrent);
+
+  /// No description provided for @delete_date_confirmation_message.
+  ///
+  /// In fr, this message translates to:
+  /// **'Êtes-vous sûr de vouloir supprimer la {isRecurrent, select, true{date récurrente} other{date}}: {date}?'**
+  String delete_date_confirmation_message(Object date, String isRecurrent);
+
+  /// No description provided for @delete_date_success_feedback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date supprimée avec succès'**
+  String get delete_date_success_feedback;
 
   /// No description provided for @edit_note_title.
   ///

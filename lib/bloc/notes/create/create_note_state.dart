@@ -10,10 +10,7 @@ class CreateNoteState extends Equatable {
     this.selectedNoteType,
     this.selectedCategories = const [],
     this.isImportantChecked = false,
-    this.selectedSingleStartDate,
-    this.selectedSingleEndDate,
-    this.singleDateAlarmElements,
-    this.hasToggleRecurrence = false,
+    this.selectedSingleDateElements = const [],
     this.selectedRecurrences = const [],
     this.isLoading = false,
     this.isError = false,
@@ -35,11 +32,8 @@ class CreateNoteState extends Equatable {
   //Important
   final bool isImportantChecked;
   //Single date => No recurrence
-  final DateTime? selectedSingleStartDate;
-  final DateTime? selectedSingleEndDate;
-  final AlarmFormElements? singleDateAlarmElements;
+  final List<SingleDateFormElements> selectedSingleDateElements;
   //Recurrence toggle
-  final bool hasToggleRecurrence;
   final List<RecurrenceFormElements> selectedRecurrences;
 
 
@@ -58,10 +52,7 @@ class CreateNoteState extends Equatable {
     selectedNoteType,
     selectedCategories,
     isImportantChecked,
-    selectedSingleStartDate,
-    selectedSingleEndDate,
-    singleDateAlarmElements,
-    hasToggleRecurrence,
+    selectedSingleDateElements,
     selectedRecurrences,
     isLoading,
     isError,
@@ -77,10 +68,7 @@ class CreateNoteState extends Equatable {
     NoteTypeEntity? selectedNoteType,
     List<CategoryEntity>? selectedCategories,
     bool? isImportantChecked,
-    DateTime? selectedSingleStartDate,
-    DateTime? selectedSingleEndDate,
-    AlarmFormElements? singleDateAlarmElements,
-    bool? hasToggleRecurrence,
+    List<SingleDateFormElements>? selectedSingleDateElements,
     List<RecurrenceFormElements>? selectedRecurrences,
     bool? isLoading,
     bool? isError,
@@ -95,10 +83,7 @@ class CreateNoteState extends Equatable {
       selectedNoteType: selectedNoteType ?? this.selectedNoteType,
       selectedCategories: selectedCategories ?? this.selectedCategories,
       isImportantChecked: isImportantChecked ?? this.isImportantChecked,
-      selectedSingleStartDate: selectedSingleStartDate ?? this.selectedSingleStartDate,
-      selectedSingleEndDate: selectedSingleEndDate ?? this.selectedSingleEndDate,
-      singleDateAlarmElements: singleDateAlarmElements ?? this.singleDateAlarmElements,
-      hasToggleRecurrence: hasToggleRecurrence ?? this.hasToggleRecurrence,
+      selectedSingleDateElements: selectedSingleDateElements ?? this.selectedSingleDateElements,
       selectedRecurrences: selectedRecurrences ?? this.selectedRecurrences,
       isLoading: isLoading ?? this.isLoading,
       isError: isError ?? this.isError,

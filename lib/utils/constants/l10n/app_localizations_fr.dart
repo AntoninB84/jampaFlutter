@@ -158,7 +158,72 @@ class AppLocalizationsFr extends AppLocalizations {
   String get create_note_type_field_title => 'Type de note';
 
   @override
+  String create_note_single_date_count(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count dates',
+      one: '1 date',
+      zero: 'Aucune date',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String create_note_recurrent_date_count(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count dates récurrentes',
+      one: '1 date récurrente',
+      zero: 'Aucune date récurrente',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get create_note_add_single_date_button => 'Ajouter une date';
+
+  @override
+  String get create_note_add_recurrent_date_button =>
+      'Ajouter une date récurrente';
+
+  @override
   String get create_note_success_feedback => 'Note créée avec succès';
+
+  @override
+  String get create_date_title => 'Ajouter une date';
+
+  @override
+  String get create_start_date_field_title => 'Date de début';
+
+  @override
+  String get create_end_date_field_title => 'Date de fin (optionnelle)';
+
+  @override
+  String get create_date_timeline_error =>
+      'La date de fin ne peut pas être antérieure à la date de départ';
+
+  @override
+  String delete_date_confirmation_title(String isRecurrent) {
+    String _temp0 = intl.Intl.selectLogic(isRecurrent, {
+      'true': 'Supprimer la date récurrente',
+      'other': 'Supprimer la date',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String delete_date_confirmation_message(Object date, String isRecurrent) {
+    String _temp0 = intl.Intl.selectLogic(isRecurrent, {
+      'true': 'date récurrente',
+      'other': 'date',
+    });
+    return 'Êtes-vous sûr de vouloir supprimer la $_temp0: $date?';
+  }
+
+  @override
+  String get delete_date_success_feedback => 'Date supprimée avec succès';
 
   @override
   String get edit_note_title => 'Modifier la note';

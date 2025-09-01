@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/repository/notes_repository.dart';
 import 'package:jampa_flutter/repository/schedule_repository.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
+import 'package:jampa_flutter/utils/service_locator.dart';
 
 import '../../bloc/bottom_navigation_bar/bottom_navigation_bar_bloc.dart';
 import '../../repository/alarm_repository.dart';
@@ -22,22 +23,22 @@ class HomePage extends StatelessWidget {
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider(
-          create: (context) => CategoriesRepository(),
+          create: (context) => serviceLocator<CategoriesRepository>(),
         ),
         RepositoryProvider(
-          create: (context) => NoteTypesRepository(),
+          create: (context) => serviceLocator<NoteTypesRepository>(),
         ),
         RepositoryProvider(
-          create: (context) => NotesListViewRepository(),
+          create: (context) => serviceLocator<NotesListViewRepository>(),
         ),
         RepositoryProvider(
-          create: (context) => NotesRepository(),
+          create: (context) => serviceLocator<NotesRepository>(),
         ),
         RepositoryProvider(
-          create: (context) => ScheduleRepository()
+          create: (context) => serviceLocator<ScheduleRepository>()
         ),
         RepositoryProvider(
-          create: (context) => AlarmRepository()
+          create: (context) => serviceLocator<AlarmRepository>()
         ),
       ],
       child: BlocProvider(

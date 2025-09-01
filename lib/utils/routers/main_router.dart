@@ -7,6 +7,7 @@ import 'package:jampa_flutter/ui/home/home_page.dart';
 import 'package:jampa_flutter/ui/note_types/create/create_note_type_page.dart';
 import 'package:jampa_flutter/ui/note_types/index/note_types_page.dart';
 import 'package:jampa_flutter/ui/notes/create/create_note_page.dart';
+import 'package:jampa_flutter/ui/notes/create_single_date/create_single_date_page.dart';
 import 'package:jampa_flutter/ui/notes/index/notes_page.dart';
 import 'package:jampa_flutter/ui/notes/show/show_note_page.dart';
 
@@ -16,6 +17,8 @@ class AppRoutes {
   static const String noteDetails = '/:id';
   static const String createNote = '/create';
   static const String editNote = '/edit';
+  static const String createSingleDate = '/createSingleDate';
+  static const String editSingleDate = '/editSingleDate';
   static const String settings = '/settings';
   static const String categories = '/categories';
   static const String createCategory = '/create';
@@ -47,6 +50,15 @@ final GoRouter mainRouter = GoRouter(
                   name: "CreateNote",
                   path: AppRoutes.createNote,
                   builder: (context, state) => const CreateNotePage(),
+                  routes: [
+                    GoRoute(
+                      name: "CreateSingleDate",
+                      path: AppRoutes.createSingleDate,
+                      builder: (context, state) => CreateSingleDatePage(
+                        singleDateIndex: (state.extra as Map?)?['dateIndex'] as int?,
+                      )
+                    )
+                  ]
                 ),
                 GoRoute(
                   name: "NoteDetails",

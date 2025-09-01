@@ -26,61 +26,75 @@ class AlarmFormElements {
   }
 }
 
+class SingleDateFormElements {
+  const SingleDateFormElements({
+    this.selectedStartDateTime,
+    this.selectedEndDateTime,
+    this.alarmsForSingleDate,
+  });
+
+  final DateTime? selectedStartDateTime;
+  final DateTime? selectedEndDateTime;
+  final List<AlarmFormElements>? alarmsForSingleDate;
+
+  SingleDateFormElements copyWith({
+    DateTime? selectedStartDateTime,
+    DateTime? selectedEndDateTime,
+    List<AlarmFormElements>? alarmsForSingleDate,
+  }) {
+    return SingleDateFormElements(
+      selectedStartDateTime: selectedStartDateTime ?? this.selectedStartDateTime,
+      selectedEndDateTime: selectedEndDateTime ?? this.selectedEndDateTime,
+      alarmsForSingleDate: alarmsForSingleDate ?? this.alarmsForSingleDate,
+    );
+  }
+}
+
 class RecurrenceFormElements {
   const RecurrenceFormElements({
-    this.selectedRecurrenceStartDate,
+    this.selectedStartDateTime,
+    this.selectedEndDateTime,
     this.selectedRecurrenceEndDate,
-    this.hasChosenInterval = true,
-    this.selectedIntervalRecurrenceType,
-    this.selectedIntervalRecurrenceNumber,
-    this.selectedIntervalRecurrenceStartDate,
-    this.selectedIntervalRecurrenceEndDate,
-    this.selectedDayBasedRecurrenceType,
-    this.selectedDayBasedRecurrenceNumber,
-    this.selectedDayBasedRecurrenceWeekday,
+    this.selectedRecurrenceType,
+    this.selectedRecurrenceDaysInterval,
+    this.selectedRecurrenceYearsInterval,
+    this.selectedRecurrenceMonthDate,
+    this.selectedRecurrenceWeekdays,
     this.alarmsForRecurrence = const [],
   });
 
-  final DateTime? selectedRecurrenceStartDate;
+  final DateTime? selectedStartDateTime;
+  final DateTime? selectedEndDateTime;
   final DateTime? selectedRecurrenceEndDate;
 
-  final bool hasChosenInterval; //Either interval or day-based recurrence
-  //e.g. (every 3 days) vs (every Monday or every 5th of the month)
-  final RecurrenceType? selectedIntervalRecurrenceType;
-  final int? selectedIntervalRecurrenceNumber;
-  final DateTime? selectedIntervalRecurrenceStartDate;
-  final DateTime? selectedIntervalRecurrenceEndDate;
-
-  final RecurrenceType? selectedDayBasedRecurrenceType;
-  final int? selectedDayBasedRecurrenceNumber; //e.g. 5th of the month
-  final int? selectedDayBasedRecurrenceWeekday; //e.g. Monday
+  final RecurrenceType? selectedRecurrenceType;
+  final int? selectedRecurrenceDaysInterval;
+  final int? selectedRecurrenceYearsInterval;
+  final int? selectedRecurrenceMonthDate;
+  final List<int>? selectedRecurrenceWeekdays;
 
   final List<AlarmFormElements> alarmsForRecurrence;
 
   RecurrenceFormElements copyWith({
-    DateTime? selectedRecurrenceStartDate,
+    DateTime? selectedStartDateTime,
+    DateTime? selectedEndDateTime,
     DateTime? selectedRecurrenceEndDate,
-    bool? hasChosenInterval,
-    RecurrenceType? selectedIntervalRecurrenceType,
-    int? selectedIntervalRecurrenceNumber,
-    DateTime? selectedIntervalRecurrenceStartDate,
-    DateTime? selectedIntervalRecurrenceEndDate,
-    RecurrenceType? selectedDayBasedRecurrenceType,
-    int? selectedDayBasedRecurrenceNumber,
-    int? selectedDayBasedRecurrenceWeekday,
+    RecurrenceType? selectedRecurrenceType,
+    int? selectedRecurrenceDaysInterval,
+    int? selectedRecurrenceYearsInterval,
+    int? selectedRecurrenceMonthDate,
+    List<int>? selectedRecurrenceWeekdays,
     List<AlarmFormElements>? alarmsForRecurrence,
   }) {
     return RecurrenceFormElements(
-      selectedRecurrenceStartDate: selectedRecurrenceStartDate ?? this.selectedRecurrenceStartDate,
+      selectedStartDateTime: selectedStartDateTime ?? this.selectedStartDateTime,
+      selectedEndDateTime: selectedEndDateTime ?? this.selectedEndDateTime,
       selectedRecurrenceEndDate: selectedRecurrenceEndDate ?? this.selectedRecurrenceEndDate,
-      hasChosenInterval: hasChosenInterval ?? this.hasChosenInterval,
-      selectedIntervalRecurrenceType: selectedIntervalRecurrenceType ?? this.selectedIntervalRecurrenceType,
-      selectedIntervalRecurrenceNumber: selectedIntervalRecurrenceNumber ?? this.selectedIntervalRecurrenceNumber,
-      selectedIntervalRecurrenceStartDate: selectedIntervalRecurrenceStartDate ?? this.selectedIntervalRecurrenceStartDate,
-      selectedIntervalRecurrenceEndDate: selectedIntervalRecurrenceEndDate ?? this.selectedIntervalRecurrenceEndDate,
-      selectedDayBasedRecurrenceType: selectedDayBasedRecurrenceType ?? this.selectedDayBasedRecurrenceType,
-      selectedDayBasedRecurrenceNumber: selectedDayBasedRecurrenceNumber ?? this.selectedDayBasedRecurrenceNumber,
-      selectedDayBasedRecurrenceWeekday: selectedDayBasedRecurrenceWeekday ?? this.selectedDayBasedRecurrenceWeekday,
+      selectedRecurrenceType: selectedRecurrenceType ?? this.selectedRecurrenceType,
+      selectedRecurrenceDaysInterval: selectedRecurrenceDaysInterval ?? this.selectedRecurrenceDaysInterval,
+      selectedRecurrenceYearsInterval: selectedRecurrenceYearsInterval ?? this.selectedRecurrenceYearsInterval,
+      selectedRecurrenceMonthDate: selectedRecurrenceMonthDate ?? this.selectedRecurrenceMonthDate,
+      selectedRecurrenceWeekdays: selectedRecurrenceWeekdays ?? this.selectedRecurrenceWeekdays,
       alarmsForRecurrence: alarmsForRecurrence ?? this.alarmsForRecurrence,
     );
   }

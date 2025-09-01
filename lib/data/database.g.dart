@@ -1493,26 +1493,30 @@ class $ScheduleTableTable extends ScheduleTable
     requiredDuringInsert: true,
     $customConstraints: 'NOT NULL REFERENCES note_table(id) ON DELETE CASCADE',
   );
-  static const VerificationMeta _dateMeta = const VerificationMeta('date');
+  static const VerificationMeta _startDateTimeMeta = const VerificationMeta(
+    'startDateTime',
+  );
   @override
-  late final GeneratedColumn<DateTime> date = GeneratedColumn<DateTime>(
-    'date',
+  late final GeneratedColumn<DateTime> startDateTime =
+      GeneratedColumn<DateTime>(
+        'start_date_time',
+        aliasedName,
+        false,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+        defaultValue: currentDateAndTime,
+      );
+  static const VerificationMeta _endDateTimeMeta = const VerificationMeta(
+    'endDateTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> endDateTime = GeneratedColumn<DateTime>(
+    'end_date_time',
     aliasedName,
     false,
     type: DriftSqlType.dateTime,
     requiredDuringInsert: false,
     defaultValue: currentDateAndTime,
-  );
-  static const VerificationMeta _endDateMeta = const VerificationMeta(
-    'endDate',
-  );
-  @override
-  late final GeneratedColumn<DateTime> endDate = GeneratedColumn<DateTime>(
-    'end_date',
-    aliasedName,
-    true,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: false,
   );
   static const VerificationMeta _createdAtMeta = const VerificationMeta(
     'createdAt',
@@ -1570,17 +1574,30 @@ class $ScheduleTableTable extends ScheduleTable
     type: DriftSqlType.int,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _recurrenceEndDateMeta = const VerificationMeta(
+    'recurrenceEndDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> recurrenceEndDate =
+      GeneratedColumn<DateTime>(
+        'recurrence_end_date',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
   @override
   List<GeneratedColumn> get $columns => [
     id,
     noteId,
-    date,
-    endDate,
+    startDateTime,
+    endDateTime,
     createdAt,
     updatedAt,
     recurrenceType,
     recurrenceInterval,
     recurrenceDay,
+    recurrenceEndDate,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1605,16 +1622,22 @@ class $ScheduleTableTable extends ScheduleTable
     } else if (isInserting) {
       context.missing(_noteIdMeta);
     }
-    if (data.containsKey('date')) {
+    if (data.containsKey('start_date_time')) {
       context.handle(
-        _dateMeta,
-        date.isAcceptableOrUnknown(data['date']!, _dateMeta),
+        _startDateTimeMeta,
+        startDateTime.isAcceptableOrUnknown(
+          data['start_date_time']!,
+          _startDateTimeMeta,
+        ),
       );
     }
-    if (data.containsKey('end_date')) {
+    if (data.containsKey('end_date_time')) {
       context.handle(
-        _endDateMeta,
-        endDate.isAcceptableOrUnknown(data['end_date']!, _endDateMeta),
+        _endDateTimeMeta,
+        endDateTime.isAcceptableOrUnknown(
+          data['end_date_time']!,
+          _endDateTimeMeta,
+        ),
       );
     }
     if (data.containsKey('created_at')) {
@@ -1656,6 +1679,15 @@ class $ScheduleTableTable extends ScheduleTable
         ),
       );
     }
+    if (data.containsKey('recurrence_end_date')) {
+      context.handle(
+        _recurrenceEndDateMeta,
+        recurrenceEndDate.isAcceptableOrUnknown(
+          data['recurrence_end_date']!,
+          _recurrenceEndDateMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -1673,14 +1705,14 @@ class $ScheduleTableTable extends ScheduleTable
         DriftSqlType.int,
         data['${effectivePrefix}note_id'],
       )!,
-      date: attachedDatabase.typeMapping.read(
+      startDateTime: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
-        data['${effectivePrefix}date'],
+        data['${effectivePrefix}start_date_time'],
       )!,
-      endDate: attachedDatabase.typeMapping.read(
+      endDateTime: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
-        data['${effectivePrefix}end_date'],
-      ),
+        data['${effectivePrefix}end_date_time'],
+      )!,
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
@@ -1701,6 +1733,10 @@ class $ScheduleTableTable extends ScheduleTable
         DriftSqlType.int,
         data['${effectivePrefix}recurrence_day'],
       ),
+      recurrenceEndDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}recurrence_end_date'],
+      ),
     );
   }
 
@@ -1713,80 +1749,87 @@ class $ScheduleTableTable extends ScheduleTable
 class ScheduleTableCompanion extends UpdateCompanion<ScheduleEntity> {
   final Value<int> id;
   final Value<int> noteId;
-  final Value<DateTime> date;
-  final Value<DateTime?> endDate;
+  final Value<DateTime> startDateTime;
+  final Value<DateTime> endDateTime;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
   final Value<String?> recurrenceType;
   final Value<int?> recurrenceInterval;
   final Value<int?> recurrenceDay;
+  final Value<DateTime?> recurrenceEndDate;
   const ScheduleTableCompanion({
     this.id = const Value.absent(),
     this.noteId = const Value.absent(),
-    this.date = const Value.absent(),
-    this.endDate = const Value.absent(),
+    this.startDateTime = const Value.absent(),
+    this.endDateTime = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.recurrenceType = const Value.absent(),
     this.recurrenceInterval = const Value.absent(),
     this.recurrenceDay = const Value.absent(),
+    this.recurrenceEndDate = const Value.absent(),
   });
   ScheduleTableCompanion.insert({
     this.id = const Value.absent(),
     required int noteId,
-    this.date = const Value.absent(),
-    this.endDate = const Value.absent(),
+    this.startDateTime = const Value.absent(),
+    this.endDateTime = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.recurrenceType = const Value.absent(),
     this.recurrenceInterval = const Value.absent(),
     this.recurrenceDay = const Value.absent(),
+    this.recurrenceEndDate = const Value.absent(),
   }) : noteId = Value(noteId);
   static Insertable<ScheduleEntity> custom({
     Expression<int>? id,
     Expression<int>? noteId,
-    Expression<DateTime>? date,
-    Expression<DateTime>? endDate,
+    Expression<DateTime>? startDateTime,
+    Expression<DateTime>? endDateTime,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
     Expression<String>? recurrenceType,
     Expression<int>? recurrenceInterval,
     Expression<int>? recurrenceDay,
+    Expression<DateTime>? recurrenceEndDate,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (noteId != null) 'note_id': noteId,
-      if (date != null) 'date': date,
-      if (endDate != null) 'end_date': endDate,
+      if (startDateTime != null) 'start_date_time': startDateTime,
+      if (endDateTime != null) 'end_date_time': endDateTime,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
       if (recurrenceType != null) 'recurrence_type': recurrenceType,
       if (recurrenceInterval != null) 'recurrence_interval': recurrenceInterval,
       if (recurrenceDay != null) 'recurrence_day': recurrenceDay,
+      if (recurrenceEndDate != null) 'recurrence_end_date': recurrenceEndDate,
     });
   }
 
   ScheduleTableCompanion copyWith({
     Value<int>? id,
     Value<int>? noteId,
-    Value<DateTime>? date,
-    Value<DateTime?>? endDate,
+    Value<DateTime>? startDateTime,
+    Value<DateTime>? endDateTime,
     Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
     Value<String?>? recurrenceType,
     Value<int?>? recurrenceInterval,
     Value<int?>? recurrenceDay,
+    Value<DateTime?>? recurrenceEndDate,
   }) {
     return ScheduleTableCompanion(
       id: id ?? this.id,
       noteId: noteId ?? this.noteId,
-      date: date ?? this.date,
-      endDate: endDate ?? this.endDate,
+      startDateTime: startDateTime ?? this.startDateTime,
+      endDateTime: endDateTime ?? this.endDateTime,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       recurrenceType: recurrenceType ?? this.recurrenceType,
       recurrenceInterval: recurrenceInterval ?? this.recurrenceInterval,
       recurrenceDay: recurrenceDay ?? this.recurrenceDay,
+      recurrenceEndDate: recurrenceEndDate ?? this.recurrenceEndDate,
     );
   }
 
@@ -1799,11 +1842,11 @@ class ScheduleTableCompanion extends UpdateCompanion<ScheduleEntity> {
     if (noteId.present) {
       map['note_id'] = Variable<int>(noteId.value);
     }
-    if (date.present) {
-      map['date'] = Variable<DateTime>(date.value);
+    if (startDateTime.present) {
+      map['start_date_time'] = Variable<DateTime>(startDateTime.value);
     }
-    if (endDate.present) {
-      map['end_date'] = Variable<DateTime>(endDate.value);
+    if (endDateTime.present) {
+      map['end_date_time'] = Variable<DateTime>(endDateTime.value);
     }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
@@ -1820,6 +1863,9 @@ class ScheduleTableCompanion extends UpdateCompanion<ScheduleEntity> {
     if (recurrenceDay.present) {
       map['recurrence_day'] = Variable<int>(recurrenceDay.value);
     }
+    if (recurrenceEndDate.present) {
+      map['recurrence_end_date'] = Variable<DateTime>(recurrenceEndDate.value);
+    }
     return map;
   }
 
@@ -1828,13 +1874,14 @@ class ScheduleTableCompanion extends UpdateCompanion<ScheduleEntity> {
     return (StringBuffer('ScheduleTableCompanion(')
           ..write('id: $id, ')
           ..write('noteId: $noteId, ')
-          ..write('date: $date, ')
-          ..write('endDate: $endDate, ')
+          ..write('startDateTime: $startDateTime, ')
+          ..write('endDateTime: $endDateTime, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('recurrenceType: $recurrenceType, ')
           ..write('recurrenceInterval: $recurrenceInterval, ')
-          ..write('recurrenceDay: $recurrenceDay')
+          ..write('recurrenceDay: $recurrenceDay, ')
+          ..write('recurrenceEndDate: $recurrenceEndDate')
           ..write(')'))
         .toString();
   }
@@ -4110,25 +4157,27 @@ typedef $$ScheduleTableTableCreateCompanionBuilder =
     ScheduleTableCompanion Function({
       Value<int> id,
       required int noteId,
-      Value<DateTime> date,
-      Value<DateTime?> endDate,
+      Value<DateTime> startDateTime,
+      Value<DateTime> endDateTime,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
       Value<String?> recurrenceType,
       Value<int?> recurrenceInterval,
       Value<int?> recurrenceDay,
+      Value<DateTime?> recurrenceEndDate,
     });
 typedef $$ScheduleTableTableUpdateCompanionBuilder =
     ScheduleTableCompanion Function({
       Value<int> id,
       Value<int> noteId,
-      Value<DateTime> date,
-      Value<DateTime?> endDate,
+      Value<DateTime> startDateTime,
+      Value<DateTime> endDateTime,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
       Value<String?> recurrenceType,
       Value<int?> recurrenceInterval,
       Value<int?> recurrenceDay,
+      Value<DateTime?> recurrenceEndDate,
     });
 
 final class $$ScheduleTableTableReferences
@@ -4194,13 +4243,13 @@ class $$ScheduleTableTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<DateTime> get date => $composableBuilder(
-    column: $table.date,
+  ColumnFilters<DateTime> get startDateTime => $composableBuilder(
+    column: $table.startDateTime,
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<DateTime> get endDate => $composableBuilder(
-    column: $table.endDate,
+  ColumnFilters<DateTime> get endDateTime => $composableBuilder(
+    column: $table.endDateTime,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -4226,6 +4275,11 @@ class $$ScheduleTableTableFilterComposer
 
   ColumnFilters<int> get recurrenceDay => $composableBuilder(
     column: $table.recurrenceDay,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get recurrenceEndDate => $composableBuilder(
+    column: $table.recurrenceEndDate,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -4292,13 +4346,13 @@ class $$ScheduleTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<DateTime> get date => $composableBuilder(
-    column: $table.date,
+  ColumnOrderings<DateTime> get startDateTime => $composableBuilder(
+    column: $table.startDateTime,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<DateTime> get endDate => $composableBuilder(
-    column: $table.endDate,
+  ColumnOrderings<DateTime> get endDateTime => $composableBuilder(
+    column: $table.endDateTime,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -4324,6 +4378,11 @@ class $$ScheduleTableTableOrderingComposer
 
   ColumnOrderings<int> get recurrenceDay => $composableBuilder(
     column: $table.recurrenceDay,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get recurrenceEndDate => $composableBuilder(
+    column: $table.recurrenceEndDate,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -4363,11 +4422,15 @@ class $$ScheduleTableTableAnnotationComposer
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get date =>
-      $composableBuilder(column: $table.date, builder: (column) => column);
+  GeneratedColumn<DateTime> get startDateTime => $composableBuilder(
+    column: $table.startDateTime,
+    builder: (column) => column,
+  );
 
-  GeneratedColumn<DateTime> get endDate =>
-      $composableBuilder(column: $table.endDate, builder: (column) => column);
+  GeneratedColumn<DateTime> get endDateTime => $composableBuilder(
+    column: $table.endDateTime,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -4387,6 +4450,11 @@ class $$ScheduleTableTableAnnotationComposer
 
   GeneratedColumn<int> get recurrenceDay => $composableBuilder(
     column: $table.recurrenceDay,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get recurrenceEndDate => $composableBuilder(
+    column: $table.recurrenceEndDate,
     builder: (column) => column,
   );
 
@@ -4469,45 +4537,49 @@ class $$ScheduleTableTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 Value<int> noteId = const Value.absent(),
-                Value<DateTime> date = const Value.absent(),
-                Value<DateTime?> endDate = const Value.absent(),
+                Value<DateTime> startDateTime = const Value.absent(),
+                Value<DateTime> endDateTime = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<String?> recurrenceType = const Value.absent(),
                 Value<int?> recurrenceInterval = const Value.absent(),
                 Value<int?> recurrenceDay = const Value.absent(),
+                Value<DateTime?> recurrenceEndDate = const Value.absent(),
               }) => ScheduleTableCompanion(
                 id: id,
                 noteId: noteId,
-                date: date,
-                endDate: endDate,
+                startDateTime: startDateTime,
+                endDateTime: endDateTime,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
                 recurrenceType: recurrenceType,
                 recurrenceInterval: recurrenceInterval,
                 recurrenceDay: recurrenceDay,
+                recurrenceEndDate: recurrenceEndDate,
               ),
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
                 required int noteId,
-                Value<DateTime> date = const Value.absent(),
-                Value<DateTime?> endDate = const Value.absent(),
+                Value<DateTime> startDateTime = const Value.absent(),
+                Value<DateTime> endDateTime = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<String?> recurrenceType = const Value.absent(),
                 Value<int?> recurrenceInterval = const Value.absent(),
                 Value<int?> recurrenceDay = const Value.absent(),
+                Value<DateTime?> recurrenceEndDate = const Value.absent(),
               }) => ScheduleTableCompanion.insert(
                 id: id,
                 noteId: noteId,
-                date: date,
-                endDate: endDate,
+                startDateTime: startDateTime,
+                endDateTime: endDateTime,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
                 recurrenceType: recurrenceType,
                 recurrenceInterval: recurrenceInterval,
                 recurrenceDay: recurrenceDay,
+                recurrenceEndDate: recurrenceEndDate,
               ),
           withReferenceMapper: (p0) => p0
               .map(

@@ -8,6 +8,7 @@ import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:jampa_flutter/ui/note_types/widgets/note_type_name_text_field.dart';
 
 import '../../../bloc/note_types/create/create_note_type_cubit.dart';
+import '../../widgets/cancel_button.dart';
 
 class CreateNoteTypeLayout extends StatelessWidget {
   const CreateNoteTypeLayout({super.key});
@@ -72,18 +73,6 @@ class SubmitNoteTypeButton extends StatelessWidget {
               : Text(state.noteType != null ? context.strings.edit : context.strings.create),
         );
       },
-    );
-  }
-}
-
-class CancelButton extends StatelessWidget {
-  const CancelButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () => context.pop(),
-      child: Text(context.strings.cancel),
     );
   }
 }

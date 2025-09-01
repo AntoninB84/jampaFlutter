@@ -92,6 +92,82 @@ class CreateNoteCubit extends Cubit<CreateNoteState> {
     );
   }
 
+  void onImportantCheckedChanged(bool isChecked) {
+    emit(
+        state.copyWith(
+          isImportantChecked: isChecked,
+        )
+    );
+  }
+
+  void onAddSingleDateElement(SingleDateFormElements element) {
+    final updatedElements = List<SingleDateFormElements>.from(state.selectedSingleDateElements)
+      ..add(element);
+    emit(
+        state.copyWith(
+          selectedSingleDateElements: updatedElements,
+        )
+    );
+  }
+
+  void onUpdateSingleDateElement(int index, SingleDateFormElements element) {
+    final updatedElements = List<SingleDateFormElements>.from(state.selectedSingleDateElements);
+    if (index >= 0 && index < updatedElements.length) {
+      updatedElements[index] = element;
+      emit(
+          state.copyWith(
+            selectedSingleDateElements: updatedElements,
+          )
+      );
+    }
+  }
+
+  void onRemoveSingleDateElement(int index) {
+    final updatedElements = List<SingleDateFormElements>.from(state.selectedSingleDateElements);
+    if (index >= 0 && index < updatedElements.length) {
+      updatedElements.removeAt(index);
+      emit(
+          state.copyWith(
+            selectedSingleDateElements: updatedElements,
+          )
+      );
+    }
+  }
+
+  void onAddRecurrenceElement(RecurrenceFormElements element) {
+    final updatedElements = List<RecurrenceFormElements>.from(state.selectedRecurrences)
+      ..add(element);
+    emit(
+        state.copyWith(
+          selectedRecurrences: updatedElements,
+        )
+    );
+  }
+
+  void onUpdateRecurrenceElement(int index, RecurrenceFormElements element) {
+    final updatedElements = List<RecurrenceFormElements>.from(state.selectedRecurrences);
+    if (index >= 0 && index < updatedElements.length) {
+      updatedElements[index] = element;
+      emit(
+          state.copyWith(
+            selectedRecurrences: updatedElements,
+          )
+      );
+    }
+  }
+
+  void onRemoveRecurrenceElement(int index) {
+    final updatedElements = List<RecurrenceFormElements>.from(state.selectedRecurrences);
+    if (index >= 0 && index < updatedElements.length) {
+      updatedElements.removeAt(index);
+      emit(
+          state.copyWith(
+            selectedRecurrences: updatedElements,
+          )
+      );
+    }
+  }
+
   Future<void> onSubmit() async {
     final title = NameValidator.dirty(state.title.value);
     final content = ContentValidator.dirty(state.content.value);
@@ -147,5 +223,9 @@ class CreateNoteCubit extends Cubit<CreateNoteState> {
         debugPrint('Error saving note: $error');
       });
     }
+  }
+
+  void resetState() {
+    emit(const CreateNoteState());
   }
 }
