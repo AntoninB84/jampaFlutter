@@ -3,17 +3,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jampa_flutter/repository/notes_list_view_repository.dart';
 import 'package:jampa_flutter/data/database.dart';
+import 'package:jampa_flutter/utils/service_locator.dart';
 
 part 'notes_list_view_event.dart';
 part 'notes_list_view_state.dart';
 
 class NotesListViewBloc extends Bloc<NotesListViewEvent, NotesListViewState> {
-  NotesListViewBloc({
-    required this.notesListViewRepository
-  }) : super(const NotesListViewState()) {
+  NotesListViewBloc() : super(const NotesListViewState()) {
     on<WatchNotes>(_watchNotesList);
   }
-  final NotesListViewRepository notesListViewRepository;
+  final NotesListViewRepository notesListViewRepository =
+      serviceLocator<NotesListViewRepository>();
 
   void _watchNotesList(WatchNotes event, Emitter<NotesListViewState> emit) async {
     await emit.onEach(

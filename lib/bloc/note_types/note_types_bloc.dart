@@ -3,19 +3,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jampa_flutter/repository/note_types_repository.dart';
 import 'package:jampa_flutter/data/models/note_type.dart';
+import 'package:jampa_flutter/utils/service_locator.dart';
 
 part 'note_types_state.dart';
 part 'note_types_event.dart';
 
 class NoteTypesBloc extends Bloc<NoteTypesEvent, NoteTypesState> {
-  NoteTypesBloc({
-    required this.noteTypesRepository
-  }) : super(const NoteTypesState()) {
+  NoteTypesBloc() : super(const NoteTypesState()) {
     on<WatchNoteTypes>(_watchNoteTypes);
     on<WatchNoteTypesWithCount>(_watchNoteTypesWithCount);
     on<DeleteNoteType>(_deleteNoteType);
   }
-  final NoteTypesRepository noteTypesRepository;
+  final NoteTypesRepository noteTypesRepository =
+        serviceLocator<NoteTypesRepository>();
 
   void _watchNoteTypes(WatchNoteTypes event, Emitter<NoteTypesState> emit) async {
     await emit.onEach(

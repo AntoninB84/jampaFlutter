@@ -5,15 +5,15 @@ import 'package:formz/formz.dart';
 import 'package:jampa_flutter/data/models/note_type.dart';
 import 'package:jampa_flutter/utils/forms/name_validator.dart';
 import 'package:jampa_flutter/repository/note_types_repository.dart';
+import 'package:jampa_flutter/utils/service_locator.dart';
 
 part 'create_note_type_state.dart';
 
 class CreateNoteTypeCubit extends Cubit<CreateNoteTypeState> {
-  CreateNoteTypeCubit({
-    required this.noteTypesRepository,
-  }) : super(const CreateNoteTypeState());
+  CreateNoteTypeCubit() : super(const CreateNoteTypeState());
 
-  final NoteTypesRepository noteTypesRepository;
+  final NoteTypesRepository noteTypesRepository =
+        serviceLocator<NoteTypesRepository>();
 
   void fetchNoteTypeForUpdate(String? noteTypeId) {
     if(noteTypeId != null){

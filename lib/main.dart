@@ -30,10 +30,7 @@ class MyApp extends StatelessWidget {
       ],
       child: BlocProvider(
         lazy: false,
-        create: (context) => AuthBloc(
-          authRepository: context.read<AuthRepository>(), 
-          userRepository: context.read<UserRepository>()
-        )..add(AuthSubscriptionRequested()),
+        create: (context) => AuthBloc()..add(AuthSubscriptionRequested()),
         child: BlocBuilder<AuthBloc,AuthState>(
           builder: (context, state) {
             return MaterialApp.router(

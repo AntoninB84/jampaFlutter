@@ -24,10 +24,6 @@ void setupServiceLocator() {
   serviceLocator.registerLazySingleton<NotesListViewRepository>(() => NotesListViewRepository());
   serviceLocator.registerLazySingleton<ScheduleRepository>(() => ScheduleRepository());
   serviceLocator.registerLazySingleton<UserRepository>(() => UserRepository());
-  serviceLocator.registerLazySingleton(
-      () => CreateNoteCubit(notesRepository: serviceLocator<NotesRepository>())
-  );
-  serviceLocator.registerLazySingleton(
-      () => EditNoteCubit(notesRepository: serviceLocator<NotesRepository>())
-  );
+  serviceLocator.registerLazySingleton(() => CreateNoteCubit());
+  serviceLocator.registerLazySingleton(() => EditNoteCubit());
 }

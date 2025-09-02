@@ -29,9 +29,7 @@ class _NoteCategoriesMultiSelectorState extends State<NoteCategoriesMultiSelecto
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CategoriesBloc>(
-        create: (context) => CategoriesBloc(
-            categoriesRepository: context.read<CategoriesRepository>()
-        )..add(WatchCategories()),
+        create: (context) => CategoriesBloc()..add(WatchCategories()),
         child: BlocConsumer<CategoriesBloc, CategoriesState>(
             listener: (context, state) {
               if (state.listStatus.isError) {

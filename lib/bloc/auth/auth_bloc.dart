@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:jampa_flutter/utils/service_locator.dart';
 
 import '../../data/models/user.dart';
 import '../../repository/auth_repository.dart';
@@ -11,18 +12,13 @@ part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  AuthBloc({
-    required AuthRepository authRepository,
-    required UserRepository userRepository,
-  }) : _authRepository = authRepository,
-        _userRepository = userRepository,
-        super(const AuthState.unknown()) {
+  AuthBloc() : super(const AuthState.unknown()) {
     on<AuthSubscriptionRequested>(_onSubscriptionRequested);
     on<AuthLogoutPressed>(_onLogoutPressed);
   }
 
-  final AuthRepository _authRepository;
-  final UserRepository _userRepository;
+  final AuthRepository _authRepository = serviceLocator<AuthRepository>();
+  final UserRepository _userRepository = serviceLocator<UserRepository>();
 
   Future<void> _onSubscriptionRequested(
       AuthSubscriptionRequested event,

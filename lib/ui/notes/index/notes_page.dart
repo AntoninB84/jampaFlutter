@@ -11,9 +11,7 @@ class NotesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<NotesListViewBloc>(
-      create: (context) => NotesListViewBloc(
-          notesListViewRepository: context.read<NotesListViewRepository>()
-      )..add(WatchNotes()),
+      create: (context) => NotesListViewBloc()..add(WatchNotes()),
       child: const NotesLayout(),
     );
   }

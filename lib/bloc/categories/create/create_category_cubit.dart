@@ -5,15 +5,15 @@ import 'package:formz/formz.dart';
 import 'package:jampa_flutter/data/models/category.dart';
 import 'package:jampa_flutter/utils/forms/name_validator.dart';
 import 'package:jampa_flutter/repository/categories_repository.dart';
+import 'package:jampa_flutter/utils/service_locator.dart';
 
 part 'create_category_state.dart';
 
 class CreateCategoryCubit extends Cubit<CreateCategoryState> {
-  CreateCategoryCubit({
-    required this.categoriesRepository,
-  }) : super(const CreateCategoryState());
+  CreateCategoryCubit() : super(const CreateCategoryState());
 
-  final CategoriesRepository categoriesRepository;
+  final CategoriesRepository categoriesRepository =
+      serviceLocator<CategoriesRepository>();
 
   void fetchCategoryForUpdate(String? categoryId) {
     if(categoryId != null){

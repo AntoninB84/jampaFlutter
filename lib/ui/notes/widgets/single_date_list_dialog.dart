@@ -30,9 +30,7 @@ class _SingleDateListDialogState extends State<SingleDateListDialog> {
   Widget build(BuildContext context) {
     return BlocProvider<SingleDateListBloc>(
       create: (context) {
-        final bloc = SingleDateListBloc(
-          scheduleRepository: serviceLocator<ScheduleRepository>()
-        );
+        final bloc = SingleDateListBloc();
         if(widget.fromMemory){
           final createNoteState = serviceLocator<CreateNoteCubit>().state;
           bloc.add(InitializeSingleDateListFromMemoryState(

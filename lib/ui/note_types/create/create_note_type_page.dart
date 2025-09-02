@@ -13,9 +13,8 @@ class CreateNoteTypePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CreateNoteTypeCubit>(
-      create: (context) => CreateNoteTypeCubit(
-          noteTypesRepository: context.read<NoteTypesRepository>()
-      )..fetchNoteTypeForUpdate(noteTypeId),
+      create: (context) => CreateNoteTypeCubit()
+        ..fetchNoteTypeForUpdate(noteTypeId),
       child: const CreateNoteTypeLayout(),
     );
   }

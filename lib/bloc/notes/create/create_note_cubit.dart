@@ -11,6 +11,7 @@ import 'package:jampa_flutter/repository/categories_repository.dart';
 import 'package:jampa_flutter/utils/forms/content_validator.dart';
 import 'package:jampa_flutter/utils/forms/name_validator.dart';
 import 'package:jampa_flutter/repository/notes_repository.dart';
+import 'package:jampa_flutter/utils/service_locator.dart';
 
 part 'create_note_state.dart';
 
@@ -18,11 +19,9 @@ part 'create_note_state.dart';
 /// All Schedule related data (SingleDate, Recurrence, Alarms) are managed in memory only
 /// and will be saved to persistent storage when the note is saved.
 class CreateNoteCubit extends Cubit<CreateNoteState> {
-  CreateNoteCubit({
-    required this.notesRepository,
-  }) : super(const CreateNoteState());
+  CreateNoteCubit() : super(const CreateNoteState());
 
-  final NotesRepository notesRepository;
+  final NotesRepository notesRepository = serviceLocator<NotesRepository>();
 
   void onNameChanged(String value) {
     final title = NameValidator.dirty(value);

@@ -19,9 +19,7 @@ class NoteTypeSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<NoteTypesBloc>(
-      create: (context) => NoteTypesBloc(
-          noteTypesRepository: context.read<NoteTypesRepository>()
-      )..add(WatchNoteTypes()),
+      create: (context) => NoteTypesBloc()..add(WatchNoteTypes()),
       child: BlocConsumer<NoteTypesBloc, NoteTypesState>(
           listener: (context, state) {
             if (state.listStatus.isError) {

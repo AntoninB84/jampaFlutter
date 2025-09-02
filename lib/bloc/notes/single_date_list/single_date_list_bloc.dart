@@ -2,14 +2,13 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
 import 'package:jampa_flutter/repository/schedule_repository.dart';
+import 'package:jampa_flutter/utils/service_locator.dart';
 
 part 'single_date_list_event.dart';
 part 'single_date_list_state.dart';
 
 class SingleDateListBloc extends Bloc<SingleDateListEvent, SingleDateListState> {
-  SingleDateListBloc({
-    required this.scheduleRepository
-  }) : super(const SingleDateListState()) {
+  SingleDateListBloc() : super(const SingleDateListState()) {
     on<ResetSingleDateListState>(_resetState);
     on<InitializeSingleDateListFromMemoryState>(_initializeFromMemoryState);
     on<LoadPersistentSingleDateList>(_onLoadPersistentSingleDateList);
@@ -17,7 +16,7 @@ class SingleDateListBloc extends Bloc<SingleDateListEvent, SingleDateListState> 
     on<RemoveSingleDateFromMemoryList>(_onRemoveSingleDateFromMemoryList);
   }
 
-  final ScheduleRepository scheduleRepository;
+  final ScheduleRepository scheduleRepository = serviceLocator<ScheduleRepository>();
 
   void _initializeFromMemoryState(InitializeSingleDateListFromMemoryState event, Emitter<SingleDateListState> emit) {
     emit(state.copyWith(singleDateElements: event.singleDateElements));
