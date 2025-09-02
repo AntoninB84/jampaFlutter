@@ -8,7 +8,17 @@ import 'package:jampa_flutter/utils/forms/content_validator.dart';
 import 'package:jampa_flutter/utils/forms/name_validator.dart';
 
 class NoteContentTextField extends StatefulWidget {
-  const NoteContentTextField({super.key});
+  const NoteContentTextField({super.key,
+    this.value,
+    this.isValid = true,
+    required this.validator,
+    required this.onChanged,
+  });
+
+  final String? value;
+  final bool isValid;
+  final ContentValidator validator;
+  final Function(String) onChanged;
 
   @override
   State<NoteContentTextField> createState() => _NoteContentTextFieldState();
@@ -20,6 +30,9 @@ class _NoteContentTextFieldState extends State<NoteContentTextField> {
 
   @override
   void initState() {
+    if(widget.value != null){
+      _textEditingController.text = widget.value!;
+    }
     super.initState();
   }
 
@@ -31,31 +44,18 @@ class _NoteContentTextFieldState extends State<NoteContentTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CreateNoteCubit, CreateNoteState>(
-      listener: (context, state){
-        if(state.note != null){
-          _textEditingController.text = state.note!.content;
-        }
-      },
-      listenWhen: (previous, current) {
-        // Only listen for changes in the note
-        return previous.note != current.note;
-      },
-      builder: (context, state) {
-        return CustomTextField(
-            controller: _textEditingController,
-            onChanged: (value) => context.read<CreateNoteCubit>().onContentChanged(value),
-            hintText: context.strings.create_note_content_field_hint,
-            errorWidget: !state.isValidContent ? ErrorText(
-                errorText: (){
-                  if (state.content.displayError?.isEmpty ?? false) {
-                    return context.strings.create_note_content_invalid_length;
-                  }
-                  return context.strings.generic_error_message;
-                }()
-            ) : null
-        );
-      },
+    return CustomTextField(
+        controller: _textEditingController,
+        onChanged: widget.onChanged,
+        hintText: context.strings.create_note_content_field_hint,
+        errorWidget: !widget.isValid ? ErrorText(
+            errorText: (){
+              if (widget.validator.displayError?.isEmpty ?? false) {
+                return context.strings.create_note_content_invalid_length;
+              }
+              return context.strings.generic_error_message;
+            }()
+        ) : null
     );
   }
 }

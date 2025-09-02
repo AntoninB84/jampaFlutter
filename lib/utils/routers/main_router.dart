@@ -8,6 +8,7 @@ import 'package:jampa_flutter/ui/note_types/create/create_note_type_page.dart';
 import 'package:jampa_flutter/ui/note_types/index/note_types_page.dart';
 import 'package:jampa_flutter/ui/notes/create/create_note_page.dart';
 import 'package:jampa_flutter/ui/notes/create_single_date/create_single_date_page.dart';
+import 'package:jampa_flutter/ui/notes/edit/edit_note_page.dart';
 import 'package:jampa_flutter/ui/notes/index/notes_page.dart';
 import 'package:jampa_flutter/ui/notes/show/show_note_page.dart';
 
@@ -70,7 +71,7 @@ final GoRouter mainRouter = GoRouter(
                     GoRoute(
                       name: "EditNote",
                       path: AppRoutes.editNote,
-                      builder: (context, state) => CreateNotePage(
+                      builder: (context, state) => EditNotePage(
                         noteId: state.pathParameters['id'],
                       )
                     )

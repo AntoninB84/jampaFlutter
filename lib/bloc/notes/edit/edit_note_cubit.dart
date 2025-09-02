@@ -12,17 +12,51 @@ import 'package:jampa_flutter/utils/forms/content_validator.dart';
 import 'package:jampa_flutter/utils/forms/name_validator.dart';
 import 'package:jampa_flutter/repository/notes_repository.dart';
 
-part 'create_note_state.dart';
+part 'edit_note_state.dart';
 
 /// Cubit to manage the state of creating or editing a note
 /// All Schedule related data (SingleDate, Recurrence, Alarms) are managed in memory only
 /// and will be saved to persistent storage when the note is saved.
-class CreateNoteCubit extends Cubit<CreateNoteState> {
-  CreateNoteCubit({
+class EditNoteCubit extends Cubit<EditNoteState> {
+  EditNoteCubit({
     required this.notesRepository,
-  }) : super(const CreateNoteState());
+  }) : super(const EditNoteState());
 
   final NotesRepository notesRepository;
+
+  void fetchNoteForUpdate(String? noteId) {
+    if(noteId != null){
+      try {
+        int? id = int.tryParse(noteId);
+        if(id != null){
+          // Fetch the note by ID and update the state
+          notesRepository.getNoteById(id)
+            .then((note) {
+              if (note != null) {
+                emit(state.copyWith(
+                  note: note,
+                  title: NameValidator.dirty(note.title),
+                  isValidTitle: Formz.validate([NameValidator.dirty(note.title)]),
+                  content: ContentValidator.dirty(note.content),
+                  isValidContent: Formz.validate([ContentValidator.dirty(note.content)]),
+                  selectedNoteType: note.noteType,
+                  selectedCategories: note.categories,
+                  isImportantChecked: note.isImportant,
+                ));
+              } else {
+                emit(state.copyWith(isError: true));
+              }
+            }).catchError((error) {
+              emit(state.copyWith(isError: true));
+              debugPrint('Error fetching note for update: $error');
+            });
+        }
+      } catch (e) {
+        emit(state.copyWith(isError: true));
+        debugPrint('Error initializing fetchNoteForUpdate: $e');
+      }
+    }
+  }
 
   void onNameChanged(String value) {
     final title = NameValidator.dirty(value);
@@ -54,8 +88,8 @@ class CreateNoteCubit extends Cubit<CreateNoteState> {
           selectedCategories: categories,
         )
     );
-
   }
+
   void onSelectedNoteTypeChanged(NoteTypeEntity? noteType) {
     emit(
         state.copyWith(
@@ -70,74 +104,6 @@ class CreateNoteCubit extends Cubit<CreateNoteState> {
           isImportantChecked: isChecked,
         )
     );
-  }
-
-  void onAddSingleDateElement(SingleDateFormElements element) {
-    final updatedElements = List<SingleDateFormElements>.from(state.selectedSingleDateElements)
-      ..add(element);
-    emit(
-        state.copyWith(
-          selectedSingleDateElements: updatedElements,
-        )
-    );
-  }
-
-  void onUpdateSingleDateElement(int index, SingleDateFormElements element) {
-    final updatedElements = List<SingleDateFormElements>.from(state.selectedSingleDateElements);
-    if (index >= 0 && index < updatedElements.length) {
-      updatedElements[index] = element;
-      emit(
-          state.copyWith(
-            selectedSingleDateElements: updatedElements,
-          )
-      );
-    }
-  }
-
-  void onRemoveSingleDateElement(int index) {
-    final updatedElements = List<SingleDateFormElements>.from(state.selectedSingleDateElements);
-    if (index >= 0 && index < updatedElements.length) {
-      updatedElements.removeAt(index);
-      emit(
-          state.copyWith(
-            selectedSingleDateElements: updatedElements,
-          )
-      );
-    }
-  }
-
-  void onAddRecurrenceElement(RecurrenceFormElements element) {
-    final updatedElements = List<RecurrenceFormElements>.from(state.selectedRecurrences)
-      ..add(element);
-    emit(
-        state.copyWith(
-          selectedRecurrences: updatedElements,
-        )
-    );
-  }
-
-  void onUpdateRecurrenceElement(int index, RecurrenceFormElements element) {
-    final updatedElements = List<RecurrenceFormElements>.from(state.selectedRecurrences);
-    if (index >= 0 && index < updatedElements.length) {
-      updatedElements[index] = element;
-      emit(
-          state.copyWith(
-            selectedRecurrences: updatedElements,
-          )
-      );
-    }
-  }
-
-  void onRemoveRecurrenceElement(int index) {
-    final updatedElements = List<RecurrenceFormElements>.from(state.selectedRecurrences);
-    if (index >= 0 && index < updatedElements.length) {
-      updatedElements.removeAt(index);
-      emit(
-          state.copyWith(
-            selectedRecurrences: updatedElements,
-          )
-      );
-    }
   }
 
   Future<void> onSubmit() async {
@@ -162,16 +128,16 @@ class CreateNoteCubit extends Cubit<CreateNoteState> {
           )
       );
 
-      late NoteEntity note = NoteEntity(
+      late NoteEntity note = state.note!.copyWith(
           title: state.title.value,
           content: state.content.value,
           noteTypeId: state.selectedNoteType?.id,
           categories: state.selectedCategories,
-          createdAt: DateTime.now(),
+          createdAt: state.note!.createdAt,
           updatedAt: DateTime.now()
       );
 
-      // Save the note to persistent storage
+      // Update the note
       notesRepository.saveNote(note)
       .then((_) {
         // If the note is saved successfully, emit a success state
@@ -186,6 +152,6 @@ class CreateNoteCubit extends Cubit<CreateNoteState> {
   }
 
   void resetState() {
-    emit(const CreateNoteState());
+    emit(const EditNoteState());
   }
 }

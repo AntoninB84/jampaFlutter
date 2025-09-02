@@ -7,14 +7,12 @@ import 'package:jampa_flutter/ui/notes/create/create_note_layout.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
 class CreateNotePage extends StatelessWidget {
-  const CreateNotePage({super.key, this.noteId});
-
-  final String? noteId;
+  const CreateNotePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CreateNoteCubit>.value(
-      value: serviceLocator<CreateNoteCubit>()..fetchNoteForUpdate(noteId),
+      value: serviceLocator<CreateNoteCubit>(),
       child: const CreateNoteLayout(),
     );
   }

@@ -12,7 +12,14 @@ import 'package:multi_dropdown/multi_dropdown.dart';
 import '../../../bloc/notes/create/create_note_cubit.dart';
 
 class NoteCategoriesMultiSelector extends StatefulWidget{
-  const NoteCategoriesMultiSelector({super.key});
+  const NoteCategoriesMultiSelector({
+    super.key,
+    this.selectedCategories = const [],
+    required this.onCategorySelected,
+  });
+
+  final List<CategoryEntity> selectedCategories;
+  final Function(List<CategoryEntity>) onCategorySelected;
 
   @override
   State<NoteCategoriesMultiSelector> createState() => _NoteCategoriesMultiSelectorState();
@@ -34,37 +41,17 @@ class _NoteCategoriesMultiSelectorState extends State<NoteCategoriesMultiSelecto
             builder: (context, state) {
               List<CategoryEntity> categories = state.categories;
 
-              List<CategoryEntity> selectedCategories = [];
-
-              return BlocConsumer<CreateNoteCubit, CreateNoteState>(
-                  listener: (context, state){
-                    if(state.note != null){
-                      context.read<CreateNoteCubit>()
-                          .onSelectedCategoriesChanged(state.note!.categories ?? []);
-                    }
-                  },
-                  listenWhen: (previous, current) {
-                    // Only listen for changes in the note
-                    return previous.note != current.note;
-                  },
-                  builder: (context, state) {
-                    selectedCategories = state.selectedCategories;
-
-                    return MultiDropdown(
-                      key: UniqueKey(),
-                      enabled: true,
-                      onSelectionChange: (values) =>
-                          context.read<CreateNoteCubit>()
-                              .onSelectedCategoriesChanged(values),
-                      items: categories.map((category) {
-                        return DropdownItem<CategoryEntity>(
-                          value: category,
-                          label: category.name,
-                          selected: selectedCategories.contains(category),
-                        );
-                      }).toList(),
-                    );
-                  }
+              return MultiDropdown(
+                key: UniqueKey(),
+                enabled: true,
+                onSelectionChange: widget.onCategorySelected,
+                items: categories.map((category) {
+                  return DropdownItem<CategoryEntity>(
+                    value: category,
+                    label: category.name,
+                    selected: widget.selectedCategories.contains(category),
+                  );
+                }).toList(),
               );
             }
         )
