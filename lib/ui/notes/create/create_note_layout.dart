@@ -12,6 +12,7 @@ import 'package:jampa_flutter/ui/notes/widgets/note_title_text_field.dart';
 import 'package:jampa_flutter/ui/notes/widgets/note_content_text_field.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_cubit.dart';
 
+import '../../../bloc/notes/create/create_note_form_helpers.dart';
 import '../../widgets/cancel_button.dart';
 
 
@@ -121,12 +122,16 @@ class DateListButton extends StatelessWidget {
         onPressed: () {
           showDialog(
               context: listContext,
-              builder: (dialogContext) => SingleDateListDialog(
-                fromMemory: true,
-                onDateDeleted: (value){
-                  blocContext.read<CreateNoteCubit>().onRemoveSingleDateElement(value);
-                },
-              )
+              builder: (dialogContext) {
+                if(isRecurrence){
+                  return Container(); // TODO
+                }
+                return SingleDateListDialog(
+                  listElements: elements as List<SingleDateFormElements>,
+                  onDateDeleted: (value) {
+                    blocContext.read<CreateNoteCubit>().onRemoveSingleDateElement(value);                  },
+                );
+              }
           );
         },
         child: Text(

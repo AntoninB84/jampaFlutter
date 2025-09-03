@@ -1,5 +1,7 @@
 
 import 'package:drift/drift.dart';
+import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
+import 'package:jampa_flutter/utils/enums/recurrence_type_enum.dart';
 import '../database.dart';
 import 'note.dart';
 
@@ -111,4 +113,122 @@ class ScheduleEntity {
         recurrenceDay = json['recurrenceDay'] as int?,
         recurrenceEndDate = json['recurrenceEndDate'] != null ? DateTime.parse(json['recurrenceEndDate'] as String) : null;
 
+
+  SingleDateFormElements toSingleDateFormElements() {
+    return SingleDateFormElements(
+      noteId: noteId,
+      scheduleId: id,
+      selectedStartDateTime: startDateTime,
+      selectedEndDateTime: endDateTime,
+      createdAt: createdAt
+    );
+  }
+
+  static ScheduleEntity fromSingleDateFormElements(SingleDateFormElements elements, int noteId) {
+    return ScheduleEntity(
+      id: elements.scheduleId,
+      noteId: noteId,
+      startDateTime: elements.selectedStartDateTime,
+      endDateTime: elements.selectedEndDateTime,
+      createdAt: elements.createdAt ?? DateTime.now(),
+      updatedAt: DateTime.now(),
+    );
+  }
+
+  RecurrenceFormElements toRecurrenceFormElements() {
+
+    int? recurrenceDaysInterval;
+    int? recurrenceYearsInterval;
+    int? recurrenceMonthDate;
+    List<int> recurrenceWeekDays = [];
+
+    switch(RecurrenceType.fromString(recurrenceType ?? '')){
+      case RecurrenceType.intervalDays: {
+        recurrenceDaysInterval = recurrenceInterval;
+        break;
+      }
+      case RecurrenceType.dayBasedWeekly: {
+        if(recurrenceDay != null){
+          String daysString = recurrenceDay!.toString();
+          if(daysString.isNotEmpty){
+            // Split the integer into its individual digits and convert to a list of integers
+            recurrenceWeekDays = daysString.split("").map(
+                    (e) => int.parse(e)
+            ).toList();
+          }
+        }
+        break;
+      }
+      case RecurrenceType.dayBasedMonthly: {
+        recurrenceMonthDate = recurrenceDay;
+        break;
+      }
+      case RecurrenceType.intervalYears: {
+        recurrenceYearsInterval = recurrenceInterval;
+        break;
+      }
+      default: break;
+    }
+
+    return RecurrenceFormElements(
+      noteId: noteId,
+      scheduleId: id,
+      selectedStartDateTime: startDateTime,
+      selectedEndDateTime: endDateTime,
+      createdAt: createdAt,
+      selectedRecurrenceType: recurrenceType != null ? RecurrenceType.fromString(recurrenceType!) : null,
+      selectedRecurrenceEndDate: recurrenceEndDate,
+      selectedRecurrenceDaysInterval: recurrenceDaysInterval,
+      selectedRecurrenceYearsInterval: recurrenceYearsInterval,
+      selectedRecurrenceMonthDate: recurrenceMonthDate,
+      selectedRecurrenceWeekdays: recurrenceWeekDays
+    );
+  }
+
+  static ScheduleEntity fromRecurrenceFormElements(RecurrenceFormElements elements, int noteId) {
+
+    String? recurrenceType;
+    int? recurrenceInterval;
+    int? recurrenceDay;
+
+    switch(elements.selectedRecurrenceType){
+      case RecurrenceType.intervalDays: {
+        recurrenceType = RecurrenceType.intervalDays.toString();
+        recurrenceInterval = elements.selectedRecurrenceDaysInterval;
+        break;
+      }
+      case RecurrenceType.dayBasedWeekly: {
+        recurrenceType = RecurrenceType.dayBasedWeekly.toString();
+        if(elements.selectedRecurrenceWeekdays?.isNotEmpty ?? false){
+          // Join the list of integers into a single integer (e.g., [1,3,5] -> 135)
+          recurrenceDay = int.parse(elements.selectedRecurrenceWeekdays!.join());
+        }
+        break;
+      }
+      case RecurrenceType.dayBasedMonthly: {
+        recurrenceType = RecurrenceType.dayBasedMonthly.toString();
+        recurrenceDay = elements.selectedRecurrenceMonthDate;
+        break;
+      }
+      case RecurrenceType.intervalYears: {
+        recurrenceType = RecurrenceType.intervalYears.toString();
+        recurrenceInterval = elements.selectedRecurrenceYearsInterval;
+        break;
+      }
+      default: break;
+    }
+
+    return ScheduleEntity(
+      id: elements.scheduleId,
+      noteId: noteId,
+      startDateTime: elements.selectedStartDateTime,
+      endDateTime: elements.selectedEndDateTime,
+      createdAt: elements.createdAt ?? DateTime.now(),
+      updatedAt: DateTime.now(),
+      recurrenceType: recurrenceType,
+      recurrenceInterval: recurrenceInterval,
+      recurrenceDay: recurrenceDay,
+      recurrenceEndDate: elements.selectedRecurrenceEndDate,
+    );
+  }
 }

@@ -44,7 +44,7 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget> {
                         IconButton(
                           icon: const Icon(Icons.edit),
                           onPressed: () {
-                            context.pushNamed("EditCategory", pathParameters: {'id': category.id.toString()});
+                            context.pushNamed("EditCategory", extra: {'id': category.id.toString()});
                           },
                         ),
                         IconButton(

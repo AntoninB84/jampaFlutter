@@ -8,6 +8,7 @@ import 'package:jampa_flutter/data/models/category.dart';
 import 'package:jampa_flutter/data/models/note.dart';
 import 'package:jampa_flutter/data/models/note_type.dart';
 import 'package:jampa_flutter/repository/categories_repository.dart';
+import 'package:jampa_flutter/repository/schedule_repository.dart';
 import 'package:jampa_flutter/utils/forms/content_validator.dart';
 import 'package:jampa_flutter/utils/forms/name_validator.dart';
 import 'package:jampa_flutter/repository/notes_repository.dart';
@@ -22,6 +23,7 @@ class CreateNoteCubit extends Cubit<CreateNoteState> {
   CreateNoteCubit() : super(const CreateNoteState());
 
   final NotesRepository notesRepository = serviceLocator<NotesRepository>();
+  final ScheduleRepository scheduleRepository = serviceLocator<ScheduleRepository>();
 
   void onNameChanged(String value) {
     final title = NameValidator.dirty(value);
@@ -171,9 +173,15 @@ class CreateNoteCubit extends Cubit<CreateNoteState> {
       );
 
       // Save the note to persistent storage
-      notesRepository.saveNote(note)
-      .then((_) {
-        // If the note is saved successfully, emit a success state
+      await notesRepository.saveNote(note)
+      .then((insertedNote) {
+        // After the note is saved, save the associated schedule elements
+        scheduleRepository.saveDateFormElements(
+            singleFormElementsList: state.selectedSingleDateElements,
+            recurrenceFormElementsList: state.selectedRecurrences,
+            noteId: insertedNote.id!
+        );
+        // If successful, emit a state indicating success
         emit(state.copyWith(isSuccess: true, isLoading: false));
       })
       .catchError((error){

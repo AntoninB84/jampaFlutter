@@ -40,7 +40,7 @@ class _NoteTypesListWidgetState extends State<NoteTypesListWidget> {
                         IconButton(
                           icon: const Icon(Icons.edit),
                           onPressed: () {
-                            context.pushNamed("EditNoteType", pathParameters: {'id': noteType.id.toString()});
+                            context.pushNamed("EditNoteType", extra: {'id': noteType.id.toString()});
                           },
                         ),
                         IconButton(

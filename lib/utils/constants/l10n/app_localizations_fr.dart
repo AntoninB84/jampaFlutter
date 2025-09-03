@@ -205,25 +205,29 @@ class AppLocalizationsFr extends AppLocalizations {
       'La date de fin ne peut pas être antérieure à la date de départ';
 
   @override
-  String delete_date_confirmation_title(String isRecurrent) {
-    String _temp0 = intl.Intl.selectLogic(isRecurrent, {
-      'true': 'Supprimer la date récurrente',
-      'other': 'Supprimer la date',
-    });
-    return '$_temp0';
-  }
+  String get delete_single_date_confirmation_title => 'Supprimer la date';
 
   @override
-  String delete_date_confirmation_message(Object date, String isRecurrent) {
-    String _temp0 = intl.Intl.selectLogic(isRecurrent, {
-      'true': 'date récurrente',
-      'other': 'date',
+  String delete_single_date_confirmation_message(
+    Object date,
+    String isFromEdit,
+  ) {
+    String _temp0 = intl.Intl.selectLogic(isFromEdit, {
+      'true':
+          'Cette action est irréversible et indépendante de la modification de la note.',
+      'other': '',
     });
-    return 'Êtes-vous sûr de vouloir supprimer la $_temp0: $date?';
+    return 'Êtes-vous sûr de vouloir supprimer la date: $date? $_temp0';
   }
 
   @override
   String get delete_date_success_feedback => 'Date supprimée avec succès';
+
+  @override
+  String get create_single_date_success_feedback => 'Date ajoutée avec succès';
+
+  @override
+  String get edit_single_date_success_feedback => 'Date modifiée avec succès';
 
   @override
   String get edit_note_title => 'Modifier la note';

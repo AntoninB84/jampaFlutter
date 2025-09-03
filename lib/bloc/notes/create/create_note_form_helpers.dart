@@ -4,21 +4,34 @@ import '../../../utils/enums/alarm_offset_type_enum.dart';
 
 class AlarmFormElements {
   const AlarmFormElements({
+    this.scheduleId,
+    this.alarmId,
+    this.createdAt,
     required this.selectedOffsetNumber,
     required this.selectedOffsetType,
     this.isSilentAlarm = true,
   });
+
+  final int? scheduleId;
+  final int? alarmId;
+  final DateTime? createdAt;
 
   final int selectedOffsetNumber;
   final AlarmOffsetType selectedOffsetType;
   final bool isSilentAlarm;
 
   AlarmFormElements copyWith({
+    int? scheduleId,
+    int? alarmId,
+    DateTime? createdAt,
     int? selectedOffsetNumber,
     AlarmOffsetType? selectedOffsetType,
     bool? isSilentAlarm,
   }) {
     return AlarmFormElements(
+      scheduleId: scheduleId ?? this.scheduleId,
+      alarmId: alarmId ?? this.alarmId,
+      createdAt: createdAt ?? this.createdAt,
       selectedOffsetNumber: selectedOffsetNumber ?? this.selectedOffsetNumber,
       selectedOffsetType: selectedOffsetType ?? this.selectedOffsetType,
       isSilentAlarm: isSilentAlarm ?? this.isSilentAlarm,
@@ -28,21 +41,34 @@ class AlarmFormElements {
 
 class SingleDateFormElements {
   const SingleDateFormElements({
+    this.noteId,
+    this.scheduleId,
+    this.createdAt,
     this.selectedStartDateTime,
     this.selectedEndDateTime,
     this.alarmsForSingleDate,
   });
+
+  final int? noteId;
+  final int? scheduleId;
+  final DateTime? createdAt;
 
   final DateTime? selectedStartDateTime;
   final DateTime? selectedEndDateTime;
   final List<AlarmFormElements>? alarmsForSingleDate;
 
   SingleDateFormElements copyWith({
+    int? noteId,
+    int? scheduleId,
+    DateTime? createdAt,
     DateTime? selectedStartDateTime,
     DateTime? selectedEndDateTime,
     List<AlarmFormElements>? alarmsForSingleDate,
   }) {
     return SingleDateFormElements(
+      noteId: noteId ?? this.noteId,
+      scheduleId: scheduleId ?? this.scheduleId,
+      createdAt: createdAt ?? this.createdAt,
       selectedStartDateTime: selectedStartDateTime ?? this.selectedStartDateTime,
       selectedEndDateTime: selectedEndDateTime ?? this.selectedEndDateTime,
       alarmsForSingleDate: alarmsForSingleDate ?? this.alarmsForSingleDate,
@@ -52,6 +78,9 @@ class SingleDateFormElements {
 
 class RecurrenceFormElements {
   const RecurrenceFormElements({
+    this.noteId,
+    this.scheduleId,
+    this.createdAt,
     this.selectedStartDateTime,
     this.selectedEndDateTime,
     this.selectedRecurrenceEndDate,
@@ -62,6 +91,10 @@ class RecurrenceFormElements {
     this.selectedRecurrenceWeekdays,
     this.alarmsForRecurrence = const [],
   });
+
+  final int? noteId;
+  final int? scheduleId;
+  final DateTime? createdAt;
 
   final DateTime? selectedStartDateTime;
   final DateTime? selectedEndDateTime;
@@ -76,6 +109,9 @@ class RecurrenceFormElements {
   final List<AlarmFormElements> alarmsForRecurrence;
 
   RecurrenceFormElements copyWith({
+    int? noteId,
+    int? scheduleId,
+    DateTime? createdAt,
     DateTime? selectedStartDateTime,
     DateTime? selectedEndDateTime,
     DateTime? selectedRecurrenceEndDate,
@@ -87,6 +123,9 @@ class RecurrenceFormElements {
     List<AlarmFormElements>? alarmsForRecurrence,
   }) {
     return RecurrenceFormElements(
+      noteId: noteId ?? this.noteId,
+      scheduleId: scheduleId ?? this.scheduleId,
+      createdAt: createdAt ?? this.createdAt,
       selectedStartDateTime: selectedStartDateTime ?? this.selectedStartDateTime,
       selectedEndDateTime: selectedEndDateTime ?? this.selectedEndDateTime,
       selectedRecurrenceEndDate: selectedRecurrenceEndDate ?? this.selectedRecurrenceEndDate,

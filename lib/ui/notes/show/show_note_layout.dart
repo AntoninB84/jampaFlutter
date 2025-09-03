@@ -42,7 +42,7 @@ class ShowNoteLayout extends StatelessWidget {
                 icon: const Icon(Icons.edit),
                 onPressed: () {
                   // Navigate to edit note page
-                  context.pushNamed("EditNote", pathParameters: {
+                  context.pushNamed("EditNote", extra: {
                     "id": state.note?.id.toString() ?? ''
                   });
                 },

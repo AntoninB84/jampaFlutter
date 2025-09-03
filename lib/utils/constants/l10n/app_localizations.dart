@@ -412,23 +412,38 @@ abstract class AppLocalizations {
   /// **'La date de fin ne peut pas être antérieure à la date de départ'**
   String get create_date_timeline_error;
 
-  /// No description provided for @delete_date_confirmation_title.
+  /// No description provided for @delete_single_date_confirmation_title.
   ///
   /// In fr, this message translates to:
-  /// **'{isRecurrent, select, true{Supprimer la date récurrente} other{Supprimer la date}}'**
-  String delete_date_confirmation_title(String isRecurrent);
+  /// **'Supprimer la date'**
+  String get delete_single_date_confirmation_title;
 
-  /// No description provided for @delete_date_confirmation_message.
+  /// No description provided for @delete_single_date_confirmation_message.
   ///
   /// In fr, this message translates to:
-  /// **'Êtes-vous sûr de vouloir supprimer la {isRecurrent, select, true{date récurrente} other{date}}: {date}?'**
-  String delete_date_confirmation_message(Object date, String isRecurrent);
+  /// **'Êtes-vous sûr de vouloir supprimer la date: {date}? {isFromEdit, select, true{Cette action est irréversible et indépendante de la modification de la note.} other{}}'**
+  String delete_single_date_confirmation_message(
+    Object date,
+    String isFromEdit,
+  );
 
   /// No description provided for @delete_date_success_feedback.
   ///
   /// In fr, this message translates to:
   /// **'Date supprimée avec succès'**
   String get delete_date_success_feedback;
+
+  /// No description provided for @create_single_date_success_feedback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date ajoutée avec succès'**
+  String get create_single_date_success_feedback;
+
+  /// No description provided for @edit_single_date_success_feedback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date modifiée avec succès'**
+  String get edit_single_date_success_feedback;
 
   /// No description provided for @edit_note_title.
   ///

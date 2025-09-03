@@ -1,3 +1,4 @@
+import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
 import 'package:jampa_flutter/data/dao/note_dao.dart';
 import 'package:jampa_flutter/data/models/note.dart';
 
@@ -9,10 +10,10 @@ class NotesRepository {
   const NotesRepository();
 
 
-  Future<void> saveNote(NoteEntity note) async {
+  Future<NoteEntity> saveNote(NoteEntity note) async {
     bool isUpdate = note.id != null;
     
-    await NoteDao.saveSingleNote(note).then((insertedNote) async {
+    return await NoteDao.saveSingleNote(note).then((insertedNote) async {
       // Re-assign categories to the inserted note
       insertedNote.categories = note.categories;
       if(isUpdate){

@@ -26,8 +26,17 @@ class SingleDateListBloc extends Bloc<SingleDateListEvent, SingleDateListState> 
 
   }
 
-  void _onDeletePersistentSingleDate(DeletePersistentSingleDate event, Emitter<SingleDateListState> emit) {
-
+  void _onDeletePersistentSingleDate(DeletePersistentSingleDate event, Emitter<SingleDateListState> emit) async {
+    await scheduleRepository.deleteScheduleById(event.id).then((_) {
+      //TODO verify if alarms are also deleted
+      // Remove from in-memory list as well
+      final updatedList = List<SingleDateFormElements>.from(state.singleDateElements);
+      final int index = updatedList.indexWhere((element) => element.scheduleId == event.id);
+      if(index >= 0 && index < updatedList.length) {
+        updatedList.removeAt(index);
+        emit(state.copyWith(singleDateElements: updatedList));
+      }
+    });
   }
 
   // Remove a single date from the in-memory list based on index

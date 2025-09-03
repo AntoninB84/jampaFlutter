@@ -1,7 +1,9 @@
-part of 'create_single_date_cubit.dart';
+part of 'save_single_date_cubit.dart';
 
-class CreateSingleDateState extends Equatable {
-  const CreateSingleDateState({
+class SaveSingleDateState extends Equatable {
+  const SaveSingleDateState({
+    this.noteId,
+    this.isSavingPersistentDate = false,
     this.initialSingleDateFormElements,
     this.initialSingleDateFormElementIndex,
     this.createdSingleDateFormElements,
@@ -11,8 +13,14 @@ class CreateSingleDateState extends Equatable {
     this.hasSubmitted = false,
   });
 
+  final bool? isSavingPersistentDate;
+  // If saving to a persistent note, this holds the note ID
+  final int? noteId;
+
+  // If editing an existing single date, these fields hold the initial data
   final SingleDateFormElements? initialSingleDateFormElements;
   final int? initialSingleDateFormElementIndex;
+
   final SingleDateFormElements? createdSingleDateFormElements;
   
   final DateTime? selectedStartDateTime;
@@ -20,7 +28,9 @@ class CreateSingleDateState extends Equatable {
   final bool isValidDate;
   final bool hasSubmitted;
 
-  CreateSingleDateState copyWith({
+  SaveSingleDateState copyWith({
+    int? noteId,
+    bool? isSavingPersistentDate,
     SingleDateFormElements? initialSingleDateFormElements,
     int? initialSingleDateFormElementIndex,
     SingleDateFormElements? createdSingleDateFormElements,
@@ -29,7 +39,9 @@ class CreateSingleDateState extends Equatable {
     bool? isValidDate,
     bool? hasSubmitted,
   }) {
-    return CreateSingleDateState(
+    return SaveSingleDateState(
+      noteId: noteId ?? this.noteId,
+      isSavingPersistentDate: isSavingPersistentDate ?? this.isSavingPersistentDate,
       initialSingleDateFormElements: initialSingleDateFormElements ?? this.initialSingleDateFormElements,
       initialSingleDateFormElementIndex: initialSingleDateFormElementIndex ?? this.initialSingleDateFormElementIndex,
       createdSingleDateFormElements: createdSingleDateFormElements ?? this.createdSingleDateFormElements,
@@ -42,6 +54,8 @@ class CreateSingleDateState extends Equatable {
 
   @override
   List<Object?> get props => [
+      noteId,
+      isSavingPersistentDate,
       initialSingleDateFormElements,
       initialSingleDateFormElementIndex,
       createdSingleDateFormElements,

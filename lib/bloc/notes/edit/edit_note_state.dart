@@ -1,4 +1,4 @@
-part of 'edit_note_cubit.dart';
+part of 'edit_note_bloc.dart';
 
 class EditNoteState extends Equatable {
   const EditNoteState({
@@ -10,6 +10,8 @@ class EditNoteState extends Equatable {
     this.selectedNoteType,
     this.selectedCategories = const [],
     this.isImportantChecked = false,
+    this.singleDates = const [],
+    this.recurrentDates = const [],
     this.isLoading = false,
     this.isError = false,
     this.isSuccess = false,
@@ -30,6 +32,9 @@ class EditNoteState extends Equatable {
   //Important
   final bool isImportantChecked;
 
+  final List<SingleDateFormElements> singleDates;
+  final List<RecurrenceFormElements> recurrentDates;
+
 
   
   final bool isLoading;
@@ -46,6 +51,8 @@ class EditNoteState extends Equatable {
     selectedNoteType,
     selectedCategories,
     isImportantChecked,
+    singleDates,
+    recurrentDates,
     isLoading,
     isError,
     isSuccess
@@ -60,6 +67,8 @@ class EditNoteState extends Equatable {
     NoteTypeEntity? selectedNoteType,
     List<CategoryEntity>? selectedCategories,
     bool? isImportantChecked,
+    List<SingleDateFormElements>? singleDates,
+    List<RecurrenceFormElements>? recurrentDates,
     bool? isLoading,
     bool? isError,
     bool? isSuccess,
@@ -73,6 +82,8 @@ class EditNoteState extends Equatable {
       selectedNoteType: selectedNoteType ?? this.selectedNoteType,
       selectedCategories: selectedCategories ?? this.selectedCategories,
       isImportantChecked: isImportantChecked ?? this.isImportantChecked,
+      singleDates: singleDates ?? this.singleDates,
+      recurrentDates: recurrentDates ?? this.recurrentDates,
       isLoading: isLoading ?? this.isLoading,
       isError: isError ?? this.isError,
       isSuccess: isSuccess ?? this.isSuccess,

@@ -42,7 +42,7 @@ class _NotesListWidgetState extends State<NotesListWidget> {
                     onTap: (){
                       context.pushNamed(
                           'NoteDetails',
-                          pathParameters: {'id': note.noteId.toString()}
+                          extra: {'id': note.noteId.toString()}
                       );
                     },
                   );

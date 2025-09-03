@@ -3,34 +3,45 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
-import 'package:jampa_flutter/data/models/Alarm.dart';
 import 'package:jampa_flutter/data/models/category.dart';
 import 'package:jampa_flutter/data/models/note.dart';
 import 'package:jampa_flutter/data/models/note_type.dart';
-import 'package:jampa_flutter/repository/categories_repository.dart';
+import 'package:jampa_flutter/data/models/schedule.dart';
+import 'package:jampa_flutter/repository/schedule_repository.dart';
 import 'package:jampa_flutter/utils/forms/content_validator.dart';
 import 'package:jampa_flutter/utils/forms/name_validator.dart';
 import 'package:jampa_flutter/repository/notes_repository.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
 part 'edit_note_state.dart';
+part 'edit_note_event.dart';
 
-/// Cubit to manage the state of creating or editing a note
+/// Bloc to manage the state of creating or editing a note
 /// All Schedule related data (SingleDate, Recurrence, Alarms) are managed in memory only
 /// and will be saved to persistent storage when the note is saved.
-class EditNoteCubit extends Cubit<EditNoteState> {
-  EditNoteCubit() : super(const EditNoteState());
+class EditNoteBloc extends Bloc<EditNoteEvent, EditNoteState> {
+  EditNoteBloc() : super(const EditNoteState()) {
+    on<FetchNoteForUpdate>(_fetchNoteForUpdate);
+    on<OnNameChanged>(_onNameChanged);
+    on<OnContentChanged>(_onContentChanged);
+    on<OnSelectedCategoriesChanged>(_onSelectedCategoriesChanged);
+    on<OnSelectedNoteTypeChanged>(_onSelectedNoteTypeChanged);
+    on<OnIsImportantCheckedChanged>(_onImportantCheckedChanged);
+    on<OnSubmit>(_onSubmit);
+    on<OnResetState>(_resetState);
+  }
 
   final NotesRepository notesRepository = serviceLocator<NotesRepository>();
+  final ScheduleRepository scheduleRepository = serviceLocator<ScheduleRepository>();
 
-  void fetchNoteForUpdate(String? noteId) {
-    if(noteId != null){
+  void _fetchNoteForUpdate(FetchNoteForUpdate event, Emitter<EditNoteState> emit) async {
+    if(event.noteId != null){
       try {
-        int? id = int.tryParse(noteId);
+        int? id = int.tryParse(event.noteId!);
         if(id != null){
           // Fetch the note by ID and update the state
-          notesRepository.getNoteById(id)
-            .then((note) {
+          await notesRepository.getNoteById(id)
+            .then((note) async {
               if (note != null) {
                 emit(state.copyWith(
                   note: note,
@@ -42,6 +53,33 @@ class EditNoteCubit extends Cubit<EditNoteState> {
                   selectedCategories: note.categories,
                   isImportantChecked: note.isImportant,
                 ));
+
+                // Listen to schedules related to this note
+                await emit.onEach(
+                    scheduleRepository.watchAllSchedulesByNoteId(note.id!),
+                    onData: (data) {
+                      // Separate schedules into single date and recurrence
+                      List<SingleDateFormElements> singleDates= [];
+                      List<RecurrenceFormElements> recurrentDates = [];
+
+                      for (var schedule in data) {
+                        if (schedule.recurrenceType != null) {
+                          recurrentDates.add(schedule.toRecurrenceFormElements());
+                        } else {
+                          singleDates.add(schedule.toSingleDateFormElements());
+                        }
+                      }
+
+                      emit(state.copyWith(
+                        singleDates: singleDates,
+                        recurrentDates: recurrentDates,
+                      ));
+                    },
+                    onError: (error, stackTrace) {
+                      emit(state.copyWith(isError: true));
+                      debugPrint('Error listening to schedules for note: $error');
+                    }
+                );
               } else {
                 emit(state.copyWith(isError: true));
               }
@@ -57,8 +95,8 @@ class EditNoteCubit extends Cubit<EditNoteState> {
     }
   }
 
-  void onNameChanged(String value) {
-    final title = NameValidator.dirty(value);
+  void _onNameChanged(OnNameChanged event, Emitter<EditNoteState> emit) {
+    final title = NameValidator.dirty(event.value);
     emit(
         state.copyWith(
           title: title,
@@ -69,8 +107,8 @@ class EditNoteCubit extends Cubit<EditNoteState> {
     );
   }
 
-  void onContentChanged(String value) {
-    final content = ContentValidator.dirty(value);
+  void _onContentChanged(OnContentChanged event, Emitter<EditNoteState> emit) {
+    final content = ContentValidator.dirty(event.value);
     emit(
         state.copyWith(
           content: content,
@@ -81,31 +119,31 @@ class EditNoteCubit extends Cubit<EditNoteState> {
     );
   }
 
-  void onSelectedCategoriesChanged(List<CategoryEntity> categories) {
+  void _onSelectedCategoriesChanged(OnSelectedCategoriesChanged event, Emitter<EditNoteState> emit) {
     emit(
         state.copyWith(
-          selectedCategories: categories,
+          selectedCategories: event.categories,
         )
     );
   }
 
-  void onSelectedNoteTypeChanged(NoteTypeEntity? noteType) {
+  void _onSelectedNoteTypeChanged(OnSelectedNoteTypeChanged event, Emitter<EditNoteState> emit) {
     emit(
         state.copyWith(
-          selectedNoteType: noteType,
+          selectedNoteType: event.noteType,
         )
     );
   }
 
-  void onImportantCheckedChanged(bool isChecked) {
+  void _onImportantCheckedChanged(OnIsImportantCheckedChanged event, Emitter<EditNoteState> emit) {
     emit(
         state.copyWith(
-          isImportantChecked: isChecked,
+          isImportantChecked: event.isChecked,
         )
     );
   }
 
-  Future<void> onSubmit() async {
+  Future<void> _onSubmit(OnSubmit event, Emitter<EditNoteState> emit) async {
     final title = NameValidator.dirty(state.title.value);
     final content = ContentValidator.dirty(state.content.value);
     emit(
@@ -137,7 +175,7 @@ class EditNoteCubit extends Cubit<EditNoteState> {
       );
 
       // Update the note
-      notesRepository.saveNote(note)
+      await notesRepository.saveNote(note)
       .then((_) {
         // If the note is saved successfully, emit a success state
         emit(state.copyWith(isSuccess: true, isLoading: false));
@@ -150,7 +188,7 @@ class EditNoteCubit extends Cubit<EditNoteState> {
     }
   }
 
-  void resetState() {
+  void _resetState(OnResetState event, Emitter<EditNoteState> emit) {
     emit(const EditNoteState());
   }
 }

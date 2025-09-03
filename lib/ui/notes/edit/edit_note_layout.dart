@@ -3,7 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jampa_flutter/bloc/notes/edit/edit_note_cubit.dart';
+import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
+import 'package:jampa_flutter/bloc/notes/edit/edit_note_bloc.dart';
 import 'package:jampa_flutter/ui/notes/widgets/single_date_list_dialog.dart';
 import 'package:jampa_flutter/ui/notes/widgets/note_categories_multiselector.dart';
 import 'package:jampa_flutter/ui/notes/widgets/note_type_selector.dart';
@@ -11,7 +12,6 @@ import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:jampa_flutter/ui/notes/widgets/note_title_text_field.dart';
 import 'package:jampa_flutter/ui/notes/widgets/note_content_text_field.dart';
-import 'package:jampa_flutter/bloc/notes/create/create_note_cubit.dart';
 
 import '../../widgets/cancel_button.dart';
 
@@ -21,7 +21,7 @@ class EditNoteLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<EditNoteCubit, EditNoteState>(
+    return BlocConsumer<EditNoteBloc, EditNoteState>(
       listener: (context, state) {
         if (state.isError) {
           SnackBarX.showError(context, context.strings.generic_error_message);
@@ -30,7 +30,7 @@ class EditNoteLayout extends StatelessWidget {
           // Back to the previous screen after success
           context.pop();
           // Reset the state after navigating back
-          context.read<EditNoteCubit>().resetState();
+          context.read<EditNoteBloc>().add(OnResetState());
         }
       },
       buildWhen: (previous, current) {
@@ -60,43 +60,60 @@ class EditNoteLayout extends StatelessWidget {
                     isValid: state.isValidTitle,
                     value: state.note?.title,
                     validator: state.title,
-                    onChanged: context.read<EditNoteCubit>().onNameChanged,
+                    onChanged: (value) => context.read<EditNoteBloc>()
+                      .add(OnNameChanged(value: value)),
                   ),
                   const SizedBox(height: 16),
                   NoteContentTextField(
                     isValid: state.isValidContent,
                     value: state.note?.content,
                     validator: state.content,
-                    onChanged: context.read<EditNoteCubit>().onContentChanged,
+                    onChanged: (value) => context.read<EditNoteBloc>()
+                        .add(OnContentChanged(value: value)),
                   ),
                   const SizedBox(height: 16),
                   NoteTypeSelector(
                     value: state.selectedNoteType,
-                    onChanged: (value) => context.read<EditNoteCubit>()
-                      ..onSelectedNoteTypeChanged(value),
+                    onChanged: (value) => context.read<EditNoteBloc>()
+                      .add(OnSelectedNoteTypeChanged(noteType: value)),
                   ),
                   const SizedBox(height: 16),
                   NoteCategoriesMultiSelector(
                     selectedCategories: state.selectedCategories,
-                    onCategorySelected: (values) => context.read<EditNoteCubit>()
-                      ..onSelectedCategoriesChanged(values),
+                    onCategorySelected: (values) => context.read<EditNoteBloc>()
+                      .add(OnSelectedCategoriesChanged(categories: values)),
                   ),
                   const SizedBox(height: 16),
-                  // DateListButton(
-                  //     blocContext: context,
-                  //     elements: state.selectedSingleDateElements,
-                  // ),
-                  // const SizedBox(height: 16),
-                  // DateListButton(
-                  //     blocContext: context,
-                  //     elements: state.selectedRecurrences,
-                  //     isRecurrence: true,
-                  // ),
-                  // const SizedBox(height: 32),
+                  BlocBuilder<EditNoteBloc, EditNoteState>(
+                    buildWhen: (previous, current) {
+                      return previous.singleDates != current.singleDates;
+                    },
+                    builder: (context, state) {
+                      return DateListButton(
+                          blocContext: context,
+                          elements: state.singleDates,
+                      );
+                    }
+                  ),
+                  const SizedBox(height: 16),
+                  BlocBuilder<EditNoteBloc, EditNoteState>(
+                    buildWhen: (previous, current) {
+                      return previous.recurrentDates != current.recurrentDates;
+                    },
+                    builder: (context, state) {
+                      return DateListButton(
+                          blocContext: context,
+                          elements: state.recurrentDates,
+                          isRecurrence: true,
+                      );
+                    }
+                  ),
+                  const SizedBox(height: 32),
                   SubmitNoteButton(),
                   const SizedBox(height: 16),
                   CancelButton(
-                    onPressed: () => context.read<EditNoteCubit>().resetState(),
+                    onPressed: () => context.read<EditNoteBloc>()
+                        .add(OnResetState()),
                   ),
                 ],
               ),
@@ -134,12 +151,18 @@ class DateListButton extends StatelessWidget {
         onPressed: () {
           showDialog(
               context: listContext,
-              builder: (dialogContext) => SingleDateListDialog(
-                fromMemory: true,
-                onDateDeleted: (value){
-                  // blocContext.read<EditNoteCubit>().onRemoveSingleDateElement(value);
-                },
-              )
+              builder: (dialogContext) {
+                if(isRecurrence){
+                  return Container(); // TODO
+                }
+                return SingleDateListDialog(
+                  isSavingPersistentData: true,
+                  listElements: elements as List<SingleDateFormElements>,
+                  onDateDeleted: (value) {
+                    // Do nothing, as we are loading from persistent storage with a stream
+                  },
+                );
+              }
           );
         },
         child: Text(
@@ -156,11 +179,11 @@ class SubmitNoteButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<EditNoteCubit, EditNoteState>(
+    return BlocBuilder<EditNoteBloc, EditNoteState>(
       builder: (context, state) {
         return ElevatedButton(
           onPressed: state.isValidTitle && !state.isLoading
-              ? () => context.read<EditNoteCubit>().onSubmit()
+              ? () => context.read<EditNoteBloc>().add(OnSubmit())
               : null,
           child: state.isLoading
               ? const CupertinoActivityIndicator()

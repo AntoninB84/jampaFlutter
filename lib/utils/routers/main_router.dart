@@ -7,7 +7,8 @@ import 'package:jampa_flutter/ui/home/home_page.dart';
 import 'package:jampa_flutter/ui/note_types/create/create_note_type_page.dart';
 import 'package:jampa_flutter/ui/note_types/index/note_types_page.dart';
 import 'package:jampa_flutter/ui/notes/create/create_note_page.dart';
-import 'package:jampa_flutter/ui/notes/create_single_date/create_single_date_page.dart';
+import 'package:jampa_flutter/ui/notes/create_single_date/save_memory_single_date_page.dart';
+import 'package:jampa_flutter/ui/notes/create_single_date/save_persistent_single_date_page.dart';
 import 'package:jampa_flutter/ui/notes/edit/edit_note_page.dart';
 import 'package:jampa_flutter/ui/notes/index/notes_page.dart';
 import 'package:jampa_flutter/ui/notes/show/show_note_page.dart';
@@ -15,18 +16,18 @@ import 'package:jampa_flutter/ui/notes/show/show_note_page.dart';
 
 class AppRoutes {
   static const String notes = '/notes';
-  static const String noteDetails = '/:id';
+  static const String noteDetails = '/details';
   static const String createNote = '/create';
   static const String editNote = '/edit';
-  static const String createSingleDate = '/createSingleDate';
-  static const String editSingleDate = '/editSingleDate';
+  static const String saveMemorySingleDate = '/saveMemorySingleDate';
+  static const String savePersistentSingleDate = '/savePersistentSingleDate';
   static const String settings = '/settings';
   static const String categories = '/categories';
   static const String createCategory = '/create';
-  static const String editCategory = '/edit/:id';
+  static const String editCategory = '/edit';
   static const String noteTypes = '/note_types';
   static const String createNoteType = '/create';
-  static const String editNoteType = '/edit/:id';
+  static const String editNoteType = '/edit';
 }
 
 final _routerKey = GlobalKey<NavigatorState>();
@@ -53,9 +54,9 @@ final GoRouter mainRouter = GoRouter(
                   builder: (context, state) => const CreateNotePage(),
                   routes: [
                     GoRoute(
-                      name: "CreateSingleDate",
-                      path: AppRoutes.createSingleDate,
-                      builder: (context, state) => CreateSingleDatePage(
+                      name: "SaveMemorySingleDate",
+                      path: AppRoutes.saveMemorySingleDate,
+                      builder: (context, state) => SaveMemorySingleDatePage(
                         singleDateIndex: (state.extra as Map?)?['dateIndex'] as int?,
                       )
                     )
@@ -65,15 +66,24 @@ final GoRouter mainRouter = GoRouter(
                   name: "NoteDetails",
                   path: AppRoutes.noteDetails,
                   builder: (context, state) => ShowNotePage(
-                      noteId: state.pathParameters['id']
+                      noteId: (state.extra as Map?)?['id']
                   ),
                   routes: [
                     GoRoute(
                       name: "EditNote",
                       path: AppRoutes.editNote,
                       builder: (context, state) => EditNotePage(
-                        noteId: state.pathParameters['id'],
-                      )
+                        noteId: (state.extra as Map?)?['id']
+                      ),
+                      routes: [
+                        GoRoute(
+                            name: "SavePersistentSingleDate",
+                            path: AppRoutes.savePersistentSingleDate,
+                            builder: (context, state) => SavePersistentSingleDatePage(
+                              singleDateIndex: (state.extra as Map?)?['dateIndex'] as int?,
+                            )
+                        )
+                      ]
                     )
                   ]
                 )
@@ -115,7 +125,7 @@ final GoRouter mainRouter = GoRouter(
                         name: "EditCategory",
                         path: AppRoutes.editCategory,
                         builder: (context, state) => CreateCategoryPage(
-                          categoryId: state.pathParameters['id'],
+                          categoryId: (state.extra as Map?)?['id'],
                         )
                       )
                     ]
@@ -134,7 +144,7 @@ final GoRouter mainRouter = GoRouter(
                         name: "EditNoteType",
                         path: AppRoutes.editNoteType,
                         builder: (context, state) => CreateNoteTypePage(
-                          noteTypeId: state.pathParameters['id'],
+                          noteTypeId: (state.extra as Map?)?['id'],
                         )
                       )
                     ]
