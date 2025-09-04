@@ -1,0 +1,73 @@
+
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jampa_flutter/ui/notes/save_alarm/save_alarm_layout.dart';
+
+import '../../../bloc/notes/save_alarm/save_alarm_cubit.dart';
+import '../../../bloc/notes/save_single_date/save_single_date_cubit.dart';
+import '../../../utils/service_locator.dart';
+
+class SavePersistentAlarmPage extends StatelessWidget {
+  const SavePersistentAlarmPage({ super.key,
+    this.isForRecurrentDate = false,
+    this.alarmIndex
+  });
+
+  final bool isForRecurrentDate;
+  final int? alarmIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+        providers: [
+          // if(isForRecurrentDate)
+          // BlocProvider<CreateNoteCubit>.value(
+          //   value: serviceLocator<CreateNoteCubit>(),
+          // ),
+          if(!isForRecurrentDate)
+            BlocProvider.value(
+              value: serviceLocator<SaveSingleDateCubit>(),
+            ),
+          BlocProvider(
+              create: (context) {
+                if(isForRecurrentDate){
+                  if(alarmIndex != null){
+                    // Editing an existing alarm for a recurrent date
+                    //TODO
+                    return SaveAlarmCubit(
+                      isSavingPersistentAlarm: true
+                    );
+                  }else{
+                    // Creating a new alarm for a recurrent date
+                    //TODO
+                    return SaveAlarmCubit(
+                      isSavingPersistentAlarm: true
+                    );
+                  }
+                }else{
+                  final saveSingleDateCubit = context.read<SaveSingleDateCubit>();
+                  if(alarmIndex != null){
+                    // Editing an existing alarm
+                    return SaveAlarmCubit()..initializeWithData(
+                      isSavingPersistentAlarm: true,
+                      alarmFormElements: saveSingleDateCubit.state
+                          .newSingleDateFormElements.alarmsForSingleDate
+                          .elementAtOrNull(alarmIndex!),
+                      initialElementIndex: alarmIndex
+                    );
+                  }else{
+                    // Creating a new alarm
+                    return SaveAlarmCubit(
+                      scheduleId: saveSingleDateCubit.state.newSingleDateFormElements.scheduleId,
+                      isSavingPersistentAlarm: true
+                    );
+                  }
+                }
+              }
+          ),
+        ],
+        child: SaveAlarmLayout(isForRecurrentDate: isForRecurrentDate,)
+    );
+  }
+}

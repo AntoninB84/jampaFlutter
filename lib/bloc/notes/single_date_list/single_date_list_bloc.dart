@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
 import 'package:jampa_flutter/repository/schedule_repository.dart';
+import 'package:jampa_flutter/utils/enums/ui_list_status_enum.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
 part 'single_date_list_event.dart';

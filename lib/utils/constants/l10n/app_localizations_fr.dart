@@ -205,6 +205,21 @@ class AppLocalizationsFr extends AppLocalizations {
       'La date de fin ne peut pas être antérieure à la date de départ';
 
   @override
+  String create_date_alarm_count(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count rappels',
+      one: '1 rappel',
+      zero: 'Aucun rappel',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get create_date_add_alarm_button => 'Ajouter un rappel';
+
+  @override
   String get delete_single_date_confirmation_title => 'Supprimer la date';
 
   @override
@@ -249,4 +264,89 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get delete_note_success_feedback => 'Note supprimée avec succès';
+
+  @override
+  String get alarm_title => 'Rappel';
+
+  @override
+  String get alarm_set_button => 'Définir le rappel';
+
+  @override
+  String get alarm_no_alarms => 'Aucun rappel défini';
+
+  @override
+  String alarm_display_text(num days, num hours, Object index, num minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days jours,',
+      one: '1 jour,',
+      zero: '',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      hours,
+      locale: localeName,
+      other: '$hours heures,',
+      one: '1 heure,',
+      zero: '',
+    );
+    String _temp2 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: '$minutes minutes',
+      one: '1 minute',
+      zero: '0 minute',
+    );
+    return 'Alarme $index: $_temp0 $_temp1 $_temp2 avant';
+  }
+
+  @override
+  String get alarm_delete_button => 'Supprimer le rappel';
+
+  @override
+  String get alarm_add_success_feedback => 'Rappel ajouté avec succès';
+
+  @override
+  String get alarm_edit_success_feedback => 'Rappel modifié avec succès';
+
+  @override
+  String get alarm_delete_confirmation_title => 'Supprimer le rappel';
+
+  @override
+  String alarm_delete_confirmation_message(Object index, String isFromEdit) {
+    String _temp0 = intl.Intl.selectLogic(isFromEdit, {
+      'true':
+          'Cette action est irréversible et indépendante de la modification de la note.',
+      'other': '',
+    });
+    return 'Êtes-vous sûr de vouloir supprimer le rappel $index? $_temp0';
+  }
+
+  @override
+  String get alarm_delete_success_feedback => 'Rappel supprimé avec succès';
+
+  @override
+  String get alarm_offset_type_days => 'Jours';
+
+  @override
+  String get alarm_offset_type_hours => 'Heures';
+
+  @override
+  String get alarm_offset_type_minutes => 'Minutes';
+
+  @override
+  String get alarm_offset_type_field_title => 'Type de décalage';
+
+  @override
+  String get alarm_offset_value_field_title => 'Valeur du décalage';
+
+  @override
+  String get alarm_offset_value_field_hint => 'Entrez la valeur du décalage';
+
+  @override
+  String get alarm_offset_value_invalid =>
+      'La valeur du décalage doit être positive et strictement numérique';
+
+  @override
+  String get alarm_silent_checkbox_title => 'Rappel silencieux';
 }

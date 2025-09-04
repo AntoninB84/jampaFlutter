@@ -14,25 +14,22 @@ class SaveMemorySingleDatePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-        providers: [
-          BlocProvider<CreateNoteCubit>.value(
-            value: serviceLocator<CreateNoteCubit>(),
-          ),
-          BlocProvider(
-            create: (context) {
-              if(singleDateIndex != null){
-                final createNoteCubit = context.read<CreateNoteCubit>();
-                return SaveSingleDateCubit()..initializeWithData(
-                  singleDateFormElements: createNoteCubit.state.selectedSingleDateElements.elementAtOrNull(singleDateIndex!),
+    return BlocProvider<CreateNoteCubit>.value(
+      value: serviceLocator<CreateNoteCubit>(),
+      child: Builder(
+          builder: (context) {
+            // Using Builder to have a new context with the CreateNoteCubit available
+            return BlocProvider<SaveSingleDateCubit>.value(
+              value: serviceLocator<SaveSingleDateCubit>()..initializeWithData(
+                  isSavingPersistentDate: false,
+                  singleDateFormElements: context.read<CreateNoteCubit>()
+                      .state.selectedSingleDateElements.elementAtOrNull(singleDateIndex!),
                   initialElementIndex: singleDateIndex
-                );
-              }
-              return SaveSingleDateCubit();
-            }
-          ),
-        ],
-        child: SaveSingleDateLayout(),
+              ),
+              child: SaveSingleDateLayout(),
+            );
+          }
+      ),
     );
   }
 }

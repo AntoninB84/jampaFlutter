@@ -1,5 +1,7 @@
 
 import 'package:drift/drift.dart';
+import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
+import '../../utils/enums/alarm_offset_type_enum.dart';
 import '../database.dart';
 import 'schedule.dart';
 
@@ -78,4 +80,59 @@ class AlarmEntity {
         isSilent = json['isSilent'] as bool? ?? true,
         createdAt = DateTime.parse(json['createdAt'] as String),
         updatedAt = DateTime.parse(json['updatedAt'] as String);
+
+  AlarmFormElements toAlarmFormElements() {
+    int offsetNumber = 0;
+    AlarmOffsetType offsetType = AlarmOffsetType.minutes;
+
+    if (offsetTimeInMinutes != null) {
+      if (offsetTimeInMinutes! % 1440 == 0) {
+        offsetNumber = (offsetTimeInMinutes! / 1440).abs().round();
+        offsetType = AlarmOffsetType.days;
+      } else if (offsetTimeInMinutes! % 60 == 0) {
+        offsetNumber = (offsetTimeInMinutes! / 60).abs().round();
+        offsetType = AlarmOffsetType.hours;
+      } else {
+        offsetNumber = offsetTimeInMinutes!.abs();
+        offsetType = AlarmOffsetType.minutes;
+      }
+    }
+
+    return AlarmFormElements(
+      scheduleId: scheduleId,
+      alarmId: id,
+      createdAt: createdAt,
+      selectedOffsetNumber: offsetNumber,
+      selectedOffsetType: offsetType,
+      isSilentAlarm: isSilent,
+    );
+  }
+
+  static AlarmEntity fromAlarmFormElements(AlarmFormElements elements, int scheduleId) {
+    int? offsetInMinutes;
+    if (elements.selectedOffsetNumber > 0) {
+      switch (elements.selectedOffsetType) {
+        case AlarmOffsetType.minutes:
+          offsetInMinutes = elements.selectedOffsetNumber;
+          break;
+        case AlarmOffsetType.hours:
+          offsetInMinutes = elements.selectedOffsetNumber * 60;
+          break;
+        case AlarmOffsetType.days:
+          offsetInMinutes = elements.selectedOffsetNumber * 1440;
+          break;
+      }
+    } else {
+      offsetInMinutes = null; // No offset
+    }
+
+    return AlarmEntity(
+      id: elements.alarmId,
+      scheduleId: scheduleId,
+      offsetTimeInMinutes: offsetInMinutes,
+      isSilent: elements.isSilentAlarm,
+      createdAt: elements.createdAt ?? DateTime.now(),
+      updatedAt: DateTime.now(),
+    );
+  }
 }

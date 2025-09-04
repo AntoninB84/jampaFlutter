@@ -4,49 +4,38 @@ class SaveSingleDateState extends Equatable {
   const SaveSingleDateState({
     this.noteId,
     this.isSavingPersistentDate = false,
-    this.initialSingleDateFormElements,
     this.initialSingleDateFormElementIndex,
-    this.createdSingleDateFormElements,
-    this.selectedStartDateTime,
-    this.selectedEndDateTime,
+    required this.newSingleDateFormElements,
     this.isValidDate = true,
     this.hasSubmitted = false,
   });
 
+  // Whether saving to a persistent note or just in-memory
   final bool? isSavingPersistentDate;
   // If saving to a persistent note, this holds the note ID
   final int? noteId;
-
-  // If editing an existing single date, these fields hold the initial data
-  final SingleDateFormElements? initialSingleDateFormElements;
+  // If editing an existing single date (persistent or in-memory)
+  // this holds the initial data index
   final int? initialSingleDateFormElementIndex;
 
-  final SingleDateFormElements? createdSingleDateFormElements;
+  final SingleDateFormElements newSingleDateFormElements;
   
-  final DateTime? selectedStartDateTime;
-  final DateTime? selectedEndDateTime;
   final bool isValidDate;
   final bool hasSubmitted;
 
   SaveSingleDateState copyWith({
     int? noteId,
     bool? isSavingPersistentDate,
-    SingleDateFormElements? initialSingleDateFormElements,
     int? initialSingleDateFormElementIndex,
-    SingleDateFormElements? createdSingleDateFormElements,
-    DateTime? selectedStartDateTime,
-    DateTime? selectedEndDateTime,
+    SingleDateFormElements? newSingleDateFormElements,
     bool? isValidDate,
     bool? hasSubmitted,
   }) {
     return SaveSingleDateState(
       noteId: noteId ?? this.noteId,
       isSavingPersistentDate: isSavingPersistentDate ?? this.isSavingPersistentDate,
-      initialSingleDateFormElements: initialSingleDateFormElements ?? this.initialSingleDateFormElements,
       initialSingleDateFormElementIndex: initialSingleDateFormElementIndex ?? this.initialSingleDateFormElementIndex,
-      createdSingleDateFormElements: createdSingleDateFormElements ?? this.createdSingleDateFormElements,
-      selectedStartDateTime: selectedStartDateTime ?? this.selectedStartDateTime,
-      selectedEndDateTime: selectedEndDateTime ?? this.selectedEndDateTime,
+      newSingleDateFormElements: newSingleDateFormElements ?? this.newSingleDateFormElements,
       isValidDate: isValidDate ?? this.isValidDate,
       hasSubmitted: hasSubmitted ?? this.hasSubmitted,
     );
@@ -56,11 +45,8 @@ class SaveSingleDateState extends Equatable {
   List<Object?> get props => [
       noteId,
       isSavingPersistentDate,
-      initialSingleDateFormElements,
       initialSingleDateFormElementIndex,
-      createdSingleDateFormElements,
-      selectedStartDateTime,
-      selectedEndDateTime,
+      newSingleDateFormElements,
       isValidDate,
       hasSubmitted
     ];

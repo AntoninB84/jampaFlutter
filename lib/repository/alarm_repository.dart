@@ -1,9 +1,30 @@
 import 'package:jampa_flutter/data/models/Alarm.dart';
 
+import '../bloc/notes/create/create_note_form_helpers.dart';
 import '../data/dao/alarm_dao.dart';
 
 class AlarmRepository {
   const AlarmRepository();
+
+  Future<void> saveAlarmFormElements({
+    List<AlarmFormElements> alarmFormElementsList = const [],
+    required int scheduleId
+  }) async {
+    // Convert form elements to AlarmEntity list
+    List<AlarmEntity> alarms = alarmFormElementsList.map((formElements) {
+      return AlarmEntity.fromAlarmFormElements(formElements, scheduleId);
+    }).toList();
+
+    await AlarmDao.saveListOfAlarms(alarms);
+  }
+
+  Future<void> saveAlarmFormElement({
+    required AlarmFormElements formElements,
+    required int scheduleId
+  }) async {
+    final alarm = AlarmEntity.fromAlarmFormElements(formElements, scheduleId);
+    await AlarmDao.saveSingleAlarm(alarm);
+  }
 
   Future<AlarmEntity> saveAlarm(AlarmEntity alarm) async {
     return await AlarmDao.saveSingleAlarm(alarm);

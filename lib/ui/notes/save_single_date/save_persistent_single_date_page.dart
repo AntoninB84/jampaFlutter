@@ -13,32 +13,24 @@ class SavePersistentSingleDatePage extends StatelessWidget {
   final int? singleDateIndex;
 
   @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider(
-        providers: [
-          BlocProvider<EditNoteBloc>.value(
-            value: serviceLocator<EditNoteBloc>(),
-          ),
-          BlocProvider(
-            create: (context) {
-              final editNoteBloc = context.read<EditNoteBloc>();
-              if(singleDateIndex != null){
-                return SaveSingleDateCubit()..initializeWithData(
+  Widget build(BuildContext widgetContext) {
+    return BlocProvider<EditNoteBloc>.value(
+      value: serviceLocator<EditNoteBloc>(),
+      child: Builder(
+          builder: (context) {
+            // Using Builder to have a new context with the EditNoteBloc available
+            return BlocProvider<SaveSingleDateCubit>.value(
+              value: serviceLocator<SaveSingleDateCubit>()..initializeWithData(
+                  noteId: context.read<EditNoteBloc>().state.note?.id,
                   isSavingPersistentDate: true,
-                  singleDateFormElements: editNoteBloc.state.singleDates.elementAtOrNull(singleDateIndex!),
+                  singleDateFormElements: context.read<EditNoteBloc>()
+                      .state.singleDates.elementAtOrNull(singleDateIndex!),
                   initialElementIndex: singleDateIndex
-                );
-              }else{
-                final noteId = editNoteBloc.state.note!.id;
-                return SaveSingleDateCubit(
-                  noteId: noteId,
-                  isSavingPersistentData: true
-                );
-              }
-            }
-          ),
-        ],
-        child: SaveSingleDateLayout(),
+              ),
+              child: SaveSingleDateLayout(),
+            );
+          }
+      ),
     );
   }
 }

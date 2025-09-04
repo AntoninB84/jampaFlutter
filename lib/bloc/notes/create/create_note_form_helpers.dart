@@ -46,7 +46,7 @@ class SingleDateFormElements {
     this.createdAt,
     this.selectedStartDateTime,
     this.selectedEndDateTime,
-    this.alarmsForSingleDate,
+    this.alarmsForSingleDate = const [],
   });
 
   final int? noteId;
@@ -55,7 +55,7 @@ class SingleDateFormElements {
 
   final DateTime? selectedStartDateTime;
   final DateTime? selectedEndDateTime;
-  final List<AlarmFormElements>? alarmsForSingleDate;
+  final List<AlarmFormElements> alarmsForSingleDate;
 
   SingleDateFormElements copyWith({
     int? noteId,

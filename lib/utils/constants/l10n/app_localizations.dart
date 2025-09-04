@@ -412,6 +412,18 @@ abstract class AppLocalizations {
   /// **'La date de fin ne peut pas être antérieure à la date de départ'**
   String get create_date_timeline_error;
 
+  /// No description provided for @create_date_alarm_count.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucun rappel} one{1 rappel} other{{count} rappels}}'**
+  String create_date_alarm_count(num count);
+
+  /// No description provided for @create_date_add_alarm_button.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter un rappel'**
+  String get create_date_add_alarm_button;
+
   /// No description provided for @delete_single_date_confirmation_title.
   ///
   /// In fr, this message translates to:
@@ -480,6 +492,114 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Note supprimée avec succès'**
   String get delete_note_success_feedback;
+
+  /// No description provided for @alarm_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rappel'**
+  String get alarm_title;
+
+  /// No description provided for @alarm_set_button.
+  ///
+  /// In fr, this message translates to:
+  /// **'Définir le rappel'**
+  String get alarm_set_button;
+
+  /// No description provided for @alarm_no_alarms.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun rappel défini'**
+  String get alarm_no_alarms;
+
+  /// No description provided for @alarm_display_text.
+  ///
+  /// In fr, this message translates to:
+  /// **'Alarme {index}: {days, plural, =0{} one{1 jour,} other{{days} jours,}} {hours, plural, =0{} one{1 heure,} other{{hours} heures,}} {minutes, plural, =0{0 minute} one{1 minute} other{{minutes} minutes}} avant'**
+  String alarm_display_text(num days, num hours, Object index, num minutes);
+
+  /// No description provided for @alarm_delete_button.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer le rappel'**
+  String get alarm_delete_button;
+
+  /// No description provided for @alarm_add_success_feedback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rappel ajouté avec succès'**
+  String get alarm_add_success_feedback;
+
+  /// No description provided for @alarm_edit_success_feedback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rappel modifié avec succès'**
+  String get alarm_edit_success_feedback;
+
+  /// No description provided for @alarm_delete_confirmation_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer le rappel'**
+  String get alarm_delete_confirmation_title;
+
+  /// No description provided for @alarm_delete_confirmation_message.
+  ///
+  /// In fr, this message translates to:
+  /// **'Êtes-vous sûr de vouloir supprimer le rappel {index}? {isFromEdit, select, true{Cette action est irréversible et indépendante de la modification de la note.} other{}}'**
+  String alarm_delete_confirmation_message(Object index, String isFromEdit);
+
+  /// No description provided for @alarm_delete_success_feedback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rappel supprimé avec succès'**
+  String get alarm_delete_success_feedback;
+
+  /// No description provided for @alarm_offset_type_days.
+  ///
+  /// In fr, this message translates to:
+  /// **'Jours'**
+  String get alarm_offset_type_days;
+
+  /// No description provided for @alarm_offset_type_hours.
+  ///
+  /// In fr, this message translates to:
+  /// **'Heures'**
+  String get alarm_offset_type_hours;
+
+  /// No description provided for @alarm_offset_type_minutes.
+  ///
+  /// In fr, this message translates to:
+  /// **'Minutes'**
+  String get alarm_offset_type_minutes;
+
+  /// No description provided for @alarm_offset_type_field_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Type de décalage'**
+  String get alarm_offset_type_field_title;
+
+  /// No description provided for @alarm_offset_value_field_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valeur du décalage'**
+  String get alarm_offset_value_field_title;
+
+  /// No description provided for @alarm_offset_value_field_hint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrez la valeur du décalage'**
+  String get alarm_offset_value_field_hint;
+
+  /// No description provided for @alarm_offset_value_invalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'La valeur du décalage doit être positive et strictement numérique'**
+  String get alarm_offset_value_invalid;
+
+  /// No description provided for @alarm_silent_checkbox_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rappel silencieux'**
+  String get alarm_silent_checkbox_title;
 }
 
 class _AppLocalizationsDelegate

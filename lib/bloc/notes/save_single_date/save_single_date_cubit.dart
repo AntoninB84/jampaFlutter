@@ -7,14 +7,11 @@ import 'package:jampa_flutter/utils/service_locator.dart';
 part 'save_single_date_state.dart';
 
 class SaveSingleDateCubit extends Cubit<SaveSingleDateState> {
-  SaveSingleDateCubit({
-    bool? isSavingPersistentData,
-    int? noteId
-  }) : super(SaveSingleDateState(
-    noteId: noteId,
-    isSavingPersistentDate: isSavingPersistentData ?? false,
-    selectedStartDateTime: DateTime.now(),
-    selectedEndDateTime: DateTime.now().add(const Duration(hours: 1)),
+  SaveSingleDateCubit() : super(SaveSingleDateState(
+    newSingleDateFormElements: SingleDateFormElements(
+      selectedStartDateTime: DateTime.now(),
+      selectedEndDateTime: DateTime.now().add(const Duration(hours: 1)),
+    ),
   ));
 
   final ScheduleRepository scheduleRepository = serviceLocator<ScheduleRepository>();
@@ -22,15 +19,15 @@ class SaveSingleDateCubit extends Cubit<SaveSingleDateState> {
   void initializeWithData({
     SingleDateFormElements? singleDateFormElements, 
     int? initialElementIndex,
-    bool isSavingPersistentDate = false
+    bool isSavingPersistentDate = false,
+    int? noteId
   }) {
     if(singleDateFormElements != null){
       emit(state.copyWith(
         isSavingPersistentDate: isSavingPersistentDate,
-        initialSingleDateFormElements: singleDateFormElements,
+        newSingleDateFormElements: singleDateFormElements,
         initialSingleDateFormElementIndex: initialElementIndex,
-        selectedStartDateTime: singleDateFormElements.selectedStartDateTime,
-        selectedEndDateTime: singleDateFormElements.selectedEndDateTime,
+        noteId: noteId ?? singleDateFormElements.noteId,
       ));
     }else{
       throw Exception("SingleDateFormElements must be provided when initializing with data.");
@@ -38,41 +35,73 @@ class SaveSingleDateCubit extends Cubit<SaveSingleDateState> {
   }
 
   void selectStartDateTime(DateTime dateTime) {
-    emit(state.copyWith(selectedStartDateTime: dateTime));
+    SingleDateFormElements currentElements = state.newSingleDateFormElements.copyWith(
+      selectedStartDateTime: dateTime
+    );
+    emit(state.copyWith(newSingleDateFormElements: currentElements));
     _validateDates();
   }
 
   void selectEndDateTime(DateTime dateTime) {
-    emit(state.copyWith(selectedEndDateTime: dateTime));
+    SingleDateFormElements currentElements = state.newSingleDateFormElements.copyWith(
+      selectedEndDateTime: dateTime
+    );
+    emit(state.copyWith(newSingleDateFormElements: currentElements));
     _validateDates();
   }
 
   void _validateDates() {
-    final isValid = state.selectedStartDateTime != null &&
-        state.selectedEndDateTime != null &&
-        state.selectedStartDateTime!.isBefore(state.selectedEndDateTime!);
+    final isValid = state.newSingleDateFormElements.selectedStartDateTime != null &&
+        state.newSingleDateFormElements.selectedEndDateTime != null &&
+        state.newSingleDateFormElements.selectedStartDateTime!.isBefore(
+            state.newSingleDateFormElements.selectedEndDateTime!
+        );
     emit(state.copyWith(isValidDate: isValid));
   }
 
+  //region In-memory alarm management
+  void onAddAlarm(AlarmFormElements alarm) {
+    List<AlarmFormElements> updatedAlarms = List.from(state.newSingleDateFormElements.alarmsForSingleDate)
+      ..add(alarm);
+    SingleDateFormElements currentElements = state.newSingleDateFormElements.copyWith(
+      alarmsForSingleDate: updatedAlarms
+    );
+    emit(state.copyWith(newSingleDateFormElements: currentElements));
+  }
+
+  void onUpdateAlarm(int index, AlarmFormElements updatedAlarm) {
+    List<AlarmFormElements> updatedAlarms = List.from(state.newSingleDateFormElements.alarmsForSingleDate);
+    if(index >= 0 && index < updatedAlarms.length){
+      updatedAlarms[index] = updatedAlarm;
+      SingleDateFormElements currentElements = state.newSingleDateFormElements.copyWith(
+        alarmsForSingleDate: updatedAlarms
+      );
+      emit(state.copyWith(newSingleDateFormElements: currentElements));
+    }
+  }
+
+  void onRemoveAlarm(int index) {
+    List<AlarmFormElements> updatedAlarms = List.from(state.newSingleDateFormElements.alarmsForSingleDate);
+    if(index >= 0 && index < updatedAlarms.length){
+      updatedAlarms.removeAt(index);
+      SingleDateFormElements currentElements = state.newSingleDateFormElements.copyWith(
+        alarmsForSingleDate: updatedAlarms
+      );
+      emit(state.copyWith(newSingleDateFormElements: currentElements));
+    }
+  }
+  //endregion
+
   void onSubmit() async {
     if(state.isValidDate){
-      late SingleDateFormElements newElement;
+      SingleDateFormElements newElement = state.newSingleDateFormElements;
 
       if(state.isSavingPersistentDate ?? false){
-        if(state.initialSingleDateFormElements != null){
-          // Editing an existing persistent date
-          newElement = state.initialSingleDateFormElements!.copyWith(
-            selectedStartDateTime: state.selectedStartDateTime!,
-            selectedEndDateTime: state.selectedEndDateTime!,
-            //TODO alarms
-          );
-        }else{
+        if(state.initialSingleDateFormElementIndex == null){
           // Creating a new persistent date
-          newElement = SingleDateFormElements(
+          newElement = state.newSingleDateFormElements.copyWith(
             noteId: state.noteId,
-            selectedStartDateTime: state.selectedStartDateTime!,
-            selectedEndDateTime: state.selectedEndDateTime!,
-            //TODO alarms
+            createdAt: DateTime.now()
           );
         }
 
@@ -80,17 +109,10 @@ class SaveSingleDateCubit extends Cubit<SaveSingleDateState> {
             formElements: newElement,
             noteId: newElement.noteId!
         );
-
-      }else{
-        newElement = SingleDateFormElements(
-          selectedStartDateTime: state.selectedStartDateTime!,
-          selectedEndDateTime: state.selectedEndDateTime!,
-          //TODO alarms
-        );
       }
       
       emit(state.copyWith(
-        createdSingleDateFormElements: newElement,
+        newSingleDateFormElements: newElement,
         hasSubmitted: true
       ));
     }

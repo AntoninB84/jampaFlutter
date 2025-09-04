@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_cubit.dart';
+import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
 import 'package:jampa_flutter/bloc/notes/save_single_date/save_single_date_cubit.dart';
+import 'package:jampa_flutter/ui/notes/widgets/alarm_list_dialog.dart';
 import 'package:jampa_flutter/ui/notes/widgets/datetime_input_field.dart';
 import 'package:jampa_flutter/ui/widgets/cancel_button.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
@@ -17,26 +19,28 @@ class SaveSingleDateLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<SaveSingleDateCubit, SaveSingleDateState>(
       listener: (context, state){
-        if(state.hasSubmitted == true && state.createdSingleDateFormElements != null){
+        if(state.hasSubmitted == true){
           if(state.initialSingleDateFormElementIndex != null){
             if(state.isSavingPersistentDate ?? false){
+              // Database updated successfully
               SnackBarX.showSuccess(context, 
                   context.strings.edit_single_date_success_feedback);
             }else{
               //Edit the existing single date in the CreateNoteCubit state
               context.read<CreateNoteCubit>().onUpdateSingleDateElement(
                 state.initialSingleDateFormElementIndex!,
-                state.createdSingleDateFormElements!,
+                state.newSingleDateFormElements!,
               );
             }
           }else{
             if(state.isSavingPersistentDate ?? false){
+              // Successfully created and saved to database
               SnackBarX.showSuccess(context,
                   context.strings.create_single_date_success_feedback);
             }else{
               //Add the created single date to the CreateNoteCubit state
               context.read<CreateNoteCubit>()
-                  .onAddSingleDateElement(state.createdSingleDateFormElements!);
+                  .onAddSingleDateElement(state.newSingleDateFormElements!);
             }
           }
           // Navigate back
@@ -53,7 +57,7 @@ class SaveSingleDateLayout extends StatelessWidget {
           children: [
             DatetimeInputField(
               label: context.strings.create_start_date_field_title,
-              initialDateTime: state.selectedStartDateTime,
+              initialDateTime: state.newSingleDateFormElements.selectedStartDateTime,
               onDateTimeSelected: (dateTime) {
                 context.read<SaveSingleDateCubit>().selectStartDateTime(dateTime);
               },
@@ -61,11 +65,17 @@ class SaveSingleDateLayout extends StatelessWidget {
             const SizedBox(height: 16),
             DatetimeInputField(
               label: context.strings.create_end_date_field_title,
-              initialDateTime: state.selectedEndDateTime,
+              initialDateTime: state.newSingleDateFormElements.selectedEndDateTime,
               errorText: state.isValidDate ? null : context.strings.create_date_timeline_error,
               onDateTimeSelected: (dateTime) {
                 context.read<SaveSingleDateCubit>().selectEndDateTime(dateTime);
               },
+            ),
+            const SizedBox(height: 16),
+            AlarmListButton(
+              isSavingPersistentData: state.isSavingPersistentDate ?? false,
+              blocContext: context,
+              elements: state.newSingleDateFormElements.alarmsForSingleDate,
             ),
             const SizedBox(height: 32,),
             SubmitSingleDateButton(),
@@ -74,6 +84,50 @@ class SaveSingleDateLayout extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+}
+
+class AlarmListButton extends StatelessWidget {
+  const AlarmListButton({super.key,
+    required this.blocContext,
+    required this.elements,
+    this.isSavingPersistentData = false
+  });
+
+  final BuildContext blocContext;
+  final List elements;
+  final bool isSavingPersistentData;
+
+  @override
+  Widget build(BuildContext listContext) {
+    return SizedBox(
+      width: double.maxFinite,
+      child: ElevatedButton(
+        style: ButtonStyle(
+            shape: WidgetStatePropertyAll(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                )
+            )
+        ),
+        onPressed: () {
+          showDialog(
+              context: listContext,
+              builder: (dialogContext) {
+                return AlarmListDialog(
+                  isSavingPersistentData: isSavingPersistentData,
+                  listElements: elements as List<AlarmFormElements>,
+                  onDateDeleted: (value) {
+                    blocContext.read<SaveSingleDateCubit>().onRemoveAlarm(value);
+                    },
+                );
+              }
+          );
+        },
+        child: Text(listContext.strings.create_date_alarm_count(elements.length)
+        ),
+      ),
     );
   }
 }
@@ -89,7 +143,7 @@ class SubmitSingleDateButton extends StatelessWidget {
           onPressed: state.isValidDate
               ? () => context.read<SaveSingleDateCubit>().onSubmit()
               : null,
-          child: Text(state.initialSingleDateFormElements != null
+          child: Text(state.initialSingleDateFormElementIndex != null
               ? context.strings.edit : context.strings.create),
         );
       },

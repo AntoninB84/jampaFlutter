@@ -7,6 +7,8 @@ import 'package:jampa_flutter/ui/home/home_page.dart';
 import 'package:jampa_flutter/ui/note_types/save/save_note_type_page.dart';
 import 'package:jampa_flutter/ui/note_types/index/note_types_page.dart';
 import 'package:jampa_flutter/ui/notes/create/create_note_page.dart';
+import 'package:jampa_flutter/ui/notes/save_alarm/save_memory_alarm_page.dart';
+import 'package:jampa_flutter/ui/notes/save_alarm/save_persistent_alarm_page.dart';
 import 'package:jampa_flutter/ui/notes/save_single_date/save_memory_single_date_page.dart';
 import 'package:jampa_flutter/ui/notes/save_single_date/save_persistent_single_date_page.dart';
 import 'package:jampa_flutter/ui/notes/edit/edit_note_page.dart';
@@ -21,6 +23,8 @@ class AppRoutes {
   static const String editNote = '/edit';
   static const String saveMemorySingleDate = '/saveMemorySingleDate';
   static const String savePersistentSingleDate = '/savePersistentSingleDate';
+  static const String saveMemoryAlarm = '/saveMemoryAlarm';
+  static const String savePersistentAlarm = '/savePersistentAlarm';
   static const String settings = '/settings';
   static const String categories = '/categories';
   static const String createCategory = '/create';
@@ -58,7 +62,16 @@ final GoRouter mainRouter = GoRouter(
                       path: AppRoutes.saveMemorySingleDate,
                       builder: (context, state) => SaveMemorySingleDatePage(
                         singleDateIndex: (state.extra as Map?)?['dateIndex'] as int?,
-                      )
+                      ),
+                      routes: [
+                        GoRoute(
+                          name: "SaveMemoryAlarm",
+                          path: AppRoutes.saveMemoryAlarm,
+                          builder: (context, state) => SaveMemoryAlarmPage(
+                            alarmIndex: (state.extra as Map?)?['alarmIndex'] as int?,
+                          )
+                        )
+                      ]
                     )
                   ]
                 ),
@@ -81,7 +94,16 @@ final GoRouter mainRouter = GoRouter(
                             path: AppRoutes.savePersistentSingleDate,
                             builder: (context, state) => SavePersistentSingleDatePage(
                               singleDateIndex: (state.extra as Map?)?['dateIndex'] as int?,
-                            )
+                            ),
+                            routes: [
+                              GoRoute(
+                                  name: "SavePersistentAlarm",
+                                  path: AppRoutes.savePersistentAlarm,
+                                  builder: (context, state) => SavePersistentAlarmPage(
+                                    alarmIndex: (state.extra as Map?)?['alarmIndex'] as int?,
+                                  )
+                              )
+                            ]
                         )
                       ]
                     )

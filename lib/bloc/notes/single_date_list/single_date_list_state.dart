@@ -1,18 +1,16 @@
 part of 'single_date_list_bloc.dart';
 
-enum SingleDateListStatus { loading, success, error }
-
 class SingleDateListState extends Equatable {
   const SingleDateListState({
-    this.singleDateListStatus = SingleDateListStatus.loading,
+    this.singleDateListStatus = UIListStatusEnum.loading,
     this.singleDateElements = const [],
   });
 
-  final SingleDateListStatus singleDateListStatus;
+  final UIListStatusEnum singleDateListStatus;
   final List<SingleDateFormElements> singleDateElements;
 
   SingleDateListState copyWith({
-    SingleDateListStatus? singleDateListStatus,
+    UIListStatusEnum? singleDateListStatus,
     List<SingleDateFormElements>? singleDateElements,
   }) {
     return SingleDateListState(
