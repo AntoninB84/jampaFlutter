@@ -1,7 +1,7 @@
-part of 'create_category_cubit.dart';
+part of 'save_category_cubit.dart';
 
-class CreateCategoryState extends Equatable {
-  const CreateCategoryState({
+class SaveCategoryState extends Equatable {
+  const SaveCategoryState({
     this.category,
     this.name = const NameValidator.pure(),
     this.isValidName = true,
@@ -22,7 +22,7 @@ class CreateCategoryState extends Equatable {
   @override
   List<Object?> get props => [category, name, isValidName, existsAlready, isLoading, isError, isSuccess];
 
-  CreateCategoryState copyWith({
+  SaveCategoryState copyWith({
     CategoryEntity? category,
     NameValidator? name,
     bool? isValidName,
@@ -31,7 +31,7 @@ class CreateCategoryState extends Equatable {
     bool? isError,
     bool? isSuccess,
   }) {
-    return CreateCategoryState(
+    return SaveCategoryState(
       category: category ?? this.category,
       name: name ?? this.name,
       isValidName: isValidName ?? this.isValidName,

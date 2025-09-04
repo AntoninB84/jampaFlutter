@@ -7,10 +7,10 @@ import 'package:jampa_flutter/utils/forms/name_validator.dart';
 import 'package:jampa_flutter/repository/note_types_repository.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
-part 'create_note_type_state.dart';
+part 'save_note_type_state.dart';
 
-class CreateNoteTypeCubit extends Cubit<CreateNoteTypeState> {
-  CreateNoteTypeCubit() : super(const CreateNoteTypeState());
+class SaveNoteTypeCubit extends Cubit<SaveNoteTypeState> {
+  SaveNoteTypeCubit() : super(const SaveNoteTypeState());
 
   final NoteTypesRepository noteTypesRepository =
         serviceLocator<NoteTypesRepository>();

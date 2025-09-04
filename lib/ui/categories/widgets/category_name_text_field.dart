@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jampa_flutter/bloc/categories/create/create_category_cubit.dart';
+import 'package:jampa_flutter/bloc/categories/save/save_category_cubit.dart';
 import 'package:jampa_flutter/ui/widgets/custom_text_field.dart';
 import 'package:jampa_flutter/ui/widgets/error_text.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
@@ -30,7 +30,7 @@ class _CategoryNameTextFieldState extends State<CategoryNameTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CreateCategoryCubit, CreateCategoryState>(
+    return BlocConsumer<SaveCategoryCubit, SaveCategoryState>(
       listener: (context, state){
         if(state.category != null){
           _textEditingController.text = state.category!.name;
@@ -43,7 +43,7 @@ class _CategoryNameTextFieldState extends State<CategoryNameTextField> {
       builder: (context, state) {
         return CustomTextField(
             controller: _textEditingController,
-            onChanged: (value) => context.read<CreateCategoryCubit>().onNameChanged(value),
+            onChanged: (value) => context.read<SaveCategoryCubit>().onNameChanged(value),
             hintText: context.strings.create_category_name_field_hint,
             errorWidget: (!state.isValidName || state.existsAlready) ? ErrorText(
                 errorText: (){

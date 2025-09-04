@@ -2,8 +2,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_cubit.dart';
-import 'package:jampa_flutter/bloc/notes/create_single_date/save_single_date_cubit.dart';
-import 'package:jampa_flutter/ui/notes/create_single_date/save_single_date_layout.dart';
+import 'package:jampa_flutter/bloc/notes/save_single_date/save_single_date_cubit.dart';
+import 'package:jampa_flutter/ui/notes/save_single_date/save_single_date_layout.dart';
 
 import '../../../utils/service_locator.dart';
 

@@ -7,10 +7,10 @@ import 'package:jampa_flutter/utils/forms/name_validator.dart';
 import 'package:jampa_flutter/repository/categories_repository.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
-part 'create_category_state.dart';
+part 'save_category_state.dart';
 
-class CreateCategoryCubit extends Cubit<CreateCategoryState> {
-  CreateCategoryCubit() : super(const CreateCategoryState());
+class SaveCategoryCubit extends Cubit<SaveCategoryState> {
+  SaveCategoryCubit() : super(const SaveCategoryState());
 
   final CategoriesRepository categoriesRepository =
       serviceLocator<CategoriesRepository>();

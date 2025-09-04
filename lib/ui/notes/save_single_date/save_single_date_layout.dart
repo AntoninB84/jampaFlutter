@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_cubit.dart';
-import 'package:jampa_flutter/bloc/notes/create_single_date/save_single_date_cubit.dart';
+import 'package:jampa_flutter/bloc/notes/save_single_date/save_single_date_cubit.dart';
 import 'package:jampa_flutter/ui/notes/widgets/datetime_input_field.dart';
 import 'package:jampa_flutter/ui/widgets/cancel_button.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';

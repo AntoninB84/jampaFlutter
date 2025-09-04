@@ -5,25 +5,25 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
-import 'package:jampa_flutter/ui/note_types/widgets/note_type_name_text_field.dart';
+import 'package:jampa_flutter/ui/categories/widgets/category_name_text_field.dart';
 
-import '../../../bloc/note_types/create/create_note_type_cubit.dart';
+import '../../../bloc/categories/save/save_category_cubit.dart';
 import '../../widgets/cancel_button.dart';
 
-class CreateNoteTypeLayout extends StatelessWidget {
-  const CreateNoteTypeLayout({super.key});
+class SaveCategoryLayout extends StatelessWidget {
+  const SaveCategoryLayout({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CreateNoteTypeCubit, CreateNoteTypeState>(
+    return BlocConsumer<SaveCategoryCubit, SaveCategoryState>(
       listener: (context, state) {
         if (state.isError) {
           SnackBarX.showError(context, context.strings.generic_error_message);
         } else if (state.isSuccess) {
           SnackBarX.showSuccess(context,
-              state.noteType != null ?
-                context.strings.edit_note_type_success_feedback
-                  : context.strings.create_note_type_success_feedback);
+              state.category != null ?
+                context.strings.edit_category_success_feedback
+                  : context.strings.create_category_success_feedback);
           // Back to the previous screen after success
           context.pop();
         }
@@ -37,15 +37,15 @@ class CreateNoteTypeLayout extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  state.noteType != null ?
-                    context.strings.edit_note_type_title
-                      : context.strings.create_note_type_title,
+                  state.category != null ?
+                    context.strings.edit_category_title
+                      : context.strings.create_category_title,
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 const SizedBox(height: 16),
-                NoteTypeNameTextField(),
+                CategoryNameTextField(),
                 const SizedBox(height: 16),
-                SubmitNoteTypeButton(),
+                SubmitCategoryButton(),
                 const SizedBox(height: 16),
                 CancelButton(),
               ],
@@ -57,23 +57,22 @@ class CreateNoteTypeLayout extends StatelessWidget {
   }
 }
 
-class SubmitNoteTypeButton extends StatelessWidget {
-  const SubmitNoteTypeButton({super.key});
+class SubmitCategoryButton extends StatelessWidget {
+  const SubmitCategoryButton({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreateNoteTypeCubit, CreateNoteTypeState>(
+    return BlocBuilder<SaveCategoryCubit, SaveCategoryState>(
       builder: (context, state) {
         return ElevatedButton(
           onPressed: state.isValidName && !state.existsAlready && !state.isLoading
-              ? () => context.read<CreateNoteTypeCubit>().onSubmit()
+              ? () => context.read<SaveCategoryCubit>().onSubmit()
               : null,
           child: state.isLoading
               ? const CupertinoActivityIndicator()
-              : Text(state.noteType != null ? context.strings.edit : context.strings.create),
+              : Text(state.category != null ? context.strings.edit : context.strings.create),
         );
       },
     );
   }
 }
-

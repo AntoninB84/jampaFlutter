@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jampa_flutter/bloc/note_types/create/create_note_type_cubit.dart';
+import 'package:jampa_flutter/bloc/note_types/save/save_note_type_cubit.dart';
 import 'package:jampa_flutter/ui/widgets/custom_text_field.dart';
 import 'package:jampa_flutter/ui/widgets/error_text.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
@@ -30,7 +30,7 @@ class _NoteTypeNameTextFieldState extends State<NoteTypeNameTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CreateNoteTypeCubit, CreateNoteTypeState>(
+    return BlocConsumer<SaveNoteTypeCubit, SaveNoteTypeState>(
       listener: (context, state){
         if(state.noteType != null){
           _textEditingController.text = state.noteType!.name;
@@ -43,7 +43,7 @@ class _NoteTypeNameTextFieldState extends State<NoteTypeNameTextField> {
       builder: (context, state) {
         return CustomTextField(
             controller: _textEditingController,
-            onChanged: (value) => context.read<CreateNoteTypeCubit>().onNameChanged(value),
+            onChanged: (value) => context.read<SaveNoteTypeCubit>().onNameChanged(value),
             hintText: context.strings.create_note_type_name_field_hint,
             errorWidget: (!state.isValidName || state.existsAlready) ? ErrorText(
                 errorText: (){

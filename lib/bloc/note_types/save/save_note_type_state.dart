@@ -1,7 +1,7 @@
-part of 'create_note_type_cubit.dart';
+part of 'save_note_type_cubit.dart';
 
-class CreateNoteTypeState extends Equatable {
-  const CreateNoteTypeState({
+class SaveNoteTypeState extends Equatable {
+  const SaveNoteTypeState({
     this.noteType,
     this.name = const NameValidator.pure(),
     this.isValidName = true,
@@ -22,7 +22,7 @@ class CreateNoteTypeState extends Equatable {
   @override
   List<Object?> get props => [noteType, name, isValidName, existsAlready, isLoading, isError, isSuccess];
 
-  CreateNoteTypeState copyWith({
+  SaveNoteTypeState copyWith({
     NoteTypeEntity? noteType,
     NameValidator? name,
     bool? isValidName,
@@ -31,7 +31,7 @@ class CreateNoteTypeState extends Equatable {
     bool? isError,
     bool? isSuccess,
   }) {
-    return CreateNoteTypeState(
+    return SaveNoteTypeState(
       noteType: noteType ?? this.noteType,
       name: name ?? this.name,
       isValidName: isValidName ?? this.isValidName,

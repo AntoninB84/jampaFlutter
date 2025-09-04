@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jampa_flutter/ui/categories/create/create_category_page.dart';
+import 'package:jampa_flutter/ui/categories/save/save_category_page.dart';
 import 'package:jampa_flutter/ui/categories/index/categories_page.dart';
 import 'package:jampa_flutter/ui/home/home_page.dart';
-import 'package:jampa_flutter/ui/note_types/create/create_note_type_page.dart';
+import 'package:jampa_flutter/ui/note_types/save/save_note_type_page.dart';
 import 'package:jampa_flutter/ui/note_types/index/note_types_page.dart';
 import 'package:jampa_flutter/ui/notes/create/create_note_page.dart';
-import 'package:jampa_flutter/ui/notes/create_single_date/save_memory_single_date_page.dart';
-import 'package:jampa_flutter/ui/notes/create_single_date/save_persistent_single_date_page.dart';
+import 'package:jampa_flutter/ui/notes/save_single_date/save_memory_single_date_page.dart';
+import 'package:jampa_flutter/ui/notes/save_single_date/save_persistent_single_date_page.dart';
 import 'package:jampa_flutter/ui/notes/edit/edit_note_page.dart';
 import 'package:jampa_flutter/ui/notes/index/notes_page.dart';
 import 'package:jampa_flutter/ui/notes/show/show_note_page.dart';
@@ -119,12 +119,12 @@ final GoRouter mainRouter = GoRouter(
                       GoRoute(
                         name: "CreateCategory",
                         path: AppRoutes.createCategory,
-                        builder: (context, state) => const CreateCategoryPage(),
+                        builder: (context, state) => const SaveCategoryPage(),
                       ),
                       GoRoute(
                         name: "EditCategory",
                         path: AppRoutes.editCategory,
-                        builder: (context, state) => CreateCategoryPage(
+                        builder: (context, state) => SaveCategoryPage(
                           categoryId: (state.extra as Map?)?['id'],
                         )
                       )
@@ -138,12 +138,12 @@ final GoRouter mainRouter = GoRouter(
                       GoRoute(
                         name: "CreateNoteType",
                         path: AppRoutes.createNoteType,
-                        builder: (context, state) => const CreateNoteTypePage(),
+                        builder: (context, state) => const SaveNoteTypePage(),
                       ),
                       GoRoute(
                         name: "EditNoteType",
                         path: AppRoutes.editNoteType,
-                        builder: (context, state) => CreateNoteTypePage(
+                        builder: (context, state) => SaveNoteTypePage(
                           noteTypeId: (state.extra as Map?)?['id'],
                         )
                       )
