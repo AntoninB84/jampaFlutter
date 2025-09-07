@@ -7,7 +7,7 @@ import 'package:jampa_flutter/data/models/note_type.dart';
 import 'package:jampa_flutter/utils/constants/data/initial_data.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'models/Alarm.dart';
+import 'models/alarm.dart';
 import 'models/note_category.dart';
 import 'models/schedule.dart';
 import 'models/user.dart';

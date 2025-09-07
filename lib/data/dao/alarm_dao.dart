@@ -1,7 +1,7 @@
 
 import 'package:drift/drift.dart';
 import 'package:jampa_flutter/data/database.dart';
-import 'package:jampa_flutter/data/models/Alarm.dart';
+import 'package:jampa_flutter/data/models/alarm.dart';
 
 import '../../utils/service_locator.dart';
 

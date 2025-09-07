@@ -7,7 +7,7 @@ class SaveAlarmState extends Equatable {
     this.scheduleId,
     this.initialAlarmFormElementIndex,
     required this.newAlarmFormElements,
-    this.offsetNumberValidator = const PositiveValueValidator.pure(),
+    this.offsetNumberValidator = const PositiveValueValidator.dirty(10),
     this.isValidOffsetNumber = true,
     this.isValidAlarm = true,
     this.hasSubmitted = false,

@@ -9,7 +9,8 @@ import 'schedule.dart';
 class AlarmTable extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get scheduleId => integer().customConstraint('NOT NULL REFERENCES schedule_table(id) ON DELETE CASCADE')();
-  IntColumn get offsetTimeInMinutes => integer().nullable()();
+  IntColumn get offsetValue => integer()();
+  TextColumn get offsetType => text()();
   BoolColumn get isSilent => boolean().withDefault(const Constant(true))();
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
@@ -18,7 +19,8 @@ class AlarmTable extends Table {
 class AlarmEntity {
   final int? id;
   final int scheduleId;
-  final int? offsetTimeInMinutes; // e.g., -10 for 10 minutes before the event
+  final int offsetValue;
+  final AlarmOffsetType alarmOffsetType;
   final bool isSilent; // true if the alarm should be silent
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -26,7 +28,8 @@ class AlarmEntity {
   AlarmEntity({
     this.id,
     required this.scheduleId,
-    this.offsetTimeInMinutes,
+    required this.offsetValue,
+    this.alarmOffsetType = AlarmOffsetType.minutes,
     this.isSilent = true,
     required this.createdAt,
     required this.updatedAt,
@@ -36,7 +39,8 @@ class AlarmEntity {
     return AlarmTableCompanion(
       id: id == null ? Value.absent() : Value(id!),
       scheduleId: Value(scheduleId),
-      offsetTimeInMinutes: offsetTimeInMinutes == null ? Value.absent() : Value(offsetTimeInMinutes!),
+      offsetValue: Value(offsetValue),
+      offsetType: Value(alarmOffsetType.name),
       isSilent: Value(isSilent),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
@@ -48,7 +52,8 @@ class AlarmEntity {
     return 'AlarmEntity{'
         'id: $id, '
         'scheduleId: $scheduleId, '
-        'offsetTimeInMinutes: $offsetTimeInMinutes, '
+        'offsetValue: $offsetValue, '
+        'alarmOffsetType: $alarmOffsetType, '
         'isSilent: $isSilent, '
         'createdAt: $createdAt, '
         'updatedAt: $updatedAt'
@@ -58,7 +63,8 @@ class AlarmEntity {
   AlarmEntity copyWith({
     int? id,
     int? scheduleId,
-    int? offsetTimeInMinutes,
+    int? offsetValue,
+    AlarmOffsetType? alarmOffsetType,
     bool? isSilent,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -66,7 +72,8 @@ class AlarmEntity {
     return AlarmEntity(
       id: id ?? this.id,
       scheduleId: scheduleId ?? this.scheduleId,
-      offsetTimeInMinutes: offsetTimeInMinutes ?? this.offsetTimeInMinutes,
+      offsetValue: offsetValue ?? this.offsetValue,
+      alarmOffsetType: alarmOffsetType ?? this.alarmOffsetType,
       isSilent: isSilent ?? this.isSilent,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -76,60 +83,31 @@ class AlarmEntity {
   AlarmEntity.fromJson(Map<String, dynamic> json)
       : id = json['id'] as int?,
         scheduleId = json['scheduleId'] as int,
-        offsetTimeInMinutes = json['offsetTimeInMinutes'] as int?,
+        offsetValue = json['offsetValue'] as int? ?? 0,
+        alarmOffsetType = AlarmOffsetType.values.firstWhere(
+            (e) => e.name == (json['offsetType'] as String?),
+            orElse: () => AlarmOffsetType.minutes),
         isSilent = json['isSilent'] as bool? ?? true,
         createdAt = DateTime.parse(json['createdAt'] as String),
         updatedAt = DateTime.parse(json['updatedAt'] as String);
 
   AlarmFormElements toAlarmFormElements() {
-    int offsetNumber = 0;
-    AlarmOffsetType offsetType = AlarmOffsetType.minutes;
-
-    if (offsetTimeInMinutes != null) {
-      if (offsetTimeInMinutes! % 1440 == 0) {
-        offsetNumber = (offsetTimeInMinutes! / 1440).abs().round();
-        offsetType = AlarmOffsetType.days;
-      } else if (offsetTimeInMinutes! % 60 == 0) {
-        offsetNumber = (offsetTimeInMinutes! / 60).abs().round();
-        offsetType = AlarmOffsetType.hours;
-      } else {
-        offsetNumber = offsetTimeInMinutes!.abs();
-        offsetType = AlarmOffsetType.minutes;
-      }
-    }
-
     return AlarmFormElements(
       scheduleId: scheduleId,
       alarmId: id,
       createdAt: createdAt,
-      selectedOffsetNumber: offsetNumber,
-      selectedOffsetType: offsetType,
+      selectedOffsetNumber: offsetValue,
+      selectedOffsetType: alarmOffsetType,
       isSilentAlarm: isSilent,
     );
   }
 
   static AlarmEntity fromAlarmFormElements(AlarmFormElements elements, int scheduleId) {
-    int? offsetInMinutes;
-    if (elements.selectedOffsetNumber > 0) {
-      switch (elements.selectedOffsetType) {
-        case AlarmOffsetType.minutes:
-          offsetInMinutes = elements.selectedOffsetNumber;
-          break;
-        case AlarmOffsetType.hours:
-          offsetInMinutes = elements.selectedOffsetNumber * 60;
-          break;
-        case AlarmOffsetType.days:
-          offsetInMinutes = elements.selectedOffsetNumber * 1440;
-          break;
-      }
-    } else {
-      offsetInMinutes = null; // No offset
-    }
-
     return AlarmEntity(
       id: elements.alarmId,
       scheduleId: scheduleId,
-      offsetTimeInMinutes: offsetInMinutes,
+      offsetValue: elements.selectedOffsetNumber,
+      alarmOffsetType: elements.selectedOffsetType ?? AlarmOffsetType.minutes,
       isSilent: elements.isSilentAlarm,
       createdAt: elements.createdAt ?? DateTime.now(),
       updatedAt: DateTime.now(),

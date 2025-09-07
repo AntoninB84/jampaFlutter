@@ -1919,15 +1919,27 @@ class $AlarmTableTable extends AlarmTable
     $customConstraints:
         'NOT NULL REFERENCES schedule_table(id) ON DELETE CASCADE',
   );
-  static const VerificationMeta _offsetTimeInMinutesMeta =
-      const VerificationMeta('offsetTimeInMinutes');
+  static const VerificationMeta _offsetValueMeta = const VerificationMeta(
+    'offsetValue',
+  );
   @override
-  late final GeneratedColumn<int> offsetTimeInMinutes = GeneratedColumn<int>(
-    'offset_time_in_minutes',
+  late final GeneratedColumn<int> offsetValue = GeneratedColumn<int>(
+    'offset_value',
     aliasedName,
-    true,
+    false,
     type: DriftSqlType.int,
-    requiredDuringInsert: false,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _offsetTypeMeta = const VerificationMeta(
+    'offsetType',
+  );
+  @override
+  late final GeneratedColumn<String> offsetType = GeneratedColumn<String>(
+    'offset_type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
   );
   static const VerificationMeta _isSilentMeta = const VerificationMeta(
     'isSilent',
@@ -1972,7 +1984,8 @@ class $AlarmTableTable extends AlarmTable
   List<GeneratedColumn> get $columns => [
     id,
     scheduleId,
-    offsetTimeInMinutes,
+    offsetValue,
+    offsetType,
     isSilent,
     createdAt,
     updatedAt,
@@ -2000,14 +2013,24 @@ class $AlarmTableTable extends AlarmTable
     } else if (isInserting) {
       context.missing(_scheduleIdMeta);
     }
-    if (data.containsKey('offset_time_in_minutes')) {
+    if (data.containsKey('offset_value')) {
       context.handle(
-        _offsetTimeInMinutesMeta,
-        offsetTimeInMinutes.isAcceptableOrUnknown(
-          data['offset_time_in_minutes']!,
-          _offsetTimeInMinutesMeta,
+        _offsetValueMeta,
+        offsetValue.isAcceptableOrUnknown(
+          data['offset_value']!,
+          _offsetValueMeta,
         ),
       );
+    } else if (isInserting) {
+      context.missing(_offsetValueMeta);
+    }
+    if (data.containsKey('offset_type')) {
+      context.handle(
+        _offsetTypeMeta,
+        offsetType.isAcceptableOrUnknown(data['offset_type']!, _offsetTypeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_offsetTypeMeta);
     }
     if (data.containsKey('is_silent')) {
       context.handle(
@@ -2044,10 +2067,10 @@ class $AlarmTableTable extends AlarmTable
         DriftSqlType.int,
         data['${effectivePrefix}schedule_id'],
       )!,
-      offsetTimeInMinutes: attachedDatabase.typeMapping.read(
+      offsetValue: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}offset_time_in_minutes'],
-      ),
+        data['${effectivePrefix}offset_value'],
+      )!,
       isSilent: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
         data['${effectivePrefix}is_silent'],
@@ -2072,14 +2095,16 @@ class $AlarmTableTable extends AlarmTable
 class AlarmTableCompanion extends UpdateCompanion<AlarmEntity> {
   final Value<int> id;
   final Value<int> scheduleId;
-  final Value<int?> offsetTimeInMinutes;
+  final Value<int> offsetValue;
+  final Value<String> offsetType;
   final Value<bool> isSilent;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
   const AlarmTableCompanion({
     this.id = const Value.absent(),
     this.scheduleId = const Value.absent(),
-    this.offsetTimeInMinutes = const Value.absent(),
+    this.offsetValue = const Value.absent(),
+    this.offsetType = const Value.absent(),
     this.isSilent = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
@@ -2087,15 +2112,19 @@ class AlarmTableCompanion extends UpdateCompanion<AlarmEntity> {
   AlarmTableCompanion.insert({
     this.id = const Value.absent(),
     required int scheduleId,
-    this.offsetTimeInMinutes = const Value.absent(),
+    required int offsetValue,
+    required String offsetType,
     this.isSilent = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
-  }) : scheduleId = Value(scheduleId);
+  }) : scheduleId = Value(scheduleId),
+       offsetValue = Value(offsetValue),
+       offsetType = Value(offsetType);
   static Insertable<AlarmEntity> custom({
     Expression<int>? id,
     Expression<int>? scheduleId,
-    Expression<int>? offsetTimeInMinutes,
+    Expression<int>? offsetValue,
+    Expression<String>? offsetType,
     Expression<bool>? isSilent,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
@@ -2103,8 +2132,8 @@ class AlarmTableCompanion extends UpdateCompanion<AlarmEntity> {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (scheduleId != null) 'schedule_id': scheduleId,
-      if (offsetTimeInMinutes != null)
-        'offset_time_in_minutes': offsetTimeInMinutes,
+      if (offsetValue != null) 'offset_value': offsetValue,
+      if (offsetType != null) 'offset_type': offsetType,
       if (isSilent != null) 'is_silent': isSilent,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
@@ -2114,7 +2143,8 @@ class AlarmTableCompanion extends UpdateCompanion<AlarmEntity> {
   AlarmTableCompanion copyWith({
     Value<int>? id,
     Value<int>? scheduleId,
-    Value<int?>? offsetTimeInMinutes,
+    Value<int>? offsetValue,
+    Value<String>? offsetType,
     Value<bool>? isSilent,
     Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
@@ -2122,7 +2152,8 @@ class AlarmTableCompanion extends UpdateCompanion<AlarmEntity> {
     return AlarmTableCompanion(
       id: id ?? this.id,
       scheduleId: scheduleId ?? this.scheduleId,
-      offsetTimeInMinutes: offsetTimeInMinutes ?? this.offsetTimeInMinutes,
+      offsetValue: offsetValue ?? this.offsetValue,
+      offsetType: offsetType ?? this.offsetType,
       isSilent: isSilent ?? this.isSilent,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -2138,8 +2169,11 @@ class AlarmTableCompanion extends UpdateCompanion<AlarmEntity> {
     if (scheduleId.present) {
       map['schedule_id'] = Variable<int>(scheduleId.value);
     }
-    if (offsetTimeInMinutes.present) {
-      map['offset_time_in_minutes'] = Variable<int>(offsetTimeInMinutes.value);
+    if (offsetValue.present) {
+      map['offset_value'] = Variable<int>(offsetValue.value);
+    }
+    if (offsetType.present) {
+      map['offset_type'] = Variable<String>(offsetType.value);
     }
     if (isSilent.present) {
       map['is_silent'] = Variable<bool>(isSilent.value);
@@ -2158,7 +2192,8 @@ class AlarmTableCompanion extends UpdateCompanion<AlarmEntity> {
     return (StringBuffer('AlarmTableCompanion(')
           ..write('id: $id, ')
           ..write('scheduleId: $scheduleId, ')
-          ..write('offsetTimeInMinutes: $offsetTimeInMinutes, ')
+          ..write('offsetValue: $offsetValue, ')
+          ..write('offsetType: $offsetType, ')
           ..write('isSilent: $isSilent, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
@@ -4672,7 +4707,8 @@ typedef $$AlarmTableTableCreateCompanionBuilder =
     AlarmTableCompanion Function({
       Value<int> id,
       required int scheduleId,
-      Value<int?> offsetTimeInMinutes,
+      required int offsetValue,
+      required String offsetType,
       Value<bool> isSilent,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
@@ -4681,7 +4717,8 @@ typedef $$AlarmTableTableUpdateCompanionBuilder =
     AlarmTableCompanion Function({
       Value<int> id,
       Value<int> scheduleId,
-      Value<int?> offsetTimeInMinutes,
+      Value<int> offsetValue,
+      Value<String> offsetType,
       Value<bool> isSilent,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
@@ -4725,8 +4762,13 @@ class $$AlarmTableTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<int> get offsetTimeInMinutes => $composableBuilder(
-    column: $table.offsetTimeInMinutes,
+  ColumnFilters<int> get offsetValue => $composableBuilder(
+    column: $table.offsetValue,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get offsetType => $composableBuilder(
+    column: $table.offsetType,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -4783,8 +4825,13 @@ class $$AlarmTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get offsetTimeInMinutes => $composableBuilder(
-    column: $table.offsetTimeInMinutes,
+  ColumnOrderings<int> get offsetValue => $composableBuilder(
+    column: $table.offsetValue,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get offsetType => $composableBuilder(
+    column: $table.offsetType,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -4839,8 +4886,13 @@ class $$AlarmTableTableAnnotationComposer
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<int> get offsetTimeInMinutes => $composableBuilder(
-    column: $table.offsetTimeInMinutes,
+  GeneratedColumn<int> get offsetValue => $composableBuilder(
+    column: $table.offsetValue,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get offsetType => $composableBuilder(
+    column: $table.offsetType,
     builder: (column) => column,
   );
 
@@ -4907,14 +4959,16 @@ class $$AlarmTableTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 Value<int> scheduleId = const Value.absent(),
-                Value<int?> offsetTimeInMinutes = const Value.absent(),
+                Value<int> offsetValue = const Value.absent(),
+                Value<String> offsetType = const Value.absent(),
                 Value<bool> isSilent = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
               }) => AlarmTableCompanion(
                 id: id,
                 scheduleId: scheduleId,
-                offsetTimeInMinutes: offsetTimeInMinutes,
+                offsetValue: offsetValue,
+                offsetType: offsetType,
                 isSilent: isSilent,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
@@ -4923,14 +4977,16 @@ class $$AlarmTableTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 required int scheduleId,
-                Value<int?> offsetTimeInMinutes = const Value.absent(),
+                required int offsetValue,
+                required String offsetType,
                 Value<bool> isSilent = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
               }) => AlarmTableCompanion.insert(
                 id: id,
                 scheduleId: scheduleId,
-                offsetTimeInMinutes: offsetTimeInMinutes,
+                offsetValue: offsetValue,
+                offsetType: offsetType,
                 isSilent: isSilent,
                 createdAt: createdAt,
                 updatedAt: updatedAt,

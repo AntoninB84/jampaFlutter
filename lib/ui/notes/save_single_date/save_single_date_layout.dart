@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_cubit.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
-import 'package:jampa_flutter/bloc/notes/save_single_date/save_single_date_cubit.dart';
+import 'package:jampa_flutter/bloc/notes/save_single_date/save_single_date_bloc.dart';
 import 'package:jampa_flutter/ui/notes/widgets/alarm_list_dialog.dart';
 import 'package:jampa_flutter/ui/notes/widgets/datetime_input_field.dart';
 import 'package:jampa_flutter/ui/widgets/cancel_button.dart';
@@ -17,7 +17,7 @@ class SaveSingleDateLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<SaveSingleDateCubit, SaveSingleDateState>(
+    return BlocConsumer<SaveSingleDateBloc, SaveSingleDateState>(
       listener: (context, state){
         if(state.hasSubmitted == true){
           if(state.initialSingleDateFormElementIndex != null){
@@ -45,6 +45,7 @@ class SaveSingleDateLayout extends StatelessWidget {
           }
           // Navigate back
           context.pop();
+          context.read<SaveSingleDateBloc>().add(ResetState());
         }else{
           SnackBarX.showError(context, context.strings.generic_error_message);
         }
@@ -59,7 +60,9 @@ class SaveSingleDateLayout extends StatelessWidget {
               label: context.strings.create_start_date_field_title,
               initialDateTime: state.newSingleDateFormElements.selectedStartDateTime,
               onDateTimeSelected: (dateTime) {
-                context.read<SaveSingleDateCubit>().selectStartDateTime(dateTime);
+                context.read<SaveSingleDateBloc>().add(
+                    SelectStartDateTime(dateTime: dateTime)
+                );
               },
             ),
             const SizedBox(height: 16),
@@ -68,7 +71,9 @@ class SaveSingleDateLayout extends StatelessWidget {
               initialDateTime: state.newSingleDateFormElements.selectedEndDateTime,
               errorText: state.isValidDate ? null : context.strings.create_date_timeline_error,
               onDateTimeSelected: (dateTime) {
-                context.read<SaveSingleDateCubit>().selectEndDateTime(dateTime);
+                context.read<SaveSingleDateBloc>().add(
+                    SelectEndDateTime(dateTime: dateTime)
+                );
               },
             ),
             const SizedBox(height: 16),
@@ -80,7 +85,11 @@ class SaveSingleDateLayout extends StatelessWidget {
             const SizedBox(height: 32,),
             SubmitSingleDateButton(),
             const SizedBox(height: 16,),
-            CancelButton(),
+            CancelButton(
+              onPressed: () {
+                context.read<SaveSingleDateBloc>().add(ResetState());
+              },
+            ),
           ],
         );
       },
@@ -119,7 +128,8 @@ class AlarmListButton extends StatelessWidget {
                   isSavingPersistentData: isSavingPersistentData,
                   listElements: elements as List<AlarmFormElements>,
                   onDateDeleted: (value) {
-                    blocContext.read<SaveSingleDateCubit>().onRemoveAlarm(value);
+                    blocContext.read<SaveSingleDateBloc>()
+                        .add(RemoveAlarm(index: value));
                     },
                 );
               }
@@ -137,11 +147,11 @@ class SubmitSingleDateButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SaveSingleDateCubit, SaveSingleDateState>(
+    return BlocBuilder<SaveSingleDateBloc, SaveSingleDateState>(
       builder: (context, state) {
         return ElevatedButton(
           onPressed: state.isValidDate
-              ? () => context.read<SaveSingleDateCubit>().onSubmit()
+              ? () => context.read<SaveSingleDateBloc>().add(OnSubmit())
               : null,
           child: Text(state.initialSingleDateFormElementIndex != null
               ? context.strings.edit : context.strings.create),

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/bloc/notes/save_alarm/save_alarm_cubit.dart';
-import 'package:jampa_flutter/bloc/notes/save_single_date/save_single_date_cubit.dart';
+import 'package:jampa_flutter/bloc/notes/save_single_date/save_single_date_bloc.dart';
 import 'package:jampa_flutter/ui/notes/widgets/alarm_offset_text_field.dart';
 import 'package:jampa_flutter/ui/widgets/cancel_button.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
@@ -33,10 +33,10 @@ class SaveAlarmLayout extends StatelessWidget {
                 //TODO
               }else{
                 //Edit the existing alarm in the CreateNoteCubit state
-                context.read<SaveSingleDateCubit>().onUpdateAlarm(
-                  state.initialAlarmFormElementIndex!,
-                  state.newAlarmFormElements,
-                );
+                context.read<SaveSingleDateBloc>().add(UpdateAlarm(
+                  index: state.initialAlarmFormElementIndex!,
+                  updatedAlarm: state.newAlarmFormElements,
+                ));
               }
             }
           }else{
@@ -49,8 +49,8 @@ class SaveAlarmLayout extends StatelessWidget {
                 //TODO
               }else{
                 //Add the created alarm to the CreateNoteCubit state
-                context.read<SaveSingleDateCubit>()
-                    .onAddAlarm(state.newAlarmFormElements);
+                context.read<SaveSingleDateBloc>()
+                    .add(AddAlarm(alarm: state.newAlarmFormElements));
               }
             }
           }
@@ -152,7 +152,7 @@ class SubmitAlarmButton extends StatelessWidget {
           onPressed: state.isValidAlarm
               ? () => context.read<SaveAlarmCubit>().onSubmit()
               : null,
-          child: Text(context.strings.create),
+          child: Text(state.initialAlarmFormElementIndex != null ? context.strings.edit : context.strings.create),
         );
       },
     );

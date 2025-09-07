@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jampa_flutter/ui/notes/save_alarm/save_alarm_layout.dart';
 
 import '../../../bloc/notes/save_alarm/save_alarm_cubit.dart';
-import '../../../bloc/notes/save_single_date/save_single_date_cubit.dart';
+import '../../../bloc/notes/save_single_date/save_single_date_bloc.dart';
 import '../../../utils/service_locator.dart';
 
 class SavePersistentAlarmPage extends StatelessWidget {
@@ -27,7 +27,7 @@ class SavePersistentAlarmPage extends StatelessWidget {
           // ),
           if(!isForRecurrentDate)
             BlocProvider.value(
-              value: serviceLocator<SaveSingleDateCubit>(),
+              value: serviceLocator<SaveSingleDateBloc>(),
             ),
           BlocProvider(
               create: (context) {
@@ -46,14 +46,15 @@ class SavePersistentAlarmPage extends StatelessWidget {
                     );
                   }
                 }else{
-                  final saveSingleDateCubit = context.read<SaveSingleDateCubit>();
+                  final saveSingleDateCubit = context.read<SaveSingleDateBloc>();
                   if(alarmIndex != null){
                     // Editing an existing alarm
                     return SaveAlarmCubit()..initializeWithData(
                       isSavingPersistentAlarm: true,
-                      alarmFormElements: saveSingleDateCubit.state
-                          .newSingleDateFormElements.alarmsForSingleDate
-                          .elementAtOrNull(alarmIndex!),
+                      alarmFormElements: alarmIndex != null ?
+                        saveSingleDateCubit.state.newSingleDateFormElements
+                            .alarmsForSingleDate.elementAtOrNull(alarmIndex!)
+                        : null,
                       initialElementIndex: alarmIndex
                     );
                   }else{

@@ -514,8 +514,8 @@ abstract class AppLocalizations {
   /// No description provided for @alarm_display_text.
   ///
   /// In fr, this message translates to:
-  /// **'Alarme {index}: {days, plural, =0{} one{1 jour,} other{{days} jours,}} {hours, plural, =0{} one{1 heure,} other{{hours} heures,}} {minutes, plural, =0{0 minute} one{1 minute} other{{minutes} minutes}} avant'**
-  String alarm_display_text(num days, num hours, Object index, num minutes);
+  /// **'Alarme {index}: {count, plural, =0{Aucun délai} one{1 {unit} avant} other{{count} {unit}s avant}}'**
+  String alarm_display_text(num count, Object index, Object unit);
 
   /// No description provided for @alarm_delete_button.
   ///
@@ -556,19 +556,19 @@ abstract class AppLocalizations {
   /// No description provided for @alarm_offset_type_days.
   ///
   /// In fr, this message translates to:
-  /// **'Jours'**
+  /// **'Jour'**
   String get alarm_offset_type_days;
 
   /// No description provided for @alarm_offset_type_hours.
   ///
   /// In fr, this message translates to:
-  /// **'Heures'**
+  /// **'Heure'**
   String get alarm_offset_type_hours;
 
   /// No description provided for @alarm_offset_type_minutes.
   ///
   /// In fr, this message translates to:
-  /// **'Minutes'**
+  /// **'Minute'**
   String get alarm_offset_type_minutes;
 
   /// No description provided for @alarm_offset_type_field_title.

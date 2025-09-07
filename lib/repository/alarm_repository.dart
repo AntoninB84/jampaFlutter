@@ -1,4 +1,4 @@
-import 'package:jampa_flutter/data/models/Alarm.dart';
+import 'package:jampa_flutter/data/models/alarm.dart';
 
 import '../bloc/notes/create/create_note_form_helpers.dart';
 import '../data/dao/alarm_dao.dart';

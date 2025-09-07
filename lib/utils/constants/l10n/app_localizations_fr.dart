@@ -275,29 +275,15 @@ class AppLocalizationsFr extends AppLocalizations {
   String get alarm_no_alarms => 'Aucun rappel défini';
 
   @override
-  String alarm_display_text(num days, num hours, Object index, num minutes) {
+  String alarm_display_text(num count, Object index, Object unit) {
     String _temp0 = intl.Intl.pluralLogic(
-      days,
+      count,
       locale: localeName,
-      other: '$days jours,',
-      one: '1 jour,',
-      zero: '',
+      other: '$count ${unit}s avant',
+      one: '1 $unit avant',
+      zero: 'Aucun délai',
     );
-    String _temp1 = intl.Intl.pluralLogic(
-      hours,
-      locale: localeName,
-      other: '$hours heures,',
-      one: '1 heure,',
-      zero: '',
-    );
-    String _temp2 = intl.Intl.pluralLogic(
-      minutes,
-      locale: localeName,
-      other: '$minutes minutes',
-      one: '1 minute',
-      zero: '0 minute',
-    );
-    return 'Alarme $index: $_temp0 $_temp1 $_temp2 avant';
+    return 'Alarme $index: $_temp0';
   }
 
   @override
@@ -326,13 +312,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get alarm_delete_success_feedback => 'Rappel supprimé avec succès';
 
   @override
-  String get alarm_offset_type_days => 'Jours';
+  String get alarm_offset_type_days => 'Jour';
 
   @override
-  String get alarm_offset_type_hours => 'Heures';
+  String get alarm_offset_type_hours => 'Heure';
 
   @override
-  String get alarm_offset_type_minutes => 'Minutes';
+  String get alarm_offset_type_minutes => 'Minute';
 
   @override
   String get alarm_offset_type_field_title => 'Type de décalage';

@@ -1,7 +1,8 @@
-part of 'save_single_date_cubit.dart';
+part of 'save_single_date_bloc.dart';
 
 class SaveSingleDateState extends Equatable {
   const SaveSingleDateState({
+    this.alreadyInitialized = false,
     this.noteId,
     this.isSavingPersistentDate = false,
     this.initialSingleDateFormElementIndex,
@@ -9,6 +10,8 @@ class SaveSingleDateState extends Equatable {
     this.isValidDate = true,
     this.hasSubmitted = false,
   });
+
+  final bool alreadyInitialized;
 
   // Whether saving to a persistent note or just in-memory
   final bool? isSavingPersistentDate;
@@ -24,6 +27,7 @@ class SaveSingleDateState extends Equatable {
   final bool hasSubmitted;
 
   SaveSingleDateState copyWith({
+    bool? alreadyInitialized,
     int? noteId,
     bool? isSavingPersistentDate,
     int? initialSingleDateFormElementIndex,
@@ -32,6 +36,7 @@ class SaveSingleDateState extends Equatable {
     bool? hasSubmitted,
   }) {
     return SaveSingleDateState(
+      alreadyInitialized: alreadyInitialized ?? this.alreadyInitialized,
       noteId: noteId ?? this.noteId,
       isSavingPersistentDate: isSavingPersistentDate ?? this.isSavingPersistentDate,
       initialSingleDateFormElementIndex: initialSingleDateFormElementIndex ?? this.initialSingleDateFormElementIndex,
@@ -43,6 +48,7 @@ class SaveSingleDateState extends Equatable {
 
   @override
   List<Object?> get props => [
+      alreadyInitialized,
       noteId,
       isSavingPersistentDate,
       initialSingleDateFormElementIndex,

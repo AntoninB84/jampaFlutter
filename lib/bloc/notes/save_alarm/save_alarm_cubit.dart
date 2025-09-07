@@ -36,8 +36,8 @@ class SaveAlarmCubit extends Cubit<SaveAlarmState> {
         isSavingPersistentAlarm: isSavingPersistentAlarm,
         initialAlarmFormElementIndex: initialElementIndex,
         newAlarmFormElements: alarmFormElements,
-        offsetNumberValidator: PositiveValueValidator.dirty(alarmFormElements.selectedOffsetNumber),
       ));
+      selectOffsetNumber(alarmFormElements.selectedOffsetNumber.toString());
     } else {
       throw Exception("AlarmFormElements must be provided when initializing with data.");
     }

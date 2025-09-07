@@ -2,7 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jampa_flutter/bloc/notes/save_single_date/save_single_date_cubit.dart';
+import 'package:jampa_flutter/bloc/notes/save_single_date/save_single_date_bloc.dart';
 import 'package:jampa_flutter/ui/notes/save_alarm/save_alarm_layout.dart';
 
 import '../../../bloc/notes/save_alarm/save_alarm_cubit.dart';
@@ -28,7 +28,7 @@ class SaveMemoryAlarmPage extends StatelessWidget {
             // ),
           if(!isForRecurrentDate)
             BlocProvider.value(
-              value: serviceLocator<SaveSingleDateCubit>(),
+              value: serviceLocator<SaveSingleDateBloc>(),
             ),
           BlocProvider(
             create: (context) {
@@ -36,11 +36,12 @@ class SaveMemoryAlarmPage extends StatelessWidget {
                 if(isForRecurrentDate){
 
                 }else{
-                  final saveSingleDateCubit = context.read<SaveSingleDateCubit>();
+                  final saveSingleDateCubit = context.read<SaveSingleDateBloc>();
                   return SaveAlarmCubit()..initializeWithData(
-                      alarmFormElements: saveSingleDateCubit.state
-                          .newSingleDateFormElements.alarmsForSingleDate
-                          .elementAtOrNull(alarmIndex!),
+                      alarmFormElements: alarmIndex != null ?
+                        saveSingleDateCubit.state.newSingleDateFormElements
+                            .alarmsForSingleDate.elementAtOrNull(alarmIndex!)
+                        : null,
                       initialElementIndex: alarmIndex
                   );
                 }

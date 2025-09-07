@@ -3,6 +3,8 @@ import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
 import 'package:jampa_flutter/data/models/schedule.dart';
 
 import '../data/dao/schedule_dao.dart';
+import '../utils/service_locator.dart';
+import 'alarm_repository.dart';
 
 class ScheduleRepository {
   const ScheduleRepository();
@@ -14,15 +16,13 @@ class ScheduleRepository {
   }) async {
     // Convert form elements to ScheduleEntity list
     // First handle single date elements
-    List<ScheduleEntity> schedules = singleFormElementsList.map((formElements) {
-      return ScheduleEntity.fromSingleDateFormElements(formElements, noteId);
-    }).toList();
+    for(var formElements in singleFormElementsList) {
+      await saveSingleDateFormElement(formElements: formElements, noteId: noteId);
+    }
     // Then handle recurrence elements
-    schedules.addAll(recurrenceFormElementsList.map((formElements) {
-      return ScheduleEntity.fromRecurrenceFormElements(formElements, noteId);
-    }).toList());
-
-    await ScheduleDao.saveListOfSchedules(schedules);
+    for(var formElements in recurrenceFormElementsList) {
+      await saveRecurrenceFormElement(formElements: formElements, noteId: noteId);
+    }
   }
 
   Future<void> saveSingleDateFormElement({
@@ -30,7 +30,14 @@ class ScheduleRepository {
     required int noteId
   }) async {
     final schedule = ScheduleEntity.fromSingleDateFormElements(formElements, noteId);
-    await ScheduleDao.saveSingleSchedule(schedule);
+    final ScheduleEntity savedSchedule = await ScheduleDao.saveSingleSchedule(schedule);
+    // If there are alarms associated with this single date, save them too
+    for (var alarm in formElements.alarmsForSingleDate) {
+      await serviceLocator<AlarmRepository>().saveAlarmFormElement(
+          formElements: alarm,
+          scheduleId: savedSchedule.id!,
+      );
+    }
   }
 
   Future<void> saveRecurrenceFormElement({
@@ -38,7 +45,14 @@ class ScheduleRepository {
     required int noteId
   }) async {
     final schedule = ScheduleEntity.fromRecurrenceFormElements(formElements, noteId);
-    await ScheduleDao.saveSingleSchedule(schedule);
+    final ScheduleEntity savedSchedule = await ScheduleDao.saveSingleSchedule(schedule);
+    // If there are alarms associated with this single date, save them too
+    for (var alarm in formElements.alarmsForRecurrence) {
+      await serviceLocator<AlarmRepository>().saveAlarmFormElement(
+        formElements: alarm,
+        scheduleId: savedSchedule.id!,
+      );
+    }
   }
 
   Future<ScheduleEntity> saveSchedule(ScheduleEntity schedule) async {

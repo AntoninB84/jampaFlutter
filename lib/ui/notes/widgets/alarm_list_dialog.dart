@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/bloc/notes/alarm_list/alarm_list_bloc.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
 import 'package:jampa_flutter/ui/widgets/confirmation_dialog.dart';
-import 'package:jampa_flutter/utils/extensions/alarm_extension.dart';
+import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 class AlarmListDialog extends StatefulWidget {
@@ -35,7 +35,13 @@ class _AlarmListDialogState extends State<AlarmListDialog> {
       ),
       child: BlocConsumer<AlarmListBloc, AlarmListState>(
         listener: (context, state){
-
+          if(widget.isSavingPersistentData){
+            // Show that delete was successful
+            SnackBarX.showSuccess(context, context.strings.alarm_delete_success_feedback);
+          }
+        },
+        listenWhen: (previous, current){
+          return previous.alarmElements.length > current.alarmElements.length;
         },
         builder: (context, state) {
           return Dialog(
@@ -54,14 +60,11 @@ class _AlarmListDialogState extends State<AlarmListDialog> {
                       itemBuilder: (context, index) {
 
                         final alarm = state.alarmElements[index];
-                        final Map<String, int> timeMap = AlarmExtension
-                            .formattedTimeFromFormElements(alarm);
                         final String displayText = context.strings
                           .alarm_display_text(
-                            index,
-                            timeMap['days']!,
-                            timeMap['hours']!,
-                            timeMap['minutes']!
+                            alarm.selectedOffsetNumber,
+                            (index + 1),
+                            alarm.selectedOffsetType.getLabel(context),
                         );
 
                         return ListTile(
