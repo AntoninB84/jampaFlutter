@@ -25,8 +25,18 @@ class _DatetimeInputFieldState extends State<DatetimeInputField> {
 
   @override
   void initState() {
-    super.initState();
     selectedDateTime = widget.initialDateTime;
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant DatetimeInputField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.initialDateTime != widget.initialDateTime) {
+      setState(() {
+        selectedDateTime = widget.initialDateTime;
+      });
+    }
   }
 
   Future<void> _selectDateTime(BuildContext context) async {

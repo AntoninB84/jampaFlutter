@@ -33,6 +33,7 @@ class SaveSingleDateBloc extends Bloc<SaveSingleDateEvent, SaveSingleDateState> 
   final AlarmRepository alarmRepository = serviceLocator<AlarmRepository>();
 
   void _initializeWithData(InitializeWithData event, Emitter<SaveSingleDateState> emit) async {
+    // Prevent re-initialization on widget tree rebuild if already done
     if(state.alreadyInitialized) return;
       emit(state.copyWith(
         alreadyInitialized: true,
@@ -41,7 +42,8 @@ class SaveSingleDateBloc extends Bloc<SaveSingleDateEvent, SaveSingleDateState> 
         initialSingleDateFormElementIndex: event.initialElementIndex,
         noteId: event.noteId ?? event.singleDateFormElements?.noteId,
       ));
-      if (event.isSavingPersistentDate == true) {
+      // If we are editing a persistent date, we need to load its alarms from the database
+      if (event.isSavingPersistentDate == true && event.initialElementIndex != null) {
         if (event.singleDateFormElements?.scheduleId == null) {
           throw Exception(
               "When initializing with persistent data, scheduleId must be provided in SingleDateFormElements.");

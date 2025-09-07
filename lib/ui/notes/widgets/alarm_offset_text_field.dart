@@ -37,6 +37,14 @@ class _AlarmOffsetTextFieldState extends State<AlarmOffsetTextField> {
   }
 
   @override
+  void didUpdateWidget(covariant AlarmOffsetTextField oldWidget) {
+    if(oldWidget.value != widget.value && widget.value != null){
+      _textEditingController.text = widget.value!;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   void dispose() {
     _textEditingController.dispose();
     super.dispose();

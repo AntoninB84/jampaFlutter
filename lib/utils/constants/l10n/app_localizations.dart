@@ -121,7 +121,7 @@ abstract class AppLocalizations {
   /// No description provided for @cancel.
   ///
   /// In fr, this message translates to:
-  /// **'Annuler'**
+  /// **'Retour'**
   String get cancel;
 
   /// No description provided for @delete.
