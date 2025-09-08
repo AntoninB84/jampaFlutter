@@ -6,8 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
-import '../../../../bloc/schedule/save_single_date_list/save_single_date_list_bloc.dart';
-import '../../../widgets/confirmation_dialog.dart';
+import '../../../bloc/schedule/save_single_date_list/save_single_date_list_bloc.dart';
+import '../../widgets/confirmation_dialog.dart';
 
 class SaveSingleDateListDialog extends StatefulWidget {
   const SaveSingleDateListDialog({

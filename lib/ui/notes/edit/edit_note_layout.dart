@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
 import 'package:jampa_flutter/bloc/notes/edit/edit_note_bloc.dart';
-import 'package:jampa_flutter/ui/notes/widgets/lists/save_single_date_list_dialog.dart';
+import 'package:jampa_flutter/ui/schedule/widgets/save_single_date_list_dialog.dart';
 import 'package:jampa_flutter/ui/notes/widgets/inputs/note_categories_multiselector.dart';
 import 'package:jampa_flutter/ui/notes/widgets/inputs/note_type_selector.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';

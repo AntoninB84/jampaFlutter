@@ -7,7 +7,7 @@ import 'package:jampa_flutter/ui/widgets/confirmation_dialog.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
-import '../../../../bloc/alarm/save_alarm_list/save_alarm_list_bloc.dart';
+import '../../../bloc/alarm/save_alarm_list/save_alarm_list_bloc.dart';
 
 class SaveAlarmListDialog extends StatefulWidget {
   const SaveAlarmListDialog({

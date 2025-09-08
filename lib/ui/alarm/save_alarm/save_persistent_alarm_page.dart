@@ -1,7 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jampa_flutter/ui/notes/save_alarm/save_alarm_layout.dart';
+import 'package:jampa_flutter/ui/alarm/save_alarm/save_alarm_layout.dart';
 
 import '../../../bloc/alarm/save_alarm/save_alarm_cubit.dart';
 import '../../../bloc/schedule/save_single_date/save_single_date_bloc.dart';

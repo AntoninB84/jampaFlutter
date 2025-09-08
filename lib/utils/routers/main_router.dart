@@ -7,13 +7,14 @@ import 'package:jampa_flutter/ui/home/home_page.dart';
 import 'package:jampa_flutter/ui/note_types/save/save_note_type_page.dart';
 import 'package:jampa_flutter/ui/note_types/index/note_types_page.dart';
 import 'package:jampa_flutter/ui/notes/create/create_note_page.dart';
-import 'package:jampa_flutter/ui/notes/save_alarm/save_memory_alarm_page.dart';
-import 'package:jampa_flutter/ui/notes/save_alarm/save_persistent_alarm_page.dart';
-import 'package:jampa_flutter/ui/notes/save_single_date/save_memory_single_date_page.dart';
-import 'package:jampa_flutter/ui/notes/save_single_date/save_persistent_single_date_page.dart';
 import 'package:jampa_flutter/ui/notes/edit/edit_note_page.dart';
 import 'package:jampa_flutter/ui/notes/index/notes_page.dart';
 import 'package:jampa_flutter/ui/notes/show/show_note_page.dart';
+
+import '../../ui/alarm/save_alarm/save_memory_alarm_page.dart';
+import '../../ui/alarm/save_alarm/save_persistent_alarm_page.dart';
+import '../../ui/schedule/save_single_date/save_memory_single_date_page.dart';
+import '../../ui/schedule/save_single_date/save_persistent_single_date_page.dart';
 
 
 class AppRoutes {
