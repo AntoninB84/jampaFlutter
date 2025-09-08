@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:jampa_flutter/ui/widgets/custom_text_field.dart';
+import 'package:jampa_flutter/ui/widgets/inputs/custom_text_field.dart';
 import 'package:jampa_flutter/ui/widgets/error_text.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:jampa_flutter/utils/forms/content_validator.dart';

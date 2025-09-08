@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_cubit.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
 import 'package:jampa_flutter/ui/alarm/widgets/save_alarm_list_dialog.dart';
-import 'package:jampa_flutter/ui/widgets/datetime_input_field.dart';
+import 'package:jampa_flutter/ui/widgets/inputs/datetime_input_field.dart';
 import 'package:jampa_flutter/ui/widgets/cancel_button.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
