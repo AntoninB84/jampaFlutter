@@ -1,12 +1,12 @@
-part of "alarm_list_bloc.dart";
+part of "save_alarm_list_bloc.dart";
 
-class AlarmListEvent extends Equatable {
+class SaveAlarmListEvent extends Equatable {
   @override
   List<Object?> get props => [];
 }
 
-final class InitializeAlarmListFromMemoryState extends AlarmListEvent {
-  InitializeAlarmListFromMemoryState({required this.alarmElements});
+final class InitializeSaveAlarmListFromMemoryState extends SaveAlarmListEvent {
+  InitializeSaveAlarmListFromMemoryState({required this.alarmElements});
 
   final List<AlarmFormElements> alarmElements;
 
@@ -14,10 +14,8 @@ final class InitializeAlarmListFromMemoryState extends AlarmListEvent {
   List<Object?> get props => [alarmElements];
 }
 
-final class LoadPersistentAlarmList extends AlarmListEvent {}
-
 /// Delete from persistent storage
-final class DeletePersistentAlarm extends AlarmListEvent {
+final class DeletePersistentAlarm extends SaveAlarmListEvent {
   DeletePersistentAlarm({required this.id});
 
   final int id;
@@ -27,7 +25,7 @@ final class DeletePersistentAlarm extends AlarmListEvent {
 }
 
 /// Remove from in-memory list only
-final class RemoveAlarmFromMemoryList extends AlarmListEvent {
+final class RemoveAlarmFromMemoryList extends SaveAlarmListEvent {
   RemoveAlarmFromMemoryList({required this.index});
 
   final int index;
@@ -36,4 +34,4 @@ final class RemoveAlarmFromMemoryList extends AlarmListEvent {
   List<Object?> get props => [index];
 }
 
-final class ResetAlarmListState extends AlarmListEvent {}
+final class ResetSaveAlarmListState extends SaveAlarmListEvent {}

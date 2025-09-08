@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/bloc/notes/list_view/notes_list_view_bloc.dart';
-import 'package:jampa_flutter/bloc/notes/show/note_bloc.dart';
-import 'package:jampa_flutter/ui/notes/widgets/notes_list_widget.dart';
+import 'package:jampa_flutter/ui/notes/widgets/lists/notes_list_widget.dart';
 
 class NotesLayout extends StatelessWidget {
   const NotesLayout({super.key});

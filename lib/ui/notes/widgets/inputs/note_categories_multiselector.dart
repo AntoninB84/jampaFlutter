@@ -4,12 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jampa_flutter/bloc/categories/categories_bloc.dart';
 import 'package:jampa_flutter/data/models/category.dart';
-import 'package:jampa_flutter/repository/categories_repository.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
-
-import '../../../bloc/notes/create/create_note_cubit.dart';
 
 class NoteCategoriesMultiSelector extends StatefulWidget{
   const NoteCategoriesMultiSelector({

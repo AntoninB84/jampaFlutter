@@ -6,7 +6,7 @@ import 'package:jampa_flutter/utils/forms/positive_number_validator.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
 import '../../../utils/enums/alarm_offset_type_enum.dart';
-import '../create/create_note_form_helpers.dart';
+import '../../notes/create/create_note_form_helpers.dart';
 
 part 'save_alarm_state.dart';
 

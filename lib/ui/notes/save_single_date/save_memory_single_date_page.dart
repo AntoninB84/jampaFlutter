@@ -2,9 +2,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_cubit.dart';
-import 'package:jampa_flutter/bloc/notes/save_single_date/save_single_date_bloc.dart';
 import 'package:jampa_flutter/ui/notes/save_single_date/save_single_date_layout.dart';
 
+import '../../../bloc/schedule/save_single_date/save_single_date_bloc.dart';
 import '../../../utils/service_locator.dart';
 
 class SaveMemorySingleDatePage extends StatelessWidget {

@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
-import 'package:jampa_flutter/bloc/notes/single_date_list/single_date_list_bloc.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
-import '../../widgets/confirmation_dialog.dart';
+import '../../../../bloc/schedule/save_single_date_list/save_single_date_list_bloc.dart';
+import '../../../widgets/confirmation_dialog.dart';
 
-class SingleDateListDialog extends StatefulWidget {
-  const SingleDateListDialog({
+class SaveSingleDateListDialog extends StatefulWidget {
+  const SaveSingleDateListDialog({
     super.key,
     this.isSavingPersistentData = false,
     required this.listElements,
@@ -22,19 +22,19 @@ class SingleDateListDialog extends StatefulWidget {
   final Function(int) onDateDeleted;
 
   @override
-  State<SingleDateListDialog> createState() => _SingleDateListDialogState();
+  State<SaveSingleDateListDialog> createState() => _SaveSingleDateListDialogState();
 }
 
-class _SingleDateListDialogState extends State<SingleDateListDialog> {
+class _SaveSingleDateListDialogState extends State<SaveSingleDateListDialog> {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<SingleDateListBloc>(
-      create: (context) => SingleDateListBloc()
-        ..add(InitializeSingleDateListFromMemoryState(
+    return BlocProvider<SaveSingleDateListBloc>(
+      create: (context) => SaveSingleDateListBloc()
+        ..add(InitializeSaveSingleDateListFromMemoryState(
             singleDateElements: widget.listElements
         )
       ),
-      child: BlocConsumer<SingleDateListBloc, SingleDateListState>(
+      child: BlocConsumer<SaveSingleDateListBloc, SaveSingleDateListState>(
         listener: (context, state){
           
         },
@@ -88,11 +88,11 @@ class _SingleDateListDialogState extends State<SingleDateListDialog> {
                                         cancelButtonText: context.strings.cancel,
                                         onConfirm: (){
                                           if(widget.isSavingPersistentData) {
-                                            context.read<SingleDateListBloc>()
+                                            context.read<SaveSingleDateListBloc>()
                                                 .add(DeletePersistentSingleDate(id: date.scheduleId!));
                                           }else{
                                             //Remove from state
-                                            context.read<SingleDateListBloc>()
+                                            context.read<SaveSingleDateListBloc>()
                                                 .add(RemoveSingleDateFromMemoryList(index: index));
                                             //Notify CreateNoteCubit
                                             widget.onDateDeleted(index);

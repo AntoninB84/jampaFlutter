@@ -1,7 +1,7 @@
-part of "alarm_list_bloc.dart";
+part of "save_alarm_list_bloc.dart";
 
-class AlarmListState extends Equatable {
-  const AlarmListState({
+class SaveAlarmListState extends Equatable {
+  const SaveAlarmListState({
     this.alarmListStatus = UIListStatusEnum.loading,
     this.alarmElements = const [],
   });
@@ -9,11 +9,11 @@ class AlarmListState extends Equatable {
   final UIListStatusEnum alarmListStatus;
   final List<AlarmFormElements> alarmElements;
 
-  AlarmListState copyWith({
+  SaveAlarmListState copyWith({
     UIListStatusEnum? alarmListStatus,
     List<AlarmFormElements>? alarmElements,
   }) {
-    return AlarmListState(
+    return SaveAlarmListState(
       alarmListStatus: alarmListStatus ?? this.alarmListStatus,
       alarmElements: alarmElements ?? this.alarmElements,
     );

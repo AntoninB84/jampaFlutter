@@ -3,13 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jampa_flutter/bloc/notes/save_alarm/save_alarm_cubit.dart';
-import 'package:jampa_flutter/bloc/notes/save_single_date/save_single_date_bloc.dart';
-import 'package:jampa_flutter/ui/notes/widgets/alarm_offset_text_field.dart';
+import 'package:jampa_flutter/ui/notes/widgets/inputs/alarm_offset_text_field.dart';
 import 'package:jampa_flutter/ui/widgets/cancel_button.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/enums/alarm_offset_type_enum.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
+
+import '../../../bloc/alarm/save_alarm/save_alarm_cubit.dart';
+import '../../../bloc/schedule/save_single_date/save_single_date_bloc.dart';
 
 class SaveAlarmLayout extends StatelessWidget {
   const SaveAlarmLayout({super.key,

@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jampa_flutter/bloc/notes/show/note_bloc.dart';
-import 'package:jampa_flutter/repository/notes_repository.dart';
 import 'package:jampa_flutter/ui/notes/show/show_note_layout.dart';
 
 class ShowNotePage extends StatelessWidget {

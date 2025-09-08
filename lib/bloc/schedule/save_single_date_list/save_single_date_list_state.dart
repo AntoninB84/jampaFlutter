@@ -1,7 +1,7 @@
-part of 'single_date_list_bloc.dart';
+part of 'save_single_date_list_bloc.dart';
 
-class SingleDateListState extends Equatable {
-  const SingleDateListState({
+class SaveSingleDateListState extends Equatable {
+  const SaveSingleDateListState({
     this.singleDateListStatus = UIListStatusEnum.loading,
     this.singleDateElements = const [],
   });
@@ -9,11 +9,11 @@ class SingleDateListState extends Equatable {
   final UIListStatusEnum singleDateListStatus;
   final List<SingleDateFormElements> singleDateElements;
 
-  SingleDateListState copyWith({
+  SaveSingleDateListState copyWith({
     UIListStatusEnum? singleDateListStatus,
     List<SingleDateFormElements>? singleDateElements,
   }) {
-    return SingleDateListState(
+    return SaveSingleDateListState(
       singleDateListStatus: singleDateListStatus ?? this.singleDateListStatus,
       singleDateElements: singleDateElements ?? this.singleDateElements,
     );

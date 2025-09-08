@@ -3,13 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jampa_flutter/ui/notes/widgets/single_date_list_dialog.dart';
-import 'package:jampa_flutter/ui/notes/widgets/note_categories_multiselector.dart';
-import 'package:jampa_flutter/ui/notes/widgets/note_type_selector.dart';
+import 'package:jampa_flutter/ui/notes/widgets/lists/save_single_date_list_dialog.dart';
+import 'package:jampa_flutter/ui/notes/widgets/inputs/note_categories_multiselector.dart';
+import 'package:jampa_flutter/ui/notes/widgets/inputs/note_type_selector.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
-import 'package:jampa_flutter/ui/notes/widgets/note_title_text_field.dart';
-import 'package:jampa_flutter/ui/notes/widgets/note_content_text_field.dart';
+import 'package:jampa_flutter/ui/notes/widgets/inputs/note_title_text_field.dart';
+import 'package:jampa_flutter/ui/notes/widgets/inputs/note_content_text_field.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_cubit.dart';
 
 import '../../../bloc/notes/create/create_note_form_helpers.dart';
@@ -126,7 +126,7 @@ class DateListButton extends StatelessWidget {
                 if(isRecurrence){
                   return Container(); // TODO
                 }
-                return SingleDateListDialog(
+                return SaveSingleDateListDialog(
                   listElements: elements as List<SingleDateFormElements>,
                   onDateDeleted: (value) {
                     blocContext.read<CreateNoteCubit>().onRemoveSingleDateElement(value);                  },

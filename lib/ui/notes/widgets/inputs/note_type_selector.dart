@@ -3,12 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jampa_flutter/bloc/note_types/note_types_bloc.dart';
-import 'package:jampa_flutter/bloc/notes/create/create_note_cubit.dart';
 import 'package:jampa_flutter/data/models/note_type.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
-
-import '../../../repository/note_types_repository.dart';
 
 class NoteTypeSelector extends StatelessWidget {
   const NoteTypeSelector({super.key, this.value, required this.onChanged});

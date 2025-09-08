@@ -1,10 +1,10 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jampa_flutter/bloc/notes/save_single_date/save_single_date_bloc.dart';
 import 'package:jampa_flutter/bloc/notes/edit/edit_note_bloc.dart';
 import 'package:jampa_flutter/ui/notes/save_single_date/save_single_date_layout.dart';
 
+import '../../../bloc/schedule/save_single_date/save_single_date_bloc.dart';
 import '../../../utils/service_locator.dart';
 
 class SavePersistentSingleDatePage extends StatelessWidget {

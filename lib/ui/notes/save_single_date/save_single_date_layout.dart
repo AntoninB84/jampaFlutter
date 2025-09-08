@@ -5,12 +5,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_cubit.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
-import 'package:jampa_flutter/bloc/notes/save_single_date/save_single_date_bloc.dart';
-import 'package:jampa_flutter/ui/notes/widgets/alarm_list_dialog.dart';
-import 'package:jampa_flutter/ui/notes/widgets/datetime_input_field.dart';
+import 'package:jampa_flutter/ui/notes/widgets/lists/save_alarm_list_dialog.dart';
+import 'package:jampa_flutter/ui/notes/widgets/inputs/datetime_input_field.dart';
 import 'package:jampa_flutter/ui/widgets/cancel_button.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
+
+import '../../../bloc/schedule/save_single_date/save_single_date_bloc.dart';
 
 class SaveSingleDateLayout extends StatelessWidget {
   const SaveSingleDateLayout({super.key});
@@ -124,7 +125,7 @@ class AlarmListButton extends StatelessWidget {
           showDialog(
               context: listContext,
               builder: (dialogContext) {
-                return AlarmListDialog(
+                return SaveAlarmListDialog(
                   isSavingPersistentData: isSavingPersistentData,
                   listElements: elements as List<AlarmFormElements>,
                   onDateDeleted: (value) {

@@ -1,9 +1,7 @@
-import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
 import 'package:jampa_flutter/data/dao/note_dao.dart';
 import 'package:jampa_flutter/data/models/note.dart';
 
 import '../data/dao/note_category_dao.dart';
-import '../data/models/category.dart';
 import '../data/models/note_category.dart';
 
 class NotesRepository {

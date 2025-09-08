@@ -5,29 +5,24 @@ import 'package:jampa_flutter/repository/schedule_repository.dart';
 import 'package:jampa_flutter/utils/enums/ui_list_status_enum.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
-part 'single_date_list_event.dart';
-part 'single_date_list_state.dart';
+part 'save_single_date_list_event.dart';
+part 'save_single_date_list_state.dart';
 
-class SingleDateListBloc extends Bloc<SingleDateListEvent, SingleDateListState> {
-  SingleDateListBloc() : super(const SingleDateListState()) {
-    on<ResetSingleDateListState>(_resetState);
-    on<InitializeSingleDateListFromMemoryState>(_initializeFromMemoryState);
-    on<LoadPersistentSingleDateList>(_onLoadPersistentSingleDateList);
+class SaveSingleDateListBloc extends Bloc<SaveSingleDateListEvent, SaveSingleDateListState> {
+  SaveSingleDateListBloc() : super(const SaveSingleDateListState()) {
+    on<ResetSaveSingleDateListState>(_resetState);
+    on<InitializeSaveSingleDateListFromMemoryState>(_initializeFromMemoryState);
     on<DeletePersistentSingleDate>(_onDeletePersistentSingleDate);
     on<RemoveSingleDateFromMemoryList>(_onRemoveSingleDateFromMemoryList);
   }
 
   final ScheduleRepository scheduleRepository = serviceLocator<ScheduleRepository>();
 
-  void _initializeFromMemoryState(InitializeSingleDateListFromMemoryState event, Emitter<SingleDateListState> emit) {
+  void _initializeFromMemoryState(InitializeSaveSingleDateListFromMemoryState event, Emitter<SaveSingleDateListState> emit) {
     emit(state.copyWith(singleDateElements: event.singleDateElements));
   }
 
-  void _onLoadPersistentSingleDateList(LoadPersistentSingleDateList event, Emitter<SingleDateListState> emit) {
-
-  }
-
-  void _onDeletePersistentSingleDate(DeletePersistentSingleDate event, Emitter<SingleDateListState> emit) async {
+  void _onDeletePersistentSingleDate(DeletePersistentSingleDate event, Emitter<SaveSingleDateListState> emit) async {
     await scheduleRepository.deleteScheduleById(event.id).then((_) {
       //TODO verify if alarms are also deleted
       // Remove from in-memory list as well
@@ -41,7 +36,7 @@ class SingleDateListBloc extends Bloc<SingleDateListEvent, SingleDateListState> 
   }
 
   // Remove a single date from the in-memory list based on index
-  void _onRemoveSingleDateFromMemoryList(RemoveSingleDateFromMemoryList event, Emitter<SingleDateListState> emit) {
+  void _onRemoveSingleDateFromMemoryList(RemoveSingleDateFromMemoryList event, Emitter<SaveSingleDateListState> emit) {
     final updatedList = List<SingleDateFormElements>.from(state.singleDateElements);
     if(event.index >= 0 && event.index < updatedList.length) {
       updatedList.removeAt(event.index);
@@ -49,7 +44,7 @@ class SingleDateListBloc extends Bloc<SingleDateListEvent, SingleDateListState> 
     }
   }
 
-  void _resetState(ResetSingleDateListState event, Emitter<SingleDateListState> emit) {
-    emit(const SingleDateListState());
+  void _resetState(ResetSaveSingleDateListState event, Emitter<SaveSingleDateListState> emit) {
+    emit(const SaveSingleDateListState());
   }
 }

@@ -2,14 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jampa_flutter/bloc/notes/alarm_list/alarm_list_bloc.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
 import 'package:jampa_flutter/ui/widgets/confirmation_dialog.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
-class AlarmListDialog extends StatefulWidget {
-  const AlarmListDialog({
+import '../../../../bloc/alarm/save_alarm_list/save_alarm_list_bloc.dart';
+
+class SaveAlarmListDialog extends StatefulWidget {
+  const SaveAlarmListDialog({
     super.key,
     this.isSavingPersistentData = false,
     required this.listElements,
@@ -21,19 +22,19 @@ class AlarmListDialog extends StatefulWidget {
   final Function(int) onDateDeleted;
 
   @override
-  State<AlarmListDialog> createState() => _AlarmListDialogState();
+  State<SaveAlarmListDialog> createState() => _SaveAlarmListDialogState();
 }
 
-class _AlarmListDialogState extends State<AlarmListDialog> {
+class _SaveAlarmListDialogState extends State<SaveAlarmListDialog> {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<AlarmListBloc>(
-      create: (context) => AlarmListBloc()
-        ..add(InitializeAlarmListFromMemoryState(
+    return BlocProvider<SaveAlarmListBloc>(
+      create: (context) => SaveAlarmListBloc()
+        ..add(InitializeSaveAlarmListFromMemoryState(
             alarmElements: widget.listElements
         )
       ),
-      child: BlocConsumer<AlarmListBloc, AlarmListState>(
+      child: BlocConsumer<SaveAlarmListBloc, SaveAlarmListState>(
         listener: (context, state){
           if(widget.isSavingPersistentData){
             // Show that delete was successful
@@ -98,11 +99,11 @@ class _AlarmListDialogState extends State<AlarmListDialog> {
                                       onCancel: () {dialogContext.pop();},
                                       onConfirm: () {
                                         if(widget.isSavingPersistentData) {
-                                          context.read<AlarmListBloc>()
+                                          context.read<SaveAlarmListBloc>()
                                               .add(DeletePersistentAlarm(id: alarm.alarmId!));
                                         }else{
                                           //Remove from state
-                                          context.read<AlarmListBloc>()
+                                          context.read<SaveAlarmListBloc>()
                                               .add(RemoveAlarmFromMemoryList(index: index));
                                           //Notify CreateNoteCubit
                                           widget.onDateDeleted(index);

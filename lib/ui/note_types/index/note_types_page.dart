@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jampa_flutter/bloc/note_types/note_types_bloc.dart';
-import 'package:jampa_flutter/repository/note_types_repository.dart';
 import 'package:jampa_flutter/ui/note_types/index/note_types_layout.dart';
 
 class NoteTypesPage extends StatelessWidget {
