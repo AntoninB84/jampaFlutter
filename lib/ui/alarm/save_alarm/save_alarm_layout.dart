@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jampa_flutter/bloc/schedule/save_recurrent_date/save_recurrent_date_bloc.dart';
 import 'package:jampa_flutter/ui/alarm/widgets/alarm_offset_text_field.dart';
 import 'package:jampa_flutter/ui/widgets/cancel_button.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
@@ -31,7 +32,11 @@ class SaveAlarmLayout extends StatelessWidget {
                   context.strings.alarm_edit_success_feedback);
             }else{
               if(isForRecurrentDate){
-                //TODO
+                // Edit the existing alarm in the CreateRecurrentDateCubit state
+                context.read<SaveRecurrentDateBloc>().add(UpdateAlarmForRecurrence(
+                  index: state.initialAlarmFormElementIndex!,
+                  updatedAlarm: state.newAlarmFormElements,
+                ));
               }else{
                 //Edit the existing alarm in the CreateNoteCubit state
                 context.read<SaveSingleDateBloc>().add(UpdateAlarm(
@@ -47,7 +52,9 @@ class SaveAlarmLayout extends StatelessWidget {
                   context.strings.alarm_add_success_feedback);
             }else{
               if(isForRecurrentDate){
-                //TODO
+                //Add the created alarm to the CreateRecurrentDateCubit state
+                context.read<SaveRecurrentDateBloc>()
+                    .add(AddAlarmForRecurrence(alarm: state.newAlarmFormElements));
               }else{
                 //Add the created alarm to the CreateNoteCubit state
                 context.read<SaveSingleDateBloc>()

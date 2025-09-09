@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jampa_flutter/ui/schedule/widgets/save_recurrent_date_list_dialog.dart';
 import 'package:jampa_flutter/ui/schedule/widgets/save_single_date_list_dialog.dart';
 import 'package:jampa_flutter/ui/notes/widgets/inputs/note_categories_multiselector.dart';
 import 'package:jampa_flutter/ui/notes/widgets/inputs/note_type_selector.dart';
@@ -124,7 +125,11 @@ class DateListButton extends StatelessWidget {
               context: listContext,
               builder: (dialogContext) {
                 if(isRecurrence){
-                  return Container(); // TODO
+                  return SaveRecurrentDateListDialog(
+                    listElements: elements as List<RecurrenceFormElements>,
+                    onDateDeleted: (value) {
+                      blocContext.read<CreateNoteCubit>().onRemoveRecurrenceElement(value);                  },
+                  );
                 }
                 return SaveSingleDateListDialog(
                   listElements: elements as List<SingleDateFormElements>,

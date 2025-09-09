@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jampa_flutter/bloc/schedule/save_recurrent_date/save_recurrent_date_bloc.dart';
 import 'package:jampa_flutter/ui/alarm/save_alarm/save_alarm_layout.dart';
 
 import '../../../bloc/alarm/save_alarm/save_alarm_cubit.dart';
@@ -21,10 +22,10 @@ class SaveMemoryAlarmPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
-          // if(isForRecurrentDate)
-            // BlocProvider<CreateNoteCubit>.value(
-            //   value: serviceLocator<CreateNoteCubit>(),
-            // ),
+          if(isForRecurrentDate)
+            BlocProvider<SaveRecurrentDateBloc>.value(
+              value: serviceLocator<SaveRecurrentDateBloc>(),
+            ),
           if(!isForRecurrentDate)
             BlocProvider.value(
               value: serviceLocator<SaveSingleDateBloc>(),
@@ -33,12 +34,19 @@ class SaveMemoryAlarmPage extends StatelessWidget {
             create: (context) {
               if(alarmIndex != null){
                 if(isForRecurrentDate){
-
-                }else{
-                  final saveSingleDateCubit = context.read<SaveSingleDateBloc>();
+                  final saveRecurrentDateBloc = context.read<SaveRecurrentDateBloc>();
                   return SaveAlarmCubit()..initializeWithData(
                       alarmFormElements: alarmIndex != null ?
-                        saveSingleDateCubit.state.newSingleDateFormElements
+                      saveRecurrentDateBloc.state.newRecurrentDateFormElements
+                          .alarmsForRecurrence.elementAtOrNull(alarmIndex!)
+                          : null,
+                      initialElementIndex: alarmIndex
+                  );
+                }else{
+                  final saveSingleDateBloc = context.read<SaveSingleDateBloc>();
+                  return SaveAlarmCubit()..initializeWithData(
+                      alarmFormElements: alarmIndex != null ?
+                        saveSingleDateBloc.state.newSingleDateFormElements
                             .alarmsForSingleDate.elementAtOrNull(alarmIndex!)
                         : null,
                       initialElementIndex: alarmIndex

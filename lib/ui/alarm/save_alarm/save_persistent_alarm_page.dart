@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jampa_flutter/bloc/schedule/save_recurrent_date/save_recurrent_date_bloc.dart';
 import 'package:jampa_flutter/ui/alarm/save_alarm/save_alarm_layout.dart';
 
 import '../../../bloc/alarm/save_alarm/save_alarm_cubit.dart';
@@ -20,10 +21,10 @@ class SavePersistentAlarmPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
-          // if(isForRecurrentDate)
-          // BlocProvider<CreateNoteCubit>.value(
-          //   value: serviceLocator<CreateNoteCubit>(),
-          // ),
+          if(isForRecurrentDate)
+            BlocProvider<SaveRecurrentDateBloc>.value(
+              value: serviceLocator<SaveRecurrentDateBloc>(),
+            ),
           if(!isForRecurrentDate)
             BlocProvider.value(
               value: serviceLocator<SaveSingleDateBloc>(),
@@ -31,16 +32,21 @@ class SavePersistentAlarmPage extends StatelessWidget {
           BlocProvider(
               create: (context) {
                 if(isForRecurrentDate){
+                  final saveRecurrentDateBloc = context.read<SaveRecurrentDateBloc>();
                   if(alarmIndex != null){
                     // Editing an existing alarm for a recurrent date
-                    //TODO
-                    return SaveAlarmCubit(
-                      isSavingPersistentAlarm: true
+                    return SaveAlarmCubit()..initializeWithData(
+                        isSavingPersistentAlarm: true,
+                        alarmFormElements: alarmIndex != null ?
+                        saveRecurrentDateBloc.state.newRecurrentDateFormElements
+                            .alarmsForRecurrence.elementAtOrNull(alarmIndex!)
+                            : null,
+                        initialElementIndex: alarmIndex
                     );
                   }else{
                     // Creating a new alarm for a recurrent date
-                    //TODO
                     return SaveAlarmCubit(
+                      scheduleId: saveRecurrentDateBloc.state.newRecurrentDateFormElements.scheduleId,
                       isSavingPersistentAlarm: true
                     );
                   }

@@ -154,6 +154,54 @@ abstract class AppLocalizations {
   /// **'Rechercher'**
   String get search;
 
+  /// No description provided for @monday.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lundi'**
+  String get monday;
+
+  /// No description provided for @tuesday.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mardi'**
+  String get tuesday;
+
+  /// No description provided for @wednesday.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mercredi'**
+  String get wednesday;
+
+  /// No description provided for @thursday.
+  ///
+  /// In fr, this message translates to:
+  /// **'Jeudi'**
+  String get thursday;
+
+  /// No description provided for @friday.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vendredi'**
+  String get friday;
+
+  /// No description provided for @saturday.
+  ///
+  /// In fr, this message translates to:
+  /// **'Samedi'**
+  String get saturday;
+
+  /// No description provided for @sunday.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dimanche'**
+  String get sunday;
+
+  /// No description provided for @everyday.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous les jours'**
+  String get everyday;
+
   /// No description provided for @no_results_found.
   ///
   /// In fr, this message translates to:
@@ -367,7 +415,7 @@ abstract class AppLocalizations {
   /// No description provided for @create_note_recurrent_date_count.
   ///
   /// In fr, this message translates to:
-  /// **'{count, plural, =0{Aucune date récurrente} one{1 date récurrente} other{{count} dates récurrentes}}'**
+  /// **'{count, plural, =0{Aucune date récurrente} one{1 récurrence} other{{count} récurrences}}'**
   String create_note_recurrent_date_count(num count);
 
   /// No description provided for @create_note_add_single_date_button.
@@ -379,7 +427,7 @@ abstract class AppLocalizations {
   /// No description provided for @create_note_add_recurrent_date_button.
   ///
   /// In fr, this message translates to:
-  /// **'Ajouter une date récurrente'**
+  /// **'Ajouter une récurrence'**
   String get create_note_add_recurrent_date_button;
 
   /// No description provided for @create_note_success_feedback.
@@ -397,19 +445,19 @@ abstract class AppLocalizations {
   /// No description provided for @create_start_date_field_title.
   ///
   /// In fr, this message translates to:
-  /// **'Date de début'**
+  /// **'Début de l\'événement'**
   String get create_start_date_field_title;
 
   /// No description provided for @create_end_date_field_title.
   ///
   /// In fr, this message translates to:
-  /// **'Date de fin (optionnelle)'**
+  /// **'Fin de l\'événement (optionnelle)'**
   String get create_end_date_field_title;
 
   /// No description provided for @create_date_timeline_error.
   ///
   /// In fr, this message translates to:
-  /// **'La date de fin ne peut pas être antérieure à la date de départ'**
+  /// **'La date de fin ne peut pas être antérieure à la date de début'**
   String get create_date_timeline_error;
 
   /// No description provided for @create_date_alarm_count.
@@ -439,11 +487,32 @@ abstract class AppLocalizations {
     String isFromEdit,
   );
 
+  /// No description provided for @delete_recurrent_date_confirmation_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer la récurrence'**
+  String get delete_recurrent_date_confirmation_title;
+
+  /// No description provided for @delete_recurrent_date_confirmation_message.
+  ///
+  /// In fr, this message translates to:
+  /// **'Êtes-vous sûr de vouloir supprimer la récurrence: {date}? {isFromEdit, select, true{Cette action est irréversible et indépendante de la modification de la note.} other{}}'**
+  String delete_recurrent_date_confirmation_message(
+    Object date,
+    String isFromEdit,
+  );
+
   /// No description provided for @delete_date_success_feedback.
   ///
   /// In fr, this message translates to:
   /// **'Date supprimée avec succès'**
   String get delete_date_success_feedback;
+
+  /// No description provided for @delete_recurrence_success_feedback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Récurrence supprimée avec succès'**
+  String get delete_recurrence_success_feedback;
 
   /// No description provided for @create_single_date_success_feedback.
   ///
@@ -456,6 +525,138 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Date modifiée avec succès'**
   String get edit_single_date_success_feedback;
+
+  /// No description provided for @create_recurrent_date_success_feedback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Récurrence ajoutée avec succès'**
+  String get create_recurrent_date_success_feedback;
+
+  /// No description provided for @edit_recurrent_date_success_feedback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Récurrence modifiée avec succès'**
+  String get edit_recurrent_date_success_feedback;
+
+  /// No description provided for @recurrent_date_day_interval_display_text.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous les {count} jours'**
+  String recurrent_date_day_interval_display_text(Object count);
+
+  /// No description provided for @recurrent_date_years_interval_display_text.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous les {count} ans'**
+  String recurrent_date_years_interval_display_text(Object count);
+
+  /// No description provided for @recurrent_date_month_date_display_text.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous les {count} du mois'**
+  String recurrent_date_month_date_display_text(Object count);
+
+  /// No description provided for @recurrent_date_weekday_display_text.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous les semaines, le: {weekdays}'**
+  String recurrent_date_weekday_display_text(Object weekdays);
+
+  /// No description provided for @date_recurrence_days.
+  ///
+  /// In fr, this message translates to:
+  /// **'Jours'**
+  String get date_recurrence_days;
+
+  /// No description provided for @date_recurrence_weeks.
+  ///
+  /// In fr, this message translates to:
+  /// **'Semaines'**
+  String get date_recurrence_weeks;
+
+  /// No description provided for @date_recurrence_months.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mois'**
+  String get date_recurrence_months;
+
+  /// No description provided for @date_recurrence_years.
+  ///
+  /// In fr, this message translates to:
+  /// **'Années'**
+  String get date_recurrence_years;
+
+  /// No description provided for @create_recurrent_date_field_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Récurrence'**
+  String get create_recurrent_date_field_title;
+
+  /// No description provided for @create_recurrent_date_interval_field_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Intervalle'**
+  String get create_recurrent_date_interval_field_title;
+
+  /// No description provided for @create_recurrent_date_interval_field_hint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrez l\'intervalle'**
+  String get create_recurrent_date_interval_field_hint;
+
+  /// No description provided for @create_recurrent_date_invalid_interval.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'intervalle doit être un nombre entier positif'**
+  String get create_recurrent_date_invalid_interval;
+
+  /// No description provided for @create_recurrent_date_type_field_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Type de récurrence'**
+  String get create_recurrent_date_type_field_title;
+
+  /// No description provided for @create_recurrent_date_month_day_field_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Jour du mois'**
+  String get create_recurrent_date_month_day_field_title;
+
+  /// No description provided for @create_recurrent_date_month_day_field_hint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrez le jour du mois (1-31)'**
+  String get create_recurrent_date_month_day_field_hint;
+
+  /// No description provided for @create_recurrent_date_invalid_month_day.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le jour du mois doit être un nombre entier entre 1 et 31'**
+  String get create_recurrent_date_invalid_month_day;
+
+  /// No description provided for @create_recurrent_date_weekdays_field_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Jours de la semaine'**
+  String get create_recurrent_date_weekdays_field_title;
+
+  /// No description provided for @create_recurrent_date_no_weekday_selected.
+  ///
+  /// In fr, this message translates to:
+  /// **'Veuillez sélectionner au moins un jour de la semaine'**
+  String get create_recurrent_date_no_weekday_selected;
+
+  /// No description provided for @create_recurrent_date_recurrence_end_field_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fin de la récurrence (optionnelle)'**
+  String get create_recurrent_date_recurrence_end_field_title;
+
+  /// No description provided for @create_recurrent_date_recurrence_end_error.
+  ///
+  /// In fr, this message translates to:
+  /// **'La date de fin de la récurrence doit être postérieure à la date de début'**
+  String get create_recurrent_date_recurrence_end_error;
 
   /// No description provided for @edit_note_title.
   ///

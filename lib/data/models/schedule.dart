@@ -2,6 +2,7 @@
 import 'package:drift/drift.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
 import 'package:jampa_flutter/utils/enums/recurrence_type_enum.dart';
+import 'package:jampa_flutter/utils/enums/weekdays_enum.dart';
 import '../database.dart';
 import 'note.dart';
 
@@ -140,7 +141,7 @@ class ScheduleEntity {
     int? recurrenceDaysInterval;
     int? recurrenceYearsInterval;
     int? recurrenceMonthDate;
-    List<int> recurrenceWeekDays = [];
+    List<WeekdaysEnum> recurrenceWeekDays = [];
 
     switch(RecurrenceType.fromString(recurrenceType ?? '')){
       case RecurrenceType.intervalDays: {
@@ -153,7 +154,7 @@ class ScheduleEntity {
           if(daysString.isNotEmpty){
             // Split the integer into its individual digits and convert to a list of integers
             recurrenceWeekDays = daysString.split("").map(
-                    (e) => int.parse(e)
+                    (e) => WeekdaysEnum.fromInt(int.parse(e))
             ).toList();
           }
         }
@@ -201,7 +202,9 @@ class ScheduleEntity {
         recurrenceType = RecurrenceType.dayBasedWeekly.toString();
         if(elements.selectedRecurrenceWeekdays?.isNotEmpty ?? false){
           // Join the list of integers into a single integer (e.g., [1,3,5] -> 135)
-          recurrenceDay = int.parse(elements.selectedRecurrenceWeekdays!.join());
+          recurrenceDay = int.parse(elements.selectedRecurrenceWeekdays!
+              .map((weekday){ return weekday.asInt;}).toList().join() //TODO test
+          );
         }
         break;
       }

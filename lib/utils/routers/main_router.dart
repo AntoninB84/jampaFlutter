@@ -10,9 +10,11 @@ import 'package:jampa_flutter/ui/notes/create/create_note_page.dart';
 import 'package:jampa_flutter/ui/notes/edit/edit_note_page.dart';
 import 'package:jampa_flutter/ui/notes/index/notes_page.dart';
 import 'package:jampa_flutter/ui/notes/show/show_note_page.dart';
+import 'package:jampa_flutter/ui/schedule/save_recurrent_date/save_memory_recurrent_date_page.dart';
 
 import '../../ui/alarm/save_alarm/save_memory_alarm_page.dart';
 import '../../ui/alarm/save_alarm/save_persistent_alarm_page.dart';
+import '../../ui/schedule/save_recurrent_date/save_persistent_recurrent_date_page.dart';
 import '../../ui/schedule/save_single_date/save_memory_single_date_page.dart';
 import '../../ui/schedule/save_single_date/save_persistent_single_date_page.dart';
 
@@ -24,6 +26,8 @@ class AppRoutes {
   static const String editNote = '/edit';
   static const String saveMemorySingleDate = '/saveMemorySingleDate';
   static const String savePersistentSingleDate = '/savePersistentSingleDate';
+  static const String saveMemoryRecurrentDate = '/saveMemoryRecurrentDate';
+  static const String savePersistentRecurrentDate = '/savePersistentRecurrentDate';
   static const String saveMemoryAlarm = '/saveMemoryAlarm';
   static const String savePersistentAlarm = '/savePersistentAlarm';
   static const String settings = '/settings';
@@ -66,11 +70,28 @@ final GoRouter mainRouter = GoRouter(
                       ),
                       routes: [
                         GoRoute(
-                          name: "SaveMemoryAlarm",
+                          name: "SaveMemoryAlarmForSingleDate",
                           path: AppRoutes.saveMemoryAlarm,
                           builder: (context, state) => SaveMemoryAlarmPage(
                             alarmIndex: (state.extra as Map?)?['alarmIndex'] as int?,
                           )
+                        )
+                      ]
+                    ),
+                    GoRoute(
+                      name: "SaveMemoryRecurrentDate",
+                      path: AppRoutes.saveMemoryRecurrentDate,
+                      builder: (context, state) => SaveMemoryRecurrentDatePage(
+                        recurrentDateIndex: (state.extra as Map?)?['dateIndex'] as int?,
+                      ),
+                      routes: [
+                        GoRoute(
+                            name: "SaveMemoryAlarmForRecurrentDate",
+                            path: AppRoutes.saveMemoryAlarm,
+                            builder: (context, state) => SaveMemoryAlarmPage(
+                              alarmIndex: (state.extra as Map?)?['alarmIndex'] as int?,
+                              isForRecurrentDate: true,
+                            )
                         )
                       ]
                     )
@@ -98,10 +119,27 @@ final GoRouter mainRouter = GoRouter(
                             ),
                             routes: [
                               GoRoute(
-                                  name: "SavePersistentAlarm",
+                                  name: "SavePersistentAlarmForSingleDate",
                                   path: AppRoutes.savePersistentAlarm,
                                   builder: (context, state) => SavePersistentAlarmPage(
                                     alarmIndex: (state.extra as Map?)?['alarmIndex'] as int?,
+                                  )
+                              )
+                            ]
+                        ),
+                        GoRoute(
+                            name: "SavePersistentRecurrentDate",
+                            path: AppRoutes.savePersistentRecurrentDate,
+                            builder: (context, state) => SavePersistentRecurrentDatePage(
+                              recurrentDateIndex: (state.extra as Map?)?['dateIndex'] as int?,
+                            ),
+                            routes: [
+                              GoRoute(
+                                  name: "SavePersistentAlarmForRecurrentDate",
+                                  path: AppRoutes.savePersistentAlarm,
+                                  builder: (context, state) => SavePersistentAlarmPage(
+                                    alarmIndex: (state.extra as Map?)?['alarmIndex'] as int?,
+                                    isForRecurrentDate: true,
                                   )
                               )
                             ]

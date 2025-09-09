@@ -1,4 +1,5 @@
 import 'package:jampa_flutter/utils/enums/recurrence_type_enum.dart';
+import 'package:jampa_flutter/utils/enums/weekdays_enum.dart';
 
 import '../../../utils/enums/alarm_offset_type_enum.dart';
 
@@ -104,7 +105,7 @@ class RecurrenceFormElements {
   final int? selectedRecurrenceDaysInterval;
   final int? selectedRecurrenceYearsInterval;
   final int? selectedRecurrenceMonthDate;
-  final List<int>? selectedRecurrenceWeekdays;
+  final List<WeekdaysEnum>? selectedRecurrenceWeekdays;
 
   final List<AlarmFormElements> alarmsForRecurrence;
 
@@ -119,7 +120,7 @@ class RecurrenceFormElements {
     int? selectedRecurrenceDaysInterval,
     int? selectedRecurrenceYearsInterval,
     int? selectedRecurrenceMonthDate,
-    List<int>? selectedRecurrenceWeekdays,
+    List<WeekdaysEnum>? selectedRecurrenceWeekdays,
     List<AlarmFormElements>? alarmsForRecurrence,
   }) {
     return RecurrenceFormElements(

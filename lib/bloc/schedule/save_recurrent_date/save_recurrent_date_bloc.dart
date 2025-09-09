@@ -3,6 +3,8 @@ import 'package:equatable/equatable.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
 import 'package:jampa_flutter/repository/alarm_repository.dart';
 import 'package:jampa_flutter/repository/schedule_repository.dart';
+import 'package:jampa_flutter/utils/enums/weekdays_enum.dart';
+import 'package:jampa_flutter/utils/forms/positive_number_validator.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
 import '../../../utils/enums/recurrence_type_enum.dart';
@@ -10,9 +12,9 @@ import '../../../utils/enums/recurrence_type_enum.dart';
 part 'save_recurrent_date_state.dart';
 part 'save_recurrent_date_event.dart';
 
-class SaveRecurrentDateBloc extends Bloc<SaveRecurrentDateEvent, SaveSingleDateState> {
+class SaveRecurrentDateBloc extends Bloc<SaveRecurrentDateEvent, SaveRecurrentDateState> {
 
-  static final _initialState = SaveSingleDateState(
+  static final _initialState = SaveRecurrentDateState(
     newRecurrentDateFormElements: RecurrenceFormElements(
       selectedStartDateTime: DateTime.now(),
       selectedEndDateTime: DateTime.now().add(const Duration(hours: 1)),
@@ -21,13 +23,18 @@ class SaveRecurrentDateBloc extends Bloc<SaveRecurrentDateEvent, SaveSingleDateS
 
   SaveRecurrentDateBloc() : super(_initialState) {
     on<InitializeWithData>(_initializeWithData);
+    on<SelectRecurrenceType>(_selectRecurrenceType);
+    on<ChangeRecurrenceDayInterval>(_changeRecurrenceDayInterval);
+    on<ChangeRecurrenceYearInterval>(_changeRecurrenceYearInterval);
+    on<ChangeRecurrenceMonthDate>(_changeRecurrenceMonthDate);
+    on<ChangeRecurrenceWeekDays>(_changeRecurrenceWeekDays);
     on<SelectStartDateTime>(_selectStartDateTime);
     on<SelectEndDateTime>(_selectEndDateTime);
     on<SelectRecurrenceEndDateTime>(_selectRecurrenceEndDateTime);
     on<ValidateDates>(_validateDates);
-    on<AddAlarm>(_onAddAlarm);
-    on<UpdateAlarm>(_onUpdateAlarm);
-    on<RemoveAlarm>(_onRemoveAlarm);
+    on<AddAlarmForRecurrence>(_onAddAlarm);
+    on<UpdateAlarmForRecurrence>(_onUpdateAlarm);
+    on<RemoveAlarmForRecurrence>(_onRemoveAlarm);
     on<OnSubmit>(_onSubmit);
     on<ResetState>(_resetState);
   }
@@ -35,7 +42,7 @@ class SaveRecurrentDateBloc extends Bloc<SaveRecurrentDateEvent, SaveSingleDateS
   final ScheduleRepository scheduleRepository = serviceLocator<ScheduleRepository>();
   final AlarmRepository alarmRepository = serviceLocator<AlarmRepository>();
 
-  void _initializeWithData(InitializeWithData event, Emitter<SaveSingleDateState> emit) async {
+  void _initializeWithData(InitializeWithData event, Emitter<SaveRecurrentDateState> emit) async {
     // Prevent re-initialization on widget tree rebuild if already done
     if(state.alreadyInitialized) return;
       emit(state.copyWith(
@@ -70,35 +77,35 @@ class SaveRecurrentDateBloc extends Bloc<SaveRecurrentDateEvent, SaveSingleDateS
       }
   }
 
-  void _selectRecurrenceType(SelectRecurrenceType event, Emitter<SaveSingleDateState> emit) {
+  void _selectRecurrenceType(SelectRecurrenceType event, Emitter<SaveRecurrentDateState> emit) {
     RecurrenceFormElements currentElements = state.newRecurrentDateFormElements.copyWith(
       selectedRecurrenceType: event.recurrenceType
     );
     emit(state.copyWith(newRecurrentDateFormElements: currentElements));
   }
   
-  void _changeRecurrenceDayInterval(ChangeRecurrenceDayInterval event, Emitter<SaveSingleDateState> emit) {
+  void _changeRecurrenceDayInterval(ChangeRecurrenceDayInterval event, Emitter<SaveRecurrentDateState> emit) {
     RecurrenceFormElements currentElements = state.newRecurrentDateFormElements.copyWith(
-      selectedRecurrenceDaysInterval: event.interval
+      selectedRecurrenceDaysInterval: int.tryParse(event.interval)
     );
     emit(state.copyWith(newRecurrentDateFormElements: currentElements));
   }
   
-  void _changeRecurrenceYearInterval(ChangeRecurrenceYearInterval event, Emitter<SaveSingleDateState> emit) {
+  void _changeRecurrenceYearInterval(ChangeRecurrenceYearInterval event, Emitter<SaveRecurrentDateState> emit) {
     RecurrenceFormElements currentElements = state.newRecurrentDateFormElements.copyWith(
-      selectedRecurrenceYearsInterval: event.interval
+      selectedRecurrenceYearsInterval: int.tryParse(event.interval)
     );
     emit(state.copyWith(newRecurrentDateFormElements: currentElements));
   }
   
-  void _changeRecurrenceMonthDate(ChangeRecurrenceMonthDate event, Emitter<SaveSingleDateState> emit) {
+  void _changeRecurrenceMonthDate(ChangeRecurrenceMonthDate event, Emitter<SaveRecurrentDateState> emit) {
     RecurrenceFormElements currentElements = state.newRecurrentDateFormElements.copyWith(
-      selectedRecurrenceMonthDate: event.day
+      selectedRecurrenceMonthDate: int.tryParse(event.day)
     );
     emit(state.copyWith(newRecurrentDateFormElements: currentElements));
   }
   
-  void _changeRecurrenceWeekDays(ChangeRecurrenceWeekDays event, Emitter<SaveSingleDateState> emit) {
+  void _changeRecurrenceWeekDays(ChangeRecurrenceWeekDays event, Emitter<SaveRecurrentDateState> emit) {
     RecurrenceFormElements currentElements = state.newRecurrentDateFormElements.copyWith(
       selectedRecurrenceWeekdays: event.weekDays
     );
@@ -106,7 +113,7 @@ class SaveRecurrentDateBloc extends Bloc<SaveRecurrentDateEvent, SaveSingleDateS
   }
   
   //region Date selection and validation
-  void _selectStartDateTime(SelectStartDateTime event, Emitter<SaveSingleDateState> emit) {
+  void _selectStartDateTime(SelectStartDateTime event, Emitter<SaveRecurrentDateState> emit) {
     RecurrenceFormElements currentElements = state.newRecurrentDateFormElements.copyWith(
       selectedStartDateTime: event.dateTime
     );
@@ -114,7 +121,7 @@ class SaveRecurrentDateBloc extends Bloc<SaveRecurrentDateEvent, SaveSingleDateS
     add(ValidateDates());
   }
 
-  void _selectEndDateTime(SelectEndDateTime event, Emitter<SaveSingleDateState> emit) {
+  void _selectEndDateTime(SelectEndDateTime event, Emitter<SaveRecurrentDateState> emit) {
     RecurrenceFormElements currentElements = state.newRecurrentDateFormElements.copyWith(
       selectedEndDateTime: event.dateTime
     );
@@ -122,7 +129,7 @@ class SaveRecurrentDateBloc extends Bloc<SaveRecurrentDateEvent, SaveSingleDateS
     add(ValidateDates());
   }
 
-  void _selectRecurrenceEndDateTime(SelectRecurrenceEndDateTime event, Emitter<SaveSingleDateState> emit) {
+  void _selectRecurrenceEndDateTime(SelectRecurrenceEndDateTime event, Emitter<SaveRecurrentDateState> emit) {
     RecurrenceFormElements currentElements = state.newRecurrentDateFormElements.copyWith(
       selectedRecurrenceEndDate: event.dateTime
     );
@@ -130,7 +137,7 @@ class SaveRecurrentDateBloc extends Bloc<SaveRecurrentDateEvent, SaveSingleDateS
     add(ValidateDates());
   }
 
-  void _validateDates(ValidateDates event, Emitter<SaveSingleDateState> emit) {
+  void _validateDates(ValidateDates event, Emitter<SaveRecurrentDateState> emit) {
     emit(state.copyWith(
       isValidEndDate: state.checkValidEndDate,
       isValidEndRecurrenceDate: state.checkRecurrenceEndDate
@@ -139,7 +146,7 @@ class SaveRecurrentDateBloc extends Bloc<SaveRecurrentDateEvent, SaveSingleDateS
   //endregion
 
   //region In-memory alarm management
-  void _onAddAlarm(AddAlarm event, Emitter<SaveSingleDateState> emit) {
+  void _onAddAlarm(AddAlarmForRecurrence event, Emitter<SaveRecurrentDateState> emit) {
     List<AlarmFormElements> updatedAlarms = List.from(state.newRecurrentDateFormElements.alarmsForRecurrence)
       ..add(event.alarm);
     RecurrenceFormElements currentElements = state.newRecurrentDateFormElements.copyWith(
@@ -148,7 +155,7 @@ class SaveRecurrentDateBloc extends Bloc<SaveRecurrentDateEvent, SaveSingleDateS
     emit(state.copyWith(newRecurrentDateFormElements: currentElements));
   }
 
-  void _onUpdateAlarm(UpdateAlarm event, Emitter<SaveSingleDateState> emit) {
+  void _onUpdateAlarm(UpdateAlarmForRecurrence event, Emitter<SaveRecurrentDateState> emit) {
     List<AlarmFormElements> updatedAlarms = List.from(state.newRecurrentDateFormElements.alarmsForRecurrence);
     if(event.index >= 0 && event.index < updatedAlarms.length){
       updatedAlarms[event.index] = event.updatedAlarm;
@@ -159,7 +166,7 @@ class SaveRecurrentDateBloc extends Bloc<SaveRecurrentDateEvent, SaveSingleDateS
     }
   }
 
-  void _onRemoveAlarm(RemoveAlarm event, Emitter<SaveSingleDateState> emit) {
+  void _onRemoveAlarm(RemoveAlarmForRecurrence event, Emitter<SaveRecurrentDateState> emit) {
     List<AlarmFormElements> updatedAlarms = List.from(state.newRecurrentDateFormElements.alarmsForRecurrence);
     if(event.index >= 0 && event.index < updatedAlarms.length){
       updatedAlarms.removeAt(event.index);
@@ -171,7 +178,7 @@ class SaveRecurrentDateBloc extends Bloc<SaveRecurrentDateEvent, SaveSingleDateS
   }
   //endregion
 
-  void _onSubmit(OnSubmit event, Emitter<SaveSingleDateState> emit) async {
+  void _onSubmit(OnSubmit event, Emitter<SaveRecurrentDateState> emit) async {
     if(state.isValidDates){
       RecurrenceFormElements newElement = state.newRecurrentDateFormElements;
 
@@ -197,7 +204,7 @@ class SaveRecurrentDateBloc extends Bloc<SaveRecurrentDateEvent, SaveSingleDateS
     }
   }
 
-  void _resetState(ResetState event, Emitter<SaveSingleDateState> emit) {
+  void _resetState(ResetState event, Emitter<SaveRecurrentDateState> emit) {
     emit(_initialState);
   }
 }

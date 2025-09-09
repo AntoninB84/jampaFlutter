@@ -30,7 +30,7 @@ final class InitializeWithData extends SaveRecurrentDateEvent {
 final class SelectRecurrenceType extends SaveRecurrentDateEvent {
   SelectRecurrenceType({required this.recurrenceType});
 
-  final RecurrenceType recurrenceType;
+  final RecurrenceType? recurrenceType;
 
   @override
   List<Object?> get props => [recurrenceType];
@@ -39,7 +39,7 @@ final class SelectRecurrenceType extends SaveRecurrentDateEvent {
 final class ChangeRecurrenceDayInterval extends SaveRecurrentDateEvent {
   ChangeRecurrenceDayInterval({required this.interval});
 
-  final int interval;
+  final String interval;
 
   @override
   List<Object?> get props => [interval];
@@ -48,7 +48,7 @@ final class ChangeRecurrenceDayInterval extends SaveRecurrentDateEvent {
 final class ChangeRecurrenceYearInterval extends SaveRecurrentDateEvent {
   ChangeRecurrenceYearInterval({required this.interval});
 
-  final int interval;
+  final String interval;
 
   @override
   List<Object?> get props => [interval];
@@ -57,7 +57,7 @@ final class ChangeRecurrenceYearInterval extends SaveRecurrentDateEvent {
 final class ChangeRecurrenceMonthDate extends SaveRecurrentDateEvent {
   ChangeRecurrenceMonthDate({required this.day});
 
-  final int day;
+  final String day;
 
   @override
   List<Object?> get props => [day];
@@ -66,7 +66,7 @@ final class ChangeRecurrenceMonthDate extends SaveRecurrentDateEvent {
 final class ChangeRecurrenceWeekDays extends SaveRecurrentDateEvent {
   ChangeRecurrenceWeekDays({required this.weekDays});
 
-  final List<int> weekDays;
+  final List<WeekdaysEnum> weekDays;
 
   @override
   List<Object?> get props => [weekDays];
@@ -101,8 +101,8 @@ final class SelectRecurrenceEndDateTime extends SaveRecurrentDateEvent {
 
 final class ValidateDates extends SaveRecurrentDateEvent {}
 
-final class AddAlarm extends SaveRecurrentDateEvent {
-  AddAlarm({required this.alarm});
+final class AddAlarmForRecurrence extends SaveRecurrentDateEvent {
+  AddAlarmForRecurrence({required this.alarm});
 
   final AlarmFormElements alarm;
 
@@ -110,8 +110,8 @@ final class AddAlarm extends SaveRecurrentDateEvent {
   List<Object?> get props => [alarm];
 }
 
-final class RemoveAlarm extends SaveRecurrentDateEvent {
-  RemoveAlarm({required this.index});
+final class RemoveAlarmForRecurrence extends SaveRecurrentDateEvent {
+  RemoveAlarmForRecurrence({required this.index});
 
   final int index;
 
@@ -119,8 +119,8 @@ final class RemoveAlarm extends SaveRecurrentDateEvent {
   List<Object?> get props => [index];
 }
 
-final class UpdateAlarm extends SaveRecurrentDateEvent {
-  UpdateAlarm({required this.index, required this.updatedAlarm});
+final class UpdateAlarmForRecurrence extends SaveRecurrentDateEvent {
+  UpdateAlarmForRecurrence({required this.index, required this.updatedAlarm});
 
   final int index;
   final AlarmFormElements updatedAlarm;

@@ -1,12 +1,15 @@
 part of 'save_recurrent_date_bloc.dart';
 
-class SaveSingleDateState extends Equatable {
-  const SaveSingleDateState({
+class SaveRecurrentDateState extends Equatable {
+  const SaveRecurrentDateState({
     this.alreadyInitialized = false,
     this.noteId,
     this.isSavingPersistentDate = false,
     this.initialRecurrentDateFormElementIndex,
     required this.newRecurrentDateFormElements,
+    this.intervalDaysValidator = const PositiveValueValidator.pure(),
+    this.intervalYearsValidator = const PositiveValueValidator.pure(),
+    this.monthDateValidator = const PositiveValueValidator.pure(),
     this.isValidStartDate = true,
     this.isValidEndDate = true,
     this.isValidEndRecurrenceDate = true,
@@ -25,28 +28,38 @@ class SaveSingleDateState extends Equatable {
 
   final RecurrenceFormElements newRecurrentDateFormElements;
 
+  final PositiveValueValidator intervalDaysValidator;
+  final PositiveValueValidator intervalYearsValidator;
+  final PositiveValueValidator monthDateValidator;
+
   final bool isValidStartDate;
   final bool isValidEndDate;
   final bool isValidEndRecurrenceDate;
   final bool hasSubmitted;
 
-  SaveSingleDateState copyWith({
+  SaveRecurrentDateState copyWith({
     bool? alreadyInitialized,
     int? noteId,
     bool? isSavingPersistentDate,
     int? initialRecurrentDateFormElementIndex,
     RecurrenceFormElements? newRecurrentDateFormElements,
+    PositiveValueValidator? intervalDaysValidator,
+    PositiveValueValidator? intervalYearsValidator,
+    PositiveValueValidator? monthDateValidator,
     bool? isValidStartDate,
     bool? isValidEndDate,
     bool? isValidEndRecurrenceDate,
     bool? hasSubmitted,
   }) {
-    return SaveSingleDateState(
+    return SaveRecurrentDateState(
       alreadyInitialized: alreadyInitialized ?? this.alreadyInitialized,
       noteId: noteId ?? this.noteId,
       isSavingPersistentDate: isSavingPersistentDate ?? this.isSavingPersistentDate,
       initialRecurrentDateFormElementIndex: initialRecurrentDateFormElementIndex ?? this.initialRecurrentDateFormElementIndex,
       newRecurrentDateFormElements: newRecurrentDateFormElements ?? this.newRecurrentDateFormElements,
+      intervalDaysValidator: intervalDaysValidator ?? this.intervalDaysValidator,
+      intervalYearsValidator: intervalYearsValidator ?? this.intervalYearsValidator,
+      monthDateValidator: monthDateValidator ?? this.monthDateValidator,
       isValidStartDate: isValidStartDate ?? this.isValidStartDate,
       isValidEndDate: isValidEndDate ?? this.isValidEndDate,
       isValidEndRecurrenceDate: isValidEndRecurrenceDate ?? this.isValidEndRecurrenceDate,
@@ -61,6 +74,9 @@ class SaveSingleDateState extends Equatable {
       isSavingPersistentDate,
       initialRecurrentDateFormElementIndex,
       newRecurrentDateFormElements,
+      intervalDaysValidator,
+      intervalYearsValidator,
+      monthDateValidator,
       isValidStartDate,
       isValidEndDate,
       isValidEndRecurrenceDate,

@@ -39,6 +39,30 @@ class AppLocalizationsFr extends AppLocalizations {
   String get search => 'Rechercher';
 
   @override
+  String get monday => 'Lundi';
+
+  @override
+  String get tuesday => 'Mardi';
+
+  @override
+  String get wednesday => 'Mercredi';
+
+  @override
+  String get thursday => 'Jeudi';
+
+  @override
+  String get friday => 'Vendredi';
+
+  @override
+  String get saturday => 'Samedi';
+
+  @override
+  String get sunday => 'Dimanche';
+
+  @override
+  String get everyday => 'Tous les jours';
+
+  @override
   String get no_results_found => 'Aucun résultat trouvé';
 
   @override
@@ -174,8 +198,8 @@ class AppLocalizationsFr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count dates récurrentes',
-      one: '1 date récurrente',
+      other: '$count récurrences',
+      one: '1 récurrence',
       zero: 'Aucune date récurrente',
     );
     return '$_temp0';
@@ -185,8 +209,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get create_note_add_single_date_button => 'Ajouter une date';
 
   @override
-  String get create_note_add_recurrent_date_button =>
-      'Ajouter une date récurrente';
+  String get create_note_add_recurrent_date_button => 'Ajouter une récurrence';
 
   @override
   String get create_note_success_feedback => 'Note créée avec succès';
@@ -195,14 +218,14 @@ class AppLocalizationsFr extends AppLocalizations {
   String get create_date_title => 'Ajouter une date';
 
   @override
-  String get create_start_date_field_title => 'Date de début';
+  String get create_start_date_field_title => 'Début de l\'événement';
 
   @override
-  String get create_end_date_field_title => 'Date de fin (optionnelle)';
+  String get create_end_date_field_title => 'Fin de l\'événement (optionnelle)';
 
   @override
   String get create_date_timeline_error =>
-      'La date de fin ne peut pas être antérieure à la date de départ';
+      'La date de fin ne peut pas être antérieure à la date de début';
 
   @override
   String create_date_alarm_count(num count) {
@@ -236,13 +259,118 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get delete_recurrent_date_confirmation_title =>
+      'Supprimer la récurrence';
+
+  @override
+  String delete_recurrent_date_confirmation_message(
+    Object date,
+    String isFromEdit,
+  ) {
+    String _temp0 = intl.Intl.selectLogic(isFromEdit, {
+      'true':
+          'Cette action est irréversible et indépendante de la modification de la note.',
+      'other': '',
+    });
+    return 'Êtes-vous sûr de vouloir supprimer la récurrence: $date? $_temp0';
+  }
+
+  @override
   String get delete_date_success_feedback => 'Date supprimée avec succès';
+
+  @override
+  String get delete_recurrence_success_feedback =>
+      'Récurrence supprimée avec succès';
 
   @override
   String get create_single_date_success_feedback => 'Date ajoutée avec succès';
 
   @override
   String get edit_single_date_success_feedback => 'Date modifiée avec succès';
+
+  @override
+  String get create_recurrent_date_success_feedback =>
+      'Récurrence ajoutée avec succès';
+
+  @override
+  String get edit_recurrent_date_success_feedback =>
+      'Récurrence modifiée avec succès';
+
+  @override
+  String recurrent_date_day_interval_display_text(Object count) {
+    return 'Tous les $count jours';
+  }
+
+  @override
+  String recurrent_date_years_interval_display_text(Object count) {
+    return 'Tous les $count ans';
+  }
+
+  @override
+  String recurrent_date_month_date_display_text(Object count) {
+    return 'Tous les $count du mois';
+  }
+
+  @override
+  String recurrent_date_weekday_display_text(Object weekdays) {
+    return 'Tous les semaines, le: $weekdays';
+  }
+
+  @override
+  String get date_recurrence_days => 'Jours';
+
+  @override
+  String get date_recurrence_weeks => 'Semaines';
+
+  @override
+  String get date_recurrence_months => 'Mois';
+
+  @override
+  String get date_recurrence_years => 'Années';
+
+  @override
+  String get create_recurrent_date_field_title => 'Récurrence';
+
+  @override
+  String get create_recurrent_date_interval_field_title => 'Intervalle';
+
+  @override
+  String get create_recurrent_date_interval_field_hint =>
+      'Entrez l\'intervalle';
+
+  @override
+  String get create_recurrent_date_invalid_interval =>
+      'L\'intervalle doit être un nombre entier positif';
+
+  @override
+  String get create_recurrent_date_type_field_title => 'Type de récurrence';
+
+  @override
+  String get create_recurrent_date_month_day_field_title => 'Jour du mois';
+
+  @override
+  String get create_recurrent_date_month_day_field_hint =>
+      'Entrez le jour du mois (1-31)';
+
+  @override
+  String get create_recurrent_date_invalid_month_day =>
+      'Le jour du mois doit être un nombre entier entre 1 et 31';
+
+  @override
+  String get create_recurrent_date_weekdays_field_title =>
+      'Jours de la semaine';
+
+  @override
+  String get create_recurrent_date_no_weekday_selected =>
+      'Veuillez sélectionner au moins un jour de la semaine';
+
+  @override
+  String get create_recurrent_date_recurrence_end_field_title =>
+      'Fin de la récurrence (optionnelle)';
+
+  @override
+  String get create_recurrent_date_recurrence_end_error =>
+      'La date de fin de la récurrence doit être postérieure à la date de début';
 
   @override
   String get edit_note_title => 'Modifier la note';

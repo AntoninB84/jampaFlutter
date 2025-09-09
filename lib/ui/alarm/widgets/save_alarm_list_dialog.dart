@@ -12,11 +12,13 @@ import '../../../bloc/alarm/save_alarm_list/save_alarm_list_bloc.dart';
 class SaveAlarmListDialog extends StatefulWidget {
   const SaveAlarmListDialog({
     super.key,
+    this.isForRecurrentDate = false,
     this.isSavingPersistentData = false,
     required this.listElements,
     required this.onDateDeleted,
   });
 
+  final bool isForRecurrentDate;
   final bool isSavingPersistentData;
   final List<AlarmFormElements> listElements;
   final Function(int) onDateDeleted;
@@ -78,8 +80,8 @@ class _SaveAlarmListDialogState extends State<SaveAlarmListDialog> {
                                 onPressed: () {
                                   context.pop(index);
                                   context.pushNamed(widget.isSavingPersistentData
-                                      ? 'SavePersistentAlarm'
-                                      : 'SaveMemoryAlarm',
+                                      ? (widget.isForRecurrentDate ? 'SavePersistentAlarmForRecurrentDate' : 'SavePersistentAlarmForSingleDate')
+                                      : (widget.isForRecurrentDate ? 'SaveMemoryAlarmForRecurrentDate' : 'SaveMemoryAlarmForSingleDate'),
                                       extra: {'alarmIndex': index}
                                   );
                                 },
@@ -124,8 +126,8 @@ class _SaveAlarmListDialogState extends State<SaveAlarmListDialog> {
                       onPressed: (){
                         context.pop();
                         context.pushNamed(widget.isSavingPersistentData
-                            ? 'SavePersistentAlarm'
-                            : 'SaveMemoryAlarm',
+                            ? (widget.isForRecurrentDate ? 'SavePersistentAlarmForRecurrentDate' : 'SavePersistentAlarmForSingleDate')
+                            : (widget.isForRecurrentDate ? 'SaveMemoryAlarmForRecurrentDate' : 'SaveMemoryAlarmForSingleDate'),
                         );
                       },
                       child: Text(context.strings.create_date_add_alarm_button)
