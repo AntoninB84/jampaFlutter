@@ -1,9 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:formz/formz.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
 import 'package:jampa_flutter/repository/alarm_repository.dart';
 import 'package:jampa_flutter/repository/schedule_repository.dart';
 import 'package:jampa_flutter/utils/enums/weekdays_enum.dart';
+import 'package:jampa_flutter/utils/forms/month_day_validator.dart';
 import 'package:jampa_flutter/utils/forms/positive_number_validator.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
@@ -81,35 +83,67 @@ class SaveRecurrentDateBloc extends Bloc<SaveRecurrentDateEvent, SaveRecurrentDa
     RecurrenceFormElements currentElements = state.newRecurrentDateFormElements.copyWith(
       selectedRecurrenceType: event.recurrenceType
     );
-    emit(state.copyWith(newRecurrentDateFormElements: currentElements));
+    emit(state.copyWith(
+      newRecurrentDateFormElements: currentElements,
+      isValidRecurrenceType: event.recurrenceType != null
+    ));
   }
   
   void _changeRecurrenceDayInterval(ChangeRecurrenceDayInterval event, Emitter<SaveRecurrentDateState> emit) {
+    int? interval = int.tryParse(event.interval);
+
     RecurrenceFormElements currentElements = state.newRecurrentDateFormElements.copyWith(
-      selectedRecurrenceDaysInterval: int.tryParse(event.interval)
+      selectedRecurrenceDaysInterval: interval
     );
-    emit(state.copyWith(newRecurrentDateFormElements: currentElements));
+    // Validate interval (>0)
+    final PositiveValueValidator intervalValidator = PositiveValueValidator.dirty(interval);
+    final bool isValid = Formz.validate([intervalValidator]);
+    // Emit state update
+    emit(state.copyWith(
+      newRecurrentDateFormElements: currentElements,
+      intervalDaysValidator: intervalValidator
+    ));
   }
   
   void _changeRecurrenceYearInterval(ChangeRecurrenceYearInterval event, Emitter<SaveRecurrentDateState> emit) {
+    int? interval = int.tryParse(event.interval);
+
     RecurrenceFormElements currentElements = state.newRecurrentDateFormElements.copyWith(
-      selectedRecurrenceYearsInterval: int.tryParse(event.interval)
+      selectedRecurrenceYearsInterval: interval
     );
-    emit(state.copyWith(newRecurrentDateFormElements: currentElements));
+    // Validate interval (>0)
+    final PositiveValueValidator intervalValidator = PositiveValueValidator.dirty(interval);
+    final bool isValid = Formz.validate([intervalValidator]);
+    // Emit state update
+    emit(state.copyWith(
+      newRecurrentDateFormElements: currentElements,
+      intervalYearsValidator: intervalValidator
+    ));
   }
   
   void _changeRecurrenceMonthDate(ChangeRecurrenceMonthDate event, Emitter<SaveRecurrentDateState> emit) {
+    int? day = int.tryParse(event.day);
+
     RecurrenceFormElements currentElements = state.newRecurrentDateFormElements.copyWith(
-      selectedRecurrenceMonthDate: int.tryParse(event.day)
+      selectedRecurrenceMonthDate: day
     );
-    emit(state.copyWith(newRecurrentDateFormElements: currentElements));
+    // Validate day of month (1-31)
+    final MonthDayValidator monthDayValidator = MonthDayValidator.dirty(day);
+    final bool isValid = Formz.validate([monthDayValidator]);
+    // Emit state update
+    emit(state.copyWith(
+      newRecurrentDateFormElements: currentElements,
+      monthDateValidator: monthDayValidator
+    ));
   }
   
   void _changeRecurrenceWeekDays(ChangeRecurrenceWeekDays event, Emitter<SaveRecurrentDateState> emit) {
     RecurrenceFormElements currentElements = state.newRecurrentDateFormElements.copyWith(
       selectedRecurrenceWeekdays: event.weekDays
     );
-    emit(state.copyWith(newRecurrentDateFormElements: currentElements));
+    emit(state.copyWith(
+      newRecurrentDateFormElements: currentElements
+    ));
   }
   
   //region Date selection and validation
@@ -179,7 +213,7 @@ class SaveRecurrentDateBloc extends Bloc<SaveRecurrentDateEvent, SaveRecurrentDa
   //endregion
 
   void _onSubmit(OnSubmit event, Emitter<SaveRecurrentDateState> emit) async {
-    if(state.isValidDates){
+    if(state.isValidFormValues){
       RecurrenceFormElements newElement = state.newRecurrentDateFormElements;
 
       if(state.isSavingPersistentDate ?? false){

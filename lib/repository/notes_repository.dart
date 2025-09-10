@@ -1,5 +1,7 @@
 import 'package:jampa_flutter/data/dao/note_dao.dart';
 import 'package:jampa_flutter/data/models/note.dart';
+import 'package:jampa_flutter/repository/schedule_repository.dart';
+import 'package:jampa_flutter/utils/service_locator.dart';
 
 import '../data/dao/note_category_dao.dart';
 import '../data/models/note_category.dart';
@@ -38,6 +40,7 @@ class NotesRepository {
   }
 
   Future<void> deleteNoteById(int id) async {
+    await serviceLocator<ScheduleRepository>().deleteSchedulesByNoteId(id);
     await NoteDao.deleteNoteById(id);
   }
 

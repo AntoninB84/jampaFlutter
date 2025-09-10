@@ -10,7 +10,7 @@ enum RecurrenceType {
 
   static RecurrenceType? fromString(String value) {
     return RecurrenceType.values.firstWhereOrNull(
-            (e) => e.toString() == value
+            (e) => e.name == value
     );
   }
 

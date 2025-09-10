@@ -63,10 +63,6 @@ class ScheduleRepository {
     await ScheduleDao.saveListOfSchedules(schedules);
   }
 
-  Future<void> deleteScheduleById(int id) async {
-    await ScheduleDao.deleteScheduleById(id);
-  }
-
   Stream<ScheduleEntity?> watchScheduleById(int id)  {
     return ScheduleDao.watchScheduleById(id);
   }
@@ -89,6 +85,18 @@ class ScheduleRepository {
 
   Stream<List<ScheduleEntity>> watchAllSchedules() {
     return ScheduleDao.watchAllSchedules();
+  }
+
+  Future<void> deleteScheduleById(int id) async {
+    await serviceLocator<AlarmRepository>().deleteAlarmsByScheduleId(id);
+    await ScheduleDao.deleteScheduleById(id);
+  }
+
+  Future<void> deleteSchedulesByNoteId(int noteId) async {
+    List<ScheduleEntity> schedules = await getAllSchedulesByNoteId(noteId);
+    for(var schedule in schedules) {
+      await deleteScheduleById(schedule.id!);
+    }
   }
 
 }

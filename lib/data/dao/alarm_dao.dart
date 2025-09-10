@@ -33,11 +33,6 @@ class AlarmDao {
         .getSingleOrNull();
   }
 
-  static Future<void> deleteAlarmById(int id) async {
-    AppDatabase db = serviceLocator<AppDatabase>();
-    await (db.delete(db.alarmTable)..where((tbl) => tbl.id.equals(id))).go();
-  }
-
   static Stream<List<AlarmEntity>> watchAllAlarms()  {
     AppDatabase db = serviceLocator<AppDatabase>();
     return (db.select(db.alarmTable))
@@ -60,6 +55,16 @@ class AlarmDao {
     AppDatabase db = serviceLocator<AppDatabase>();
     return await (db.select(db.alarmTable)..where((tbl) => tbl.scheduleId.equals(scheduleId)))
         .get();
+  }
+
+  static Future<void> deleteAlarmById(int id) async {
+    AppDatabase db = serviceLocator<AppDatabase>();
+    await (db.delete(db.alarmTable)..where((tbl) => tbl.id.equals(id))).go();
+  }
+
+  static Future<void> deleteAlarmsByScheduleId(int scheduleId) async {
+    AppDatabase db = serviceLocator<AppDatabase>();
+    await (db.delete(db.alarmTable)..where((tbl) => tbl.scheduleId.equals(scheduleId))).go();
   }
 
 }

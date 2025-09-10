@@ -32,11 +32,6 @@ class ScheduleDao {
         .getSingleOrNull();
   }
 
-  static Future<void> deleteScheduleById(int id) async {
-    AppDatabase db = serviceLocator<AppDatabase>();
-    await (db.delete(db.scheduleTable)..where((tbl) => tbl.id.equals(id))).go();
-  }
-
   static Stream<List<ScheduleEntity>> watchAllSchedulesByNoteId(int noteId)  {
     AppDatabase db = serviceLocator<AppDatabase>();
     return (db.select(db.scheduleTable)..where((tbl) => tbl.noteId.equals(noteId)))
@@ -57,5 +52,10 @@ class ScheduleDao {
   static Future<List<ScheduleEntity>> getAllSchedules() async {
     AppDatabase db = serviceLocator<AppDatabase>();
     return await db.select(db.scheduleTable).get();
+  }
+
+  static Future<void> deleteScheduleById(int id) async {
+    AppDatabase db = serviceLocator<AppDatabase>();
+    await (db.delete(db.scheduleTable)..where((tbl) => tbl.id.equals(id))).go();
   }
 }

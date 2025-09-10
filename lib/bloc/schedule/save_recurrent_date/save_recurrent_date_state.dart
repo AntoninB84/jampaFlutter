@@ -9,7 +9,8 @@ class SaveRecurrentDateState extends Equatable {
     required this.newRecurrentDateFormElements,
     this.intervalDaysValidator = const PositiveValueValidator.pure(),
     this.intervalYearsValidator = const PositiveValueValidator.pure(),
-    this.monthDateValidator = const PositiveValueValidator.pure(),
+    this.monthDateValidator = const MonthDayValidator.pure(),
+    this.isValidRecurrenceType = true,
     this.isValidStartDate = true,
     this.isValidEndDate = true,
     this.isValidEndRecurrenceDate = true,
@@ -30,8 +31,9 @@ class SaveRecurrentDateState extends Equatable {
 
   final PositiveValueValidator intervalDaysValidator;
   final PositiveValueValidator intervalYearsValidator;
-  final PositiveValueValidator monthDateValidator;
+  final MonthDayValidator monthDateValidator;
 
+  final bool isValidRecurrenceType;
   final bool isValidStartDate;
   final bool isValidEndDate;
   final bool isValidEndRecurrenceDate;
@@ -45,7 +47,8 @@ class SaveRecurrentDateState extends Equatable {
     RecurrenceFormElements? newRecurrentDateFormElements,
     PositiveValueValidator? intervalDaysValidator,
     PositiveValueValidator? intervalYearsValidator,
-    PositiveValueValidator? monthDateValidator,
+    MonthDayValidator? monthDateValidator,
+    bool? isValidRecurrenceType,
     bool? isValidStartDate,
     bool? isValidEndDate,
     bool? isValidEndRecurrenceDate,
@@ -60,6 +63,7 @@ class SaveRecurrentDateState extends Equatable {
       intervalDaysValidator: intervalDaysValidator ?? this.intervalDaysValidator,
       intervalYearsValidator: intervalYearsValidator ?? this.intervalYearsValidator,
       monthDateValidator: monthDateValidator ?? this.monthDateValidator,
+      isValidRecurrenceType: isValidRecurrenceType ?? this.isValidRecurrenceType,
       isValidStartDate: isValidStartDate ?? this.isValidStartDate,
       isValidEndDate: isValidEndDate ?? this.isValidEndDate,
       isValidEndRecurrenceDate: isValidEndRecurrenceDate ?? this.isValidEndRecurrenceDate,
@@ -77,6 +81,7 @@ class SaveRecurrentDateState extends Equatable {
       intervalDaysValidator,
       intervalYearsValidator,
       monthDateValidator,
+      isValidRecurrenceType,
       isValidStartDate,
       isValidEndDate,
       isValidEndRecurrenceDate,
@@ -114,7 +119,27 @@ class SaveRecurrentDateState extends Equatable {
       return true;
     }
 
-    bool get isValidDates {
-      return isValidStartDate && isValidEndDate && isValidEndRecurrenceDate;
+    bool get isRecurrenceValueValid {
+      if(newRecurrentDateFormElements.selectedRecurrenceType == RecurrenceType.intervalDays) {
+        return intervalDaysValidator.isValid;
+      }
+      if(newRecurrentDateFormElements.selectedRecurrenceType == RecurrenceType.intervalYears) {
+        return intervalYearsValidator.isValid;
+      }
+      if(newRecurrentDateFormElements.selectedRecurrenceType == RecurrenceType.dayBasedMonthly) {
+        return monthDateValidator.isValid;
+      }
+      if(newRecurrentDateFormElements.selectedRecurrenceType == RecurrenceType.dayBasedWeekly) {
+        if(newRecurrentDateFormElements.selectedRecurrenceWeekdays == null
+            || newRecurrentDateFormElements.selectedRecurrenceWeekdays!.isEmpty) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    bool get isValidFormValues {
+      return isValidStartDate && isValidEndDate && isValidEndRecurrenceDate
+        && isRecurrenceValueValid && isValidRecurrenceType;
     }
   }

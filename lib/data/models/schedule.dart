@@ -194,12 +194,12 @@ class ScheduleEntity {
 
     switch(elements.selectedRecurrenceType){
       case RecurrenceType.intervalDays: {
-        recurrenceType = RecurrenceType.intervalDays.toString();
+        recurrenceType = RecurrenceType.intervalDays.name;
         recurrenceInterval = elements.selectedRecurrenceDaysInterval;
         break;
       }
       case RecurrenceType.dayBasedWeekly: {
-        recurrenceType = RecurrenceType.dayBasedWeekly.toString();
+        recurrenceType = RecurrenceType.dayBasedWeekly.name;
         if(elements.selectedRecurrenceWeekdays?.isNotEmpty ?? false){
           // Join the list of integers into a single integer (e.g., [1,3,5] -> 135)
           recurrenceDay = int.parse(elements.selectedRecurrenceWeekdays!
@@ -209,12 +209,12 @@ class ScheduleEntity {
         break;
       }
       case RecurrenceType.dayBasedMonthly: {
-        recurrenceType = RecurrenceType.dayBasedMonthly.toString();
+        recurrenceType = RecurrenceType.dayBasedMonthly.name;
         recurrenceDay = elements.selectedRecurrenceMonthDate;
         break;
       }
       case RecurrenceType.intervalYears: {
-        recurrenceType = RecurrenceType.intervalYears.toString();
+        recurrenceType = RecurrenceType.intervalYears.name;
         recurrenceInterval = elements.selectedRecurrenceYearsInterval;
         break;
       }

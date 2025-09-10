@@ -34,10 +34,6 @@ class AlarmRepository {
     await AlarmDao.saveListOfAlarms(alarms);
   }
 
-  Future<void> deleteAlarmById(int id) async {
-    await AlarmDao.deleteAlarmById(id);
-  }
-
   Stream<AlarmEntity?> watchAlarmById(int id)  {
     return AlarmDao.watchAlarmById(id);
   }
@@ -59,5 +55,13 @@ class AlarmRepository {
   }
   Stream<List<AlarmEntity>> watchAllAlarms() {
     return AlarmDao.watchAllAlarms();
+  }
+
+  Future<void> deleteAlarmById(int id) async {
+    await AlarmDao.deleteAlarmById(id);
+  }
+
+  Future<void> deleteAlarmsByScheduleId(int scheduleId) async {
+    await AlarmDao.deleteAlarmsByScheduleId(scheduleId);
   }
 }

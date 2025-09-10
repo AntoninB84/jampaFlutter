@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:formz/formz.dart';
 import 'package:jampa_flutter/ui/widgets/inputs/custom_text_field.dart';
 import 'package:jampa_flutter/ui/widgets/error_text.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
@@ -16,7 +17,7 @@ class RecurrenceIntervalTextField extends StatefulWidget {
 
   final String? value;
   final bool isValid;
-  final PositiveValueValidator validator;
+  final FormzInput validator;
   final Function(String) onChanged;
   
   final String hintText;
