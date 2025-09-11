@@ -6,10 +6,12 @@ import 'package:jampa_flutter/repository/user_repository.dart';
 import 'package:jampa_flutter/utils/constants/l10n/app_localizations.dart';
 import 'package:jampa_flutter/utils/routers/main_router.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
+import 'package:jampa_flutter/workers/alarm_worker.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setupServiceLocator();
+  setupAlarmWorker();
 
   runApp(const MyApp());
 }
@@ -58,5 +60,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-

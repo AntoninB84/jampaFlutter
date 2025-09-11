@@ -562,7 +562,7 @@ class $NoteTableTable extends NoteTable
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: false,
-    defaultValue: Constant(NoteStatus.todo.name),
+    defaultValue: Constant(NoteStatusEnum.todo.name),
   );
   static const VerificationMeta _createdAtMeta = const VerificationMeta(
     'createdAt',

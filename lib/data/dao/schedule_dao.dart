@@ -1,8 +1,12 @@
 
 import 'package:drift/drift.dart';
 import 'package:jampa_flutter/data/database.dart';
+import 'package:jampa_flutter/data/models/alarm.dart';
+import 'package:jampa_flutter/data/models/note.dart';
 import 'package:jampa_flutter/data/models/schedule.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
+
+import '../../utils/enums/note_status_enum.dart';
 
 class ScheduleDao {
   static Future<ScheduleEntity> saveSingleSchedule(ScheduleEntity schedule) async {
@@ -57,5 +61,47 @@ class ScheduleDao {
   static Future<void> deleteScheduleById(int id) async {
     AppDatabase db = serviceLocator<AppDatabase>();
     await (db.delete(db.scheduleTable)..where((tbl) => tbl.id.equals(id))).go();
+  }
+
+  static Future<List<ScheduleEntity>> getAllSchedulesHavingAlarmsForToBeDoneNotes() async {
+    AppDatabase db = AppDatabase.instance();
+    final query = db.select(db.scheduleTable).join([
+      innerJoin(
+        db.noteTable,
+        db.noteTable.id.equalsExp(db.scheduleTable.noteId),
+      ),
+      innerJoin(
+        db.alarmTable,
+        db.alarmTable.scheduleId.equalsExp(db.scheduleTable.id),
+      ),
+    ])
+      ..where(db.scheduleTable.recurrenceEndDate.isNull() | db.scheduleTable.recurrenceEndDate.isBiggerThanValue(DateTime.now()))
+      ..where(db.alarmTable.id.isNotNull())
+      ..where(db.noteTable.status.isNotIn([NoteStatusEnum.done.name]));
+
+    final rows = await query.get();
+    List<ScheduleEntity> schedules = [];
+    for(final row in rows){
+      ScheduleEntity scheduleEntity = row.readTable(db.scheduleTable);
+      NoteEntity noteEntity = row.readTable(db.noteTable);
+      AlarmEntity alarmEntity = row.readTable(db.alarmTable);
+
+      // Check if the schedule already exists in the list
+      final existingScheduleIndex = schedules.indexWhere((s) => s.id == scheduleEntity.id);
+      if(existingScheduleIndex != -1){
+        // If it exists, add the alarm to the existing schedule's alarms list
+        if(schedules[existingScheduleIndex].alarms == null){
+          schedules[existingScheduleIndex].alarms = [];
+        }
+        schedules[existingScheduleIndex].alarms!.add(alarmEntity);
+      }else {
+        // If it doesn't exist, create a new schedule with the alarm
+        scheduleEntity.alarms = [alarmEntity];
+        scheduleEntity.note = noteEntity;
+        schedules.add(scheduleEntity);
+      }
+
+    }
+    return schedules;
   }
 }

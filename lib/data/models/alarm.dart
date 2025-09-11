@@ -91,6 +91,10 @@ class AlarmEntity {
         createdAt = DateTime.parse(json['createdAt'] as String),
         updatedAt = DateTime.parse(json['updatedAt'] as String);
 
+  static List<AlarmEntity> fromJsonArray(List jsonArray) {
+    return jsonArray.map((json) => AlarmEntity.fromJson(json)).toList();
+  }
+
   AlarmFormElements toAlarmFormElements() {
     return AlarmFormElements(
       scheduleId: scheduleId,

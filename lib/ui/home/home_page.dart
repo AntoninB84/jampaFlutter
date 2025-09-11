@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jampa_flutter/bloc/permissions/permissions_bloc.dart';
 import 'package:jampa_flutter/repository/notes_repository.dart';
 import 'package:jampa_flutter/repository/schedule_repository.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
@@ -41,28 +42,31 @@ class HomePage extends StatelessWidget {
           create: (context) => serviceLocator<AlarmRepository>()
         ),
       ],
-      child: BlocProvider(
-        create: (context) => BottomNavigationBarBloc(),
-        child: Scaffold(
-          body: BlocListener<BottomNavigationBarBloc, int>(
-            listener: (context, state) {
-              navigationShell.goBranch(state);
-            },
-            child: SafeArea(child: navigationShell)
-          ),
-          bottomNavigationBar: BlocBuilder<BottomNavigationBarBloc, int>(
-            builder: (context, currentIndex) {
-              return BottomNavigationBar(
-                currentIndex: currentIndex,
-                onTap: (index) {
-                  context.read<BottomNavigationBarBloc>().add(BottomNavigationBarEvent.values[index]);
-                },
-                items: [
-                  BottomNavigationBarItem(icon: Icon(Icons.notes), label: context.strings.notes),
-                  BottomNavigationBarItem(icon: Icon(Icons.settings), label: context.strings.settings),
-                ],
-              );
-            },
+      child: BlocProvider.value(
+        value: serviceLocator<PermissionsBloc>()..add(CheckPermissions()),
+        child: BlocProvider(
+          create: (context) => BottomNavigationBarBloc(),
+          child: Scaffold(
+            body: BlocListener<BottomNavigationBarBloc, int>(
+              listener: (context, state) {
+                navigationShell.goBranch(state);
+              },
+              child: SafeArea(child: navigationShell)
+            ),
+            bottomNavigationBar: BlocBuilder<BottomNavigationBarBloc, int>(
+              builder: (context, currentIndex) {
+                return BottomNavigationBar(
+                  currentIndex: currentIndex,
+                  onTap: (index) {
+                    context.read<BottomNavigationBarBloc>().add(BottomNavigationBarEvent.values[index]);
+                  },
+                  items: [
+                    BottomNavigationBarItem(icon: Icon(Icons.notes), label: context.strings.notes),
+                    BottomNavigationBarItem(icon: Icon(Icons.settings), label: context.strings.settings),
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),

@@ -1,6 +1,7 @@
 
 import 'package:drift/drift.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
+import 'package:jampa_flutter/data/models/alarm.dart';
 import 'package:jampa_flutter/utils/enums/recurrence_type_enum.dart';
 import 'package:jampa_flutter/utils/enums/weekdays_enum.dart';
 import '../database.dart';
@@ -23,18 +24,21 @@ class ScheduleTable extends Table {
 class ScheduleEntity {
   final int? id;
   final int noteId;
+  NoteEntity? note;
   final DateTime? startDateTime;
   final DateTime? endDateTime;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final String? recurrenceType; // e.g., 'daily', 'weekly', 'monthly'
-  final int? recurrenceInterval; // e.g., every 2 days/weeks/months
-  final int? recurrenceDay; // e.g., day of the week for weekly recurrence
+  final String? recurrenceType;
+  final int? recurrenceInterval; // e.g., every 2 days/years
+  final int? recurrenceDay; // e.g., day of the month / days of the week
   final DateTime? recurrenceEndDate; // Optional end date for the recurrence
+  List<AlarmEntity>? alarms;
 
   ScheduleEntity({
     this.id,
     required this.noteId,
+    this.note,
     required this.startDateTime,
     this.endDateTime,
     required this.createdAt,
@@ -43,6 +47,7 @@ class ScheduleEntity {
     this.recurrenceInterval,
     this.recurrenceDay,
     this.recurrenceEndDate,
+    this.alarms
   });
 
   ScheduleTableCompanion toCompanion() {
@@ -65,6 +70,7 @@ class ScheduleEntity {
     return 'ScheduleEntity{'
         'id: $id, '
         'noteId: $noteId, '
+        'note: $note, '
         'startDateTime: $startDateTime, '
         'endDateTime: $endDateTime, '
         'createdAt: $createdAt, '
@@ -72,13 +78,15 @@ class ScheduleEntity {
         'recurrenceType: $recurrenceType, '
         'recurrenceInterval: $recurrenceInterval, '
         'recurrenceDay: $recurrenceDay, '
-        'recurrenceEndDate: $recurrenceEndDate'
+        'recurrenceEndDate: $recurrenceEndDate, '
+        'alarms: $alarms'
       '}';
   }
 
   ScheduleEntity copyWith({
     int? id,
     int? noteId,
+    NoteEntity? note,
     DateTime? startDateTime,
     DateTime? endDateTime,
     DateTime? createdAt,
@@ -87,10 +95,12 @@ class ScheduleEntity {
     int? recurrenceInterval,
     int? recurrenceDay,
     DateTime? recurrenceEndDate,
+    List<AlarmEntity>? alarms
   }) {
     return ScheduleEntity(
       id: id ?? this.id,
       noteId: noteId ?? this.noteId,
+      note: note ?? this.note,
       startDateTime: startDateTime ?? this.startDateTime,
       endDateTime: endDateTime ?? this.endDateTime,
       createdAt: createdAt ?? this.createdAt,
@@ -99,12 +109,14 @@ class ScheduleEntity {
       recurrenceInterval: recurrenceInterval ?? this.recurrenceInterval,
       recurrenceDay: recurrenceDay ?? this.recurrenceDay,
       recurrenceEndDate: recurrenceEndDate ?? this.recurrenceEndDate,
+      alarms: alarms ?? this.alarms,
     );
   }
 
   ScheduleEntity.fromJson(Map<String, dynamic> json)
       : id = json['id'] as int?,
         noteId = json['noteId'] as int,
+        note = NoteEntity.fromJson(json['note']),
         startDateTime = json['startDateTime'] != null ? DateTime.parse(json['startDateTime'] as String) : null,
         endDateTime = json['endDateTime'] != null ? DateTime.parse(json['endDateTime'] as String) : null,
         createdAt = DateTime.parse(json['createdAt'] as String),
@@ -112,7 +124,9 @@ class ScheduleEntity {
         recurrenceType = json['recurrenceType'] as String?,
         recurrenceInterval = json['recurrenceInterval'] as int?,
         recurrenceDay = json['recurrenceDay'] as int?,
-        recurrenceEndDate = json['recurrenceEndDate'] != null ? DateTime.parse(json['recurrenceEndDate'] as String) : null;
+        recurrenceEndDate = json['recurrenceEndDate'] != null ? DateTime.parse(json['recurrenceEndDate'] as String) : null,
+        alarms = AlarmEntity.fromJsonArray(json['alarms'])
+  ;
 
 
   SingleDateFormElements toSingleDateFormElements() {

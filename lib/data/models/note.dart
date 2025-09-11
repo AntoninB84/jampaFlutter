@@ -3,12 +3,7 @@ import 'package:jampa_flutter/data/database.dart';
 import 'package:jampa_flutter/data/models/category.dart';
 import 'package:jampa_flutter/data/models/note_type.dart';
 import 'package:jampa_flutter/data/models/user.dart';
-
-enum NoteStatus {
-  todo,
-  inProgress,
-  done,
-}
+import 'package:jampa_flutter/utils/enums/note_status_enum.dart';
 
 @UseRowClass(NoteEntity)
 class NoteTable extends Table {
@@ -16,7 +11,7 @@ class NoteTable extends Table {
   TextColumn get title => text().withLength(min: 1, max: 100)();
   TextColumn get content => text().withLength(min: 1)();
   BoolColumn get isImportant => boolean().withDefault(const Constant(false))();
-  TextColumn get status => text().withDefault(Constant(NoteStatus.todo.name))();
+  TextColumn get status => text().withDefault(Constant(NoteStatusEnum.todo.name))();
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
   IntColumn get noteTypeId => integer().references(NoteTypeTable, #id).nullable()();
@@ -113,7 +108,7 @@ class NoteEntity {
       title = json['title'] as String,
       content = json['content'] as String,
       isImportant = json['isImportant'] as bool? ?? false,
-      status = json['status'] as String? ?? NoteStatus.todo.name,
+      status = json['status'] as String? ?? NoteStatusEnum.todo.name,
       createdAt = DateTime.parse(json['createdAt'] as String),
       updatedAt = DateTime.parse(json['updatedAt'] as String),
       noteTypeId = json['noteTypeId'] as int?,
