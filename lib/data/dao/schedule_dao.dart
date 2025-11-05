@@ -63,7 +63,9 @@ class ScheduleDao {
     await (db.delete(db.scheduleTable)..where((tbl) => tbl.id.equals(id))).go();
   }
 
-  static Future<List<ScheduleEntity>> getAllSchedulesHavingAlarmsForToBeDoneNotes() async {
+  static Future<List<ScheduleEntity>> getAllSchedulesHavingAlarmsForToBeDoneNotes({
+    required List<int> alarmIdsToExclude
+  }) async {
     AppDatabase db = AppDatabase.instance();
     final query = db.select(db.scheduleTable).join([
       innerJoin(
@@ -77,6 +79,7 @@ class ScheduleDao {
     ])
       ..where(db.scheduleTable.recurrenceEndDate.isNull() | db.scheduleTable.recurrenceEndDate.isBiggerThanValue(DateTime.now()))
       ..where(db.alarmTable.id.isNotNull())
+      ..where(db.noteTable.id.isNotIn(alarmIdsToExclude))
       ..where(db.noteTable.status.isNotIn([NoteStatusEnum.done.name]));
 
     final rows = await query.get();

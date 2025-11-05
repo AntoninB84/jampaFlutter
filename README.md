@@ -10,6 +10,14 @@
 
 If ```dart run build_runner build``` does not work, try running: ```flutter gen-l10n```
 
+## DontKillMyApp
+
+To ensure the app works properly in the background on certain devices (especially some Xiaomi, OnePlus, Oppo, Vivo, Realme, Huawei, Samsung models), you may need to adjust specific settings. 
+Please refer to the [DontKillMyApp](https://dontkillmyapp.com/) website for detailed instructions on how to configure your device to allow the app to run in the background without being killed by the system.
+
+Personal note:
+- Options -> Apps -> Permissions -> Background autostart -> Enable for the app
+- AppInfo -> Battery -> No restrictions
 
 ## Logic
 

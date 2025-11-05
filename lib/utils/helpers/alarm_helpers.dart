@@ -3,12 +3,24 @@ import 'package:jampa_flutter/data/models/schedule.dart';
 
 import '../enums/alarm_offset_type_enum.dart';
 
+class AlarmToSetup {
+  final ScheduleEntity schedule;
+  final AlarmEntity alarm;
+  final DateTime alarmDateTime;
+
+  AlarmToSetup({
+    required this.schedule,
+    required this.alarm,
+    required this.alarmDateTime,
+  });
+}
+
 class AlarmHelpers {
 
-  static Future<List<DateTime>> calculateAlarmDateFromSchedule(List<ScheduleEntity> schedules) async {
+  static Future<List<AlarmToSetup>> calculateAlarmDateFromSchedule(List<ScheduleEntity> schedules) async {
     DateTime now = DateTime.now();
     DateTime upperLimit = now.add(Duration(days: 2)); //Consider alarms only within the next 2 days
-    List<DateTime> alarmDates = [];
+    List<AlarmToSetup> alarmDates = [];
     for(final schedule in schedules) {
       if(schedule.alarms == null || schedule.alarms!.isEmpty) continue;
       for(final alarm in schedule.alarms!) {
@@ -31,7 +43,11 @@ class AlarmHelpers {
             break;
         }
         if(alarmDate.isAfter(now) && alarmDate.isBefore(upperLimit)) {
-          alarmDates.add(alarmDate);
+          alarmDates.add(AlarmToSetup(
+            schedule: schedule,
+            alarm: alarm,
+            alarmDateTime: alarmDate,
+          ));
         }
       }
     }
@@ -124,5 +140,27 @@ class AlarmHelpers {
       case AlarmOffsetType.days:
         return Duration(days: alarm.offsetValue);
     }
+  }
+
+  static Map<String, String> extractPayloadValues(String payload){
+    Map<String, String> values = {};
+    List<String> parts = payload.split("?");
+    for(final part in parts){
+      if(part.contains("=")){
+        List<String> keyValue = part.split("=");
+        if(keyValue.length == 2){
+          values[keyValue[0]] = keyValue[1];
+        }
+      }
+    }
+    return values;
+  }
+
+  static int extractObjectIdFromPayload(String payload){
+    Map<String, String> values = extractPayloadValues(payload);
+    if(values.containsKey("objectId")){
+      return int.tryParse(values["objectId"] ?? "") ?? 0;
+    }
+    return 0;
   }
 }
