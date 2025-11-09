@@ -5,12 +5,12 @@ class SaveRecurrentDateState extends Equatable {
     this.alreadyInitialized = false,
     this.noteId,
     this.isSavingPersistentDate = false,
+    this.scheduleId,
     this.initialRecurrentDateFormElementIndex,
     required this.newRecurrentDateFormElements,
     this.intervalDaysValidator = const PositiveValueValidator.pure(),
     this.intervalYearsValidator = const PositiveValueValidator.pure(),
     this.monthDateValidator = const MonthDayValidator.pure(),
-    this.isValidRecurrenceType = true,
     this.isValidStartDate = true,
     this.isValidEndDate = true,
     this.isValidEndRecurrenceDate = true,
@@ -21,6 +21,7 @@ class SaveRecurrentDateState extends Equatable {
 
   // Whether saving to a persistent note or just in-memory
   final bool? isSavingPersistentDate;
+  final int? scheduleId;
   // If saving to a persistent note, this holds the note ID
   final int? noteId;
   // If editing an existing single date (persistent or in-memory)
@@ -33,7 +34,6 @@ class SaveRecurrentDateState extends Equatable {
   final PositiveValueValidator intervalYearsValidator;
   final MonthDayValidator monthDateValidator;
 
-  final bool isValidRecurrenceType;
   final bool isValidStartDate;
   final bool isValidEndDate;
   final bool isValidEndRecurrenceDate;
@@ -43,12 +43,12 @@ class SaveRecurrentDateState extends Equatable {
     bool? alreadyInitialized,
     int? noteId,
     bool? isSavingPersistentDate,
+    int? scheduleId,
     int? initialRecurrentDateFormElementIndex,
     RecurrenceFormElements? newRecurrentDateFormElements,
     PositiveValueValidator? intervalDaysValidator,
     PositiveValueValidator? intervalYearsValidator,
     MonthDayValidator? monthDateValidator,
-    bool? isValidRecurrenceType,
     bool? isValidStartDate,
     bool? isValidEndDate,
     bool? isValidEndRecurrenceDate,
@@ -58,12 +58,12 @@ class SaveRecurrentDateState extends Equatable {
       alreadyInitialized: alreadyInitialized ?? this.alreadyInitialized,
       noteId: noteId ?? this.noteId,
       isSavingPersistentDate: isSavingPersistentDate ?? this.isSavingPersistentDate,
+      scheduleId: scheduleId ?? this.scheduleId,
       initialRecurrentDateFormElementIndex: initialRecurrentDateFormElementIndex ?? this.initialRecurrentDateFormElementIndex,
       newRecurrentDateFormElements: newRecurrentDateFormElements ?? this.newRecurrentDateFormElements,
       intervalDaysValidator: intervalDaysValidator ?? this.intervalDaysValidator,
       intervalYearsValidator: intervalYearsValidator ?? this.intervalYearsValidator,
       monthDateValidator: monthDateValidator ?? this.monthDateValidator,
-      isValidRecurrenceType: isValidRecurrenceType ?? this.isValidRecurrenceType,
       isValidStartDate: isValidStartDate ?? this.isValidStartDate,
       isValidEndDate: isValidEndDate ?? this.isValidEndDate,
       isValidEndRecurrenceDate: isValidEndRecurrenceDate ?? this.isValidEndRecurrenceDate,
@@ -76,6 +76,7 @@ class SaveRecurrentDateState extends Equatable {
       alreadyInitialized,
       noteId,
       isSavingPersistentDate,
+      scheduleId,
       initialRecurrentDateFormElementIndex,
       newRecurrentDateFormElements,
       intervalDaysValidator,
@@ -117,6 +118,10 @@ class SaveRecurrentDateState extends Equatable {
         return !end.isBefore(start);
       }
       return true;
+    }
+
+    bool get isValidRecurrenceType {
+      return newRecurrentDateFormElements.selectedRecurrenceType != null;
     }
 
     bool get isRecurrenceValueValid {

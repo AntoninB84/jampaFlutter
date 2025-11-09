@@ -9,10 +9,14 @@ import 'package:jampa_flutter/data/models/note.dart';
 import 'package:jampa_flutter/data/models/note_type.dart';
 import 'package:jampa_flutter/repository/categories_repository.dart';
 import 'package:jampa_flutter/repository/schedule_repository.dart';
+import 'package:jampa_flutter/utils/extensions/datetime_extension.dart';
 import 'package:jampa_flutter/utils/forms/content_validator.dart';
 import 'package:jampa_flutter/utils/forms/name_validator.dart';
 import 'package:jampa_flutter/repository/notes_repository.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
+
+import '../../../data/models/schedule.dart';
+import '../../../utils/helpers/alarm_helpers.dart';
 
 part 'create_note_state.dart';
 
@@ -174,13 +178,22 @@ class CreateNoteCubit extends Cubit<CreateNoteState> {
 
       // Save the note to persistent storage
       await notesRepository.saveNote(note)
-      .then((insertedNote) {
+      .then((insertedNote) async  {
         // After the note is saved, save the associated schedule elements
-        scheduleRepository.saveDateFormElements(
+        List<ScheduleEntity> scheduleEntities = await scheduleRepository.saveDateFormElements(
             singleFormElementsList: state.selectedSingleDateElements,
             recurrenceFormElementsList: state.selectedRecurrences,
             noteId: insertedNote.id!
         );
+
+        // Check and set alarm notifications if needed
+        List<AlarmToSetup> alarmsToSetup = await AlarmHelpers.calculateAlarmDateFromSchedule(scheduleEntities);
+        if(alarmsToSetup.isNotEmpty){
+          if(alarmsToSetup.first.alarmDateTime.isBetween(DateTime.now(), DateTime.now().add(Duration(hours: 12)))){
+            await AlarmHelpers.setAlarmNotification(alarmsToSetup[0]);
+          }
+        }
+
         // If successful, emit a state indicating success
         emit(state.copyWith(isSuccess: true, isLoading: false));
       })

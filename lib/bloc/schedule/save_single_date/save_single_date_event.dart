@@ -10,12 +10,14 @@ final class InitializeWithData extends SaveSingleDateEvent {
     required this.singleDateFormElements,
     this.initialElementIndex,
     this.isSavingPersistentDate = false,
+    this.scheduleId,
     this.noteId
   });
 
   final SingleDateFormElements? singleDateFormElements;
   final int? initialElementIndex;
   final bool isSavingPersistentDate;
+  final int? scheduleId;
   final int? noteId;
 
   @override
@@ -23,6 +25,7 @@ final class InitializeWithData extends SaveSingleDateEvent {
     singleDateFormElements,
     initialElementIndex,
     isSavingPersistentDate,
+    scheduleId,
     noteId
   ];
 }

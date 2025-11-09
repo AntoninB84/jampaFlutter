@@ -1,7 +1,15 @@
+import 'package:alarm/alarm.dart';
+import 'package:alarm/model/alarm_settings.dart';
+import 'package:alarm/model/notification_settings.dart';
+import 'package:alarm/model/volume_settings.dart';
 import 'package:jampa_flutter/data/models/alarm.dart';
 import 'package:jampa_flutter/data/models/schedule.dart';
+import 'package:jampa_flutter/utils/enums/object_type_enum.dart';
+import 'package:jampa_flutter/utils/helpers/utils.dart';
 
 import '../enums/alarm_offset_type_enum.dart';
+import '../local_notification_manager.dart';
+import 'notification_helpers.dart';
 
 class AlarmToSetup {
   final ScheduleEntity schedule;
@@ -15,8 +23,9 @@ class AlarmToSetup {
   });
 }
 
-class AlarmHelpers {
+abstract class AlarmHelpers {
 
+  //region Alarm Date Calculations
   static Future<List<AlarmToSetup>> calculateAlarmDateFromSchedule(List<ScheduleEntity> schedules) async {
     DateTime now = DateTime.now();
     DateTime upperLimit = now.add(Duration(days: 2)); //Consider alarms only within the next 2 days
@@ -132,7 +141,7 @@ class AlarmHelpers {
   }
 
   static Duration getOffsetDuration(AlarmEntity alarm) {
-    switch(alarm.alarmOffsetType){
+    switch(alarm.offsetType){
       case AlarmOffsetType.minutes:
         return Duration(minutes: alarm.offsetValue);
       case AlarmOffsetType.hours:
@@ -141,26 +150,57 @@ class AlarmHelpers {
         return Duration(days: alarm.offsetValue);
     }
   }
+  //endregion
 
-  static Map<String, String> extractPayloadValues(String payload){
-    Map<String, String> values = {};
-    List<String> parts = payload.split("?");
-    for(final part in parts){
-      if(part.contains("=")){
-        List<String> keyValue = part.split("=");
-        if(keyValue.length == 2){
-          values[keyValue[0]] = keyValue[1];
-        }
-      }
+  static Future<void> setAlarmNotification(AlarmToSetup alarmToSetup) async {
+    print(alarmToSetup.alarmDateTime);
+    if(alarmToSetup.alarm.isSilent){
+      // Schedule silent notification
+      await Utils.logMessage("Scheduling silent notification for alarm at ${alarmToSetup.alarmDateTime} for note id ${alarmToSetup.schedule.noteId}");
+      await LocalNotificationManager().scheduleNotification(
+          alarmToSetup.schedule.note?.title,
+          "",
+          NotificationData(
+              notificationType: NotificationType.reminder,
+              objectId: alarmToSetup.alarm.id.toString(),
+              objectType: ObjectTypeEnum.alarmEntity.toString(),
+              scheduledDate: alarmToSetup.alarmDateTime
+          )
+      );
+    }else{
+      // Schedule actual alarm
+      await Utils.logMessage("Scheduling alarm at ${alarmToSetup.alarmDateTime} for note id ${alarmToSetup.schedule.noteId}");
+      final alarmSettings = AlarmSettings(
+        id: alarmToSetup.alarm.id ?? alarmToSetup.hashCode,
+        dateTime: alarmToSetup.alarmDateTime,
+        assetAudioPath: 'assets/alarm.mp3',
+        loopAudio: true,
+        vibrate: true,
+        androidFullScreenIntent: true,
+        volumeSettings: VolumeSettings.fade(
+          volume: 0.8,
+          fadeDuration: Duration(seconds: 5),
+          volumeEnforced: true,
+        ),
+        notificationSettings: NotificationSettings(
+          title: alarmToSetup.schedule.note?.title ?? 'Alarm',
+          body: alarmToSetup.schedule.startDateTime?.toString() ?? '',
+          stopButton: 'Stop',
+        ),
+        payload: "?objectId=${alarmToSetup.alarm.id}"
+            "?objectType=${ObjectTypeEnum.alarmEntity}",
+      );
+      await Alarm.set(alarmSettings: alarmSettings);
     }
-    return values;
   }
 
-  static int extractObjectIdFromPayload(String payload){
-    Map<String, String> values = extractPayloadValues(payload);
-    if(values.containsKey("objectId")){
-      return int.tryParse(values["objectId"] ?? "") ?? 0;
+  static Future<void> cancelAlarmNotification(NotificationPayload notificationPayload) async {
+    await Utils.logMessage("Cancelling alarm notification for alarm id ${notificationPayload.objectId}");
+    if(notificationPayload.alarmId != null){
+      await Alarm.stop(notificationPayload.alarmId!);
     }
-    return 0;
+    if(notificationPayload.notificationId != null){
+      await LocalNotificationManager().removeNotification(notificationPayload.notificationId!);
+    }
   }
 }

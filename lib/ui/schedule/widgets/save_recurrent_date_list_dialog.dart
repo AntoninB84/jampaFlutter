@@ -91,7 +91,7 @@ class _SaveRecurrentDateListDialogState extends State<SaveRecurrentDateListDialo
                                   context.pushNamed(widget.isSavingPersistentData
                                       ? 'SavePersistentRecurrentDate'
                                       : 'SaveMemoryRecurrentDate',
-                                    extra: {'dateIndex': index}
+                                    extra: {'dateIndex': index, 'scheduleId': recurrence.scheduleId}
                                   );
                                 },
                               ),

@@ -11,7 +11,7 @@ class NoteTable extends Table {
   TextColumn get title => text().withLength(min: 1, max: 100)();
   TextColumn get content => text().withLength(min: 1)();
   BoolColumn get isImportant => boolean().withDefault(const Constant(false))();
-  TextColumn get status => text().withDefault(Constant(NoteStatusEnum.todo.name))();
+  TextColumn get status => textEnum<NoteStatusEnum>().withDefault(Constant(NoteStatusEnum.todo.name))();
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
   IntColumn get noteTypeId => integer().references(NoteTypeTable, #id).nullable()();
@@ -23,7 +23,7 @@ class NoteEntity {
   String title;
   String content;
   bool isImportant;
-  String status;
+  NoteStatusEnum status;
   DateTime createdAt;
   DateTime updatedAt;
   int? noteTypeId;
@@ -36,7 +36,7 @@ class NoteEntity {
     required this.title,
     required this.content,
     this.isImportant = false,
-    this.status = 'todo',
+    this.status = NoteStatusEnum.todo,
     required this.createdAt,
     required this.updatedAt,
     this.userId,
@@ -80,7 +80,7 @@ class NoteEntity {
     String? title,
     String? content,
     bool? isImportant,
-    String? status,
+    NoteStatusEnum? status,
     DateTime? createdAt,
     DateTime? updatedAt,
     int? noteTypeId,
@@ -108,7 +108,9 @@ class NoteEntity {
       title = json['title'] as String,
       content = json['content'] as String,
       isImportant = json['isImportant'] as bool? ?? false,
-      status = json['status'] as String? ?? NoteStatusEnum.todo.name,
+      status = NoteStatusEnum.values.firstWhere(
+              (e) => e.name == (json['status'] as String?),
+          orElse: () => NoteStatusEnum.todo),
       createdAt = DateTime.parse(json['createdAt'] as String),
       updatedAt = DateTime.parse(json['updatedAt'] as String),
       noteTypeId = json['noteTypeId'] as int?,

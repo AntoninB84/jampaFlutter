@@ -8,9 +8,10 @@ import 'package:jampa_flutter/ui/schedule/save_recurrent_date/save_recurrent_dat
 import '../../../utils/service_locator.dart';
 
 class SavePersistentRecurrentDatePage extends StatelessWidget {
-  const SavePersistentRecurrentDatePage({super.key, this.recurrentDateIndex});
+  const SavePersistentRecurrentDatePage({super.key, this.recurrentDateIndex, this.scheduleId});
 
   final int? recurrentDateIndex;
+  final int? scheduleId;
 
   @override
   Widget build(BuildContext widgetContext) {
@@ -23,6 +24,7 @@ class SavePersistentRecurrentDatePage extends StatelessWidget {
               value: serviceLocator<SaveRecurrentDateBloc>()..add(InitializeWithData(
                   noteId: context.read<EditNoteBloc>().state.note?.id,
                   isSavingPersistentDate: true,
+                  scheduleId: scheduleId,
                   recurrentDateFormElements: recurrentDateIndex != null
                     ? context.read<EditNoteBloc>().state.recurrentDates
                       .elementAtOrNull(recurrentDateIndex!)

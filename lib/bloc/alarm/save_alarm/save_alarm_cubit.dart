@@ -1,10 +1,17 @@
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:jampa_flutter/data/models/schedule.dart';
 import 'package:jampa_flutter/repository/alarm_repository.dart';
+import 'package:jampa_flutter/utils/extensions/datetime_extension.dart';
 import 'package:jampa_flutter/utils/forms/positive_number_validator.dart';
+import 'package:jampa_flutter/utils/helpers/alarm_helpers.dart';
+import 'package:jampa_flutter/utils/helpers/notification_helpers.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
+import '../../../data/models/alarm.dart';
+import '../../../repository/schedule_repository.dart';
 import '../../../utils/enums/alarm_offset_type_enum.dart';
 import '../../notes/create/create_note_form_helpers.dart';
 
@@ -25,6 +32,7 @@ class SaveAlarmCubit extends Cubit<SaveAlarmState> {
   ));
 
   final AlarmRepository alarmRepository = serviceLocator<AlarmRepository>();
+  final ScheduleRepository scheduleRepository = serviceLocator<ScheduleRepository>();
 
   void initializeWithData({
     AlarmFormElements? alarmFormElements,
@@ -90,10 +98,35 @@ class SaveAlarmCubit extends Cubit<SaveAlarmState> {
             createdAt: DateTime.now(),
           );
         }
-          await alarmRepository.saveAlarmFormElement(
-              formElements: newElement,
-              scheduleId: newElement.scheduleId!
-          );
+        // Save the persistent alarm
+        AlarmEntity newAlarm = await alarmRepository.saveAlarmFormElement(
+            formElements: newElement,
+            scheduleId: newElement.scheduleId!
+        );
+
+        // Check and set an alarm notification if needed
+        ScheduleEntity? parentSchedule = await scheduleRepository.getScheduleById(newElement.scheduleId!);
+        if(parentSchedule != null){
+          // Set the alarm as the schedule's alarms
+          parentSchedule.alarms = [newAlarm];
+
+          // Check if alarm already exists in pending notifications
+          List<NotificationPayload> pendingPayloads = await NotificationHelpers.fetchPendingPayloads();
+          NotificationPayload? alreadyScheduled = pendingPayloads.firstWhereOrNull((payload) => payload.objectId == newAlarm.id);
+          // Cancel existing alarm notification if found
+          if(alreadyScheduled != null){
+            await AlarmHelpers.cancelAlarmNotification(alreadyScheduled);
+          }
+
+          // Calculate the alarm notification datetime
+          List<AlarmToSetup> alarmsToSetup = await AlarmHelpers.calculateAlarmDateFromSchedule([parentSchedule]);
+          if(alarmsToSetup.isNotEmpty){
+            if(alarmsToSetup.first.alarmDateTime.isBetween(DateTime.now(), DateTime.now().add(Duration(hours: 12)))){
+              // Set the new alarm notification
+              await AlarmHelpers.setAlarmNotification(alarmsToSetup[0]);
+            }
+          }
+        }
       }
 
       emit(state.copyWith(

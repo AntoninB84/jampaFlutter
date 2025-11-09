@@ -1,4 +1,5 @@
 
+import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
 import 'package:jampa_flutter/data/models/alarm.dart';
@@ -15,7 +16,7 @@ class ScheduleTable extends Table {
   DateTimeColumn get endDateTime => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
-  TextColumn get recurrenceType => text().nullable()();
+  TextColumn get recurrenceType => textEnum<RecurrenceType>().nullable()();
   IntColumn get recurrenceInterval => integer().nullable()();
   IntColumn get recurrenceDay => integer().nullable()();
   DateTimeColumn get recurrenceEndDate => dateTime().nullable()();
@@ -29,7 +30,7 @@ class ScheduleEntity {
   final DateTime? endDateTime;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final String? recurrenceType;
+  final RecurrenceType? recurrenceType;
   final int? recurrenceInterval; // e.g., every 2 days/years
   final int? recurrenceDay; // e.g., day of the month / days of the week
   final DateTime? recurrenceEndDate; // Optional end date for the recurrence
@@ -91,7 +92,7 @@ class ScheduleEntity {
     DateTime? endDateTime,
     DateTime? createdAt,
     DateTime? updatedAt,
-    String? recurrenceType,
+    RecurrenceType? recurrenceType,
     int? recurrenceInterval,
     int? recurrenceDay,
     DateTime? recurrenceEndDate,
@@ -121,7 +122,8 @@ class ScheduleEntity {
         endDateTime = json['endDateTime'] != null ? DateTime.parse(json['endDateTime'] as String) : null,
         createdAt = DateTime.parse(json['createdAt'] as String),
         updatedAt = DateTime.parse(json['updatedAt'] as String),
-        recurrenceType = json['recurrenceType'] as String?,
+        recurrenceType = RecurrenceType.values.firstWhereOrNull(
+                (e) => e.name == (json['recurrencyType'] as String?)),
         recurrenceInterval = json['recurrenceInterval'] as int?,
         recurrenceDay = json['recurrenceDay'] as int?,
         recurrenceEndDate = json['recurrenceEndDate'] != null ? DateTime.parse(json['recurrenceEndDate'] as String) : null,
@@ -157,7 +159,7 @@ class ScheduleEntity {
     int? recurrenceMonthDate;
     List<WeekdaysEnum> recurrenceWeekDays = [];
 
-    switch(RecurrenceType.fromString(recurrenceType ?? '')){
+    switch(recurrenceType){
       case RecurrenceType.intervalDays: {
         recurrenceDaysInterval = recurrenceInterval;
         break;
@@ -191,7 +193,7 @@ class ScheduleEntity {
       selectedStartDateTime: startDateTime,
       selectedEndDateTime: endDateTime,
       createdAt: createdAt,
-      selectedRecurrenceType: recurrenceType != null ? RecurrenceType.fromString(recurrenceType!) : null,
+      selectedRecurrenceType: recurrenceType,
       selectedRecurrenceEndDate: recurrenceEndDate,
       selectedRecurrenceDaysInterval: recurrenceDaysInterval,
       selectedRecurrenceYearsInterval: recurrenceYearsInterval,
@@ -202,18 +204,18 @@ class ScheduleEntity {
 
   static ScheduleEntity fromRecurrenceFormElements(RecurrenceFormElements elements, int noteId) {
 
-    String? recurrenceType;
+    RecurrenceType? recurrenceType;
     int? recurrenceInterval;
     int? recurrenceDay;
 
     switch(elements.selectedRecurrenceType){
       case RecurrenceType.intervalDays: {
-        recurrenceType = RecurrenceType.intervalDays.name;
+        recurrenceType = RecurrenceType.intervalDays;
         recurrenceInterval = elements.selectedRecurrenceDaysInterval;
         break;
       }
       case RecurrenceType.dayBasedWeekly: {
-        recurrenceType = RecurrenceType.dayBasedWeekly.name;
+        recurrenceType = RecurrenceType.dayBasedWeekly;
         if(elements.selectedRecurrenceWeekdays?.isNotEmpty ?? false){
           // Join the list of integers into a single integer (e.g., [1,3,5] -> 135)
           recurrenceDay = int.parse(elements.selectedRecurrenceWeekdays!
@@ -223,12 +225,12 @@ class ScheduleEntity {
         break;
       }
       case RecurrenceType.dayBasedMonthly: {
-        recurrenceType = RecurrenceType.dayBasedMonthly.name;
+        recurrenceType = RecurrenceType.dayBasedMonthly;
         recurrenceDay = elements.selectedRecurrenceMonthDate;
         break;
       }
       case RecurrenceType.intervalYears: {
-        recurrenceType = RecurrenceType.intervalYears.name;
+        recurrenceType = RecurrenceType.intervalYears;
         recurrenceInterval = elements.selectedRecurrenceYearsInterval;
         break;
       }

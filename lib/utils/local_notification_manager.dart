@@ -99,7 +99,9 @@ class LocalNotificationManager {
               styleInformation: const BigTextStyleInformation(''),
             ),
           ),
-          payload: "?notificationType=${notificationData.notificationType.name}?objectId=${notificationData.objectId}");
+          payload: "?notificationType=${notificationData.notificationType.name}"
+              "?objectId=${notificationData.objectId}"
+              "?objectType=${notificationData.objectType}");
     }
     // ios
     // else if (Platform.isIOS) {
@@ -146,7 +148,9 @@ class LocalNotificationManager {
             ),
           ),
           androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-          payload: "?notificationType=${notificationData.notificationType.name}?objectId=${notificationData.objectId}",
+          payload: "?notificationType=${notificationData.notificationType.name}"
+              "?objectId=${notificationData.objectId}"
+              "?objectType=${notificationData.objectType}",
       );
     }
   }
@@ -161,11 +165,13 @@ class LocalNotificationManager {
 class NotificationData {
   final NotificationType notificationType;
   final String? objectId;
+  final String? objectType;
   final DateTime? scheduledDate;
 
   NotificationData({
     required this.notificationType,
     this.objectId,
+    this.objectType,
     this.scheduledDate,
   });
 }

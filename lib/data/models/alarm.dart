@@ -10,7 +10,7 @@ class AlarmTable extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get scheduleId => integer().customConstraint('NOT NULL REFERENCES schedule_table(id) ON DELETE CASCADE')();
   IntColumn get offsetValue => integer()();
-  TextColumn get offsetType => text()();
+  TextColumn get offsetType => textEnum<AlarmOffsetType>()();
   BoolColumn get isSilent => boolean().withDefault(const Constant(true))();
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
@@ -20,7 +20,7 @@ class AlarmEntity {
   final int? id;
   final int scheduleId;
   final int offsetValue;
-  final AlarmOffsetType alarmOffsetType;
+  final AlarmOffsetType offsetType;
   final bool isSilent; // true if the alarm should be silent
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -29,7 +29,7 @@ class AlarmEntity {
     this.id,
     required this.scheduleId,
     required this.offsetValue,
-    this.alarmOffsetType = AlarmOffsetType.minutes,
+    required this.offsetType,
     this.isSilent = true,
     required this.createdAt,
     required this.updatedAt,
@@ -40,7 +40,7 @@ class AlarmEntity {
       id: id == null ? Value.absent() : Value(id!),
       scheduleId: Value(scheduleId),
       offsetValue: Value(offsetValue),
-      offsetType: Value(alarmOffsetType.name),
+      offsetType: Value(offsetType),
       isSilent: Value(isSilent),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
@@ -53,7 +53,7 @@ class AlarmEntity {
         'id: $id, '
         'scheduleId: $scheduleId, '
         'offsetValue: $offsetValue, '
-        'alarmOffsetType: $alarmOffsetType, '
+        'alarmOffsetType: $offsetType, '
         'isSilent: $isSilent, '
         'createdAt: $createdAt, '
         'updatedAt: $updatedAt'
@@ -73,7 +73,7 @@ class AlarmEntity {
       id: id ?? this.id,
       scheduleId: scheduleId ?? this.scheduleId,
       offsetValue: offsetValue ?? this.offsetValue,
-      alarmOffsetType: alarmOffsetType ?? this.alarmOffsetType,
+      offsetType: alarmOffsetType ?? this.offsetType,
       isSilent: isSilent ?? this.isSilent,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -84,7 +84,7 @@ class AlarmEntity {
       : id = json['id'] as int?,
         scheduleId = json['scheduleId'] as int,
         offsetValue = json['offsetValue'] as int? ?? 0,
-        alarmOffsetType = AlarmOffsetType.values.firstWhere(
+        offsetType = AlarmOffsetType.values.firstWhere(
             (e) => e.name == (json['offsetType'] as String?),
             orElse: () => AlarmOffsetType.minutes),
         isSilent = json['isSilent'] as bool? ?? true,
@@ -101,7 +101,7 @@ class AlarmEntity {
       alarmId: id,
       createdAt: createdAt,
       selectedOffsetNumber: offsetValue,
-      selectedOffsetType: alarmOffsetType,
+      selectedOffsetType: offsetType,
       isSilentAlarm: isSilent,
     );
   }
@@ -111,7 +111,7 @@ class AlarmEntity {
       id: elements.alarmId,
       scheduleId: scheduleId,
       offsetValue: elements.selectedOffsetNumber,
-      alarmOffsetType: elements.selectedOffsetType ?? AlarmOffsetType.minutes,
+      offsetType: elements.selectedOffsetType ?? AlarmOffsetType.minutes,
       isSilent: elements.isSilentAlarm,
       createdAt: elements.createdAt ?? DateTime.now(),
       updatedAt: DateTime.now(),

@@ -46,7 +46,7 @@ class InitialData {
       startDateTime: DateTime.now().add(const Duration(days: 1)),
       endDateTime: DateTime.now().add(const Duration(days: 1, hours: 1)),
       recurrenceEndDate: DateTime.now().add(const Duration(days: 10)),
-      recurrenceType: RecurrenceType.intervalDays.name,
+      recurrenceType: RecurrenceType.intervalDays,
       recurrenceInterval: 1,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now()
@@ -58,7 +58,7 @@ class InitialData {
         startDateTime: DateTime.now().add(const Duration(days: 3)),
         endDateTime: DateTime.now().add(const Duration(days: 3, hours: 1)),
         recurrenceEndDate: null,
-        recurrenceType: RecurrenceType.dayBasedMonthly.name,
+        recurrenceType: RecurrenceType.dayBasedMonthly,
         recurrenceDay: 18,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now()
@@ -80,35 +80,35 @@ class InitialData {
   static List<AlarmEntity> alarms = [
     AlarmEntity(
         scheduleId: 1,
-        alarmOffsetType: AlarmOffsetType.hours,
+        offsetType: AlarmOffsetType.hours,
         offsetValue: 2,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now()
     ),
     AlarmEntity(
         scheduleId: 1,
-        alarmOffsetType: AlarmOffsetType.hours,
+        offsetType: AlarmOffsetType.hours,
         offsetValue: 1,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now()
     ),
     AlarmEntity(
         scheduleId: 1,
-        alarmOffsetType: AlarmOffsetType.minutes,
+        offsetType: AlarmOffsetType.minutes,
         offsetValue: 30,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now()
     ),
     AlarmEntity(
         scheduleId: 2,
-        alarmOffsetType: AlarmOffsetType.days,
+        offsetType: AlarmOffsetType.days,
         offsetValue: 2,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now()
     ),
     AlarmEntity(
         scheduleId: 3,
-        alarmOffsetType: AlarmOffsetType.days,
+        offsetType: AlarmOffsetType.days,
         offsetValue: 1,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now()

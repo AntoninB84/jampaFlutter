@@ -116,6 +116,7 @@ final GoRouter mainRouter = GoRouter(
                             path: AppRoutes.savePersistentSingleDate,
                             builder: (context, state) => SavePersistentSingleDatePage(
                               singleDateIndex: (state.extra as Map?)?['dateIndex'] as int?,
+                              scheduleId: (state.extra as Map?)?['scheduleId'] as int?,
                             ),
                             routes: [
                               GoRoute(
@@ -132,6 +133,7 @@ final GoRouter mainRouter = GoRouter(
                             path: AppRoutes.savePersistentRecurrentDate,
                             builder: (context, state) => SavePersistentRecurrentDatePage(
                               recurrentDateIndex: (state.extra as Map?)?['dateIndex'] as int?,
+                              scheduleId: (state.extra as Map?)?['scheduleId'] as int?,
                             ),
                             routes: [
                               GoRoute(

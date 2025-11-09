@@ -18,12 +18,12 @@ class AlarmRepository {
     await AlarmDao.saveListOfAlarms(alarms);
   }
 
-  Future<void> saveAlarmFormElement({
+  Future<AlarmEntity> saveAlarmFormElement({
     required AlarmFormElements formElements,
     required int scheduleId
   }) async {
     final alarm = AlarmEntity.fromAlarmFormElements(formElements, scheduleId);
-    await AlarmDao.saveSingleAlarm(alarm);
+    return await AlarmDao.saveSingleAlarm(alarm);
   }
 
   Future<AlarmEntity> saveAlarm(AlarmEntity alarm) async {

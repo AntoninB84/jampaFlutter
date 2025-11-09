@@ -554,16 +554,16 @@ class $NoteTableTable extends NoteTable
     ),
     defaultValue: const Constant(false),
   );
-  static const VerificationMeta _statusMeta = const VerificationMeta('status');
   @override
-  late final GeneratedColumn<String> status = GeneratedColumn<String>(
-    'status',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    defaultValue: Constant(NoteStatusEnum.todo.name),
-  );
+  late final GeneratedColumnWithTypeConverter<NoteStatusEnum, String> status =
+      GeneratedColumn<String>(
+        'status',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: Constant(NoteStatusEnum.todo.name),
+      ).withConverter<NoteStatusEnum>($NoteTableTable.$converterstatus);
   static const VerificationMeta _createdAtMeta = const VerificationMeta(
     'createdAt',
   );
@@ -666,12 +666,6 @@ class $NoteTableTable extends NoteTable
         ),
       );
     }
-    if (data.containsKey('status')) {
-      context.handle(
-        _statusMeta,
-        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
-      );
-    }
     if (data.containsKey('created_at')) {
       context.handle(
         _createdAtMeta,
@@ -724,10 +718,12 @@ class $NoteTableTable extends NoteTable
         DriftSqlType.bool,
         data['${effectivePrefix}is_important'],
       )!,
-      status: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}status'],
-      )!,
+      status: $NoteTableTable.$converterstatus.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}status'],
+        )!,
+      ),
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
@@ -751,6 +747,9 @@ class $NoteTableTable extends NoteTable
   $NoteTableTable createAlias(String alias) {
     return $NoteTableTable(attachedDatabase, alias);
   }
+
+  static JsonTypeConverter2<NoteStatusEnum, String, String> $converterstatus =
+      const EnumNameConverter<NoteStatusEnum>(NoteStatusEnum.values);
 }
 
 class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
@@ -758,7 +757,7 @@ class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
   final Value<String> title;
   final Value<String> content;
   final Value<bool> isImportant;
-  final Value<String> status;
+  final Value<NoteStatusEnum> status;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
   final Value<int?> noteTypeId;
@@ -815,7 +814,7 @@ class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
     Value<String>? title,
     Value<String>? content,
     Value<bool>? isImportant,
-    Value<String>? status,
+    Value<NoteStatusEnum>? status,
     Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
     Value<int?>? noteTypeId,
@@ -850,7 +849,9 @@ class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
       map['is_important'] = Variable<bool>(isImportant.value);
     }
     if (status.present) {
-      map['status'] = Variable<String>(status.value);
+      map['status'] = Variable<String>(
+        $NoteTableTable.$converterstatus.toSql(status.value),
+      );
     }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
@@ -1542,17 +1543,18 @@ class $ScheduleTableTable extends ScheduleTable
     requiredDuringInsert: false,
     defaultValue: currentDateAndTime,
   );
-  static const VerificationMeta _recurrenceTypeMeta = const VerificationMeta(
-    'recurrenceType',
-  );
   @override
-  late final GeneratedColumn<String> recurrenceType = GeneratedColumn<String>(
-    'recurrence_type',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
+  late final GeneratedColumnWithTypeConverter<RecurrenceType?, String>
+  recurrenceType =
+      GeneratedColumn<String>(
+        'recurrence_type',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+      ).withConverter<RecurrenceType?>(
+        $ScheduleTableTable.$converterrecurrenceTypen,
+      );
   static const VerificationMeta _recurrenceIntervalMeta =
       const VerificationMeta('recurrenceInterval');
   @override
@@ -1652,15 +1654,6 @@ class $ScheduleTableTable extends ScheduleTable
         updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
       );
     }
-    if (data.containsKey('recurrence_type')) {
-      context.handle(
-        _recurrenceTypeMeta,
-        recurrenceType.isAcceptableOrUnknown(
-          data['recurrence_type']!,
-          _recurrenceTypeMeta,
-        ),
-      );
-    }
     if (data.containsKey('recurrence_interval')) {
       context.handle(
         _recurrenceIntervalMeta,
@@ -1721,9 +1714,11 @@ class $ScheduleTableTable extends ScheduleTable
         DriftSqlType.dateTime,
         data['${effectivePrefix}updated_at'],
       )!,
-      recurrenceType: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}recurrence_type'],
+      recurrenceType: $ScheduleTableTable.$converterrecurrenceTypen.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}recurrence_type'],
+        ),
       ),
       recurrenceInterval: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
@@ -1744,6 +1739,15 @@ class $ScheduleTableTable extends ScheduleTable
   $ScheduleTableTable createAlias(String alias) {
     return $ScheduleTableTable(attachedDatabase, alias);
   }
+
+  static JsonTypeConverter2<RecurrenceType, String, String>
+  $converterrecurrenceType = const EnumNameConverter<RecurrenceType>(
+    RecurrenceType.values,
+  );
+  static JsonTypeConverter2<RecurrenceType?, String?, String?>
+  $converterrecurrenceTypen = JsonTypeConverter2.asNullable(
+    $converterrecurrenceType,
+  );
 }
 
 class ScheduleTableCompanion extends UpdateCompanion<ScheduleEntity> {
@@ -1753,7 +1757,7 @@ class ScheduleTableCompanion extends UpdateCompanion<ScheduleEntity> {
   final Value<DateTime> endDateTime;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
-  final Value<String?> recurrenceType;
+  final Value<RecurrenceType?> recurrenceType;
   final Value<int?> recurrenceInterval;
   final Value<int?> recurrenceDay;
   final Value<DateTime?> recurrenceEndDate;
@@ -1814,7 +1818,7 @@ class ScheduleTableCompanion extends UpdateCompanion<ScheduleEntity> {
     Value<DateTime>? endDateTime,
     Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
-    Value<String?>? recurrenceType,
+    Value<RecurrenceType?>? recurrenceType,
     Value<int?>? recurrenceInterval,
     Value<int?>? recurrenceDay,
     Value<DateTime?>? recurrenceEndDate,
@@ -1855,7 +1859,11 @@ class ScheduleTableCompanion extends UpdateCompanion<ScheduleEntity> {
       map['updated_at'] = Variable<DateTime>(updatedAt.value);
     }
     if (recurrenceType.present) {
-      map['recurrence_type'] = Variable<String>(recurrenceType.value);
+      map['recurrence_type'] = Variable<String>(
+        $ScheduleTableTable.$converterrecurrenceTypen.toSql(
+          recurrenceType.value,
+        ),
+      );
     }
     if (recurrenceInterval.present) {
       map['recurrence_interval'] = Variable<int>(recurrenceInterval.value);
@@ -1930,17 +1938,15 @@ class $AlarmTableTable extends AlarmTable
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _offsetTypeMeta = const VerificationMeta(
-    'offsetType',
-  );
   @override
-  late final GeneratedColumn<String> offsetType = GeneratedColumn<String>(
+  late final GeneratedColumnWithTypeConverter<AlarmOffsetType, String>
+  offsetType = GeneratedColumn<String>(
     'offset_type',
     aliasedName,
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: true,
-  );
+  ).withConverter<AlarmOffsetType>($AlarmTableTable.$converteroffsetType);
   static const VerificationMeta _isSilentMeta = const VerificationMeta(
     'isSilent',
   );
@@ -2024,14 +2030,6 @@ class $AlarmTableTable extends AlarmTable
     } else if (isInserting) {
       context.missing(_offsetValueMeta);
     }
-    if (data.containsKey('offset_type')) {
-      context.handle(
-        _offsetTypeMeta,
-        offsetType.isAcceptableOrUnknown(data['offset_type']!, _offsetTypeMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_offsetTypeMeta);
-    }
     if (data.containsKey('is_silent')) {
       context.handle(
         _isSilentMeta,
@@ -2071,6 +2069,12 @@ class $AlarmTableTable extends AlarmTable
         DriftSqlType.int,
         data['${effectivePrefix}offset_value'],
       )!,
+      offsetType: $AlarmTableTable.$converteroffsetType.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}offset_type'],
+        )!,
+      ),
       isSilent: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
         data['${effectivePrefix}is_silent'],
@@ -2090,13 +2094,18 @@ class $AlarmTableTable extends AlarmTable
   $AlarmTableTable createAlias(String alias) {
     return $AlarmTableTable(attachedDatabase, alias);
   }
+
+  static JsonTypeConverter2<AlarmOffsetType, String, String>
+  $converteroffsetType = const EnumNameConverter<AlarmOffsetType>(
+    AlarmOffsetType.values,
+  );
 }
 
 class AlarmTableCompanion extends UpdateCompanion<AlarmEntity> {
   final Value<int> id;
   final Value<int> scheduleId;
   final Value<int> offsetValue;
-  final Value<String> offsetType;
+  final Value<AlarmOffsetType> offsetType;
   final Value<bool> isSilent;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
@@ -2113,7 +2122,7 @@ class AlarmTableCompanion extends UpdateCompanion<AlarmEntity> {
     this.id = const Value.absent(),
     required int scheduleId,
     required int offsetValue,
-    required String offsetType,
+    required AlarmOffsetType offsetType,
     this.isSilent = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
@@ -2144,7 +2153,7 @@ class AlarmTableCompanion extends UpdateCompanion<AlarmEntity> {
     Value<int>? id,
     Value<int>? scheduleId,
     Value<int>? offsetValue,
-    Value<String>? offsetType,
+    Value<AlarmOffsetType>? offsetType,
     Value<bool>? isSilent,
     Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
@@ -2173,7 +2182,9 @@ class AlarmTableCompanion extends UpdateCompanion<AlarmEntity> {
       map['offset_value'] = Variable<int>(offsetValue.value);
     }
     if (offsetType.present) {
-      map['offset_type'] = Variable<String>(offsetType.value);
+      map['offset_type'] = Variable<String>(
+        $AlarmTableTable.$converteroffsetType.toSql(offsetType.value),
+      );
     }
     if (isSilent.present) {
       map['is_silent'] = Variable<bool>(isSilent.value);
@@ -2852,7 +2863,7 @@ typedef $$NoteTableTableCreateCompanionBuilder =
       required String title,
       required String content,
       Value<bool> isImportant,
-      Value<String> status,
+      Value<NoteStatusEnum> status,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
       Value<int?> noteTypeId,
@@ -2864,7 +2875,7 @@ typedef $$NoteTableTableUpdateCompanionBuilder =
       Value<String> title,
       Value<String> content,
       Value<bool> isImportant,
-      Value<String> status,
+      Value<NoteStatusEnum> status,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
       Value<int?> noteTypeId,
@@ -2983,9 +2994,10 @@ class $$NoteTableTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get status => $composableBuilder(
+  ColumnWithTypeConverterFilters<NoteStatusEnum, NoteStatusEnum, String>
+  get status => $composableBuilder(
     column: $table.status,
-    builder: (column) => ColumnFilters(column),
+    builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
@@ -3209,7 +3221,7 @@ class $$NoteTableTableAnnotationComposer
     builder: (column) => column,
   );
 
-  GeneratedColumn<String> get status =>
+  GeneratedColumnWithTypeConverter<NoteStatusEnum, String> get status =>
       $composableBuilder(column: $table.status, builder: (column) => column);
 
   GeneratedColumn<DateTime> get createdAt =>
@@ -3353,7 +3365,7 @@ class $$NoteTableTableTableManager
                 Value<String> title = const Value.absent(),
                 Value<String> content = const Value.absent(),
                 Value<bool> isImportant = const Value.absent(),
-                Value<String> status = const Value.absent(),
+                Value<NoteStatusEnum> status = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<int?> noteTypeId = const Value.absent(),
@@ -3375,7 +3387,7 @@ class $$NoteTableTableTableManager
                 required String title,
                 required String content,
                 Value<bool> isImportant = const Value.absent(),
-                Value<String> status = const Value.absent(),
+                Value<NoteStatusEnum> status = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<int?> noteTypeId = const Value.absent(),
@@ -4196,7 +4208,7 @@ typedef $$ScheduleTableTableCreateCompanionBuilder =
       Value<DateTime> endDateTime,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
-      Value<String?> recurrenceType,
+      Value<RecurrenceType?> recurrenceType,
       Value<int?> recurrenceInterval,
       Value<int?> recurrenceDay,
       Value<DateTime?> recurrenceEndDate,
@@ -4209,7 +4221,7 @@ typedef $$ScheduleTableTableUpdateCompanionBuilder =
       Value<DateTime> endDateTime,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
-      Value<String?> recurrenceType,
+      Value<RecurrenceType?> recurrenceType,
       Value<int?> recurrenceInterval,
       Value<int?> recurrenceDay,
       Value<DateTime?> recurrenceEndDate,
@@ -4298,9 +4310,10 @@ class $$ScheduleTableTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get recurrenceType => $composableBuilder(
+  ColumnWithTypeConverterFilters<RecurrenceType?, RecurrenceType, String>
+  get recurrenceType => $composableBuilder(
     column: $table.recurrenceType,
-    builder: (column) => ColumnFilters(column),
+    builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
   ColumnFilters<int> get recurrenceInterval => $composableBuilder(
@@ -4473,7 +4486,8 @@ class $$ScheduleTableTableAnnotationComposer
   GeneratedColumn<DateTime> get updatedAt =>
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 
-  GeneratedColumn<String> get recurrenceType => $composableBuilder(
+  GeneratedColumnWithTypeConverter<RecurrenceType?, String>
+  get recurrenceType => $composableBuilder(
     column: $table.recurrenceType,
     builder: (column) => column,
   );
@@ -4576,7 +4590,7 @@ class $$ScheduleTableTableTableManager
                 Value<DateTime> endDateTime = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
-                Value<String?> recurrenceType = const Value.absent(),
+                Value<RecurrenceType?> recurrenceType = const Value.absent(),
                 Value<int?> recurrenceInterval = const Value.absent(),
                 Value<int?> recurrenceDay = const Value.absent(),
                 Value<DateTime?> recurrenceEndDate = const Value.absent(),
@@ -4600,7 +4614,7 @@ class $$ScheduleTableTableTableManager
                 Value<DateTime> endDateTime = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
-                Value<String?> recurrenceType = const Value.absent(),
+                Value<RecurrenceType?> recurrenceType = const Value.absent(),
                 Value<int?> recurrenceInterval = const Value.absent(),
                 Value<int?> recurrenceDay = const Value.absent(),
                 Value<DateTime?> recurrenceEndDate = const Value.absent(),
@@ -4708,7 +4722,7 @@ typedef $$AlarmTableTableCreateCompanionBuilder =
       Value<int> id,
       required int scheduleId,
       required int offsetValue,
-      required String offsetType,
+      required AlarmOffsetType offsetType,
       Value<bool> isSilent,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
@@ -4718,7 +4732,7 @@ typedef $$AlarmTableTableUpdateCompanionBuilder =
       Value<int> id,
       Value<int> scheduleId,
       Value<int> offsetValue,
-      Value<String> offsetType,
+      Value<AlarmOffsetType> offsetType,
       Value<bool> isSilent,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
@@ -4767,9 +4781,10 @@ class $$AlarmTableTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get offsetType => $composableBuilder(
+  ColumnWithTypeConverterFilters<AlarmOffsetType, AlarmOffsetType, String>
+  get offsetType => $composableBuilder(
     column: $table.offsetType,
-    builder: (column) => ColumnFilters(column),
+    builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
   ColumnFilters<bool> get isSilent => $composableBuilder(
@@ -4891,10 +4906,11 @@ class $$AlarmTableTableAnnotationComposer
     builder: (column) => column,
   );
 
-  GeneratedColumn<String> get offsetType => $composableBuilder(
-    column: $table.offsetType,
-    builder: (column) => column,
-  );
+  GeneratedColumnWithTypeConverter<AlarmOffsetType, String> get offsetType =>
+      $composableBuilder(
+        column: $table.offsetType,
+        builder: (column) => column,
+      );
 
   GeneratedColumn<bool> get isSilent =>
       $composableBuilder(column: $table.isSilent, builder: (column) => column);
@@ -4960,7 +4976,7 @@ class $$AlarmTableTableTableManager
                 Value<int> id = const Value.absent(),
                 Value<int> scheduleId = const Value.absent(),
                 Value<int> offsetValue = const Value.absent(),
-                Value<String> offsetType = const Value.absent(),
+                Value<AlarmOffsetType> offsetType = const Value.absent(),
                 Value<bool> isSilent = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
@@ -4978,7 +4994,7 @@ class $$AlarmTableTableTableManager
                 Value<int> id = const Value.absent(),
                 required int scheduleId,
                 required int offsetValue,
-                required String offsetType,
+                required AlarmOffsetType offsetType,
                 Value<bool> isSilent = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),

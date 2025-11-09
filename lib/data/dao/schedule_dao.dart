@@ -64,9 +64,10 @@ class ScheduleDao {
   }
 
   static Future<List<ScheduleEntity>> getAllSchedulesHavingAlarmsForToBeDoneNotes({
-    required List<int> alarmIdsToExclude
+    required List<int> alarmIdsToExclude,
+    bool useNewInstanceOfDb = true,
   }) async {
-    AppDatabase db = AppDatabase.instance();
+    AppDatabase db = useNewInstanceOfDb ? AppDatabase.instance() : serviceLocator<AppDatabase>();
     final query = db.select(db.scheduleTable).join([
       innerJoin(
         db.noteTable,

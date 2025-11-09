@@ -70,7 +70,7 @@ class _SaveSingleDateListDialogState extends State<SaveSingleDateListDialog> {
                                   context.pushNamed(widget.isSavingPersistentData
                                       ? 'SavePersistentSingleDate'
                                       : 'SaveMemorySingleDate',
-                                    extra: {'dateIndex': index}
+                                    extra: {'dateIndex': index, 'scheduleId': date.scheduleId}
                                   );
                                 },
                               ),

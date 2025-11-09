@@ -8,9 +8,10 @@ import '../../../bloc/schedule/save_single_date/save_single_date_bloc.dart';
 import '../../../utils/service_locator.dart';
 
 class SavePersistentSingleDatePage extends StatelessWidget {
-  const SavePersistentSingleDatePage({super.key, this.singleDateIndex});
+  const SavePersistentSingleDatePage({super.key, this.singleDateIndex, this.scheduleId});
 
   final int? singleDateIndex;
+  final int? scheduleId;
 
   @override
   Widget build(BuildContext widgetContext) {
@@ -23,6 +24,7 @@ class SavePersistentSingleDatePage extends StatelessWidget {
               value: serviceLocator<SaveSingleDateBloc>()..add(InitializeWithData(
                   noteId: context.read<EditNoteBloc>().state.note?.id,
                   isSavingPersistentDate: true,
+                  scheduleId: scheduleId,
                   singleDateFormElements: singleDateIndex != null
                     ? context.read<EditNoteBloc>().state.singleDates
                       .elementAtOrNull(singleDateIndex!)

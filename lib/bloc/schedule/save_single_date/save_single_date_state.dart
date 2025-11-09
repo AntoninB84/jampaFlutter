@@ -5,6 +5,7 @@ class SaveSingleDateState extends Equatable {
     this.alreadyInitialized = false,
     this.noteId,
     this.isSavingPersistentDate = false,
+    this.scheduleId,
     this.initialSingleDateFormElementIndex,
     required this.newSingleDateFormElements,
     this.isValidDate = true,
@@ -15,6 +16,7 @@ class SaveSingleDateState extends Equatable {
 
   // Whether saving to a persistent note or just in-memory
   final bool? isSavingPersistentDate;
+  final int? scheduleId;
   // If saving to a persistent note, this holds the note ID
   final int? noteId;
   // If editing an existing single date (persistent or in-memory)
@@ -30,6 +32,7 @@ class SaveSingleDateState extends Equatable {
     bool? alreadyInitialized,
     int? noteId,
     bool? isSavingPersistentDate,
+    int? scheduleId,
     int? initialSingleDateFormElementIndex,
     SingleDateFormElements? newSingleDateFormElements,
     bool? isValidDate,
@@ -39,6 +42,7 @@ class SaveSingleDateState extends Equatable {
       alreadyInitialized: alreadyInitialized ?? this.alreadyInitialized,
       noteId: noteId ?? this.noteId,
       isSavingPersistentDate: isSavingPersistentDate ?? this.isSavingPersistentDate,
+      scheduleId: scheduleId ?? this.scheduleId,
       initialSingleDateFormElementIndex: initialSingleDateFormElementIndex ?? this.initialSingleDateFormElementIndex,
       newSingleDateFormElements: newSingleDateFormElements ?? this.newSingleDateFormElements,
       isValidDate: isValidDate ?? this.isValidDate,
@@ -51,6 +55,7 @@ class SaveSingleDateState extends Equatable {
       alreadyInitialized,
       noteId,
       isSavingPersistentDate,
+      scheduleId,
       initialSingleDateFormElementIndex,
       newSingleDateFormElements,
       isValidDate,

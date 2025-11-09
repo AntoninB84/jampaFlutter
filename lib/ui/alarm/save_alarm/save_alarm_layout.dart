@@ -26,6 +26,7 @@ class SaveAlarmLayout extends StatelessWidget {
       listener: (context, state) {
         if(state.hasSubmitted == true) {
           if(state.initialAlarmFormElementIndex != null){
+            //Editing
             if(state.isSavingPersistentAlarm ?? false){
               // Database updated successfully
               SnackBarX.showSuccess(context,
@@ -46,6 +47,7 @@ class SaveAlarmLayout extends StatelessWidget {
               }
             }
           }else{
+            //Creating
             if(state.isSavingPersistentAlarm ?? false){
               // Successfully created and saved to database
               SnackBarX.showSuccess(context,
@@ -56,7 +58,7 @@ class SaveAlarmLayout extends StatelessWidget {
                 context.read<SaveRecurrentDateBloc>()
                     .add(AddAlarmForRecurrence(alarm: state.newAlarmFormElements));
               }else{
-                //Add the created alarm to the CreateNoteCubit state
+                //Add the created alarm to the CreateSingleDateCubit state
                 context.read<SaveSingleDateBloc>()
                     .add(AddAlarm(alarm: state.newAlarmFormElements));
               }

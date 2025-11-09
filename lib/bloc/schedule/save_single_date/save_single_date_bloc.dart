@@ -1,9 +1,14 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
+import 'package:jampa_flutter/data/models/schedule.dart';
 import 'package:jampa_flutter/repository/alarm_repository.dart';
 import 'package:jampa_flutter/repository/schedule_repository.dart';
+import 'package:jampa_flutter/utils/extensions/datetime_extension.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
+
+import '../../../utils/helpers/alarm_helpers.dart';
+import '../../../utils/helpers/notification_helpers.dart';
 
 part 'save_single_date_state.dart';
 part 'save_single_date_event.dart';
@@ -138,10 +143,30 @@ class SaveSingleDateBloc extends Bloc<SaveSingleDateEvent, SaveSingleDateState> 
           );
         }
 
-        await scheduleRepository.saveSingleDateFormElement(
+        ScheduleEntity schedule = await scheduleRepository.saveSingleDateFormElement(
             formElements: newElement,
             noteId: newElement.noteId!
         );
+
+        schedule.alarms = await alarmRepository.getAllAlarmsByScheduleId(schedule.id!);
+        List<int> scheduledAlarmsIds = schedule.alarms?.map((alarm) => alarm.id!).toList() ?? [];
+        // Check if alarm already exists in pending notifications
+        List<NotificationPayload> pendingPayloads = await NotificationHelpers.fetchPendingPayloads();
+        List<NotificationPayload> alreadyScheduledList = pendingPayloads.where((payload) =>
+            scheduledAlarmsIds.contains(payload.objectId)
+        ).toList();
+        // Cancel existing alarm notification if found
+        for(final alreadyScheduled in alreadyScheduledList){
+          await AlarmHelpers.cancelAlarmNotification(alreadyScheduled);
+        }
+
+        // Check and set alarm notifications if needed
+        List<AlarmToSetup> alarmsToSetup = await AlarmHelpers.calculateAlarmDateFromSchedule([schedule]);
+        if(alarmsToSetup.isNotEmpty){
+          if(alarmsToSetup.first.alarmDateTime.isBetween(DateTime.now(), DateTime.now().add(Duration(hours: 12)))){
+            await AlarmHelpers.setAlarmNotification(alarmsToSetup[0]);
+          }
+        }
       }
       
       emit(state.copyWith(

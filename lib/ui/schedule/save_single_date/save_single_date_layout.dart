@@ -79,7 +79,7 @@ class SaveSingleDateLayout extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             AlarmListButton(
-              isSavingPersistentData: state.isSavingPersistentDate ?? false,
+              isSavingPersistentData: state.scheduleId != null,
               blocContext: context,
               elements: state.newSingleDateFormElements.alarmsForSingleDate,
             ),
