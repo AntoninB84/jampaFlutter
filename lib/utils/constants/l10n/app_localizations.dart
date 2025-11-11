@@ -454,6 +454,12 @@ abstract class AppLocalizations {
   /// **'Ajouter une date'**
   String get create_date_title;
 
+  /// No description provided for @create_recurrence_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter une récurrence'**
+  String get create_recurrence_title;
+
   /// No description provided for @create_start_date_field_title.
   ///
   /// In fr, this message translates to:

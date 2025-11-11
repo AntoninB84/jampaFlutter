@@ -28,11 +28,14 @@ class NoteTypesLayout extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Headers.createHeader(
+              Headers.listHeader(
                 context: context,
                 title: context.strings.note_types,
                 onAddPressed: (){
                   context.pushNamed("CreateNoteType");
+                },
+                onBackPressed: (){
+                  context.pop();
                 },
               ),
               Expanded(

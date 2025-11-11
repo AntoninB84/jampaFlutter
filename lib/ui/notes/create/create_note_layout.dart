@@ -7,6 +7,7 @@ import 'package:jampa_flutter/ui/schedule/widgets/save_recurrent_date_list_dialo
 import 'package:jampa_flutter/ui/schedule/widgets/save_single_date_list_dialog.dart';
 import 'package:jampa_flutter/ui/notes/widgets/inputs/note_categories_multiselector.dart';
 import 'package:jampa_flutter/ui/notes/widgets/inputs/note_type_selector.dart';
+import 'package:jampa_flutter/ui/widgets/headers.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:jampa_flutter/ui/notes/widgets/inputs/note_title_text_field.dart';
@@ -41,9 +42,13 @@ class CreateNoteLayout extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  context.strings.create_note_title,
-                  style: Theme.of(context).textTheme.headlineSmall,
+                Headers.basicHeader(
+                  context: context,
+                  title: context.strings.create_note_title,
+                  onBackPressed: (){
+                    context.pop();
+                    context.read<CreateNoteCubit>().resetState();
+                  }
                 ),
                 const SizedBox(height: kGap16),
                 NoteTitleTextField(
@@ -82,11 +87,6 @@ class CreateNoteLayout extends StatelessWidget {
                 ),
                 const SizedBox(height: kGap32),
                 SubmitNoteButton(),
-                const SizedBox(height: kGap16),
-                CancelButton(
-                  onPressed: () => context.read<CreateNoteCubit>()
-                      .resetState(),
-                ),
               ],
             ),
           ),

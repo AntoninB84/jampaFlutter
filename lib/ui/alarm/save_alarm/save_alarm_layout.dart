@@ -78,9 +78,10 @@ class SaveAlarmLayout extends StatelessWidget {
       builder: (context, state) {
         return Column(
           children: [
-            Headers.noActionHeader(
+            Headers.basicHeader(
               context: context,
               title: context.strings.alarm_title,
+              onBackPressed: () => context.pop(),
             ),
             const SizedBox(height: kGap16),
             AlarmOffsetTypeSelector(
@@ -110,8 +111,6 @@ class SaveAlarmLayout extends StatelessWidget {
             ),
             const SizedBox(height: kGap32),
             SubmitAlarmButton(),
-            const SizedBox(height: kGap16),
-            CancelButton()
           ],
         );
       },

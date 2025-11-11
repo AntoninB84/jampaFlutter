@@ -35,19 +35,18 @@ class SaveNoteTypeLayout extends StatelessWidget {
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Headers.noActionHeader(
+              Headers.basicHeader(
                 context: context,
                 title: state.noteType != null ?
                 context.strings.edit_note_type_title
                     : context.strings.create_note_type_title,
+                onBackPressed: () => context.pop(),
               ),
               const SizedBox(height: kGap16),
               NoteTypeNameTextField(),
               const SizedBox(height: kGap16),
               Row(
                 children: [
-                  CancelButton(),
-                  Spacer(),
                   SubmitNoteTypeButton(),
                 ],
               ),

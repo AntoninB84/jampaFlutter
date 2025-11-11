@@ -23,7 +23,7 @@ class NotesLayout extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Headers.createHeader(
+              Headers.listHeader(
                 context: context,
                 title: context.strings.notes,
                 onAddPressed: (){

@@ -28,11 +28,14 @@ class CategoriesLayout extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Headers.createHeader(
+            Headers.listHeader(
               context: context,
               title: context.strings.categories,
               onAddPressed: (){
                 context.pushNamed("CreateCategory");
+              },
+              onBackPressed: (){
+                context.pop();
               },
             ),
             Expanded(

@@ -224,6 +224,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get create_date_title => 'Ajouter une date';
 
   @override
+  String get create_recurrence_title => 'Ajouter une récurrence';
+
+  @override
   String get create_start_date_field_title => 'Début de l\'événement';
 
   @override

@@ -59,9 +59,13 @@ class SaveSingleDateLayout extends StatelessWidget {
       builder: (context, state){
         return Column(
           children: [
-            Headers.noActionHeader(
+            Headers.basicHeader(
               context: context,
               title: context.strings.create_date_title,
+              onBackPressed: () {
+                context.pop();
+                context.read<SaveSingleDateBloc>().add(ResetState());
+              },
             ),
             const SizedBox(height: kGap16),
             DatetimeInputField(
@@ -92,12 +96,6 @@ class SaveSingleDateLayout extends StatelessWidget {
             ),
             const SizedBox(height: kGap32,),
             SubmitSingleDateButton(),
-            const SizedBox(height: kGap16,),
-            CancelButton(
-              onPressed: () {
-                context.read<SaveSingleDateBloc>().add(ResetState());
-              },
-            ),
           ],
         );
       },

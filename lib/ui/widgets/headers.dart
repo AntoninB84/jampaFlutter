@@ -6,13 +6,20 @@ import '../../utils/constants/styles/styles.dart';
 
 class Headers {
 
-  static Widget createHeader({
+  static Widget listHeader({
     required BuildContext context,
     required String title,
-    required VoidCallback onAddPressed
+    required VoidCallback onAddPressed,
+    VoidCallback? onBackPressed
   }) {
     return Row(
       children: [
+        if(onBackPressed != null)
+          IconButton(
+              visualDensity: VisualDensity.compact,
+              onPressed: onBackPressed,
+              icon: const Icon(Icons.arrow_back)
+          ),
         Expanded(
           child: Text(
             title,
@@ -30,12 +37,18 @@ class Headers {
     );
   }
 
-  static Widget noActionHeader({
+  static Widget basicHeader({
     required BuildContext context,
     required String title,
+    required VoidCallback onBackPressed
   }) {
     return Row(
       children: [
+        IconButton(
+          visualDensity: VisualDensity.compact,
+          onPressed: onBackPressed,
+          icon: const Icon(Icons.arrow_back)
+        ),
         Expanded(
           child: Text(
             title,

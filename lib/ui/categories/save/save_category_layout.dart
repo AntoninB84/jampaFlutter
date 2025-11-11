@@ -35,19 +35,18 @@ class SaveCategoryLayout extends StatelessWidget {
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Headers.noActionHeader(
+              Headers.basicHeader(
                   context: context,
                   title: state.category != null ?
                   context.strings.edit_category_title
                       : context.strings.create_category_title,
+                onBackPressed: () => context.pop(),
               ),
               const SizedBox(height: kGap16),
               CategoryNameTextField(),
               const SizedBox(height: kGap16),
               Row(
                 children: [
-                  CancelButton(),
-                  Spacer(),
                   SubmitCategoryButton(),
                 ],
               ),

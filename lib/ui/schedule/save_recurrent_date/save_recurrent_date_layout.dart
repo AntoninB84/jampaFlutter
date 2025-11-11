@@ -68,9 +68,13 @@ class SaveRecurrentDateLayout extends StatelessWidget {
         return SingleChildScrollView(
           child: Column(
             children: [
-              Headers.noActionHeader(
+              Headers.basicHeader(
                 context: context,
                 title: context.strings.create_recurrence_title,
+                onBackPressed: () {
+                  context.pop();
+                  context.read<SaveRecurrentDateBloc>().add(ResetState());
+                },
               ),
               const SizedBox(height: kGap16),
               RecurrenceTypeSelector(
@@ -203,12 +207,6 @@ class SaveRecurrentDateLayout extends StatelessWidget {
               ),
               const SizedBox(height: kGap32,),
               SubmitSingleDateButton(),
-              const SizedBox(height: kGap16,),
-              CancelButton(
-                onPressed: () {
-                  context.read<SaveRecurrentDateBloc>().add(ResetState());
-                },
-              ),
             ],
           ),
         );
