@@ -11,6 +11,7 @@ import 'package:jampa_flutter/utils/helpers/permissions_helpers.dart';
 import 'package:jampa_flutter/utils/local_notification_manager.dart';
 import 'package:jampa_flutter/utils/routers/main_router.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
+import 'package:jampa_flutter/utils/styles/themes.dart';
 import 'package:jampa_flutter/workers/alarm_worker.dart';
 
 Future main() async {
@@ -55,9 +56,8 @@ class MyApp extends StatelessWidget {
                 }
                 return const Locale('fr');
               },
-              theme: ThemeData(
-                colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
-              ),
+              theme: lightTheme,
+              darkTheme: darkTheme,
               // routerConfig: state.status == AuthStatus.authenticated
               //     ? mainRouter : authRouter,
               routerConfig: mainRouter,
