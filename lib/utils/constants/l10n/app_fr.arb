@@ -1,5 +1,7 @@
 {
     "notes": "Notes",
+    "categories": "Catégories",
+    "note_types": "Types de notes",
     "settings": "Paramètres",
     "generic_error_message": "Une erreur s'est produite",
     "confirm": "Confirmer",

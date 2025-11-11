@@ -7,7 +7,6 @@ import 'package:jampa_flutter/bloc/auth/auth_bloc.dart';
 import 'package:jampa_flutter/repository/auth_repository.dart';
 import 'package:jampa_flutter/repository/user_repository.dart';
 import 'package:jampa_flutter/utils/constants/l10n/app_localizations.dart';
-import 'package:jampa_flutter/utils/helpers/permissions_helpers.dart';
 import 'package:jampa_flutter/utils/local_notification_manager.dart';
 import 'package:jampa_flutter/utils/routers/main_router.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
@@ -17,7 +16,6 @@ import 'package:jampa_flutter/workers/alarm_worker.dart';
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setupServiceLocator();
-  await PermissionsHelpers.requestAllPermissions();
   await LocalNotificationManager().initialize();
   setupAlarmWorker();
   await Alarm.init();

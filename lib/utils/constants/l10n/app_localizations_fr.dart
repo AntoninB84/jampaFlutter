@@ -12,6 +12,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get notes => 'Notes';
 
   @override
+  String get categories => 'Catégories';
+
+  @override
+  String get note_types => 'Types de notes';
+
+  @override
   String get settings => 'Paramètres';
 
   @override

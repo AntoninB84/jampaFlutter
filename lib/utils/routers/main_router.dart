@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jampa_flutter/bloc/settings_menu/settings_menu_bloc.dart';
 import 'package:jampa_flutter/ui/categories/save/save_category_page.dart';
 import 'package:jampa_flutter/ui/categories/index/categories_page.dart';
 import 'package:jampa_flutter/ui/home/home_page.dart';
@@ -11,6 +12,7 @@ import 'package:jampa_flutter/ui/notes/edit/edit_note_page.dart';
 import 'package:jampa_flutter/ui/notes/index/notes_page.dart';
 import 'package:jampa_flutter/ui/notes/show/show_note_page.dart';
 import 'package:jampa_flutter/ui/schedule/save_recurrent_date/save_memory_recurrent_date_page.dart';
+import 'package:jampa_flutter/utils/service_locator.dart';
 
 import '../../ui/alarm/save_alarm/save_memory_alarm_page.dart';
 import '../../ui/alarm/save_alarm/save_persistent_alarm_page.dart';
@@ -30,7 +32,6 @@ class AppRoutes {
   static const String savePersistentRecurrentDate = '/savePersistentRecurrentDate';
   static const String saveMemoryAlarm = '/saveMemoryAlarm';
   static const String savePersistentAlarm = '/savePersistentAlarm';
-  static const String settings = '/settings';
   static const String categories = '/categories';
   static const String createCategory = '/create';
   static const String editCategory = '/edit';
@@ -47,7 +48,10 @@ final GoRouter mainRouter = GoRouter(
   routes: <RouteBase>[
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
-        return HomePage(navigationShell: navigationShell);
+        // Check and reset settings menu state on each navigation
+        serviceLocator<SettingsMenuCubit>().reset(state.fullPath);
+
+        return HomePage(navigationShell: navigationShell,);
       },
       branches: [
         StatefulShellBranch(
@@ -151,71 +155,52 @@ final GoRouter mainRouter = GoRouter(
                   ]
                 )
               ]
-            )
-          ]
-        ),
-        StatefulShellBranch(
-          routes: [
+            ),
             GoRoute(
-                name: "Settings",
-                path: AppRoutes.settings,
-                builder: (context, state) => Center(
-                    child: Column(
-                      children: [
-                        TextButton(
-                          onPressed: () {context.pushNamed("Categories");},
-                          child: Text("Categories"),
-                        ),
-                        TextButton(
-                          onPressed: () {context.pushNamed("NoteTypes");},
-                          child: Text("Note Types"),
-                        ),
-                      ],
-                    )
-                ),
+                name: "Categories",
+                path: AppRoutes.categories,
+                builder: (context, state) => const CategoriesPage(),
                 routes: [
                   GoRoute(
-                    name: "Categories",
-                    path: AppRoutes.categories,
-                    builder: (context, state) => const CategoriesPage(),
-                    routes: [
-                      GoRoute(
-                        name: "CreateCategory",
-                        path: AppRoutes.createCategory,
-                        builder: (context, state) => const SaveCategoryPage(),
-                      ),
-                      GoRoute(
-                        name: "EditCategory",
-                        path: AppRoutes.editCategory,
-                        builder: (context, state) => SaveCategoryPage(
-                          categoryId: (state.extra as Map?)?['id'],
-                        )
-                      )
-                    ]
+                    name: "CreateCategory",
+                    path: AppRoutes.createCategory,
+                    builder: (context, state) => const SaveCategoryPage(),
                   ),
                   GoRoute(
-                    name: "NoteTypes",
-                    path: AppRoutes.noteTypes,
-                    builder: (context, state) => const NoteTypesPage(),
-                    routes: [
-                      GoRoute(
-                        name: "CreateNoteType",
-                        path: AppRoutes.createNoteType,
-                        builder: (context, state) => const SaveNoteTypePage(),
-                      ),
-                      GoRoute(
-                        name: "EditNoteType",
-                        path: AppRoutes.editNoteType,
-                        builder: (context, state) => SaveNoteTypePage(
-                          noteTypeId: (state.extra as Map?)?['id'],
-                        )
+                      name: "EditCategory",
+                      path: AppRoutes.editCategory,
+                      builder: (context, state) => SaveCategoryPage(
+                        categoryId: (state.extra as Map?)?['id'],
                       )
-                    ]
+                  )
+                ]
+            ),
+            GoRoute(
+                name: "NoteTypes",
+                path: AppRoutes.noteTypes,
+                builder: (context, state) => const NoteTypesPage(),
+                routes: [
+                  GoRoute(
+                    name: "CreateNoteType",
+                    path: AppRoutes.createNoteType,
+                    builder: (context, state) => const SaveNoteTypePage(),
+                  ),
+                  GoRoute(
+                      name: "EditNoteType",
+                      path: AppRoutes.editNoteType,
+                      builder: (context, state) => SaveNoteTypePage(
+                        noteTypeId: (state.extra as Map?)?['id'],
+                      )
                   )
                 ]
             )
           ]
         ),
+        // StatefulShellBranch(
+        //   routes: [
+        //     //TODO : Calendar branch
+        //   ]
+        // ),
       ]
     ),
   ],

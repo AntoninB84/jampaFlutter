@@ -100,6 +100,18 @@ abstract class AppLocalizations {
   /// **'Notes'**
   String get notes;
 
+  /// No description provided for @categories.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégories'**
+  String get categories;
+
+  /// No description provided for @note_types.
+  ///
+  /// In fr, this message translates to:
+  /// **'Types de notes'**
+  String get note_types;
+
   /// No description provided for @settings.
   ///
   /// In fr, this message translates to:
