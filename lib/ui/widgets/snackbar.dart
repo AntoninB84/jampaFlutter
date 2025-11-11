@@ -15,9 +15,9 @@ class SnackBarX {
   }
 
   static void showError(BuildContext context, String message) {
-    _snackbar(context, message: message, color: Colors.red);
+    _snackbar(context, message: message, color: Theme.of(context).colorScheme.errorContainer);
   }
   static void showSuccess(BuildContext context, String message) {
-    _snackbar(context, message: message, color: Colors.green);
+    _snackbar(context, message: message, color: Theme.of(context).colorScheme.primary);
   }
 }

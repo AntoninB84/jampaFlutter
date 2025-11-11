@@ -16,7 +16,7 @@ class Headers {
         Expanded(
           child: Text(
             title,
-            style: kHeading1,
+            style: Theme.of(context).textTheme.headlineLarge,
           ),
         ),
         IconButton(

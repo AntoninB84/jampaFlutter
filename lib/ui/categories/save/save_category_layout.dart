@@ -8,6 +8,7 @@ import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:jampa_flutter/ui/categories/widgets/category_name_text_field.dart';
 
 import '../../../bloc/categories/save/save_category_cubit.dart';
+import '../../../utils/constants/styles/sizes.dart';
 import '../../widgets/cancel_button.dart';
 
 class SaveCategoryLayout extends StatelessWidget {
@@ -30,26 +31,26 @@ class SaveCategoryLayout extends StatelessWidget {
       },
       builder: (context, state) {
         return Scaffold(
-          body: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  state.category != null ?
-                    context.strings.edit_category_title
-                      : context.strings.create_category_title,
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                const SizedBox(height: 16),
-                CategoryNameTextField(),
-                const SizedBox(height: 16),
-                SubmitCategoryButton(),
-                const SizedBox(height: 16),
-                CancelButton(),
-              ],
-            ),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                state.category != null ?
+                  context.strings.edit_category_title
+                    : context.strings.create_category_title,
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              const SizedBox(height: kGap16),
+              CategoryNameTextField(),
+              const SizedBox(height: kGap16),
+              Row(
+                children: [
+                  CancelButton(),
+                  Spacer(),
+                  SubmitCategoryButton(),
+                ],
+              ),
+            ],
           ),
         );
       }

@@ -8,6 +8,7 @@ import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:jampa_flutter/ui/note_types/widgets/note_type_name_text_field.dart';
 
 import '../../../bloc/note_types/save/save_note_type_cubit.dart';
+import '../../../utils/constants/styles/sizes.dart';
 import '../../widgets/cancel_button.dart';
 
 class SaveNoteTypeLayout extends StatelessWidget {
@@ -30,26 +31,26 @@ class SaveNoteTypeLayout extends StatelessWidget {
       },
       builder: (context, state) {
         return Scaffold(
-          body: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  state.noteType != null ?
-                    context.strings.edit_note_type_title
-                      : context.strings.create_note_type_title,
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                const SizedBox(height: 16),
-                NoteTypeNameTextField(),
-                const SizedBox(height: 16),
-                SubmitNoteTypeButton(),
-                const SizedBox(height: 16),
-                CancelButton(),
-              ],
-            ),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                state.noteType != null ?
+                  context.strings.edit_note_type_title
+                    : context.strings.create_note_type_title,
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              const SizedBox(height: kGap16),
+              NoteTypeNameTextField(),
+              const SizedBox(height: kGap16),
+              Row(
+                children: [
+                  CancelButton(),
+                  Spacer(),
+                  SubmitNoteTypeButton(),
+                ],
+              ),
+            ],
           ),
         );
       }
@@ -70,7 +71,9 @@ class SubmitNoteTypeButton extends StatelessWidget {
               : null,
           child: state.isLoading
               ? const CupertinoActivityIndicator()
-              : Text(state.noteType != null ? context.strings.edit : context.strings.create),
+              : Text(
+                  state.noteType != null ? context.strings.edit : context.strings.create,
+                ),
         );
       },
     );

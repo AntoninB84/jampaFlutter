@@ -53,10 +53,9 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget> {
                         child: ListTile(
                           title: Text(
                             category.name,
-                            style: TextStyle(
-                              fontSize: kBodyLSize,
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               color: Theme.of(context).colorScheme.primary
-                            ),
+                            )
                           ),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,

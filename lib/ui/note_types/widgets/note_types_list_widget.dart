@@ -53,10 +53,9 @@ class _NoteTypesListWidgetState extends State<NoteTypesListWidget> {
                         child: ListTile(
                           title: Text(
                             noteType.name,
-                            style: TextStyle(
-                              fontSize: kBodyLSize,
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               color: Theme.of(context).colorScheme.primary
-                            ),
+                            )
                           ),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,

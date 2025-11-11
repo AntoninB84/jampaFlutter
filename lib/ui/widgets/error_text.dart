@@ -9,7 +9,9 @@ class ErrorText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       errorText,
-      style: const TextStyle(color: Colors.redAccent),
+      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+        color: Theme.of(context).colorScheme.error,
+      ),
     );
   }
 }

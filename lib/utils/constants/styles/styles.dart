@@ -8,38 +8,47 @@ TextTheme get textTheme {
     displayLarge: TextStyle(
       fontFamily: "UbuntuMono",
       fontSize: kDisplayLSize,
+      fontWeight: FontWeight.bold
     ),
     displayMedium: TextStyle(
       fontFamily: "UbuntuMono",
       fontSize: kDisplayMSize,
+      fontWeight: FontWeight.bold
     ),
     displaySmall: TextStyle(
       fontFamily: "UbuntuMono",
       fontSize: kDisplaySSize,
+      fontWeight: FontWeight.bold
     ),
     headlineLarge: TextStyle(
       fontFamily: "UbuntuMono",
       fontSize: kHeadingLSize,
+      fontWeight: FontWeight.w600
     ),
     headlineMedium: TextStyle(
       fontFamily: "UbuntuMono",
       fontSize: kHeadingMSize,
+        fontWeight: FontWeight.w600
     ),
     headlineSmall: TextStyle(
       fontFamily: "UbuntuMono",
       fontSize: kHeadingSSize,
+        fontWeight: FontWeight.w600
     ),
     titleLarge: TextStyle(
       fontFamily: "UbuntuMono",
       fontSize: kTitleLSize,
+        fontWeight: FontWeight.w600
     ),
     titleMedium: TextStyle(
       fontFamily: "UbuntuMono",
       fontSize: kTitleMSize,
+        fontWeight: FontWeight.w600
     ),
     titleSmall: TextStyle(
       fontFamily: "UbuntuMono",
       fontSize: kTitleSSize,
+        fontWeight: FontWeight.w600
     ),
     bodyLarge: TextStyle(
       fontFamily: "Ubuntu",
@@ -52,6 +61,7 @@ TextTheme get textTheme {
     bodySmall: TextStyle(
       fontFamily: "Ubuntu",
       fontSize: kBodySSize,
+        fontWeight: FontWeight.w300
     ),
     labelLarge: TextStyle(
       fontFamily: "Ubuntu",
@@ -64,21 +74,8 @@ TextTheme get textTheme {
     labelSmall: TextStyle(
       fontFamily: "Ubuntu",
       fontSize: kLabelSSize,
+        fontWeight: FontWeight.w300
     ),
   );
 }
-
-const TextStyle kHeading1 = TextStyle(
-  fontSize: kHeadingLSize,
-  fontWeight: FontWeight.bold,
-);
-
-const TextStyle kHeading2 = TextStyle(
-  fontSize: kHeadingMSize,
-  fontWeight: FontWeight.bold,
-);
-
-const TextStyle kBodyText = TextStyle(
-  fontSize: kBodyLSize,
-);
 
