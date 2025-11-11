@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/bloc/note_types/note_types_bloc.dart';
+import 'package:jampa_flutter/data/models/note_type.dart';
 import 'package:jampa_flutter/ui/widgets/confirmation_dialog.dart';
+import 'package:jampa_flutter/utils/constants/data/fake_skeleton_data.dart';
+import 'package:jampa_flutter/utils/constants/styles/sizes.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class NoteTypesListWidget extends StatefulWidget {
   const NoteTypesListWidget({super.key});
@@ -23,48 +27,71 @@ class _NoteTypesListWidgetState extends State<NoteTypesListWidget> {
           switch(state.listStatus){
             case NoteTypesListStatus.initial:
             case NoteTypesListStatus.loading:
-              return const Center(child: CircularProgressIndicator());
             case NoteTypesListStatus.success:
-              return ListView.builder(
-                controller: scrollController,
-                itemCount: state.noteTypesWithCount.length,
-                itemBuilder: (context, index) {
-                  final noteType = state.noteTypesWithCount[index].noteType;
-                  final usageCount = state.noteTypesWithCount[index].noteCount;
+              List<NoteTypeWithCount> noteTypesWithCount = state.listStatus.isLoading
+                  ? List.filled(3, fakeSkeletonNoteTypeWithCount)
+                  : state.noteTypesWithCount;
 
-                  return ListTile(
-                    title: Text(noteType.name),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            context.pushNamed("EditNoteType", extra: {'id': noteType.id.toString()});
-                          },
+              if(noteTypesWithCount.isEmpty){
+                return Center(child: Text(context.strings.no_results_found));
+              }
+
+              return Skeletonizer(
+                enabled: state.listStatus.isLoading,
+                child: ListView.builder(
+                  controller: scrollController,
+                  itemCount: noteTypesWithCount.length,
+                  itemBuilder: (context, index) {
+                    final noteType = noteTypesWithCount[index].noteType;
+                    final usageCount = noteTypesWithCount[index].noteCount;
+
+                    return Material(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: kGap4,
                         ),
-                        IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: (usageCount > 0) ? null : () {
-                            showDialog(context: context, builder: (BuildContext dialogContext){
-                              return ConfirmationDialog(
-                                  title: context.strings.delete_note_type_confirmation_title,
-                                  content: context.strings.delete_note_type_confirmation_message(noteType.name),
-                                  confirmButtonText: context.strings.delete,
-                                  cancelButtonText: context.strings.cancel,
-                                  onConfirm: (){
-                                    context.read<NoteTypesBloc>().add(DeleteNoteType(noteType.id!));
-                                    dialogContext.pop();
-                                  },
-                                  onCancel: (){dialogContext.pop();}
-                              );
-                            });
-                          },
+                        child: ListTile(
+                          title: Text(
+                            noteType.name,
+                            style: TextStyle(
+                              fontSize: kBodyLSize,
+                              color: Theme.of(context).colorScheme.primary
+                            ),
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.edit),
+                                onPressed: () {
+                                  context.pushNamed("EditNoteType", extra: {'id': noteType.id.toString()});
+                                },
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete),
+                                onPressed: (usageCount > 0) ? null : () {
+                                  showDialog(context: context, builder: (BuildContext dialogContext){
+                                    return ConfirmationDialog(
+                                        title: context.strings.delete_note_type_confirmation_title,
+                                        content: context.strings.delete_note_type_confirmation_message(noteType.name),
+                                        confirmButtonText: context.strings.delete,
+                                        cancelButtonText: context.strings.cancel,
+                                        onConfirm: (){
+                                          context.read<NoteTypesBloc>().add(DeleteNoteType(noteType.id!));
+                                          dialogContext.pop();
+                                        },
+                                        onCancel: (){dialogContext.pop();}
+                                    );
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
-                  );
-                },
+                      ),
+                    );
+                  },
+                ),
               );
             case NoteTypesListStatus.error:
               return const Center(child: Text("Error loading noteTypes"));

@@ -8,6 +8,8 @@ import 'package:jampa_flutter/ui/note_types/widgets/note_types_list_widget.dart'
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
+import '../../widgets/headers.dart';
+
 class NoteTypesLayout extends StatelessWidget {
   const NoteTypesLayout({super.key});
 
@@ -23,18 +25,18 @@ class NoteTypesLayout extends StatelessWidget {
           }
         },
         builder: (context, asyncSnapshot) {
-          return Stack(
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              NoteTypesListWidget(),
-              Positioned(
-                bottom: 16,
-                right: 16,
-                child: FloatingActionButton(
-                  onPressed: () {
-                    context.pushNamed("CreateNoteType");
-                  },
-                  child: const Icon(Icons.add),
-                ),
+              Headers.createHeader(
+                context: context,
+                title: context.strings.note_types,
+                onAddPressed: (){
+                  context.pushNamed("CreateNoteType");
+                },
+              ),
+              Expanded(
+                child: NoteTypesListWidget()
               ),
             ],
           );

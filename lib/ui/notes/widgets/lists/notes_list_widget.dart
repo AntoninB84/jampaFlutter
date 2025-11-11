@@ -42,37 +42,40 @@ class _NotesListWidgetState extends State<NotesListWidget> {
                   itemCount: notes.length,
                   itemBuilder: (context, index) {
                     final note = notes[index];
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: kGap4,
-                      ),
-                      child: ListTile(
-                        dense: true,
-                        title: Text(
-                          note.noteTitle,
-                          style: TextStyle(
-                            fontSize: kBodyLSize,
-                            color: Theme.of(context).colorScheme.primary
-                          ),
+
+                    return Material(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: kGap4,
                         ),
-                        trailing: Text(
-                          note.noteTypeName ?? '',
-                          style: TextStyle(
-                            fontSize: kBodyMSize,
+                        child: ListTile(
+                          dense: true,
+                          title: Text(
+                            note.noteTitle,
+                            style: TextStyle(
+                              fontSize: kBodyLSize,
+                              color: Theme.of(context).colorScheme.primary
+                            ),
                           ),
-                        ),
-                        subtitle: Text(
-                          note.categoriesNames ?? "",
-                          style: TextStyle(
-                            fontSize: kBodySSize
+                          trailing: Text(
+                            note.noteTypeName ?? '',
+                            style: TextStyle(
+                              fontSize: kBodyMSize,
+                            ),
                           ),
+                          subtitle: Text(
+                            note.categoriesNames ?? "",
+                            style: TextStyle(
+                              fontSize: kBodySSize
+                            ),
+                          ),
+                          onTap: (){
+                            context.pushNamed(
+                                'NoteDetails',
+                                extra: {'id': note.noteId.toString()}
+                            );
+                          },
                         ),
-                        onTap: (){
-                          context.pushNamed(
-                              'NoteDetails',
-                              extra: {'id': note.noteId.toString()}
-                          );
-                        },
                       ),
                     );
                   },

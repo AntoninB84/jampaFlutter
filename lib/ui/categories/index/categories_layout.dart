@@ -8,6 +8,8 @@ import 'package:jampa_flutter/ui/categories/widgets/categories_list_widget.dart'
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
+import '../../widgets/headers.dart';
+
 class CategoriesLayout extends StatelessWidget {
   const CategoriesLayout({super.key});
 
@@ -23,18 +25,18 @@ class CategoriesLayout extends StatelessWidget {
         }
       },
       builder: (context, asyncSnapshot) {
-        return Stack(
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CategoriesListWidget(),
-            Positioned(
-              bottom: 16,
-              right: 16,
-              child: FloatingActionButton(
-                onPressed: () {
-                  context.pushNamed("CreateCategory");
-                },
-                child: const Icon(Icons.add),
-              ),
+            Headers.createHeader(
+              context: context,
+              title: context.strings.categories,
+              onAddPressed: (){
+                context.pushNamed("CreateCategory");
+              },
+            ),
+            Expanded(
+              child: CategoriesListWidget()
             ),
           ],
         );
