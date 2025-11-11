@@ -29,4 +29,20 @@ class Headers {
       ],
     );
   }
+
+  static Widget noActionHeader({
+    required BuildContext context,
+    required String title,
+  }) {
+    return Row(
+      children: [
+        Expanded(
+          child: Text(
+            title,
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
+        ),
+      ],
+    );
+  }
 }

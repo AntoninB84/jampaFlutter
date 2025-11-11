@@ -10,6 +10,7 @@ import 'package:jampa_flutter/ui/alarm/widgets/save_alarm_list_dialog.dart';
 import 'package:jampa_flutter/ui/schedule/widgets/inputs/recurrence_interval_input.dart';
 import 'package:jampa_flutter/ui/schedule/widgets/inputs/recurrence_type_selector.dart';
 import 'package:jampa_flutter/ui/schedule/widgets/inputs/recurrence_weekdays_multiselector.dart';
+import 'package:jampa_flutter/ui/widgets/headers.dart';
 import 'package:jampa_flutter/ui/widgets/inputs/datetime_input_field.dart';
 import 'package:jampa_flutter/ui/widgets/cancel_button.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
@@ -17,6 +18,7 @@ import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:jampa_flutter/utils/forms/month_day_validator.dart';
 import 'package:jampa_flutter/utils/forms/positive_number_validator.dart';
 
+import '../../../utils/constants/styles/sizes.dart';
 import '../../../utils/enums/recurrence_type_enum.dart';
 import '../../widgets/error_text.dart';
 
@@ -66,13 +68,18 @@ class SaveRecurrentDateLayout extends StatelessWidget {
         return SingleChildScrollView(
           child: Column(
             children: [
+              Headers.noActionHeader(
+                context: context,
+                title: context.strings.create_recurrence_title,
+              ),
+              const SizedBox(height: kGap16),
               RecurrenceTypeSelector(
                 value: state.newRecurrentDateFormElements.selectedRecurrenceType,
                 onChanged: (value) => context.read<SaveRecurrentDateBloc>().add(
                   SelectRecurrenceType(recurrenceType: value)
                 )
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: kGap16),
               Builder(
                 builder: (context){
                   if(state.newRecurrentDateFormElements.selectedRecurrenceType.isIntervalDays) {
@@ -156,7 +163,7 @@ class SaveRecurrentDateLayout extends StatelessWidget {
                   }
                 }
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: kGap16),
               DatetimeInputField(
                 label: context.strings.create_start_date_field_title,
                 initialDateTime: state.newRecurrentDateFormElements.selectedStartDateTime,
@@ -166,7 +173,7 @@ class SaveRecurrentDateLayout extends StatelessWidget {
                   );
                 },
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: kGap16),
               DatetimeInputField(
                 label: context.strings.create_end_date_field_title,
                 initialDateTime: state.newRecurrentDateFormElements.selectedEndDateTime,
@@ -177,7 +184,7 @@ class SaveRecurrentDateLayout extends StatelessWidget {
                   );
                 },
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: kGap16),
               DatetimeInputField(
                 label: context.strings.create_recurrent_date_recurrence_end_field_title,
                 initialDateTime: state.newRecurrentDateFormElements.selectedRecurrenceEndDate,
@@ -188,15 +195,15 @@ class SaveRecurrentDateLayout extends StatelessWidget {
                   );
                 },
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: kGap16),
               AlarmListButton(
                 isSavingPersistentData: state.scheduleId != null,
                 blocContext: context,
                 elements: state.newRecurrentDateFormElements.alarmsForRecurrence,
               ),
-              const SizedBox(height: 32,),
+              const SizedBox(height: kGap32,),
               SubmitSingleDateButton(),
-              const SizedBox(height: 16,),
+              const SizedBox(height: kGap16,),
               CancelButton(
                 onPressed: () {
                   context.read<SaveRecurrentDateBloc>().add(ResetState());

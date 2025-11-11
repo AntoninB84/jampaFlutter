@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jampa_flutter/ui/widgets/headers.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:jampa_flutter/ui/categories/widgets/category_name_text_field.dart';
@@ -34,11 +35,11 @@ class SaveCategoryLayout extends StatelessWidget {
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                state.category != null ?
+              Headers.noActionHeader(
+                  context: context,
+                  title: state.category != null ?
                   context.strings.edit_category_title
-                    : context.strings.create_category_title,
-                style: Theme.of(context).textTheme.headlineSmall,
+                      : context.strings.create_category_title,
               ),
               const SizedBox(height: kGap16),
               CategoryNameTextField(),

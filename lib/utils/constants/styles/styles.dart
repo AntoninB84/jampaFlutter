@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:multi_dropdown/multi_dropdown.dart';
 import 'sizes.dart';
 
 TextTheme get textTheme {
@@ -78,4 +79,83 @@ TextTheme get textTheme {
     ),
   );
 }
+
+MenuThemeData menuThemeData(ColorScheme colorScheme) {
+  return MenuThemeData(
+    style: MenuStyle(
+      backgroundColor: WidgetStateProperty.all(colorScheme.surfaceBright),
+      shape: WidgetStateProperty.all(
+        RoundedRectangleBorder(
+          borderRadius: kRadius8,
+        ),
+      ),
+    ),
+  );
+}
+
+PopupMenuThemeData popupMenuThemeData(ColorScheme colorScheme) {
+  return PopupMenuThemeData(
+    color: colorScheme.surfaceBright,
+    shape: RoundedRectangleBorder(
+      borderRadius: kRadius8,
+    ),
+  );
+}
+
+DropdownMenuThemeData dropdownMenuThemeData(ColorScheme colorScheme) {
+  return DropdownMenuThemeData(
+    menuStyle: MenuStyle(
+      backgroundColor: WidgetStateProperty.all(colorScheme.surfaceBright),
+      shape: WidgetStateProperty.all(
+        RoundedRectangleBorder(
+          borderRadius: kRadius8,
+        ),
+      ),
+    ),
+  );
+}
+
+class MultiDropdownTheme {
+  static FieldDecoration fieldDecoration(BuildContext context, String? labelText) {
+    return FieldDecoration(
+      labelText: labelText,
+      labelStyle: Theme.of(context).inputDecorationTheme.labelStyle,
+      hintStyle: Theme.of(context).inputDecorationTheme.hintStyle,
+      border: OutlineInputBorder(
+        borderRadius: kRadius8,
+        borderSide: BorderSide(
+          color: Theme.of(context).inputDecorationTheme.enabledBorder?.borderSide.color ?? Colors.grey,
+        )
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: kRadius8,
+        borderSide: BorderSide(
+          color: Theme.of(context).inputDecorationTheme.focusedBorder?.borderSide.color ?? Colors.grey,
+        )
+      ),
+    );
+  }
+
+  static DropdownDecoration dropdownDecoration(BuildContext context) {
+    return DropdownDecoration(
+      backgroundColor: Theme.of(context).popupMenuTheme.color ?? Colors.red,
+    );
+  }
+
+  static DropdownItemDecoration dropdownItemDecoration(BuildContext context) {
+    return DropdownItemDecoration(
+      selectedBackgroundColor: Colors.transparent
+    );
+  }
+
+  static ChipDecoration chipDecoration(BuildContext context) {
+    return ChipDecoration(
+      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+      labelStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+        color: Theme.of(context).colorScheme.onPrimaryContainer,
+      ),
+    );
+  }
+}
+
 

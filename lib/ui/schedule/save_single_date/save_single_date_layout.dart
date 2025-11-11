@@ -6,9 +6,11 @@ import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_cubit.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
 import 'package:jampa_flutter/ui/alarm/widgets/save_alarm_list_dialog.dart';
+import 'package:jampa_flutter/ui/widgets/headers.dart';
 import 'package:jampa_flutter/ui/widgets/inputs/datetime_input_field.dart';
 import 'package:jampa_flutter/ui/widgets/cancel_button.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
+import 'package:jampa_flutter/utils/constants/styles/sizes.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 import '../../../bloc/schedule/save_single_date/save_single_date_bloc.dart';
@@ -57,6 +59,11 @@ class SaveSingleDateLayout extends StatelessWidget {
       builder: (context, state){
         return Column(
           children: [
+            Headers.noActionHeader(
+              context: context,
+              title: context.strings.create_date_title,
+            ),
+            const SizedBox(height: kGap16),
             DatetimeInputField(
               label: context.strings.create_start_date_field_title,
               initialDateTime: state.newSingleDateFormElements.selectedStartDateTime,
@@ -66,7 +73,7 @@ class SaveSingleDateLayout extends StatelessWidget {
                 );
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: kGap16),
             DatetimeInputField(
               label: context.strings.create_end_date_field_title,
               initialDateTime: state.newSingleDateFormElements.selectedEndDateTime,
@@ -77,15 +84,15 @@ class SaveSingleDateLayout extends StatelessWidget {
                 );
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: kGap16),
             AlarmListButton(
               isSavingPersistentData: state.scheduleId != null,
               blocContext: context,
               elements: state.newSingleDateFormElements.alarmsForSingleDate,
             ),
-            const SizedBox(height: 32,),
+            const SizedBox(height: kGap32,),
             SubmitSingleDateButton(),
-            const SizedBox(height: 16,),
+            const SizedBox(height: kGap16,),
             CancelButton(
               onPressed: () {
                 context.read<SaveSingleDateBloc>().add(ResetState());

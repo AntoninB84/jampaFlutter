@@ -43,12 +43,14 @@ class MaterialTheme {
         borderRadius: kRadius12,
       ),
       tileColor: colorScheme.surfaceContainer,
-    )
+    ),
+    popupMenuTheme: popupMenuThemeData(colorScheme),
+    menuTheme: menuThemeData(colorScheme),
+    dropdownMenuTheme: dropdownMenuThemeData(colorScheme),
   );
 
   List<ExtendedColor> get extendedColors => [
   ];
-
 }
 
 class ExtendedColor {

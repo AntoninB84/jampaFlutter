@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:jampa_flutter/utils/enums/recurrence_type_enum.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
+import '../../../../utils/constants/styles/sizes.dart';
+
 class RecurrenceTypeSelector extends StatelessWidget {
   const RecurrenceTypeSelector({super.key, this.value, required this.onChanged});
 
@@ -15,8 +17,12 @@ class RecurrenceTypeSelector extends StatelessWidget {
     return DropdownButtonFormField<RecurrenceType>(
       decoration: InputDecoration(
         labelText: context.strings.create_recurrent_date_field_title,
-        border: OutlineInputBorder(),
+        border: OutlineInputBorder(
+            borderRadius: kRadius8
+        ),
       ),
+      dropdownColor: Theme.of(context).popupMenuTheme.color,
+      borderRadius: kRadius12,
       value: value,
       items: RecurrenceType.values.map((recurrenceType) {
         return DropdownMenuItem<RecurrenceType>(

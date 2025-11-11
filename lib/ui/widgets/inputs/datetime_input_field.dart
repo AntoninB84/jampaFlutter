@@ -2,6 +2,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../../utils/constants/styles/sizes.dart';
+
 class DatetimeInputField extends StatefulWidget {
   const DatetimeInputField({
     super.key,
@@ -77,7 +79,9 @@ class _DatetimeInputFieldState extends State<DatetimeInputField> {
         decoration: InputDecoration(
           labelText: widget.label,
           errorText: widget.errorText,
-          border: const OutlineInputBorder(),
+          border: OutlineInputBorder(
+            borderRadius: kRadius8
+          ),
         ),
         child: Text(
           selectedDateTime != null

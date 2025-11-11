@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jampa_flutter/bloc/note_types/note_types_bloc.dart';
 import 'package:jampa_flutter/data/models/note_type.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
+import 'package:jampa_flutter/utils/constants/styles/sizes.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 class NoteTypeSelector extends StatelessWidget {
@@ -32,8 +33,12 @@ class NoteTypeSelector extends StatelessWidget {
             return DropdownButtonFormField<NoteTypeEntity>(
               decoration: InputDecoration(
                 labelText: context.strings.create_note_type_field_title,
-                border: OutlineInputBorder(),
+                border: OutlineInputBorder(
+                  borderRadius: kRadius8
+                ),
               ),
+              dropdownColor: Theme.of(context).popupMenuTheme.color,
+              borderRadius: kRadius12,
               value: value,
               items: noteTypesState.noteTypes.map((noteType) {
                 return DropdownMenuItem<NoteTypeEntity>(

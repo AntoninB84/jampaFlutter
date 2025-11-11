@@ -67,6 +67,7 @@
     "create_note_success_feedback": "Note créée avec succès",
     "@create_date": {},
     "create_date_title": "Ajouter une date",
+    "create_recurrence_title": "Ajouter une récurrence",
     "create_start_date_field_title": "Début de l'événement",
     "create_end_date_field_title": "Fin de l'événement (optionnelle)",
     "create_date_timeline_error" : "La date de fin ne peut pas être antérieure à la date de début",

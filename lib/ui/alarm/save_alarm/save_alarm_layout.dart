@@ -6,12 +6,14 @@ import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/bloc/schedule/save_recurrent_date/save_recurrent_date_bloc.dart';
 import 'package:jampa_flutter/ui/alarm/widgets/alarm_offset_text_field.dart';
 import 'package:jampa_flutter/ui/widgets/cancel_button.dart';
+import 'package:jampa_flutter/ui/widgets/headers.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/enums/alarm_offset_type_enum.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 import '../../../bloc/alarm/save_alarm/save_alarm_cubit.dart';
 import '../../../bloc/schedule/save_single_date/save_single_date_bloc.dart';
+import '../../../utils/constants/styles/sizes.dart';
 
 class SaveAlarmLayout extends StatelessWidget {
   const SaveAlarmLayout({super.key,
@@ -76,18 +78,23 @@ class SaveAlarmLayout extends StatelessWidget {
       builder: (context, state) {
         return Column(
           children: [
+            Headers.noActionHeader(
+              context: context,
+              title: context.strings.alarm_title,
+            ),
+            const SizedBox(height: kGap16),
             AlarmOffsetTypeSelector(
               selectedValue: state.newAlarmFormElements.selectedOffsetType,
               onChanged: context.read<SaveAlarmCubit>().selectOffsetType
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: kGap16),
             AlarmOffsetTextField(
               value: state.offsetNumberValidator.value.toString(),
               validator: state.offsetNumberValidator,
               isValid: state.isValidOffsetNumber,
               onChanged: context.read<SaveAlarmCubit>().selectOffsetNumber,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: kGap16),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -95,15 +102,15 @@ class SaveAlarmLayout extends StatelessWidget {
                     value: state.newAlarmFormElements.isSilentAlarm,
                     onChanged: context.read<SaveAlarmCubit>().toggleSilentAlarm
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: kGap8),
                 Text(context.strings.alarm_silent_checkbox_title,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ],
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: kGap32),
             SubmitAlarmButton(),
-            const SizedBox(height: 16),
+            const SizedBox(height: kGap16),
             CancelButton()
           ],
         );
@@ -137,8 +144,12 @@ class AlarmOffsetTypeSelector extends StatelessWidget {
     return DropdownButtonFormField<AlarmOffsetType>(
       decoration: InputDecoration(
         labelText: context.strings.alarm_offset_type_field_title,
-        border: OutlineInputBorder()
+        border: OutlineInputBorder(
+            borderRadius: kRadius8
+        ),
       ),
+      dropdownColor: Theme.of(context).popupMenuTheme.color,
+      borderRadius: kRadius12,
       value: selectedValue,
       items: AlarmOffsetType.values.map((alarmOffsetType) {
         return DropdownMenuItem<AlarmOffsetType>(

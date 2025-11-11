@@ -9,6 +9,8 @@ import 'package:jampa_flutter/utils/enums/weekdays_enum.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 
+import '../../../../utils/constants/styles/styles.dart';
+
 class RecurrenceWeekdaysMultiSelector extends StatefulWidget{
   const RecurrenceWeekdaysMultiSelector({
     super.key,
@@ -41,6 +43,13 @@ class _RecurrenceWeekdaysMultiSelectorState extends State<RecurrenceWeekdaysMult
         );
       }).toList(),
       validator: widget.validator,
+      fieldDecoration: MultiDropdownTheme.fieldDecoration(
+          context,
+          context.strings.create_recurrent_date_weekdays_field_title
+      ),
+      dropdownDecoration: MultiDropdownTheme.dropdownDecoration(context),
+      dropdownItemDecoration: MultiDropdownTheme.dropdownItemDecoration(context),
+      chipDecoration: MultiDropdownTheme.chipDecoration(context),
     );
   }
 }

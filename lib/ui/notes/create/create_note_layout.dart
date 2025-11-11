@@ -14,6 +14,7 @@ import 'package:jampa_flutter/ui/notes/widgets/inputs/note_content_text_field.da
 import 'package:jampa_flutter/bloc/notes/create/create_note_cubit.dart';
 
 import '../../../bloc/notes/create/create_note_form_helpers.dart';
+import '../../../utils/constants/styles/sizes.dart';
 import '../../widgets/cancel_button.dart';
 
 
@@ -36,59 +37,57 @@ class CreateNoteLayout extends StatelessWidget {
       },
       builder: (context, state) {
         return Scaffold(
-          body: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Text(
-                    context.strings.create_note_title,
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  const SizedBox(height: 16),
-                  NoteTitleTextField(
-                    isValid: state.isValidTitle,
-                    validator: state.title,
-                    onChanged: context.read<CreateNoteCubit>().onNameChanged,
-                  ),
-                  const SizedBox(height: 16),
-                  NoteContentTextField(
-                    isValid: state.isValidContent,
-                    validator: state.content,
-                    onChanged: context.read<CreateNoteCubit>().onContentChanged,
-                  ),
-                  const SizedBox(height: 16),
-                  NoteTypeSelector(
-                    value: state.selectedNoteType,
-                    onChanged: context.read<CreateNoteCubit>()
-                        .onSelectedNoteTypeChanged,
-                  ),
-                  const SizedBox(height: 16),
-                  NoteCategoriesMultiSelector(
-                    selectedCategories: state.selectedCategories,
-                    onCategorySelected: context.read<CreateNoteCubit>()
-                        .onSelectedCategoriesChanged
-                  ),
-                  const SizedBox(height: 16),
-                  DateListButton(
-                      blocContext: context,
-                      elements: state.selectedSingleDateElements,
-                  ),
-                  const SizedBox(height: 16),
-                  DateListButton(
-                      blocContext: context,
-                      elements: state.selectedRecurrences,
-                      isRecurrence: true,
-                  ),
-                  const SizedBox(height: 32),
-                  SubmitNoteButton(),
-                  const SizedBox(height: 16),
-                  CancelButton(
-                    onPressed: () => context.read<CreateNoteCubit>()
-                        .resetState(),
-                  ),
-                ],
-              ),
+          body: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  context.strings.create_note_title,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                const SizedBox(height: kGap16),
+                NoteTitleTextField(
+                  isValid: state.isValidTitle,
+                  validator: state.title,
+                  onChanged: context.read<CreateNoteCubit>().onNameChanged,
+                ),
+                const SizedBox(height: kGap16),
+                NoteContentTextField(
+                  isValid: state.isValidContent,
+                  validator: state.content,
+                  onChanged: context.read<CreateNoteCubit>().onContentChanged,
+                ),
+                const SizedBox(height: kGap16),
+                NoteTypeSelector(
+                  value: state.selectedNoteType,
+                  onChanged: context.read<CreateNoteCubit>()
+                      .onSelectedNoteTypeChanged,
+                ),
+                const SizedBox(height: kGap16),
+                NoteCategoriesMultiSelector(
+                  selectedCategories: state.selectedCategories,
+                  onCategorySelected: context.read<CreateNoteCubit>()
+                      .onSelectedCategoriesChanged
+                ),
+                const SizedBox(height: kGap16),
+                DateListButton(
+                    blocContext: context,
+                    elements: state.selectedSingleDateElements,
+                ),
+                const SizedBox(height: kGap16),
+                DateListButton(
+                    blocContext: context,
+                    elements: state.selectedRecurrences,
+                    isRecurrence: true,
+                ),
+                const SizedBox(height: kGap32),
+                SubmitNoteButton(),
+                const SizedBox(height: kGap16),
+                CancelButton(
+                  onPressed: () => context.read<CreateNoteCubit>()
+                      .resetState(),
+                ),
+              ],
             ),
           ),
         );

@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jampa_flutter/bloc/categories/categories_bloc.dart';
 import 'package:jampa_flutter/data/models/category.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
+import 'package:jampa_flutter/utils/constants/styles/sizes.dart';
+import 'package:jampa_flutter/utils/constants/styles/styles.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 
@@ -39,6 +41,7 @@ class _NoteCategoriesMultiSelectorState extends State<NoteCategoriesMultiSelecto
               return MultiDropdown(
                 key: UniqueKey(),
                 enabled: true,
+                closeOnBackButton: true,
                 onSelectionChange: widget.onCategorySelected,
                 items: categories.map((category) {
                   return DropdownItem<CategoryEntity>(
@@ -47,6 +50,13 @@ class _NoteCategoriesMultiSelectorState extends State<NoteCategoriesMultiSelecto
                     selected: widget.selectedCategories.contains(category),
                   );
                 }).toList(),
+                fieldDecoration: MultiDropdownTheme.fieldDecoration(
+                  context,
+                  context.strings.create_note_categories_field_title
+                ),
+                dropdownDecoration: MultiDropdownTheme.dropdownDecoration(context),
+                dropdownItemDecoration: MultiDropdownTheme.dropdownItemDecoration(context),
+                chipDecoration: MultiDropdownTheme.chipDecoration(context),
               );
             }
         )
