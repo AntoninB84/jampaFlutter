@@ -173,7 +173,7 @@ abstract class AlarmHelpers {
       final alarmSettings = AlarmSettings(
         id: alarmToSetup.alarm.id ?? alarmToSetup.hashCode,
         dateTime: alarmToSetup.alarmDateTime,
-        assetAudioPath: 'assets/alarm.mp3',
+        assetAudioPath: 'assets/sounds/alarm.mp3',
         loopAudio: true,
         vibrate: true,
         androidFullScreenIntent: true,

@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/bloc/permissions/permissions_bloc.dart';
 import 'package:jampa_flutter/repository/notes_repository.dart';
 import 'package:jampa_flutter/repository/schedule_repository.dart';
+import 'package:jampa_flutter/utils/constants/styles/sizes.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
@@ -51,7 +52,13 @@ class HomePage extends StatelessWidget {
               listener: (context, state) {
                 navigationShell.goBranch(state);
               },
-              child: SafeArea(child: navigationShell)
+              child: SafeArea(
+                minimum: EdgeInsets.symmetric(
+                  horizontal: kGap16,
+                  vertical: kGap40,
+                ),
+                child: navigationShell,
+              )
             ),
             bottomNavigationBar: BlocBuilder<BottomNavigationBarBloc, int>(
               builder: (context, currentIndex) {
