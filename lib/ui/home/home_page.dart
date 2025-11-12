@@ -56,7 +56,10 @@ class HomePage extends StatelessWidget {
         ],
         child: Scaffold(
           body: SafeArea(
-            minimum: EdgeInsets.all(kGap16),
+            minimum: EdgeInsets.symmetric(
+              horizontal: kGap16,
+              vertical: kGap4
+            ),
             child: navigationShell,
           ),
           appBar: AppBar(

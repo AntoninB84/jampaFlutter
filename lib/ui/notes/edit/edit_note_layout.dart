@@ -85,7 +85,7 @@ class EditNoteLayout extends StatelessWidget {
                   onCategorySelected: (values) => context.read<EditNoteBloc>()
                     .add(OnSelectedCategoriesChanged(categories: values)),
                 ),
-                const SizedBox(height: kGap16),
+                const SizedBox(height: kGap8),
                 BlocBuilder<EditNoteBloc, EditNoteState>(
                   buildWhen: (previous, current) {
                     return (previous.singleDates != current.singleDates)
@@ -109,7 +109,7 @@ class EditNoteLayout extends StatelessWidget {
                     );
                   }
                 ),
-                const SizedBox(height: kGap32),
+                const SizedBox(height: kGap8),
                 SubmitNoteButton(),
               ],
             ),

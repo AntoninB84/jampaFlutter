@@ -6,7 +6,6 @@ import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
 import 'package:jampa_flutter/data/models/category.dart';
 import 'package:jampa_flutter/data/models/note.dart';
 import 'package:jampa_flutter/data/models/note_type.dart';
-import 'package:jampa_flutter/data/models/schedule.dart';
 import 'package:jampa_flutter/repository/schedule_repository.dart';
 import 'package:jampa_flutter/utils/forms/content_validator.dart';
 import 'package:jampa_flutter/utils/forms/name_validator.dart';
@@ -27,6 +26,7 @@ class EditNoteBloc extends Bloc<EditNoteEvent, EditNoteState> {
     on<OnSelectedCategoriesChanged>(_onSelectedCategoriesChanged);
     on<OnSelectedNoteTypeChanged>(_onSelectedNoteTypeChanged);
     on<OnIsImportantCheckedChanged>(_onImportantCheckedChanged);
+    on<OnDeletePersistentSchedule>(_onDeletePersistentSchedule);
     on<OnSubmit>(_onSubmit);
     on<OnResetState>(_resetState);
   }
@@ -141,6 +141,10 @@ class EditNoteBloc extends Bloc<EditNoteEvent, EditNoteState> {
           isImportantChecked: event.isChecked,
         )
     );
+  }
+
+  void _onDeletePersistentSchedule(OnDeletePersistentSchedule event, Emitter<EditNoteState> emit) async {
+    await scheduleRepository.deleteScheduleById(event.scheduleId);
   }
 
   Future<void> _onSubmit(OnSubmit event, Emitter<EditNoteState> emit) async {

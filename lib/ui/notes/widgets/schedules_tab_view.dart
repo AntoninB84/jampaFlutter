@@ -1,21 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
 import 'package:jampa_flutter/ui/schedule/widgets/save_recurrent_date_list.dart';
 import 'package:jampa_flutter/ui/schedule/widgets/save_single_date_list.dart';
-import 'package:jampa_flutter/utils/constants/styles/sizes.dart';
+import 'package:jampa_flutter/ui/widgets/Commons.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
-
-import '../../../bloc/schedule/save_recurrent_date_list/save_recurrent_date_list_bloc.dart';
-import '../../../bloc/schedule/save_single_date_list/save_single_date_list_bloc.dart';
 
 class SchedulesTabView extends StatefulWidget {
   const SchedulesTabView({
     super.key,
     this.isSavingPersistentData = false,
-    this.recurrenceListElements = const [],
-    this.singleDateListElements = const [],
+    required this.recurrenceListElements,
+    required this.singleDateListElements,
     required this.onRecurrentDateDeleted,
     required this.onSingleDateDeleted,
   });
@@ -42,6 +38,12 @@ class _SchedulesTabViewState extends State<SchedulesTabView>
   }
 
   @override
+  void dispose() {
+    _tabController?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -60,29 +62,18 @@ class _SchedulesTabViewState extends State<SchedulesTabView>
             ),
           ]
         ),
-        Container(
-          constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height * 0.3,
-          ),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Theme.of(context).dividerColor,
-              width: 0.2,
-            ),
-            borderRadius: BorderRadius.vertical(
-              top: Radius.zero,
-              bottom: Radius.circular(4.0)
-            ),
-          ),
-          padding: const EdgeInsets.all(kGap8),
+        Commons.secondaryListsContainer(
+          context: context,
           child: TabBarView(
             controller: _tabController,
             children: [
               SaveSingleDateList(
+                isSavingPersistentData: widget.isSavingPersistentData,
                 listElements: widget.singleDateListElements,
                 onDateDeleted: widget.onSingleDateDeleted
               ),
               SaveRecurrentDateList(
+                isSavingPersistentData: widget.isSavingPersistentData,
                 listElements: widget.recurrenceListElements,
                 onDateDeleted: widget.onRecurrentDateDeleted
               )

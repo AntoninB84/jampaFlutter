@@ -71,7 +71,7 @@ class CreateNoteLayout extends StatelessWidget {
                   onCategorySelected: context.read<CreateNoteCubit>()
                       .onSelectedCategoriesChanged
                 ),
-                const SizedBox(height: kGap16),
+                const SizedBox(height: kGap8),
                 SchedulesTabView(
                   recurrenceListElements: state.selectedRecurrences,
                   singleDateListElements: state.selectedSingleDateElements,
@@ -82,7 +82,7 @@ class CreateNoteLayout extends StatelessWidget {
                     context.read<CreateNoteCubit>().onRemoveRecurrenceElement(value);
                   },
                 ),
-                const SizedBox(height: kGap32),
+                const SizedBox(height: kGap8),
                 SubmitNoteButton(),
               ],
             ),

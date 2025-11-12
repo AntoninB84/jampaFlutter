@@ -78,6 +78,15 @@ final class UpdateAlarm extends SaveSingleDateEvent {
   List<Object?> get props => [index, updatedAlarm];
 }
 
+final class DeletePersistentAlarmFromSingleDate extends SaveSingleDateEvent {
+  DeletePersistentAlarmFromSingleDate({required this.alarmId});
+
+  final int alarmId;
+
+  @override
+  List<Object?> get props => [alarmId];
+}
+
 final class OnSubmit extends SaveSingleDateEvent {}
 
 final class ResetState extends SaveSingleDateEvent {}

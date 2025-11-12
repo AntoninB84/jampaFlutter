@@ -94,7 +94,7 @@ class SaveAlarmCubit extends Cubit<SaveAlarmState> {
         if(state.initialAlarmFormElementIndex == null){
           // Creating a new persistent alarm
           newElement = state.newAlarmFormElements.copyWith(
-            scheduleId: state.scheduleId,
+            scheduleId: state.scheduleId ?? state.newAlarmFormElements.scheduleId,
             createdAt: DateTime.now(),
           );
         }

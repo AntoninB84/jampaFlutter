@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
-import '../../../bloc/schedule/save_single_date_list/save_single_date_list_bloc.dart';
+import '../../../bloc/notes/edit/edit_note_bloc.dart';
 import '../../widgets/confirmation_dialog.dart';
 
 class SaveSingleDateList extends StatefulWidget {
@@ -28,90 +28,76 @@ class SaveSingleDateList extends StatefulWidget {
 class _SaveSingleDateListState extends State<SaveSingleDateList> {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<SaveSingleDateListBloc>(
-      create: (context) => SaveSingleDateListBloc()
-        ..add(InitializeSaveSingleDateListFromMemoryState(
-            singleDateElements: widget.listElements
-        )
-      ),
-      child: BlocBuilder<SaveSingleDateListBloc, SaveSingleDateListState>(
-        builder: (context, state) {
-          return Column(
-            children: [
-              ElevatedButton(
-                  onPressed: (){
-                    context.pushNamed(widget.isSavingPersistentData
-                        ? 'SavePersistentSingleDate'
-                        : 'SaveMemorySingleDate',
-                    );
-                  },
-                  child: Text(context.strings.create_note_add_single_date_button)
-              ),
-              Expanded(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: state.singleDateElements.length,
-                  itemBuilder: (context, index) {
-                    final date = state.singleDateElements[index];
-                    final String displayText = date.selectedStartDateTime != null
-                        ? date.selectedStartDateTime!.toLocal().toString()
-                        : 'null';
-                  
-                    return ListTile(
-                      title: Text(displayText),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.edit),
-                            onPressed: () {
-                              context.pushNamed(widget.isSavingPersistentData
-                                  ? 'SavePersistentSingleDate'
-                                  : 'SaveMemorySingleDate',
-                                extra: {'dateIndex': index, 'scheduleId': date.scheduleId}
-                              );
-                            },
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.delete),
-                            onPressed: () {
-                              showDialog(context: context, builder: (BuildContext dialogContext){
-                                return ConfirmationDialog(
-                                    title: context.strings.delete_single_date_confirmation_title,
-                                    content: context.strings.delete_single_date_confirmation_message(
-                                        displayText,
-                                        widget.isSavingPersistentData.toString()
-                                    ),
-                                    confirmButtonText: context.strings.delete,
-                                    cancelButtonText: context.strings.cancel,
-                                    onConfirm: (){
-                                      if(widget.isSavingPersistentData) {
-                                        context.read<SaveSingleDateListBloc>()
-                                            .add(DeletePersistentSingleDate(id: date.scheduleId!));
-                                      }else{
-                                        //Remove from state
-                                        context.read<SaveSingleDateListBloc>()
-                                            .add(RemoveSingleDateFromMemoryList(index: index));
-                                        //Notify CreateNoteCubit
-                                        widget.onDateDeleted(index);
-                                      }
-                                      dialogContext.pop();
-                                    },
-                                    onCancel: (){dialogContext.pop();}
-                                );
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                    );
-                  },
+    return Column(
+      children: [
+        ElevatedButton(
+            onPressed: (){
+              context.pushNamed(widget.isSavingPersistentData
+                  ? 'SavePersistentSingleDate'
+                  : 'SaveMemorySingleDate',
+              );
+            },
+            child: Text(context.strings.create_note_add_single_date_button)
+        ),
+        Expanded(
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: widget.listElements.length,
+            itemBuilder: (context, index) {
+              final date = widget.listElements[index];
+              final String displayText = date.selectedStartDateTime != null
+                  ? date.selectedStartDateTime!.toLocal().toString()
+                  : 'null';
+
+              return ListTile(
+                title: Text(displayText),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () {
+                        context.pushNamed(widget.isSavingPersistentData
+                            ? 'SavePersistentSingleDate'
+                            : 'SaveMemorySingleDate',
+                            extra: {'dateIndex': index, 'scheduleId': date.scheduleId}
+                        );
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () {
+                        showDialog(context: context, builder: (BuildContext dialogContext){
+                          return ConfirmationDialog(
+                              title: context.strings.delete_single_date_confirmation_title,
+                              content: context.strings.delete_single_date_confirmation_message(
+                                  displayText,
+                                  widget.isSavingPersistentData.toString()
+                              ),
+                              confirmButtonText: context.strings.delete,
+                              cancelButtonText: context.strings.cancel,
+                              onConfirm: (){
+                                if(widget.isSavingPersistentData) {
+                                  context.read<EditNoteBloc>()
+                                      .add(OnDeletePersistentSchedule(
+                                      scheduleId: date.scheduleId!));
+                                }else{
+                                  widget.onDateDeleted(index);
+                                }
+                                dialogContext.pop();
+                              },
+                              onCancel: (){dialogContext.pop();}
+                          );
+                        });
+                      },
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          );
-        }
-      ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }

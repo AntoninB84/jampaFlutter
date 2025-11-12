@@ -5,7 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_cubit.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
-import 'package:jampa_flutter/ui/alarm/widgets/save_alarm_list_dialog.dart';
+import 'package:jampa_flutter/ui/alarm/widgets/save_alarm_list.dart';
+import 'package:jampa_flutter/ui/widgets/Commons.dart';
 import 'package:jampa_flutter/ui/widgets/headers.dart';
 import 'package:jampa_flutter/ui/widgets/inputs/datetime_input_field.dart';
 import 'package:jampa_flutter/ui/widgets/cancel_button.dart';
@@ -89,61 +90,26 @@ class SaveSingleDateLayout extends StatelessWidget {
               },
             ),
             const SizedBox(height: kGap16),
-            AlarmListButton(
-              isSavingPersistentData: state.scheduleId != null,
-              blocContext: context,
-              elements: state.newSingleDateFormElements.alarmsForSingleDate,
+            Text(
+              context.strings.create_date_alarm_count(
+                state.newSingleDateFormElements.alarmsForSingleDate.length
+              ),
             ),
-            const SizedBox(height: kGap32,),
+            Commons.secondaryListsContainer(
+              context: context,
+              child: SaveAlarmList(
+                isSavingPersistentData: state.scheduleId != null,
+                listElements: state.newSingleDateFormElements.alarmsForSingleDate,
+                onDateDeleted: (value) {
+                  context.read<SaveSingleDateBloc>().add(RemoveAlarm(index: value));
+                },
+              ),
+            ),
+            const SizedBox(height: kGap16,),
             SubmitSingleDateButton(),
           ],
         );
       },
-    );
-  }
-}
-
-class AlarmListButton extends StatelessWidget {
-  const AlarmListButton({super.key,
-    required this.blocContext,
-    required this.elements,
-    this.isSavingPersistentData = false
-  });
-
-  final BuildContext blocContext;
-  final List elements;
-  final bool isSavingPersistentData;
-
-  @override
-  Widget build(BuildContext listContext) {
-    return SizedBox(
-      width: double.maxFinite,
-      child: ElevatedButton(
-        style: ButtonStyle(
-            shape: WidgetStatePropertyAll(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                )
-            )
-        ),
-        onPressed: () {
-          showDialog(
-              context: listContext,
-              builder: (dialogContext) {
-                return SaveAlarmListDialog(
-                  isSavingPersistentData: isSavingPersistentData,
-                  listElements: elements as List<AlarmFormElements>,
-                  onDateDeleted: (value) {
-                    blocContext.read<SaveSingleDateBloc>()
-                        .add(RemoveAlarm(index: value));
-                    },
-                );
-              }
-          );
-        },
-        child: Text(listContext.strings.create_date_alarm_count(elements.length)
-        ),
-      ),
     );
   }
 }

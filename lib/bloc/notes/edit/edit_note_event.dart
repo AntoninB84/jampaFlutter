@@ -59,6 +59,15 @@ final class OnIsImportantCheckedChanged extends EditNoteEvent {
   List<Object?> get props => [isChecked];
 }
 
+final class OnDeletePersistentSchedule extends EditNoteEvent {
+  OnDeletePersistentSchedule({required this.scheduleId});
+
+  final int scheduleId;
+
+  @override
+  List<Object?> get props => [scheduleId];
+}
+
 final class OnSubmit extends EditNoteEvent {}
 
 final class OnResetState extends EditNoteEvent {}

@@ -41,6 +41,7 @@ class SaveRecurrentDateBloc extends Bloc<SaveRecurrentDateEvent, SaveRecurrentDa
     on<AddAlarmForRecurrence>(_onAddAlarm);
     on<UpdateAlarmForRecurrence>(_onUpdateAlarm);
     on<RemoveAlarmForRecurrence>(_onRemoveAlarm);
+    on<DeletePersistentAlarmFromRecurrence>(_onDeletePersistentAlarm);
     on<OnSubmit>(_onSubmit);
     on<ResetState>(_resetState);
   }
@@ -50,37 +51,41 @@ class SaveRecurrentDateBloc extends Bloc<SaveRecurrentDateEvent, SaveRecurrentDa
 
   void _initializeWithData(InitializeWithData event, Emitter<SaveRecurrentDateState> emit) async {
     // Prevent re-initialization on widget tree rebuild if already done
-    if(state.alreadyInitialized) return;
-      emit(state.copyWith(
-        alreadyInitialized: true,
-        isSavingPersistentDate: event.isSavingPersistentDate,
-        newRecurrentDateFormElements: event.recurrentDateFormElements,
-        initialRecurrentDateFormElementIndex: event.initialElementIndex,
-        noteId: event.noteId ?? event.recurrentDateFormElements?.noteId,
-      ));
-      // If we are editing a persistent date, we need to load its alarms from the database
-      if (event.isSavingPersistentDate == true && event.initialElementIndex != null) {
-        if (event.recurrentDateFormElements?.scheduleId == null) {
-          throw Exception(
-              "When initializing with persistent data, scheduleId must be provided in SingleDateFormElements.");
-        } else {
-          // Watch for alarms related to this scheduleId
-          await emit.onEach(
-              alarmRepository.watchAllAlarmsByScheduleId(
-                  event.recurrentDateFormElements!.scheduleId!),
-              onData: (result) {
-                RecurrenceFormElements currentElements = state
-                    .newRecurrentDateFormElements.copyWith(
-                    alarmsForRecurrence: result.map((alarmEntity) {
-                      return alarmEntity.toAlarmFormElements();
-                    }).toList()
-                );
-                emit(state.copyWith(
-                    newRecurrentDateFormElements: currentElements));
-              }
-          );
-        }
+    if(state.alreadyInitialized) {
+      return;
+    }
+
+    emit(state.copyWith(
+      alreadyInitialized: true,
+      isSavingPersistentDate: event.isSavingPersistentDate,
+      newRecurrentDateFormElements: event.recurrentDateFormElements,
+      initialRecurrentDateFormElementIndex: event.initialElementIndex,
+      noteId: event.noteId ?? event.recurrentDateFormElements?.noteId,
+      scheduleId: event.scheduleId
+    ));
+    // If we are editing a persistent date, we need to load its alarms from the database
+    if (event.isSavingPersistentDate == true && event.initialElementIndex != null) {
+      if (event.recurrentDateFormElements?.scheduleId == null) {
+        throw Exception(
+            "When initializing with persistent data, scheduleId must be provided in SingleDateFormElements.");
+      } else {
+        // Watch for alarms related to this scheduleId
+        await emit.onEach(
+            alarmRepository.watchAllAlarmsByScheduleId(
+                event.recurrentDateFormElements!.scheduleId!),
+            onData: (result) {
+              RecurrenceFormElements currentElements = state
+                  .newRecurrentDateFormElements.copyWith(
+                  alarmsForRecurrence: result.map((alarmEntity) {
+                    return alarmEntity.toAlarmFormElements();
+                  }).toList()
+              );
+              emit(state.copyWith(
+                  newRecurrentDateFormElements: currentElements));
+            }
+        );
       }
+    }
   }
 
   void _selectRecurrenceType(SelectRecurrenceType event, Emitter<SaveRecurrentDateState> emit) {
@@ -214,6 +219,10 @@ class SaveRecurrentDateBloc extends Bloc<SaveRecurrentDateEvent, SaveRecurrentDa
     }
   }
   //endregion
+
+  void _onDeletePersistentAlarm(DeletePersistentAlarmFromRecurrence event, Emitter<SaveRecurrentDateState> emit) async {
+    await alarmRepository.deleteAlarmById(event.alarmId);
+  }
 
   void _onSubmit(OnSubmit event, Emitter<SaveRecurrentDateState> emit) async {
     if(state.isValidFormValues){

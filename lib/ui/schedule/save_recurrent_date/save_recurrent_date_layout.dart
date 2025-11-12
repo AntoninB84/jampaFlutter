@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_cubit.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
 import 'package:jampa_flutter/bloc/schedule/save_recurrent_date/save_recurrent_date_bloc.dart';
-import 'package:jampa_flutter/ui/alarm/widgets/save_alarm_list_dialog.dart';
+import 'package:jampa_flutter/ui/alarm/widgets/save_alarm_list.dart';
 import 'package:jampa_flutter/ui/schedule/widgets/inputs/recurrence_interval_input.dart';
 import 'package:jampa_flutter/ui/schedule/widgets/inputs/recurrence_type_selector.dart';
 import 'package:jampa_flutter/ui/schedule/widgets/inputs/recurrence_weekdays_multiselector.dart';
@@ -20,6 +20,7 @@ import 'package:jampa_flutter/utils/forms/positive_number_validator.dart';
 
 import '../../../utils/constants/styles/sizes.dart';
 import '../../../utils/enums/recurrence_type_enum.dart';
+import '../../widgets/Commons.dart';
 import '../../widgets/error_text.dart';
 
 
@@ -200,63 +201,29 @@ class SaveRecurrentDateLayout extends StatelessWidget {
                 },
               ),
               const SizedBox(height: kGap16),
-              AlarmListButton(
-                isSavingPersistentData: state.scheduleId != null,
-                blocContext: context,
-                elements: state.newRecurrentDateFormElements.alarmsForRecurrence,
+              Text(
+                context.strings.create_date_alarm_count(
+                  state.newRecurrentDateFormElements.alarmsForRecurrence.length
+                )
               ),
-              const SizedBox(height: kGap32,),
+              Commons.secondaryListsContainer(
+                context: context,
+                child: SaveAlarmList(
+                  isSavingPersistentData: state.scheduleId != null,
+                  isForRecurrentDate: true,
+                  listElements: state.newRecurrentDateFormElements.alarmsForRecurrence,
+                  onDateDeleted: (value) {
+                    context.read<SaveRecurrentDateBloc>()
+                        .add(RemoveAlarmForRecurrence(index: value));
+                  },
+                ),
+              ),
+              const SizedBox(height: kGap16,),
               SubmitSingleDateButton(),
             ],
           ),
         );
       },
-    );
-  }
-}
-
-class AlarmListButton extends StatelessWidget {
-  const AlarmListButton({super.key,
-    required this.blocContext,
-    required this.elements,
-    this.isSavingPersistentData = false
-  });
-
-  final BuildContext blocContext;
-  final List elements;
-  final bool isSavingPersistentData;
-
-  @override
-  Widget build(BuildContext listContext) {
-    return SizedBox(
-      width: double.maxFinite,
-      child: ElevatedButton(
-        style: ButtonStyle(
-            shape: WidgetStatePropertyAll(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                )
-            )
-        ),
-        onPressed: () {
-          showDialog(
-              context: listContext,
-              builder: (dialogContext) {
-                return SaveAlarmListDialog(
-                  isForRecurrentDate: true,
-                  isSavingPersistentData: isSavingPersistentData,
-                  listElements: elements as List<AlarmFormElements>,
-                  onDateDeleted: (value) {
-                    blocContext.read<SaveRecurrentDateBloc>()
-                        .add(RemoveAlarmForRecurrence(index: value));
-                    },
-                );
-              }
-          );
-        },
-        child: Text(listContext.strings.create_date_alarm_count(elements.length)
-        ),
-      ),
     );
   }
 }

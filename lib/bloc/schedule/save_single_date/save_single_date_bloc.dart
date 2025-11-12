@@ -30,6 +30,7 @@ class SaveSingleDateBloc extends Bloc<SaveSingleDateEvent, SaveSingleDateState> 
     on<AddAlarm>(_onAddAlarm);
     on<UpdateAlarm>(_onUpdateAlarm);
     on<RemoveAlarm>(_onRemoveAlarm);
+    on<DeletePersistentAlarmFromSingleDate>(_onDeletePersistentAlarm);
     on<OnSubmit>(_onSubmit);
     on<ResetState>(_resetState);
   }
@@ -39,37 +40,41 @@ class SaveSingleDateBloc extends Bloc<SaveSingleDateEvent, SaveSingleDateState> 
 
   void _initializeWithData(InitializeWithData event, Emitter<SaveSingleDateState> emit) async {
     // Prevent re-initialization on widget tree rebuild if already done
-    if(state.alreadyInitialized) return;
-      emit(state.copyWith(
-        alreadyInitialized: true,
-        isSavingPersistentDate: event.isSavingPersistentDate,
-        newSingleDateFormElements: event.singleDateFormElements,
-        initialSingleDateFormElementIndex: event.initialElementIndex,
-        noteId: event.noteId ?? event.singleDateFormElements?.noteId,
-      ));
-      // If we are editing a persistent date, we need to load its alarms from the database
-      if (event.isSavingPersistentDate == true && event.initialElementIndex != null) {
-        if (event.singleDateFormElements?.scheduleId == null) {
-          throw Exception(
-              "When initializing with persistent data, scheduleId must be provided in SingleDateFormElements.");
-        } else {
-          // Watch for alarms related to this scheduleId
-          await emit.onEach(
-              alarmRepository.watchAllAlarmsByScheduleId(
-                  event.singleDateFormElements!.scheduleId!),
-              onData: (result) {
-                SingleDateFormElements currentElements = state
-                    .newSingleDateFormElements.copyWith(
-                    alarmsForSingleDate: result.map((alarmEntity) {
-                      return alarmEntity.toAlarmFormElements();
-                    }).toList()
-                );
-                emit(state.copyWith(
-                    newSingleDateFormElements: currentElements));
-              }
-          );
-        }
+    if(state.alreadyInitialized) {
+      return;
+    }
+
+    emit(state.copyWith(
+      alreadyInitialized: true,
+      isSavingPersistentDate: event.isSavingPersistentDate,
+      newSingleDateFormElements: event.singleDateFormElements,
+      initialSingleDateFormElementIndex: event.initialElementIndex,
+      noteId: event.noteId ?? event.singleDateFormElements?.noteId,
+      scheduleId: event.scheduleId
+    ));
+    // If we are editing a persistent date, we need to load its alarms from the database
+    if (event.isSavingPersistentDate == true && event.initialElementIndex != null) {
+      if (event.singleDateFormElements?.scheduleId == null) {
+        throw Exception(
+            "When initializing with persistent data, scheduleId must be provided in SingleDateFormElements.");
+      } else {
+        // Watch for alarms related to this scheduleId
+        await emit.onEach(
+            alarmRepository.watchAllAlarmsByScheduleId(
+                event.singleDateFormElements!.scheduleId!),
+            onData: (result) {
+              SingleDateFormElements currentElements = state
+                  .newSingleDateFormElements.copyWith(
+                  alarmsForSingleDate: result.map((alarmEntity) {
+                    return alarmEntity.toAlarmFormElements();
+                  }).toList()
+              );
+              emit(state.copyWith(
+                  newSingleDateFormElements: currentElements));
+            }
+        );
       }
+    }
   }
 
   void _selectStartDateTime(SelectStartDateTime event, Emitter<SaveSingleDateState> emit) {
@@ -129,6 +134,10 @@ class SaveSingleDateBloc extends Bloc<SaveSingleDateEvent, SaveSingleDateState> 
     }
   }
   //endregion
+
+  void _onDeletePersistentAlarm(DeletePersistentAlarmFromSingleDate event, Emitter<SaveSingleDateState> emit) async {
+    await alarmRepository.deleteAlarmById(event.alarmId);
+  }
 
   void _onSubmit(OnSubmit event, Emitter<SaveSingleDateState> emit) async {
     if(state.isValidDate){

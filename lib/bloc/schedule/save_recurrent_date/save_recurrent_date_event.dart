@@ -132,6 +132,15 @@ final class UpdateAlarmForRecurrence extends SaveRecurrentDateEvent {
   List<Object?> get props => [index, updatedAlarm];
 }
 
+final class DeletePersistentAlarmFromRecurrence extends SaveRecurrentDateEvent {
+  DeletePersistentAlarmFromRecurrence({required this.alarmId});
+
+  final int alarmId;
+
+  @override
+  List<Object?> get props => [alarmId];
+}
+
 final class OnSubmit extends SaveRecurrentDateEvent {}
 
 final class ResetState extends SaveRecurrentDateEvent {}
