@@ -15,11 +15,13 @@ part 'save_single_date_event.dart';
 
 class SaveSingleDateBloc extends Bloc<SaveSingleDateEvent, SaveSingleDateState> {
 
+  static final SingleDateFormElements emptySingleDateFormElements = SingleDateFormElements(
+    selectedStartDateTime: DateTime.now(),
+    selectedEndDateTime: DateTime.now().add(const Duration(hours: 1)),
+    alarmsForSingleDate: [],
+  );
   static final _initialState = SaveSingleDateState(
-    newSingleDateFormElements: SingleDateFormElements(
-      selectedStartDateTime: DateTime.now(),
-      selectedEndDateTime: DateTime.now().add(const Duration(hours: 1)),
-    ),
+    newSingleDateFormElements: emptySingleDateFormElements,
   );
 
   SaveSingleDateBloc() : super(_initialState) {

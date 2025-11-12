@@ -24,8 +24,9 @@ class SaveMemorySingleDatePage extends StatelessWidget {
               isSavingPersistentDate: false,
               singleDateFormElements: singleDateIndex != null
                   ? serviceLocator<CreateNoteCubit>().state.selectedSingleDateElements.elementAtOrNull(singleDateIndex!)
-                  : null,
-              initialElementIndex: singleDateIndex
+                  : SaveSingleDateBloc.emptySingleDateFormElements,
+              initialElementIndex: singleDateIndex,
+
           )),
         )
       ],

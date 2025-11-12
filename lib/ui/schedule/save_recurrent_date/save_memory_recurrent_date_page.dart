@@ -24,7 +24,7 @@ class SaveMemoryRecurrentDatePage extends StatelessWidget {
               isSavingPersistentDate: false,
               recurrentDateFormElements: recurrentDateIndex != null
                   ? serviceLocator<CreateNoteCubit>().state.selectedRecurrences.elementAtOrNull(recurrentDateIndex!)
-                  : null,
+                  : SaveRecurrentDateBloc.emptyRecurrentFormElements,
               initialElementIndex: recurrentDateIndex
           )),
         )

@@ -20,11 +20,13 @@ part 'save_recurrent_date_event.dart';
 
 class SaveRecurrentDateBloc extends Bloc<SaveRecurrentDateEvent, SaveRecurrentDateState> {
 
+  static final RecurrenceFormElements emptyRecurrentFormElements = RecurrenceFormElements(
+    selectedStartDateTime: DateTime.now(),
+    selectedEndDateTime: DateTime.now().add(const Duration(hours: 1)),
+    alarmsForRecurrence: [],
+  );
   static final _initialState = SaveRecurrentDateState(
-    newRecurrentDateFormElements: RecurrenceFormElements(
-      selectedStartDateTime: DateTime.now(),
-      selectedEndDateTime: DateTime.now().add(const Duration(hours: 1)),
-    ),
+    newRecurrentDateFormElements: emptyRecurrentFormElements
   );
 
   SaveRecurrentDateBloc() : super(_initialState) {
@@ -67,7 +69,7 @@ class SaveRecurrentDateBloc extends Bloc<SaveRecurrentDateEvent, SaveRecurrentDa
     if (event.isSavingPersistentDate == true && event.initialElementIndex != null) {
       if (event.recurrentDateFormElements?.scheduleId == null) {
         throw Exception(
-            "When initializing with persistent data, scheduleId must be provided in SingleDateFormElements.");
+            "When initializing with persistent data, scheduleId must be provided in RecurrentDateFormElements.");
       } else {
         // Watch for alarms related to this scheduleId
         await emit.onEach(
