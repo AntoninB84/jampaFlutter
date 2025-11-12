@@ -421,14 +421,14 @@ abstract class AppLocalizations {
   /// No description provided for @create_note_single_date_count.
   ///
   /// In fr, this message translates to:
-  /// **'{count, plural, =0{Aucune date} one{1 date} other{{count} dates}}'**
-  String create_note_single_date_count(num count);
+  /// **'Dates ({count})'**
+  String create_note_single_date_count(Object count);
 
   /// No description provided for @create_note_recurrent_date_count.
   ///
   /// In fr, this message translates to:
-  /// **'{count, plural, =0{Aucune date récurrente} one{1 récurrence} other{{count} récurrences}}'**
-  String create_note_recurrent_date_count(num count);
+  /// **'Récurrences ({count})'**
+  String create_note_recurrent_date_count(Object count);
 
   /// No description provided for @create_note_add_single_date_button.
   ///

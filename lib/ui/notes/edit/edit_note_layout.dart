@@ -3,10 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
 import 'package:jampa_flutter/bloc/notes/edit/edit_note_bloc.dart';
-import 'package:jampa_flutter/ui/schedule/widgets/save_recurrent_date_list_dialog.dart';
-import 'package:jampa_flutter/ui/schedule/widgets/save_single_date_list_dialog.dart';
 import 'package:jampa_flutter/ui/notes/widgets/inputs/note_categories_multiselector.dart';
 import 'package:jampa_flutter/ui/notes/widgets/inputs/note_type_selector.dart';
 import 'package:jampa_flutter/ui/widgets/headers.dart';
@@ -16,7 +13,7 @@ import 'package:jampa_flutter/ui/notes/widgets/inputs/note_title_text_field.dart
 import 'package:jampa_flutter/ui/notes/widgets/inputs/note_content_text_field.dart';
 
 import '../../../utils/constants/styles/sizes.dart';
-import '../../widgets/cancel_button.dart';
+import '../widgets/schedules_tab_view.dart';
 
 
 class EditNoteLayout extends StatelessWidget {
@@ -91,25 +88,24 @@ class EditNoteLayout extends StatelessWidget {
                 const SizedBox(height: kGap16),
                 BlocBuilder<EditNoteBloc, EditNoteState>(
                   buildWhen: (previous, current) {
-                    return previous.singleDates != current.singleDates;
+                    return (previous.singleDates != current.singleDates)
+                    || (previous.recurrentDates != current.recurrentDates);
                   },
                   builder: (context, state) {
-                    return DateListButton(
-                        blocContext: context,
-                        elements: state.singleDates,
-                    );
-                  }
-                ),
-                const SizedBox(height: kGap16),
-                BlocBuilder<EditNoteBloc, EditNoteState>(
-                  buildWhen: (previous, current) {
-                    return previous.recurrentDates != current.recurrentDates;
-                  },
-                  builder: (context, state) {
-                    return DateListButton(
-                        blocContext: context,
-                        elements: state.recurrentDates,
-                        isRecurrence: true,
+                    return Column(
+                      children: [
+                        SchedulesTabView(
+                          isSavingPersistentData: true,
+                          recurrenceListElements: state.recurrentDates,
+                          singleDateListElements: state.singleDates,
+                          onSingleDateDeleted: (value) {
+                            //Do nothing
+                          },
+                          onRecurrentDateDeleted: (value) {
+                            //Do nothing
+                          },
+                        ),
+                      ],
                     );
                   }
                 ),
@@ -120,61 +116,6 @@ class EditNoteLayout extends StatelessWidget {
           ),
         );
       }
-    );
-  }
-}
-
-class DateListButton extends StatelessWidget {
-  const DateListButton({super.key,
-    required this.blocContext,
-    required this.elements,
-    this.isRecurrence = false
-  });
-
-  final BuildContext blocContext;
-  final List elements;
-  final bool isRecurrence;
-
-  @override
-  Widget build(BuildContext listContext) {
-    return SizedBox(
-      width: double.maxFinite,
-      child: ElevatedButton(
-        style: ButtonStyle(
-          shape: WidgetStatePropertyAll(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            )
-          )
-        ),
-        onPressed: () {
-          showDialog(
-              context: listContext,
-              builder: (dialogContext) {
-                if(isRecurrence){
-                  return SaveRecurrentDateListDialog(
-                    isSavingPersistentData: true,
-                    listElements: elements as List<RecurrenceFormElements>,
-                    onDateDeleted: (value) {
-                      // Do nothing, as we are loading from persistent storage with a stream
-                    },
-                  );
-                }
-                return SaveSingleDateListDialog(
-                  isSavingPersistentData: true,
-                  listElements: elements as List<SingleDateFormElements>,
-                  onDateDeleted: (value) {
-                    // Do nothing, as we are loading from persistent storage with a stream
-                  },
-                );
-              }
-          );
-        },
-        child: Text(
-          isRecurrence ? listContext.strings.create_note_recurrent_date_count(elements.length)
-              : listContext.strings.create_note_single_date_count(elements.length)
-        ),
-      ),
     );
   }
 }

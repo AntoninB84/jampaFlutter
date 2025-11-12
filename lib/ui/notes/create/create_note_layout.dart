@@ -3,8 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jampa_flutter/ui/schedule/widgets/save_recurrent_date_list_dialog.dart';
-import 'package:jampa_flutter/ui/schedule/widgets/save_single_date_list_dialog.dart';
+import 'package:jampa_flutter/ui/notes/widgets/schedules_tab_view.dart';
 import 'package:jampa_flutter/ui/notes/widgets/inputs/note_categories_multiselector.dart';
 import 'package:jampa_flutter/ui/notes/widgets/inputs/note_type_selector.dart';
 import 'package:jampa_flutter/ui/widgets/headers.dart';
@@ -14,9 +13,7 @@ import 'package:jampa_flutter/ui/notes/widgets/inputs/note_title_text_field.dart
 import 'package:jampa_flutter/ui/notes/widgets/inputs/note_content_text_field.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_cubit.dart';
 
-import '../../../bloc/notes/create/create_note_form_helpers.dart';
 import '../../../utils/constants/styles/sizes.dart';
-import '../../widgets/cancel_button.dart';
 
 
 class CreateNoteLayout extends StatelessWidget {
@@ -75,15 +72,15 @@ class CreateNoteLayout extends StatelessWidget {
                       .onSelectedCategoriesChanged
                 ),
                 const SizedBox(height: kGap16),
-                DateListButton(
-                    blocContext: context,
-                    elements: state.selectedSingleDateElements,
-                ),
-                const SizedBox(height: kGap16),
-                DateListButton(
-                    blocContext: context,
-                    elements: state.selectedRecurrences,
-                    isRecurrence: true,
+                SchedulesTabView(
+                  recurrenceListElements: state.selectedRecurrences,
+                  singleDateListElements: state.selectedSingleDateElements,
+                  onSingleDateDeleted: (value) {
+                    context.read<CreateNoteCubit>().onRemoveSingleDateElement(value);
+                  },
+                  onRecurrentDateDeleted: (value) {
+                    context.read<CreateNoteCubit>().onRemoveRecurrenceElement(value);
+                  },
                 ),
                 const SizedBox(height: kGap32),
                 SubmitNoteButton(),
@@ -92,57 +89,6 @@ class CreateNoteLayout extends StatelessWidget {
           ),
         );
       }
-    );
-  }
-}
-
-class DateListButton extends StatelessWidget {
-  const DateListButton({super.key,
-    required this.blocContext,
-    required this.elements,
-    this.isRecurrence = false
-  });
-
-  final BuildContext blocContext;
-  final List elements;
-  final bool isRecurrence;
-
-  @override
-  Widget build(BuildContext listContext) {
-    return SizedBox(
-      width: double.maxFinite,
-      child: ElevatedButton(
-        style: ButtonStyle(
-          shape: WidgetStatePropertyAll(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            )
-          )
-        ),
-        onPressed: () {
-          showDialog(
-              context: listContext,
-              builder: (dialogContext) {
-                if(isRecurrence){
-                  return SaveRecurrentDateListDialog(
-                    listElements: elements as List<RecurrenceFormElements>,
-                    onDateDeleted: (value) {
-                      blocContext.read<CreateNoteCubit>().onRemoveRecurrenceElement(value);                  },
-                  );
-                }
-                return SaveSingleDateListDialog(
-                  listElements: elements as List<SingleDateFormElements>,
-                  onDateDeleted: (value) {
-                    blocContext.read<CreateNoteCubit>().onRemoveSingleDateElement(value);                  },
-                );
-              }
-          );
-        },
-        child: Text(
-          isRecurrence ? listContext.strings.create_note_recurrent_date_count(elements.length)
-              : listContext.strings.create_note_single_date_count(elements.length)
-        ),
-      ),
     );
   }
 }

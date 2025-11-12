@@ -24,7 +24,6 @@ class SaveSingleDateListBloc extends Bloc<SaveSingleDateListEvent, SaveSingleDat
 
   void _onDeletePersistentSingleDate(DeletePersistentSingleDate event, Emitter<SaveSingleDateListState> emit) async {
     await scheduleRepository.deleteScheduleById(event.id).then((_) {
-      //TODO verify if alarms are also deleted
       // Remove from in-memory list as well
       final updatedList = List<SingleDateFormElements>.from(state.singleDateElements);
       final int index = updatedList.indexWhere((element) => element.scheduleId == event.id);

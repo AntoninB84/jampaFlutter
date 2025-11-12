@@ -188,27 +188,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get create_note_type_field_title => 'Type de note';
 
   @override
-  String create_note_single_date_count(num count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count dates',
-      one: '1 date',
-      zero: 'Aucune date',
-    );
-    return '$_temp0';
+  String create_note_single_date_count(Object count) {
+    return 'Dates ($count)';
   }
 
   @override
-  String create_note_recurrent_date_count(num count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count récurrences',
-      one: '1 récurrence',
-      zero: 'Aucune date récurrente',
-    );
-    return '$_temp0';
+  String create_note_recurrent_date_count(Object count) {
+    return 'Récurrences ($count)';
   }
 
   @override
