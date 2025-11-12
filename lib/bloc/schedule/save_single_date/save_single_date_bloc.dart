@@ -78,8 +78,15 @@ class SaveSingleDateBloc extends Bloc<SaveSingleDateEvent, SaveSingleDateState> 
   }
 
   void _selectStartDateTime(SelectStartDateTime event, Emitter<SaveSingleDateState> emit) {
+    DateTime? selectedEndDateTime = state.newSingleDateFormElements.selectedEndDateTime;
+    // If the new start date is after the current end date, adjust the end date to be after the start date
+    if(selectedEndDateTime != null && event.dateTime.isAfter(selectedEndDateTime)){
+      selectedEndDateTime = event.dateTime.add(const Duration(hours: 1));
+    }
+
     SingleDateFormElements currentElements = state.newSingleDateFormElements.copyWith(
-      selectedStartDateTime: event.dateTime
+      selectedStartDateTime: event.dateTime,
+      selectedEndDateTime: selectedEndDateTime
     );
     emit(state.copyWith(newSingleDateFormElements: currentElements));
     add(ValidateDates());

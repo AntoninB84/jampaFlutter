@@ -9,6 +9,8 @@ import 'package:jampa_flutter/ui/widgets/confirmation_dialog.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
+import '../../../utils/constants/styles/sizes.dart';
+
 class SaveAlarmList extends StatefulWidget {
   const SaveAlarmList({
     super.key,
@@ -55,56 +57,65 @@ class _SaveAlarmListState extends State<SaveAlarmList> {
                 alarm.selectedOffsetType.getLabel(context),
               );
 
-              return ListTile(
-                title: Text(displayText),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.edit),
-                      onPressed: () {
-                        context.pushNamed(widget.isSavingPersistentData
-                            ? (widget.isForRecurrentDate ? 'SavePersistentAlarmForRecurrentDate' : 'SavePersistentAlarmForSingleDate')
-                            : (widget.isForRecurrentDate ? 'SaveMemoryAlarmForRecurrentDate' : 'SaveMemoryAlarmForSingleDate'),
-                            extra: {'alarmIndex': index}
-                        );
-                      },
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (dialogContext) => ConfirmationDialog(
-                              title: context.strings.alarm_delete_confirmation_title,
-                              content: context.strings.alarm_delete_confirmation_message(
-                                  index, widget.isSavingPersistentData.toString()
-                              ),
-                              confirmButtonText: context.strings.delete,
-                              cancelButtonText: context.strings.cancel,
-                              onCancel: () {dialogContext.pop();},
-                              onConfirm: () {
-                                if(widget.isSavingPersistentData) {
-                                  if(widget.isForRecurrentDate){
-                                    context.read<SaveRecurrentDateBloc>()
-                                        .add(DeletePersistentAlarmFromRecurrence(alarmId: alarm.alarmId!));
-                                  }else{
-                                    context.read<SaveSingleDateBloc>()
-                                        .add(DeletePersistentAlarmFromSingleDate(alarmId: alarm.alarmId!));
-                                  }
-                                  SnackBarX.showSuccess(context, context.strings.alarm_delete_success_feedback);
-
-                                }else{
-                                  //Notify parent
-                                  widget.onDateDeleted(index);
-                                }
-                                dialogContext.pop();
-                              }
+              return Material(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: kGap4,
+                  ),
+                  child: ListTile(
+                    dense: true,
+                    title: Text(displayText),
+                    onTap: (){
+                      context.pushNamed(widget.isSavingPersistentData
+                          ? (widget.isForRecurrentDate ? 'SavePersistentAlarmForRecurrentDate' : 'SavePersistentAlarmForSingleDate')
+                          : (widget.isForRecurrentDate ? 'SaveMemoryAlarmForRecurrentDate' : 'SaveMemoryAlarmForSingleDate'),
+                          extra: {'alarmIndex': index}
+                      );
+                    },
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.delete,
+                            color: Theme.of(context).colorScheme.error,
                           ),
-                        );
-                      },
+                          visualDensity: VisualDensity.compact,
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (dialogContext) => ConfirmationDialog(
+                                  title: context.strings.alarm_delete_confirmation_title,
+                                  content: context.strings.alarm_delete_confirmation_message(
+                                      index, widget.isSavingPersistentData.toString()
+                                  ),
+                                  confirmButtonText: context.strings.delete,
+                                  cancelButtonText: context.strings.cancel,
+                                  onCancel: () {dialogContext.pop();},
+                                  onConfirm: () {
+                                    if(widget.isSavingPersistentData) {
+                                      if(widget.isForRecurrentDate){
+                                        context.read<SaveRecurrentDateBloc>()
+                                            .add(DeletePersistentAlarmFromRecurrence(alarmId: alarm.alarmId!));
+                                      }else{
+                                        context.read<SaveSingleDateBloc>()
+                                            .add(DeletePersistentAlarmFromSingleDate(alarmId: alarm.alarmId!));
+                                      }
+                                      SnackBarX.showSuccess(context, context.strings.alarm_delete_success_feedback);
+
+                                    }else{
+                                      //Notify parent
+                                      widget.onDateDeleted(index);
+                                    }
+                                    dialogContext.pop();
+                                  }
+                              ),
+                            );
+                          },
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               );
             },

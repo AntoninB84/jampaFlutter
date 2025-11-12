@@ -90,11 +90,16 @@ class SaveSingleDateLayout extends StatelessWidget {
               },
             ),
             const SizedBox(height: kGap16),
-            Text(
-              context.strings.create_date_alarm_count(
-                state.newSingleDateFormElements.alarmsForSingleDate.length
+            Align(
+              alignment: Alignment.topLeft,
+              child: Text(
+                context.strings.create_date_alarm_count(
+                  state.newSingleDateFormElements.alarmsForSingleDate.length
+                ),
+                style: Theme.of(context).textTheme.titleMedium,
               ),
             ),
+            const SizedBox(height: kGap8),
             Commons.secondaryListsContainer(
               context: context,
               child: SaveAlarmList(

@@ -8,6 +8,7 @@ import 'package:jampa_flutter/bloc/notes/edit/edit_note_bloc.dart';
 import 'package:jampa_flutter/utils/enums/recurrence_type_enum.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
+import '../../../utils/constants/styles/sizes.dart';
 import '../../../utils/enums/weekdays_enum.dart';
 import '../../widgets/confirmation_dialog.dart';
 
@@ -70,49 +71,58 @@ class _SaveRecurrentDateListState extends State<SaveRecurrentDateList> {
                   ); break;
               }
 
-              return ListTile(
-                title: Text(displayText),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.edit),
-                      onPressed: () {
-                        context.pushNamed(widget.isSavingPersistentData
-                            ? 'SavePersistentRecurrentDate'
-                            : 'SaveMemoryRecurrentDate',
-                            extra: {'dateIndex': index, 'scheduleId': recurrence.scheduleId}
-                        );
-                      },
+              return Material(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: kGap4,
+                  ),
+                  child: ListTile(
+                    dense: true,
+                    title: Text(displayText),
+                    onTap: (){
+                      context.pushNamed(widget.isSavingPersistentData
+                          ? 'SavePersistentRecurrentDate'
+                          : 'SaveMemoryRecurrentDate',
+                          extra: {'dateIndex': index, 'scheduleId': recurrence.scheduleId}
+                      );
+                    },
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.delete,
+                            color: Theme.of(context).colorScheme.error,
+                          ),
+                          visualDensity: VisualDensity.compact,
+                          onPressed: () {
+                            showDialog(context: context, builder: (BuildContext dialogContext){
+                              return ConfirmationDialog(
+                                  title: context.strings.delete_recurrent_date_confirmation_title,
+                                  content: context.strings.delete_recurrent_date_confirmation_message(
+                                      displayText,
+                                      widget.isSavingPersistentData.toString()
+                                  ),
+                                  confirmButtonText: context.strings.delete,
+                                  cancelButtonText: context.strings.cancel,
+                                  onConfirm: (){
+                                    if(widget.isSavingPersistentData) {
+                                      context.read<EditNoteBloc>()
+                                        .add(OnDeletePersistentSchedule(
+                                          scheduleId: recurrence.scheduleId!));
+                                    }else{
+                                      widget.onDateDeleted(index);
+                                    }
+                                    dialogContext.pop();
+                                  },
+                                  onCancel: (){dialogContext.pop();}
+                              );
+                            });
+                          },
+                        ),
+                      ],
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        showDialog(context: context, builder: (BuildContext dialogContext){
-                          return ConfirmationDialog(
-                              title: context.strings.delete_recurrent_date_confirmation_title,
-                              content: context.strings.delete_recurrent_date_confirmation_message(
-                                  displayText,
-                                  widget.isSavingPersistentData.toString()
-                              ),
-                              confirmButtonText: context.strings.delete,
-                              cancelButtonText: context.strings.cancel,
-                              onConfirm: (){
-                                if(widget.isSavingPersistentData) {
-                                  context.read<EditNoteBloc>()
-                                    .add(OnDeletePersistentSchedule(
-                                      scheduleId: recurrence.scheduleId!));
-                                }else{
-                                  widget.onDateDeleted(index);
-                                }
-                                dialogContext.pop();
-                              },
-                              onCancel: (){dialogContext.pop();}
-                          );
-                        });
-                      },
-                    ),
-                  ],
+                  ),
                 ),
               );
             },

@@ -481,8 +481,8 @@ abstract class AppLocalizations {
   /// No description provided for @create_date_alarm_count.
   ///
   /// In fr, this message translates to:
-  /// **'{count, plural, =0{Aucun rappel} one{1 rappel} other{{count} rappels}}'**
-  String create_date_alarm_count(num count);
+  /// **'Rappels ({count})'**
+  String create_date_alarm_count(Object count);
 
   /// No description provided for @create_date_add_alarm_button.
   ///

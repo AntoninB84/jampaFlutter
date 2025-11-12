@@ -156,8 +156,14 @@ class SaveRecurrentDateBloc extends Bloc<SaveRecurrentDateEvent, SaveRecurrentDa
   
   //region Date selection and validation
   void _selectStartDateTime(SelectStartDateTime event, Emitter<SaveRecurrentDateState> emit) {
+    DateTime? selectedEndDateTime = state.newRecurrentDateFormElements.selectedEndDateTime;
+    // If the new start date is after the current end date, adjust the end date to be after the start date
+    if(selectedEndDateTime != null && event.dateTime.isAfter(selectedEndDateTime)){
+      selectedEndDateTime = event.dateTime.add(const Duration(hours: 1));
+    }
     RecurrenceFormElements currentElements = state.newRecurrentDateFormElements.copyWith(
-      selectedStartDateTime: event.dateTime
+      selectedStartDateTime: event.dateTime,
+      selectedEndDateTime: selectedEndDateTime
     );
     emit(state.copyWith(newRecurrentDateFormElements: currentElements));
     add(ValidateDates());

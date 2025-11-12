@@ -223,15 +223,8 @@ class AppLocalizationsFr extends AppLocalizations {
       'La date de fin ne peut pas être antérieure à la date de début';
 
   @override
-  String create_date_alarm_count(num count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count rappels',
-      one: '1 rappel',
-      zero: 'Aucun rappel',
-    );
-    return '$_temp0';
+  String create_date_alarm_count(Object count) {
+    return 'Rappels ($count)';
   }
 
   @override

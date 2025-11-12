@@ -151,7 +151,7 @@ class SaveRecurrentDateLayout extends StatelessWidget {
                             }()
                         ) : null
                     );
-                  }else {
+                  }else if(state.newRecurrentDateFormElements.selectedRecurrenceType.isDayBasedWeekly) {
                     // Show weekday multi selector
                     return RecurrenceWeekdaysMultiSelector(
                         selectedWeekdays: state.newRecurrentDateFormElements.selectedRecurrenceWeekdays ?? [],
@@ -165,6 +165,8 @@ class SaveRecurrentDateLayout extends StatelessWidget {
                           return null;
                         }
                     );
+                  } else {
+                    return kEmptyWidget;
                   }
                 }
               ),
@@ -201,11 +203,16 @@ class SaveRecurrentDateLayout extends StatelessWidget {
                 },
               ),
               const SizedBox(height: kGap16),
-              Text(
-                context.strings.create_date_alarm_count(
-                  state.newRecurrentDateFormElements.alarmsForRecurrence.length
-                )
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  context.strings.create_date_alarm_count(
+                    state.newRecurrentDateFormElements.alarmsForRecurrence.length
+                  ),
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
               ),
+              const SizedBox(height: kGap8),
               Commons.secondaryListsContainer(
                 context: context,
                 child: SaveAlarmList(
