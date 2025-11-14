@@ -21,6 +21,15 @@ class NoteDao {
     });
   }
 
+  static Future<void> updateNoteContent(int id, String content) async {
+    AppDatabase db = serviceLocator<AppDatabase>();
+    await (db.update(db.noteTable)..where((note) => note.id.equals(id)))
+        .write(NoteTableCompanion(
+      content: Value(content),
+      updatedAt: Value(DateTime.now()),
+    ));
+  }
+
   static JoinedSelectStatement _getNoteDataQuery(AppDatabase db, int id) {
     return (db.select(db.noteTable)
       ..where((note) => note.id.equals(id)))

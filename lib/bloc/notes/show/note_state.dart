@@ -12,28 +12,38 @@ extension NoteStatusX on NoteStatus {
 class NoteState extends Equatable {
 
   final NoteEntity? note;
+  final Document? noteContent;
   final NoteStatus status;
   final bool deletionSuccess;
   final bool deletionFailure;
 
   const NoteState({
     this.note,
+    this.noteContent,
     this.status = NoteStatus.initial,
     this.deletionSuccess = false,
     this.deletionFailure = false,
   });
 
   @override
-  List<Object?> get props => [note, status, deletionSuccess, deletionFailure];
+  List<Object?> get props => [
+    note,
+    noteContent,
+    status,
+    deletionSuccess,
+    deletionFailure
+  ];
 
   NoteState copyWith({
     NoteEntity? note,
+    Document? noteContent,
     NoteStatus? status,
     bool? deletionSuccess,
     bool? deletionFailure,
   }) {
     return NoteState(
       note: note ?? this.note,
+      noteContent: noteContent ?? this.noteContent,
       status: status ?? this.status,
       deletionSuccess: deletionSuccess ?? this.deletionSuccess,
       deletionFailure: deletionFailure ?? this.deletionFailure,

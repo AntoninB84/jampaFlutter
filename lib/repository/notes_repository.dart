@@ -39,6 +39,10 @@ class NotesRepository {
     await NoteDao.saveListOfNotes(notes);
   }
 
+  Future<void> updateNoteContent(int id, String content) async {
+    await NoteDao.updateNoteContent(id, content);
+  }
+
   Future<void> deleteNoteById(int id) async {
     await serviceLocator<ScheduleRepository>().deleteSchedulesByNoteId(id);
     await NoteDao.deleteNoteById(id);

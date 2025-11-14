@@ -1,17 +1,25 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:jampa_flutter/repository/notes_repository.dart';
+import 'package:jampa_flutter/utils/helpers/utils.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
 import '../../../data/models/note.dart';
 
-part 'note_state.dart';
 part 'note_event.dart';
+part 'note_state.dart';
 
 class NoteBloc extends Bloc<NoteEvent, NoteState> {
   NoteBloc() : super(const NoteState()) {
     on<WatchNoteById>(_watchNoteById);
+    on<OnChangeNoteContent>(
+      _onNoteContentChanged,
+      transformer: Utils.debounceTransformer(const Duration(seconds: 1))
+    );
     on<DeleteNoteById>(_deleteNoteById);
   }
 
@@ -27,7 +35,15 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
           notesRepository.watchNoteById(int.parse(noteId)),
           onData: (note) {
             if(note != null) {
-              emit(state.copyWith(status: NoteStatus.success, note: note));
+              final content = note.content != null
+                  ? Document.fromJson(jsonDecode(note.content!))
+                  : null;
+
+              emit(state.copyWith(
+                  status: NoteStatus.success,
+                  note: note,
+                  noteContent: content
+              ));
             } else {
               if(!state.deletionSuccess){
                 emit(state.copyWith(status: NoteStatus.failure));
@@ -47,6 +63,23 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
     }
   }
 
+  void _onNoteContentChanged(OnChangeNoteContent event, Emitter<NoteState> emit) async {
+    emit(state.copyWith(
+      noteContent: event.content,
+    ));
+
+    final String? content =
+    (state.noteContent != null && !state.noteContent!.isEmpty())
+        ? jsonEncode(state.noteContent?.toDelta().toJson())
+        : null;
+
+    if(state.note != null){
+      await notesRepository.updateNoteContent(state.note!.id!, content ?? "")
+      .catchError((error){
+        debugPrint("Error updating note content: $error");
+      });
+    }
+  }
   void _deleteNoteById(DeleteNoteById event, Emitter<NoteState> emit) async {
     emit(state.copyWith(status: NoteStatus.loading, deletionSuccess: false, deletionFailure: false));
     try {

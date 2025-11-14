@@ -1,6 +1,5 @@
-import 'dart:convert';
+import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:jampa_flutter/utils/constants/styles/sizes.dart';
@@ -23,29 +22,43 @@ class NoteContentTextField extends StatefulWidget {
 class _NoteContentTextFieldState extends State<NoteContentTextField> {
 
   final QuillController _quillController = QuillController.basic();
+  StreamSubscription? _docChangesSubscription;
 
   @override
   void initState() {
-    if(widget.value != null){
-      _quillController.document = widget.value!;
-    }
-    _quillController.addListener(_handleContentChange);
+    _handleInitParameterChange();
     super.initState();
   }
 
   @override
   void dispose() {
-    _quillController.removeListener(_handleContentChange);
+    if(_docChangesSubscription != null) {
+      _docChangesSubscription?.cancel();
+    }
     _quillController.dispose();
     super.dispose();
   }
 
-  void _handleContentChange(){
-    if(_quillController.document.isEmpty()){
-      widget.onChanged(null);
-    }else{
-      widget.onChanged(_quillController.document);
+  @override
+  void didUpdateWidget(covariant NoteContentTextField oldWidget) {
+    if(oldWidget.value != widget.value){
+      _handleInitParameterChange();
     }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  void _handleInitParameterChange(){
+    if(widget.value != null && !widget.value!.isEmpty()) {
+      _quillController.document = widget.value!;
+      _startListeningToChanges();
+    }
+  }
+
+  void _startListeningToChanges() async {
+    await _docChangesSubscription?.cancel();
+    _docChangesSubscription = _quillController.changes.listen((event) {
+      widget.onChanged(_quillController.document);
+    });
   }
 
   @override
@@ -92,6 +105,9 @@ class _NoteContentTextFieldState extends State<NoteContentTextField> {
                 placeholder: context.strings.create_note_content_field_hint,
                 expands: true,
                 padding: const EdgeInsets.all(kGap4),
+                onTapOutside: (event, focusNode) {
+                  focusNode.unfocus();
+                },
               ),
             ),
           )

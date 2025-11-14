@@ -1,14 +1,9 @@
 
-import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jampa_flutter/ui/notes/widgets/note_content_displayer.dart';
+import 'package:jampa_flutter/ui/notes/widgets/inputs/note_content_text_field.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
-import 'package:jampa_flutter/utils/constants/styles/sizes.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 import '../../../bloc/notes/show/note_bloc.dart';
@@ -72,12 +67,20 @@ class ShowNoteLayout extends StatelessWidget {
               )
             ],
           ),
-          body: Column(
-             children: [
-               Text(state.note?.title ?? 'No Title', style: Theme.of(context).textTheme.headlineMedium),
-               const SizedBox(height: 16),
-               NoteContentDisplayer(content: state.note?.content)
-             ],
+          body: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+               children: [
+                 Text(state.note?.title ?? 'No Title', style: Theme.of(context).textTheme.headlineMedium),
+                 const SizedBox(height: 16),
+                 NoteContentTextField(
+                   value: state.noteContent,
+                   onChanged: (document) {
+                     context.read<NoteBloc>().add(OnChangeNoteContent(document));
+                   },
+                 )
+               ],
+            ),
           )
         );
       }

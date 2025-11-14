@@ -14,6 +14,15 @@ final class WatchNoteById extends NoteEvent {
   List<Object?> get props => [noteId];
 }
 
+final class OnChangeNoteContent extends NoteEvent {
+  final Document? content;
+
+  OnChangeNoteContent(this.content);
+
+  @override
+  List<Object?> get props => [content];
+}
+
 final class DeleteNoteById extends NoteEvent {
   final int? noteId;
 
