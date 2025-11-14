@@ -58,61 +58,63 @@ class SaveSingleDateLayout extends StatelessWidget {
         return (previous.hasSubmitted == false && current.hasSubmitted == true);
       },
       builder: (context, state){
-        return Column(
-          children: [
-            Headers.basicHeader(
-              context: context,
-              title: context.strings.create_date_title,
-              onBackPressed: () {
-                context.pop();
-                context.read<SaveSingleDateBloc>().add(ResetState());
-              },
-            ),
-            const SizedBox(height: kGap16),
-            DatetimeInputField(
-              label: context.strings.create_start_date_field_title,
-              initialDateTime: state.newSingleDateFormElements.selectedStartDateTime,
-              onDateTimeSelected: (dateTime) {
-                context.read<SaveSingleDateBloc>().add(
-                    SelectStartDateTime(dateTime: dateTime)
-                );
-              },
-            ),
-            const SizedBox(height: kGap16),
-            DatetimeInputField(
-              label: context.strings.create_end_date_field_title,
-              initialDateTime: state.newSingleDateFormElements.selectedEndDateTime,
-              errorText: state.isValidDate ? null : context.strings.create_date_timeline_error,
-              onDateTimeSelected: (dateTime) {
-                context.read<SaveSingleDateBloc>().add(
-                    SelectEndDateTime(dateTime: dateTime)
-                );
-              },
-            ),
-            const SizedBox(height: kGap16),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                context.strings.create_date_alarm_count(
-                  state.newSingleDateFormElements.alarmsForSingleDate.length
-                ),
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-            ),
-            const SizedBox(height: kGap8),
-            Commons.secondaryListsContainer(
-              context: context,
-              child: SaveAlarmList(
-                isSavingPersistentData: state.scheduleId != null,
-                listElements: state.newSingleDateFormElements.alarmsForSingleDate,
-                onDateDeleted: (value) {
-                  context.read<SaveSingleDateBloc>().add(RemoveAlarm(index: value));
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              Headers.basicHeader(
+                context: context,
+                title: context.strings.create_date_title,
+                onBackPressed: () {
+                  context.pop();
+                  context.read<SaveSingleDateBloc>().add(ResetState());
                 },
               ),
-            ),
-            const SizedBox(height: kGap16,),
-            SubmitSingleDateButton(),
-          ],
+              const SizedBox(height: kGap16),
+              DatetimeInputField(
+                label: context.strings.create_start_date_field_title,
+                initialDateTime: state.newSingleDateFormElements.selectedStartDateTime,
+                onDateTimeSelected: (dateTime) {
+                  context.read<SaveSingleDateBloc>().add(
+                      SelectStartDateTime(dateTime: dateTime)
+                  );
+                },
+              ),
+              const SizedBox(height: kGap16),
+              DatetimeInputField(
+                label: context.strings.create_end_date_field_title,
+                initialDateTime: state.newSingleDateFormElements.selectedEndDateTime,
+                errorText: state.isValidDate ? null : context.strings.create_date_timeline_error,
+                onDateTimeSelected: (dateTime) {
+                  context.read<SaveSingleDateBloc>().add(
+                      SelectEndDateTime(dateTime: dateTime)
+                  );
+                },
+              ),
+              const SizedBox(height: kGap16),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  context.strings.create_date_alarm_count(
+                    state.newSingleDateFormElements.alarmsForSingleDate.length
+                  ),
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ),
+              const SizedBox(height: kGap8),
+              Commons.secondaryListsContainer(
+                context: context,
+                child: SaveAlarmList(
+                  isSavingPersistentData: state.scheduleId != null,
+                  listElements: state.newSingleDateFormElements.alarmsForSingleDate,
+                  onDateDeleted: (value) {
+                    context.read<SaveSingleDateBloc>().add(RemoveAlarm(index: value));
+                  },
+                ),
+              ),
+              const SizedBox(height: kGap16,),
+              SubmitSingleDateButton(),
+            ],
+          ),
         );
       },
     );

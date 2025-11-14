@@ -69,6 +69,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get everyday => 'Tous les jours';
 
   @override
+  String get datetime_hint => 'Choisir une date et une heure';
+
+  @override
   String get no_results_found => 'Aucun résultat trouvé';
 
   @override

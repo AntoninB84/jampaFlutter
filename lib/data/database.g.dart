@@ -534,10 +534,9 @@ class $NoteTableTable extends NoteTable
   late final GeneratedColumn<String> content = GeneratedColumn<String>(
     'content',
     aliasedName,
-    false,
-    additionalChecks: GeneratedColumn.checkTextLength(minTextLength: 1),
+    true,
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
   );
   static const VerificationMeta _isImportantMeta = const VerificationMeta(
     'isImportant',
@@ -654,8 +653,6 @@ class $NoteTableTable extends NoteTable
         _contentMeta,
         content.isAcceptableOrUnknown(data['content']!, _contentMeta),
       );
-    } else if (isInserting) {
-      context.missing(_contentMeta);
     }
     if (data.containsKey('is_important')) {
       context.handle(
@@ -713,7 +710,7 @@ class $NoteTableTable extends NoteTable
       content: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}content'],
-      )!,
+      ),
       isImportant: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
         data['${effectivePrefix}is_important'],
@@ -755,7 +752,7 @@ class $NoteTableTable extends NoteTable
 class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
   final Value<int> id;
   final Value<String> title;
-  final Value<String> content;
+  final Value<String?> content;
   final Value<bool> isImportant;
   final Value<NoteStatusEnum> status;
   final Value<DateTime> createdAt;
@@ -776,15 +773,14 @@ class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
   NoteTableCompanion.insert({
     this.id = const Value.absent(),
     required String title,
-    required String content,
+    this.content = const Value.absent(),
     this.isImportant = const Value.absent(),
     this.status = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.noteTypeId = const Value.absent(),
     this.userId = const Value.absent(),
-  }) : title = Value(title),
-       content = Value(content);
+  }) : title = Value(title);
   static Insertable<NoteEntity> custom({
     Expression<int>? id,
     Expression<String>? title,
@@ -812,7 +808,7 @@ class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
   NoteTableCompanion copyWith({
     Value<int>? id,
     Value<String>? title,
-    Value<String>? content,
+    Value<String?>? content,
     Value<bool>? isImportant,
     Value<NoteStatusEnum>? status,
     Value<DateTime>? createdAt,
@@ -2861,7 +2857,7 @@ typedef $$NoteTableTableCreateCompanionBuilder =
     NoteTableCompanion Function({
       Value<int> id,
       required String title,
-      required String content,
+      Value<String?> content,
       Value<bool> isImportant,
       Value<NoteStatusEnum> status,
       Value<DateTime> createdAt,
@@ -2873,7 +2869,7 @@ typedef $$NoteTableTableUpdateCompanionBuilder =
     NoteTableCompanion Function({
       Value<int> id,
       Value<String> title,
-      Value<String> content,
+      Value<String?> content,
       Value<bool> isImportant,
       Value<NoteStatusEnum> status,
       Value<DateTime> createdAt,
@@ -3363,7 +3359,7 @@ class $$NoteTableTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 Value<String> title = const Value.absent(),
-                Value<String> content = const Value.absent(),
+                Value<String?> content = const Value.absent(),
                 Value<bool> isImportant = const Value.absent(),
                 Value<NoteStatusEnum> status = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
@@ -3385,7 +3381,7 @@ class $$NoteTableTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 required String title,
-                required String content,
+                Value<String?> content = const Value.absent(),
                 Value<bool> isImportant = const Value.absent(),
                 Value<NoteStatusEnum> status = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),

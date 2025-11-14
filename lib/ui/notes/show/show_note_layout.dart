@@ -1,9 +1,14 @@
 
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jampa_flutter/ui/notes/widgets/note_content_displayer.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
+import 'package:jampa_flutter/utils/constants/styles/sizes.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 import '../../../bloc/notes/show/note_bloc.dart';
@@ -71,7 +76,7 @@ class ShowNoteLayout extends StatelessWidget {
              children: [
                Text(state.note?.title ?? 'No Title', style: Theme.of(context).textTheme.headlineMedium),
                const SizedBox(height: 16),
-               Text(state.note?.content ?? 'No Content', style: Theme.of(context).textTheme.bodyLarge),
+               NoteContentDisplayer(content: state.note?.content)
              ],
           )
         );

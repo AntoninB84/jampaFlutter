@@ -9,7 +9,7 @@ import 'package:jampa_flutter/utils/enums/note_status_enum.dart';
 class NoteTable extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get title => text().withLength(min: 1, max: 100)();
-  TextColumn get content => text().withLength(min: 1)();
+  TextColumn get content => text().nullable()();
   BoolColumn get isImportant => boolean().withDefault(const Constant(false))();
   TextColumn get status => textEnum<NoteStatusEnum>().withDefault(Constant(NoteStatusEnum.todo.name))();
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
@@ -21,7 +21,7 @@ class NoteTable extends Table {
 class NoteEntity {
   int? id;
   String title;
-  String content;
+  String? content;
   bool isImportant;
   NoteStatusEnum status;
   DateTime createdAt;
@@ -49,7 +49,7 @@ class NoteEntity {
     return NoteTableCompanion(
       id: id == null ? Value.absent() : Value(id!),
       title: Value(title),
-      content: Value(content),
+      content: content == null ? Value.absent() : Value(content!),
       isImportant: Value(isImportant),
       status: Value(status),
       createdAt: Value(createdAt),
@@ -106,7 +106,7 @@ class NoteEntity {
   NoteEntity.fromJson(Map<String, dynamic> json)
     : id = json['id'] as int?,
       title = json['title'] as String,
-      content = json['content'] as String,
+      content = json['content'] as String?,
       isImportant = json['isImportant'] as bool? ?? false,
       status = NoteStatusEnum.values.firstWhere(
               (e) => e.name == (json['status'] as String?),

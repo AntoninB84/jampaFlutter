@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
+import 'package:jampa_flutter/utils/extensions/datetime_extension.dart';
 
 import '../../../bloc/notes/edit/edit_note_bloc.dart';
 import '../../../utils/constants/styles/sizes.dart';
@@ -47,7 +48,7 @@ class _SaveSingleDateListState extends State<SaveSingleDateList> {
             itemBuilder: (context, index) {
               final date = widget.listElements[index];
               final String displayText = date.selectedStartDateTime != null
-                  ? date.selectedStartDateTime!.toLocal().toString()
+                  ? date.selectedStartDateTime!.toFullFormat(context)
                   : 'null';
 
               return Material(

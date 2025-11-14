@@ -55,8 +55,6 @@ class CreateNoteLayout extends StatelessWidget {
                 ),
                 const SizedBox(height: kGap16),
                 NoteContentTextField(
-                  isValid: state.isValidContent,
-                  validator: state.content,
                   onChanged: context.read<CreateNoteCubit>().onContentChanged,
                 ),
                 const SizedBox(height: kGap16),

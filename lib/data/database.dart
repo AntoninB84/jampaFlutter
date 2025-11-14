@@ -51,15 +51,15 @@ class AppDatabase extends _$AppDatabase {
         for(var noteType in InitialData.noteTypes) {
           await into(noteTypeTable).insert(noteType.toCompanion());
         }
-        for(var note in InitialData.notes) {
-          await into(noteTable).insert(note.toCompanion());
-        }
-        for(var schedule in InitialData.schedules) {
-          await into(scheduleTable).insert(schedule.toCompanion());
-        }
-        for(var alarm in InitialData.alarms) {
-          await into(alarmTable).insert(alarm.toCompanion());
-        }
+        // for(var note in InitialData.notes) {
+        //   await into(noteTable).insert(note.toCompanion());
+        // }
+        // for(var schedule in InitialData.schedules) {
+        //   await into(scheduleTable).insert(schedule.toCompanion());
+        // }
+        // for(var alarm in InitialData.alarms) {
+        //   await into(alarmTable).insert(alarm.toCompanion());
+        // }
       },
       onUpgrade: (Migrator m, int from, int to) async {
         if (from < 2) {

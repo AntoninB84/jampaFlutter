@@ -214,6 +214,12 @@ abstract class AppLocalizations {
   /// **'Tous les jours'**
   String get everyday;
 
+  /// No description provided for @datetime_hint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisir une date et une heure'**
+  String get datetime_hint;
+
   /// No description provided for @no_results_found.
   ///
   /// In fr, this message translates to:

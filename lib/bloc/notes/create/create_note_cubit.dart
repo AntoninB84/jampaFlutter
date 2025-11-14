@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:formz/formz.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
 import 'package:jampa_flutter/data/models/category.dart';
@@ -8,7 +11,6 @@ import 'package:jampa_flutter/data/models/note.dart';
 import 'package:jampa_flutter/data/models/note_type.dart';
 import 'package:jampa_flutter/repository/schedule_repository.dart';
 import 'package:jampa_flutter/utils/extensions/datetime_extension.dart';
-import 'package:jampa_flutter/utils/forms/content_validator.dart';
 import 'package:jampa_flutter/utils/forms/name_validator.dart';
 import 'package:jampa_flutter/repository/notes_repository.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
@@ -39,12 +41,10 @@ class CreateNoteCubit extends Cubit<CreateNoteState> {
     );
   }
 
-  void onContentChanged(String value) {
-    final content = ContentValidator.dirty(value);
+  void onContentChanged(Document? value) {
     emit(
         state.copyWith(
-          content: content,
-          isValidContent: Formz.validate([content]),
+          content: value,
           isError: false, // Reset error state on content change
           isSuccess: false, // Reset success state on content change
         )
@@ -145,17 +145,17 @@ class CreateNoteCubit extends Cubit<CreateNoteState> {
 
   Future<void> onSubmit() async {
     final title = NameValidator.dirty(state.title.value);
-    final content = ContentValidator.dirty(state.content.value);
     emit(
       state.copyWith(
         title: title,
-        content: content,
         isValidTitle: Formz.validate([title]),
-        isValidContent: Formz.validate([content]),
       )
     );
+    final String? content = state.content != null
+        ? jsonEncode(state.content?.toDelta().toJson())
+        : null;
 
-    if (state.isValidTitle && state.isValidContent) {
+    if (state.isValidTitle) {
       // If the name is valid, start loading
       emit(
           state.copyWith(
@@ -167,7 +167,7 @@ class CreateNoteCubit extends Cubit<CreateNoteState> {
 
       late NoteEntity note = NoteEntity(
           title: state.title.value,
-          content: state.content.value,
+          content: content,
           noteTypeId: state.selectedNoteType?.id,
           categories: state.selectedCategories,
           createdAt: DateTime.now(),

@@ -67,9 +67,7 @@ class EditNoteLayout extends StatelessWidget {
                 ),
                 const SizedBox(height: kGap16),
                 NoteContentTextField(
-                  isValid: state.isValidContent,
-                  value: state.note?.content,
-                  validator: state.content,
+                  value: state.content,
                   onChanged: (value) => context.read<EditNoteBloc>()
                       .add(OnContentChanged(value: value)),
                 ),

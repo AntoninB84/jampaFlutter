@@ -37,6 +37,7 @@ dependencies:
   #Forms
   formz: ^0.8.0
   multi_dropdown: ^3.0.1
+  flutter_quill: ^11.5.0
 
   # File management
   path_provider: ^2.1.5

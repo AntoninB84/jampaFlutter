@@ -19,6 +19,7 @@
     "saturday": "Samedi",
     "sunday": "Dimanche",
     "everyday": "Tous les jours",
+    "datetime_hint": "Choisir une date et une heure",
     "no_results_found": "Aucun résultat trouvé",
     "@create_category": {},
     "create_category_title": "Créer une catégorie",

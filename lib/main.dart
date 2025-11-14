@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:alarm/alarm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:jampa_flutter/bloc/auth/auth_bloc.dart';
 import 'package:jampa_flutter/repository/auth_repository.dart';
 import 'package:jampa_flutter/repository/user_repository.dart';
@@ -44,7 +45,10 @@ class MyApp extends StatelessWidget {
           builder: (context, state) {
             return MaterialApp.router(
               title: 'Jampa Flutter',
-              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              localizationsDelegates: AppLocalizations.localizationsDelegates
+              + [
+                FlutterQuillLocalizations.delegate
+              ],
               supportedLocales: AppLocalizations.supportedLocales,
               localeResolutionCallback: (locale, supportedLocales) {
                 for (final supportedLocale in supportedLocales) {

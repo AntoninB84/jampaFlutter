@@ -14,9 +14,12 @@ const kGap40 = 40.0;
 const kGap50 = 50.0;
 const kGap60 = 60.0;
 
-final kRadius4 = BorderRadius.circular(4.0);
-final kRadius8 = BorderRadius.circular(8.0);
-final kRadius12 = BorderRadius.circular(12.0);
+final kRadiusValue4 = 4.0;
+final kRadiusValue8 = 8.0;
+final kRadiusValue12 = 12.0;
+final kRadius4 = BorderRadius.circular(kRadiusValue4);
+final kRadius8 = BorderRadius.circular(kRadiusValue8);
+final kRadius12 = BorderRadius.circular(kRadiusValue12);
 
 const kDisplayLSize = 57.0;
 const kDisplayMSize = 52.0;

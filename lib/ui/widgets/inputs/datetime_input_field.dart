@@ -1,6 +1,8 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
+import 'package:jampa_flutter/utils/extensions/datetime_extension.dart';
 
 import '../../../utils/constants/styles/sizes.dart';
 
@@ -85,8 +87,8 @@ class _DatetimeInputFieldState extends State<DatetimeInputField> {
         ),
         child: Text(
           selectedDateTime != null
-              ? '${"${selectedDateTime!.toLocal()}".split(' ')[0]} ${TimeOfDay.fromDateTime(selectedDateTime!).format(context)}'
-              : 'Select date and time',
+              ? selectedDateTime!.toFullFormat(context)
+              : context.strings.datetime_hint,
         ),
       ),
     );

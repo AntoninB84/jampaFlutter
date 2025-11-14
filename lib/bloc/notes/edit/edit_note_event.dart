@@ -26,7 +26,7 @@ final class OnNameChanged extends EditNoteEvent {
 final class OnContentChanged extends EditNoteEvent {
   OnContentChanged({required this.value});
 
-  final String value;
+  final Document? value;
 
   @override
   List<Object?> get props => [value];
