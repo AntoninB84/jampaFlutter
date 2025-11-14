@@ -1,11 +1,11 @@
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jampa_flutter/bloc/home/app_bar_cubit.dart';
 import 'package:jampa_flutter/bloc/schedule/save_recurrent_date/save_recurrent_date_bloc.dart';
 import 'package:jampa_flutter/ui/alarm/widgets/alarm_offset_text_field.dart';
-import 'package:jampa_flutter/ui/widgets/cancel_button.dart';
+import 'package:jampa_flutter/ui/widgets/app_bar_config_widget.dart';
 import 'package:jampa_flutter/ui/widgets/headers.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/enums/alarm_offset_type_enum.dart';
@@ -24,96 +24,98 @@ class SaveAlarmLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<SaveAlarmCubit, SaveAlarmState>(
-      listener: (context, state) {
-        if(state.hasSubmitted == true) {
-          if(state.initialAlarmFormElementIndex != null){
-            //Editing
-            if(state.isSavingPersistentAlarm ?? false){
-              // Database updated successfully
-              SnackBarX.showSuccess(context,
-                  context.strings.alarm_edit_success_feedback);
-            }else{
-              if(isForRecurrentDate){
-                // Edit the existing alarm in the CreateRecurrentDateCubit state
-                context.read<SaveRecurrentDateBloc>().add(UpdateAlarmForRecurrence(
-                  index: state.initialAlarmFormElementIndex!,
-                  updatedAlarm: state.newAlarmFormElements,
-                ));
+    return AppBarConfigWidget(
+      config: AppBarConfig(),
+      child: BlocConsumer<SaveAlarmCubit, SaveAlarmState>(
+        listener: (context, state) {
+          if(state.hasSubmitted == true) {
+            if(state.initialAlarmFormElementIndex != null){
+              //Editing
+              if(state.isSavingPersistentAlarm ?? false){
+                // Database updated successfully
+                SnackBarX.showSuccess(context,
+                    context.strings.alarm_edit_success_feedback);
               }else{
-                //Edit the existing alarm in the CreateNoteCubit state
-                context.read<SaveSingleDateBloc>().add(UpdateAlarm(
-                  index: state.initialAlarmFormElementIndex!,
-                  updatedAlarm: state.newAlarmFormElements,
-                ));
+                if(isForRecurrentDate){
+                  // Edit the existing alarm in the CreateRecurrentDateCubit state
+                  context.read<SaveRecurrentDateBloc>().add(UpdateAlarmForRecurrence(
+                    index: state.initialAlarmFormElementIndex!,
+                    updatedAlarm: state.newAlarmFormElements,
+                  ));
+                }else{
+                  //Edit the existing alarm in the CreateNoteCubit state
+                  context.read<SaveSingleDateBloc>().add(UpdateAlarm(
+                    index: state.initialAlarmFormElementIndex!,
+                    updatedAlarm: state.newAlarmFormElements,
+                  ));
+                }
+              }
+            }else{
+              //Creating
+              if(state.isSavingPersistentAlarm ?? false){
+                // Successfully created and saved to database
+                SnackBarX.showSuccess(context,
+                    context.strings.alarm_add_success_feedback);
+              }else{
+                if(isForRecurrentDate){
+                  //Add the created alarm to the CreateRecurrentDateCubit state
+                  context.read<SaveRecurrentDateBloc>()
+                      .add(AddAlarmForRecurrence(alarm: state.newAlarmFormElements));
+                }else{
+                  //Add the created alarm to the CreateSingleDateCubit state
+                  context.read<SaveSingleDateBloc>()
+                      .add(AddAlarm(alarm: state.newAlarmFormElements));
+                }
               }
             }
-          }else{
-            //Creating
-            if(state.isSavingPersistentAlarm ?? false){
-              // Successfully created and saved to database
-              SnackBarX.showSuccess(context,
-                  context.strings.alarm_add_success_feedback);
-            }else{
-              if(isForRecurrentDate){
-                //Add the created alarm to the CreateRecurrentDateCubit state
-                context.read<SaveRecurrentDateBloc>()
-                    .add(AddAlarmForRecurrence(alarm: state.newAlarmFormElements));
-              }else{
-                //Add the created alarm to the CreateSingleDateCubit state
-                context.read<SaveSingleDateBloc>()
-                    .add(AddAlarm(alarm: state.newAlarmFormElements));
-              }
-            }
+            // Navigate back
+            context.pop();
+          } else {
+            SnackBarX.showError(context, context.strings.generic_error_message);
           }
-          // Navigate back
-          context.pop();
-        } else {
-          SnackBarX.showError(context, context.strings.generic_error_message);
-        }
-      },
-      listenWhen: (previous, current) {
-        return (previous.hasSubmitted == false && current.hasSubmitted == true);
-      },
-      builder: (context, state) {
-        return Column(
-          children: [
-            Headers.basicHeader(
-              context: context,
-              title: context.strings.alarm_title,
-              onBackPressed: () => context.pop(),
-            ),
-            const SizedBox(height: kGap16),
-            AlarmOffsetTypeSelector(
-              selectedValue: state.newAlarmFormElements.selectedOffsetType,
-              onChanged: context.read<SaveAlarmCubit>().selectOffsetType
-            ),
-            const SizedBox(height: kGap16),
-            AlarmOffsetTextField(
-              value: state.offsetNumberValidator.value.toString(),
-              validator: state.offsetNumberValidator,
-              isValid: state.isValidOffsetNumber,
-              onChanged: context.read<SaveAlarmCubit>().selectOffsetNumber,
-            ),
-            const SizedBox(height: kGap16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Checkbox(
-                    value: state.newAlarmFormElements.isSilentAlarm,
-                    onChanged: context.read<SaveAlarmCubit>().toggleSilentAlarm
-                ),
-                const SizedBox(width: kGap8),
-                Text(context.strings.alarm_silent_checkbox_title,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ],
-            ),
-            const SizedBox(height: kGap32),
-            SubmitAlarmButton(),
-          ],
-        );
-      },
+        },
+        listenWhen: (previous, current) {
+          return (previous.hasSubmitted == false && current.hasSubmitted == true);
+        },
+        builder: (context, state) {
+          return Column(
+            children: [
+              Headers.basicHeader(
+                context: context,
+                title: context.strings.alarm_title,
+              ),
+              const SizedBox(height: kGap16),
+              AlarmOffsetTypeSelector(
+                selectedValue: state.newAlarmFormElements.selectedOffsetType,
+                onChanged: context.read<SaveAlarmCubit>().selectOffsetType
+              ),
+              const SizedBox(height: kGap16),
+              AlarmOffsetTextField(
+                value: state.offsetNumberValidator.value.toString(),
+                validator: state.offsetNumberValidator,
+                isValid: state.isValidOffsetNumber,
+                onChanged: context.read<SaveAlarmCubit>().selectOffsetNumber,
+              ),
+              const SizedBox(height: kGap16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Checkbox(
+                      value: state.newAlarmFormElements.isSilentAlarm,
+                      onChanged: context.read<SaveAlarmCubit>().toggleSilentAlarm
+                  ),
+                  const SizedBox(width: kGap8),
+                  Text(context.strings.alarm_silent_checkbox_title,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ],
+              ),
+              const SizedBox(height: kGap32),
+              SubmitAlarmButton(),
+            ],
+          );
+        },
+      ),
     );
   }
 }

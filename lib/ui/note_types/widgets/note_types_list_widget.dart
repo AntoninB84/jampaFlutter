@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/bloc/note_types/note_types_bloc.dart';
 import 'package:jampa_flutter/data/models/note_type.dart';
+import 'package:jampa_flutter/ui/widgets/buttons/buttons.dart';
 import 'package:jampa_flutter/ui/widgets/confirmation_dialog.dart';
 import 'package:jampa_flutter/utils/constants/data/fake_skeleton_data.dart';
 import 'package:jampa_flutter/utils/constants/styles/sizes.dart';
@@ -57,17 +57,14 @@ class _NoteTypesListWidgetState extends State<NoteTypesListWidget> {
                               color: Theme.of(context).colorScheme.primary
                             )
                           ),
+                          onTap: () {
+                            context.pushNamed("EditNoteType", extra: {'id': noteType.id.toString()});
+                          },
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              IconButton(
-                                icon: const Icon(Icons.edit),
-                                onPressed: () {
-                                  context.pushNamed("EditNoteType", extra: {'id': noteType.id.toString()});
-                                },
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.delete),
+                              Buttons.deleteButtonIcon(
+                                context: context,
                                 onPressed: (usageCount > 0) ? null : () {
                                   showDialog(context: context, builder: (BuildContext dialogContext){
                                     return ConfirmationDialog(

@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jampa_flutter/bloc/settings_menu/settings_menu_bloc.dart';
-import 'package:jampa_flutter/ui/categories/save/save_category_page.dart';
+import 'package:jampa_flutter/bloc/home/settings_menu/settings_menu_bloc.dart';
 import 'package:jampa_flutter/ui/categories/index/categories_page.dart';
+import 'package:jampa_flutter/ui/categories/save/save_category_page.dart';
 import 'package:jampa_flutter/ui/home/home_page.dart';
-import 'package:jampa_flutter/ui/note_types/save/save_note_type_page.dart';
 import 'package:jampa_flutter/ui/note_types/index/note_types_page.dart';
+import 'package:jampa_flutter/ui/note_types/save/save_note_type_page.dart';
 import 'package:jampa_flutter/ui/notes/create/create_note_page.dart';
 import 'package:jampa_flutter/ui/notes/edit/edit_note_page.dart';
 import 'package:jampa_flutter/ui/notes/index/notes_page.dart';

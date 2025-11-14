@@ -10,10 +10,12 @@ class NoteContentTextField extends StatefulWidget {
   const NoteContentTextField({super.key,
     this.value,
     required this.onChanged,
+    this.editorMaxHeight = 300.0
   });
 
   final Document? value;
   final Function(Document?) onChanged;
+  final double editorMaxHeight;
 
   @override
   State<NoteContentTextField> createState() => _NoteContentTextFieldState();
@@ -97,7 +99,7 @@ class _NoteContentTextFieldState extends State<NoteContentTextField> {
           ),
           Container(
             constraints: BoxConstraints(
-              maxHeight: MediaQuery.sizeOf(context).height * 0.3,
+              maxHeight: widget.editorMaxHeight,
             ),
             child: QuillEditor.basic(
               controller: _quillController,

@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/ui/notes/widgets/inputs/note_content_text_field.dart';
+import 'package:jampa_flutter/ui/widgets/app_bar_config_widget.dart';
+import 'package:jampa_flutter/ui/widgets/buttons/buttons.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
+import '../../../bloc/home/app_bar_cubit.dart';
 import '../../../bloc/notes/show/note_bloc.dart';
 import '../../widgets/confirmation_dialog.dart';
 
@@ -29,17 +32,11 @@ class ShowNoteLayout extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-                onPressed: (){
-                  context.pop();
-                },
-                icon: const Icon(Icons.arrow_back)
-            ),
+        return AppBarConfigWidget(
+          config: AppBarConfig(
             actions: [
-              IconButton(
-                icon: const Icon(Icons.edit),
+              Buttons.editButtonIcon(
+                context: context,
                 onPressed: () {
                   // Navigate to edit note page
                   context.pushNamed("EditNote", extra: {
@@ -47,41 +44,44 @@ class ShowNoteLayout extends StatelessWidget {
                   });
                 },
               ),
-              IconButton(
-                  onPressed: (){
-                    showDialog(context: context, builder: (BuildContext dialogContext){
-                      return ConfirmationDialog(
-                          title: context.strings.delete_note_confirmation_title,
-                          content: context.strings.delete_note_confirmation_message(state.note?.title ?? ''),
-                          confirmButtonText: context.strings.delete,
-                          cancelButtonText: context.strings.cancel,
-                          onConfirm: (){
-                            context.read<NoteBloc>().add(DeleteNoteById(state.note?.id));
-                            context.pop();
-                          },
-                          onCancel: (){dialogContext.pop();}
-                      );
-                    });
-                  },
-                  icon: const Icon(Icons.delete)
+              Buttons.deleteButtonIcon(
+                context: context,
+                onPressed: (){
+                  showDialog(context: context, builder: (BuildContext dialogContext){
+                    return ConfirmationDialog(
+                        title: context.strings.delete_note_confirmation_title,
+                        content: context.strings.delete_note_confirmation_message(state.note?.title ?? ''),
+                        confirmButtonText: context.strings.delete,
+                        cancelButtonText: context.strings.cancel,
+                        onConfirm: (){
+                          context.read<NoteBloc>().add(DeleteNoteById(state.note?.id));
+                          context.pop();
+                        },
+                        onCancel: (){dialogContext.pop();}
+                    );
+                  });
+                },
               )
-            ],
+            ]
           ),
-          body: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-               children: [
-                 Text(state.note?.title ?? 'No Title', style: Theme.of(context).textTheme.headlineMedium),
-                 const SizedBox(height: 16),
-                 NoteContentTextField(
-                   value: state.noteContent,
-                   onChanged: (document) {
-                     context.read<NoteBloc>().add(OnChangeNoteContent(document));
-                   },
-                 )
-               ],
-            ),
-          )
+          child: Scaffold(
+            body: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                 children: [
+                   Text(state.note?.title ?? 'No Title', style: Theme.of(context).textTheme.headlineMedium),
+                   const SizedBox(height: 16),
+                   NoteContentTextField(
+                     value: state.noteContent,
+                     editorMaxHeight: MediaQuery.sizeOf(context).height * 0.5,
+                     onChanged: (document) {
+                       context.read<NoteBloc>().add(OnChangeNoteContent(document));
+                     },
+                   )
+                 ],
+              ),
+            )
+          ),
         );
       }
     );

@@ -1,8 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../../utils/constants/styles/sizes.dart';
-import '../../utils/constants/styles/styles.dart';
+import 'package:jampa_flutter/ui/widgets/buttons/buttons.dart';
 
 class Headers {
 
@@ -15,10 +12,9 @@ class Headers {
     return Row(
       children: [
         if(onBackPressed != null)
-          IconButton(
-              visualDensity: VisualDensity.compact,
-              onPressed: onBackPressed,
-              icon: const Icon(Icons.arrow_back)
+          Buttons.backButtonIcon(
+            context: context,
+            onPressed: onBackPressed,
           ),
         Expanded(
           child: Text(
@@ -26,12 +22,10 @@ class Headers {
             style: Theme.of(context).textTheme.headlineLarge,
           ),
         ),
-        IconButton(
+        Buttons.addButtonIcon(
+          context: context,
           onPressed: onAddPressed,
-          icon: const Icon(
-            Icons.add,
-            size: kHeadingLSize,
-          ),
+          visualDensity: VisualDensity.standard,
         ),
       ],
     );
@@ -39,16 +33,10 @@ class Headers {
 
   static Widget basicHeader({
     required BuildContext context,
-    required String title,
-    required VoidCallback onBackPressed
+    required String title
   }) {
     return Row(
       children: [
-        IconButton(
-          visualDensity: VisualDensity.compact,
-          onPressed: onBackPressed,
-          icon: const Icon(Icons.arrow_back)
-        ),
         Expanded(
           child: Text(
             title,
