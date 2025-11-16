@@ -21,15 +21,36 @@ class InitialData {
     NoteTypeEntity(id: null, name: "Event", createdAt: DateTime.now(), updatedAt: DateTime.now()),
   ];
 
-  static List<NoteEntity> notes = List<NoteEntity>.generate(50, (index){
-    return NoteEntity(
-      id: index + 1,
-      title: "Note #${index + 1}",
-      content: "This is the content of note #${index + 1}.",
+  static List<NoteEntity> notes = [
+    NoteEntity(
+      id: 1,
+      title: "Note #1",
+      content: null,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
-    );
-  });
+    ),
+    NoteEntity(
+      id: 2,
+      title: "Note #2",
+      content: null,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    ),
+    NoteEntity(
+      id: 3,
+      title: "Note #3",
+      content: null,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    ),
+    NoteEntity(
+      id: 4,
+      title: "Note #4",
+      content: null,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    ),
+  ];
 
   static List<ScheduleEntity> schedules = [
     // First note, every day for 9 days starting tomorrow

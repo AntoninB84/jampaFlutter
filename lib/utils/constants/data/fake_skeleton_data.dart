@@ -9,6 +9,9 @@ NoteListViewData get fakeSkeletonNoteListViewData => NoteListViewData(
   noteTitle: 'Loading...',
   noteTypeName: 'Loading...',
   categoriesNames: 'Loading...',
+  schedulesCount: 0,
+  recurringSchedulesCount: 0,
+  alarmsCount: 0,
   noteCreatedAt: DateTime.now(),
 );
 

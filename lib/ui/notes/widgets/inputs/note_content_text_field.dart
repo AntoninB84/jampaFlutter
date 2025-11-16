@@ -25,10 +25,12 @@ class _NoteContentTextFieldState extends State<NoteContentTextField> {
 
   final QuillController _quillController = QuillController.basic();
   StreamSubscription? _docChangesSubscription;
+  final FocusNode _focusNode = FocusNode();
+  bool _hasInitialized = false;
 
   @override
   void initState() {
-    _handleInitParameterChange();
+    _handleInitParameterChangeOnce();
     super.initState();
   }
 
@@ -37,6 +39,7 @@ class _NoteContentTextFieldState extends State<NoteContentTextField> {
     if(_docChangesSubscription != null) {
       _docChangesSubscription?.cancel();
     }
+    _focusNode.dispose();
     _quillController.dispose();
     super.dispose();
   }
@@ -44,13 +47,14 @@ class _NoteContentTextFieldState extends State<NoteContentTextField> {
   @override
   void didUpdateWidget(covariant NoteContentTextField oldWidget) {
     if(oldWidget.value != widget.value){
-      _handleInitParameterChange();
+      _handleInitParameterChangeOnce();
     }
     super.didUpdateWidget(oldWidget);
   }
 
-  void _handleInitParameterChange(){
-    if(widget.value != null && !widget.value!.isEmpty()) {
+  void _handleInitParameterChangeOnce(){
+    if(widget.value != null && !widget.value!.isEmpty() && !_hasInitialized) {
+      _hasInitialized = true;
       _quillController.document = widget.value!;
       _startListeningToChanges();
     }
@@ -103,13 +107,14 @@ class _NoteContentTextFieldState extends State<NoteContentTextField> {
             ),
             child: QuillEditor.basic(
               controller: _quillController,
+              focusNode: _focusNode,
               config: QuillEditorConfig(
                 placeholder: context.strings.create_note_content_field_hint,
                 expands: true,
                 padding: const EdgeInsets.all(kGap4),
-                onTapOutside: (event, focusNode) {
-                  focusNode.unfocus();
-                },
+                // onTapOutside: (event, focusNode) {
+                //   focusNode.unfocus();
+                // },
               ),
             ),
           )

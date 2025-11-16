@@ -1236,231 +1236,6 @@ class NoteCategoryTableCompanion extends UpdateCompanion<NoteCategoryEntity> {
   }
 }
 
-class NoteListViewData extends DataClass {
-  final int noteId;
-  final String noteTitle;
-  final DateTime noteCreatedAt;
-  final int? noteTypeId;
-  final String? noteTypeName;
-  final String? categoriesIds;
-  final String? categoriesNames;
-  const NoteListViewData({
-    required this.noteId,
-    required this.noteTitle,
-    required this.noteCreatedAt,
-    this.noteTypeId,
-    this.noteTypeName,
-    this.categoriesIds,
-    this.categoriesNames,
-  });
-  factory NoteListViewData.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return NoteListViewData(
-      noteId: serializer.fromJson<int>(json['note_id']),
-      noteTitle: serializer.fromJson<String>(json['note_title']),
-      noteCreatedAt: serializer.fromJson<DateTime>(json['note_created_at']),
-      noteTypeId: serializer.fromJson<int?>(json['note_type_id']),
-      noteTypeName: serializer.fromJson<String?>(json['note_type_name']),
-      categoriesIds: serializer.fromJson<String?>(json['categories_ids']),
-      categoriesNames: serializer.fromJson<String?>(json['categories_names']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'note_id': serializer.toJson<int>(noteId),
-      'note_title': serializer.toJson<String>(noteTitle),
-      'note_created_at': serializer.toJson<DateTime>(noteCreatedAt),
-      'note_type_id': serializer.toJson<int?>(noteTypeId),
-      'note_type_name': serializer.toJson<String?>(noteTypeName),
-      'categories_ids': serializer.toJson<String?>(categoriesIds),
-      'categories_names': serializer.toJson<String?>(categoriesNames),
-    };
-  }
-
-  NoteListViewData copyWith({
-    int? noteId,
-    String? noteTitle,
-    DateTime? noteCreatedAt,
-    Value<int?> noteTypeId = const Value.absent(),
-    Value<String?> noteTypeName = const Value.absent(),
-    Value<String?> categoriesIds = const Value.absent(),
-    Value<String?> categoriesNames = const Value.absent(),
-  }) => NoteListViewData(
-    noteId: noteId ?? this.noteId,
-    noteTitle: noteTitle ?? this.noteTitle,
-    noteCreatedAt: noteCreatedAt ?? this.noteCreatedAt,
-    noteTypeId: noteTypeId.present ? noteTypeId.value : this.noteTypeId,
-    noteTypeName: noteTypeName.present ? noteTypeName.value : this.noteTypeName,
-    categoriesIds: categoriesIds.present
-        ? categoriesIds.value
-        : this.categoriesIds,
-    categoriesNames: categoriesNames.present
-        ? categoriesNames.value
-        : this.categoriesNames,
-  );
-  @override
-  String toString() {
-    return (StringBuffer('NoteListViewData(')
-          ..write('noteId: $noteId, ')
-          ..write('noteTitle: $noteTitle, ')
-          ..write('noteCreatedAt: $noteCreatedAt, ')
-          ..write('noteTypeId: $noteTypeId, ')
-          ..write('noteTypeName: $noteTypeName, ')
-          ..write('categoriesIds: $categoriesIds, ')
-          ..write('categoriesNames: $categoriesNames')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(
-    noteId,
-    noteTitle,
-    noteCreatedAt,
-    noteTypeId,
-    noteTypeName,
-    categoriesIds,
-    categoriesNames,
-  );
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is NoteListViewData &&
-          other.noteId == this.noteId &&
-          other.noteTitle == this.noteTitle &&
-          other.noteCreatedAt == this.noteCreatedAt &&
-          other.noteTypeId == this.noteTypeId &&
-          other.noteTypeName == this.noteTypeName &&
-          other.categoriesIds == this.categoriesIds &&
-          other.categoriesNames == this.categoriesNames);
-}
-
-class NoteListView extends ViewInfo<NoteListView, NoteListViewData>
-    implements HasResultSet {
-  final String? _alias;
-  @override
-  final _$AppDatabase attachedDatabase;
-  NoteListView(this.attachedDatabase, [this._alias]);
-  @override
-  List<GeneratedColumn> get $columns => [
-    noteId,
-    noteTitle,
-    noteCreatedAt,
-    noteTypeId,
-    noteTypeName,
-    categoriesIds,
-    categoriesNames,
-  ];
-  @override
-  String get aliasedName => _alias ?? entityName;
-  @override
-  String get entityName => 'note_list_view';
-  @override
-  Map<SqlDialect, String> get createViewStatements => {
-    SqlDialect.sqlite:
-        'CREATE VIEW note_list_view AS SELECT n.id AS note_id, n.title AS note_title, n.created_at AS note_created_at, n.note_type_id AS note_type_id, nt.name AS note_type_name, GROUP_CONCAT(c.id) AS categories_ids, GROUP_CONCAT(c.name, \', \') AS categories_names FROM note_table AS n LEFT JOIN note_type_table AS nt ON nt.id = n.note_type_id LEFT JOIN note_category_table AS nc ON nc.note_id = n.id LEFT JOIN category_table AS c ON c.id = nc.category_id WHERE n.id IS NOT NULL GROUP BY n.id, n.title, n.created_at, n.note_type_id, nt.name',
-  };
-  @override
-  NoteListView get asDslTable => this;
-  @override
-  NoteListViewData map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return NoteListViewData(
-      noteId: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}note_id'],
-      )!,
-      noteTitle: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}note_title'],
-      )!,
-      noteCreatedAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}note_created_at'],
-      )!,
-      noteTypeId: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}note_type_id'],
-      ),
-      noteTypeName: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}note_type_name'],
-      ),
-      categoriesIds: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}categories_ids'],
-      ),
-      categoriesNames: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}categories_names'],
-      ),
-    );
-  }
-
-  late final GeneratedColumn<int> noteId = GeneratedColumn<int>(
-    'note_id',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-  );
-  late final GeneratedColumn<String> noteTitle = GeneratedColumn<String>(
-    'note_title',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-  );
-  late final GeneratedColumn<DateTime> noteCreatedAt =
-      GeneratedColumn<DateTime>(
-        'note_created_at',
-        aliasedName,
-        false,
-        type: DriftSqlType.dateTime,
-      );
-  late final GeneratedColumn<int> noteTypeId = GeneratedColumn<int>(
-    'note_type_id',
-    aliasedName,
-    true,
-    type: DriftSqlType.int,
-  );
-  late final GeneratedColumn<String> noteTypeName = GeneratedColumn<String>(
-    'note_type_name',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-  );
-  late final GeneratedColumn<String> categoriesIds = GeneratedColumn<String>(
-    'categories_ids',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-  );
-  late final GeneratedColumn<String> categoriesNames = GeneratedColumn<String>(
-    'categories_names',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-  );
-  @override
-  NoteListView createAlias(String alias) {
-    return NoteListView(attachedDatabase, alias);
-  }
-
-  @override
-  Query? get query => null;
-  @override
-  Set<String> get readTables => const {
-    'note_table',
-    'note_type_table',
-    'note_category_table',
-    'category_table',
-  };
-}
-
 class $ScheduleTableTable extends ScheduleTable
     with TableInfo<$ScheduleTableTable, ScheduleEntity> {
   @override
@@ -2209,6 +1984,299 @@ class AlarmTableCompanion extends UpdateCompanion<AlarmEntity> {
   }
 }
 
+class NoteListViewData extends DataClass {
+  final int noteId;
+  final String noteTitle;
+  final DateTime noteCreatedAt;
+  final int? noteTypeId;
+  final String? noteTypeName;
+  final String? categoriesIds;
+  final String? categoriesNames;
+  final int alarmsCount;
+  final int schedulesCount;
+  final int recurringSchedulesCount;
+  const NoteListViewData({
+    required this.noteId,
+    required this.noteTitle,
+    required this.noteCreatedAt,
+    this.noteTypeId,
+    this.noteTypeName,
+    this.categoriesIds,
+    this.categoriesNames,
+    required this.alarmsCount,
+    required this.schedulesCount,
+    required this.recurringSchedulesCount,
+  });
+  factory NoteListViewData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return NoteListViewData(
+      noteId: serializer.fromJson<int>(json['note_id']),
+      noteTitle: serializer.fromJson<String>(json['note_title']),
+      noteCreatedAt: serializer.fromJson<DateTime>(json['note_created_at']),
+      noteTypeId: serializer.fromJson<int?>(json['note_type_id']),
+      noteTypeName: serializer.fromJson<String?>(json['note_type_name']),
+      categoriesIds: serializer.fromJson<String?>(json['categories_ids']),
+      categoriesNames: serializer.fromJson<String?>(json['categories_names']),
+      alarmsCount: serializer.fromJson<int>(json['alarms_count']),
+      schedulesCount: serializer.fromJson<int>(json['schedules_count']),
+      recurringSchedulesCount: serializer.fromJson<int>(
+        json['recurring_schedules_count'],
+      ),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'note_id': serializer.toJson<int>(noteId),
+      'note_title': serializer.toJson<String>(noteTitle),
+      'note_created_at': serializer.toJson<DateTime>(noteCreatedAt),
+      'note_type_id': serializer.toJson<int?>(noteTypeId),
+      'note_type_name': serializer.toJson<String?>(noteTypeName),
+      'categories_ids': serializer.toJson<String?>(categoriesIds),
+      'categories_names': serializer.toJson<String?>(categoriesNames),
+      'alarms_count': serializer.toJson<int>(alarmsCount),
+      'schedules_count': serializer.toJson<int>(schedulesCount),
+      'recurring_schedules_count': serializer.toJson<int>(
+        recurringSchedulesCount,
+      ),
+    };
+  }
+
+  NoteListViewData copyWith({
+    int? noteId,
+    String? noteTitle,
+    DateTime? noteCreatedAt,
+    Value<int?> noteTypeId = const Value.absent(),
+    Value<String?> noteTypeName = const Value.absent(),
+    Value<String?> categoriesIds = const Value.absent(),
+    Value<String?> categoriesNames = const Value.absent(),
+    int? alarmsCount,
+    int? schedulesCount,
+    int? recurringSchedulesCount,
+  }) => NoteListViewData(
+    noteId: noteId ?? this.noteId,
+    noteTitle: noteTitle ?? this.noteTitle,
+    noteCreatedAt: noteCreatedAt ?? this.noteCreatedAt,
+    noteTypeId: noteTypeId.present ? noteTypeId.value : this.noteTypeId,
+    noteTypeName: noteTypeName.present ? noteTypeName.value : this.noteTypeName,
+    categoriesIds: categoriesIds.present
+        ? categoriesIds.value
+        : this.categoriesIds,
+    categoriesNames: categoriesNames.present
+        ? categoriesNames.value
+        : this.categoriesNames,
+    alarmsCount: alarmsCount ?? this.alarmsCount,
+    schedulesCount: schedulesCount ?? this.schedulesCount,
+    recurringSchedulesCount:
+        recurringSchedulesCount ?? this.recurringSchedulesCount,
+  );
+  @override
+  String toString() {
+    return (StringBuffer('NoteListViewData(')
+          ..write('noteId: $noteId, ')
+          ..write('noteTitle: $noteTitle, ')
+          ..write('noteCreatedAt: $noteCreatedAt, ')
+          ..write('noteTypeId: $noteTypeId, ')
+          ..write('noteTypeName: $noteTypeName, ')
+          ..write('categoriesIds: $categoriesIds, ')
+          ..write('categoriesNames: $categoriesNames, ')
+          ..write('alarmsCount: $alarmsCount, ')
+          ..write('schedulesCount: $schedulesCount, ')
+          ..write('recurringSchedulesCount: $recurringSchedulesCount')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    noteId,
+    noteTitle,
+    noteCreatedAt,
+    noteTypeId,
+    noteTypeName,
+    categoriesIds,
+    categoriesNames,
+    alarmsCount,
+    schedulesCount,
+    recurringSchedulesCount,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is NoteListViewData &&
+          other.noteId == this.noteId &&
+          other.noteTitle == this.noteTitle &&
+          other.noteCreatedAt == this.noteCreatedAt &&
+          other.noteTypeId == this.noteTypeId &&
+          other.noteTypeName == this.noteTypeName &&
+          other.categoriesIds == this.categoriesIds &&
+          other.categoriesNames == this.categoriesNames &&
+          other.alarmsCount == this.alarmsCount &&
+          other.schedulesCount == this.schedulesCount &&
+          other.recurringSchedulesCount == this.recurringSchedulesCount);
+}
+
+class NoteListView extends ViewInfo<NoteListView, NoteListViewData>
+    implements HasResultSet {
+  final String? _alias;
+  @override
+  final _$AppDatabase attachedDatabase;
+  NoteListView(this.attachedDatabase, [this._alias]);
+  @override
+  List<GeneratedColumn> get $columns => [
+    noteId,
+    noteTitle,
+    noteCreatedAt,
+    noteTypeId,
+    noteTypeName,
+    categoriesIds,
+    categoriesNames,
+    alarmsCount,
+    schedulesCount,
+    recurringSchedulesCount,
+  ];
+  @override
+  String get aliasedName => _alias ?? entityName;
+  @override
+  String get entityName => 'note_list_view';
+  @override
+  Map<SqlDialect, String> get createViewStatements => {
+    SqlDialect.sqlite:
+        'CREATE VIEW note_list_view AS SELECT n.id AS note_id, n.title AS note_title, n.created_at AS note_created_at, n.note_type_id AS note_type_id, nt.name AS note_type_name, GROUP_CONCAT(DISTINCT c.id) AS categories_ids, GROUP_CONCAT(DISTINCT c.name) AS categories_names, COUNT(DISTINCT a.id) AS alarms_count, COUNT(DISTINCT s.id) AS schedules_count, COUNT(DISTINCT sr.id) AS recurring_schedules_count FROM note_table AS n LEFT JOIN note_type_table AS nt ON nt.id = n.note_type_id LEFT JOIN note_category_table AS nc ON nc.note_id = n.id LEFT JOIN category_table AS c ON c.id = nc.category_id LEFT JOIN schedule_table AS s ON s.note_id = n.id AND s.recurrence_type IS NULL LEFT JOIN schedule_table AS sr ON sr.note_id = n.id AND sr.recurrence_type IS NOT NULL LEFT JOIN alarm_table AS a ON a.schedule_id = s.id OR a.schedule_id = sr.id WHERE n.id IS NOT NULL GROUP BY n.id, n.title, n.created_at, n.note_type_id, nt.name',
+  };
+  @override
+  NoteListView get asDslTable => this;
+  @override
+  NoteListViewData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return NoteListViewData(
+      noteId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}note_id'],
+      )!,
+      noteTitle: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note_title'],
+      )!,
+      noteCreatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}note_created_at'],
+      )!,
+      noteTypeId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}note_type_id'],
+      ),
+      noteTypeName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note_type_name'],
+      ),
+      categoriesIds: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}categories_ids'],
+      ),
+      categoriesNames: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}categories_names'],
+      ),
+      alarmsCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}alarms_count'],
+      )!,
+      schedulesCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}schedules_count'],
+      )!,
+      recurringSchedulesCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}recurring_schedules_count'],
+      )!,
+    );
+  }
+
+  late final GeneratedColumn<int> noteId = GeneratedColumn<int>(
+    'note_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+  );
+  late final GeneratedColumn<String> noteTitle = GeneratedColumn<String>(
+    'note_title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+  );
+  late final GeneratedColumn<DateTime> noteCreatedAt =
+      GeneratedColumn<DateTime>(
+        'note_created_at',
+        aliasedName,
+        false,
+        type: DriftSqlType.dateTime,
+      );
+  late final GeneratedColumn<int> noteTypeId = GeneratedColumn<int>(
+    'note_type_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+  );
+  late final GeneratedColumn<String> noteTypeName = GeneratedColumn<String>(
+    'note_type_name',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+  );
+  late final GeneratedColumn<String> categoriesIds = GeneratedColumn<String>(
+    'categories_ids',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+  );
+  late final GeneratedColumn<String> categoriesNames = GeneratedColumn<String>(
+    'categories_names',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+  );
+  late final GeneratedColumn<int> alarmsCount = GeneratedColumn<int>(
+    'alarms_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+  );
+  late final GeneratedColumn<int> schedulesCount = GeneratedColumn<int>(
+    'schedules_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+  );
+  late final GeneratedColumn<int> recurringSchedulesCount =
+      GeneratedColumn<int>(
+        'recurring_schedules_count',
+        aliasedName,
+        false,
+        type: DriftSqlType.int,
+      );
+  @override
+  NoteListView createAlias(String alias) {
+    return NoteListView(attachedDatabase, alias);
+  }
+
+  @override
+  Query? get query => null;
+  @override
+  Set<String> get readTables => const {
+    'note_table',
+    'note_type_table',
+    'note_category_table',
+    'category_table',
+    'schedule_table',
+    'alarm_table',
+  };
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -2218,9 +2286,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $CategoryTableTable categoryTable = $CategoryTableTable(this);
   late final $NoteCategoryTableTable noteCategoryTable =
       $NoteCategoryTableTable(this);
-  late final NoteListView noteListView = NoteListView(this);
   late final $ScheduleTableTable scheduleTable = $ScheduleTableTable(this);
   late final $AlarmTableTable alarmTable = $AlarmTableTable(this);
+  late final NoteListView noteListView = NoteListView(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2231,9 +2299,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     noteTable,
     categoryTable,
     noteCategoryTable,
-    noteListView,
     scheduleTable,
     alarmTable,
+    noteListView,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([

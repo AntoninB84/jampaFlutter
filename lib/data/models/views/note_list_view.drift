@@ -2,6 +2,8 @@ import 'package:jampa_flutter/data/models/note_category.dart';
 import 'package:jampa_flutter/data/models/note_type.dart';
 import 'package:jampa_flutter/data/models/category.dart';
 import 'package:jampa_flutter/data/models/note.dart';
+import 'package:jampa_flutter/data/models/schedule.dart';
+import 'package:jampa_flutter/data/models/alarm.dart';
 
 CREATE VIEW note_list_view AS
 SELECT
@@ -10,11 +12,17 @@ SELECT
   n.created_at AS note_created_at,
   n.note_type_id AS note_type_id,
   nt.name AS note_type_name,
-  GROUP_CONCAT(c.id) AS categories_ids,
-  GROUP_CONCAT(c.name, ', ') AS categories_names
+  GROUP_CONCAT(DISTINCT c.id) AS categories_ids,
+  GROUP_CONCAT(DISTINCT c.name) AS categories_names,
+  COUNT(DISTINCT a.id) AS alarms_count,
+  COUNT(DISTINCT s.id) AS schedules_count,
+  COUNT(DISTINCT sr.id) AS recurring_schedules_count
 FROM note_table n
 LEFT JOIN note_type_table nt ON nt.id = n.note_type_id
 LEFT JOIN note_category_table nc ON nc.note_id = n.id
 LEFT JOIN category_table c ON c.id = nc.category_id
+LEFT JOIN schedule_table s ON s.note_id = n.id AND s.recurrence_type IS NULL
+LEFT JOIN schedule_table sr ON sr.note_id = n.id AND sr.recurrence_type IS NOT NULL
+LEFT JOIN alarm_table a ON a.schedule_id = s.id OR a.schedule_id = sr.id
 WHERE n.id IS NOT NULL
 GROUP BY n.id, n.title, n.created_at, n.note_type_id, nt.name;

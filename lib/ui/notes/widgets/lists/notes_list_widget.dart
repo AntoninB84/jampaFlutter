@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -57,11 +56,20 @@ class _NotesListWidgetState extends State<NotesListWidget> {
                               color: Theme.of(context).colorScheme.primary
                             ),
                           ),
-                          trailing: Text(
-                            note.noteTypeName ?? '',
-                            style: TextStyle(
-                              fontSize: kBodyMSize,
-                            ),
+                          trailing: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  note.noteTypeName ?? '',
+                                  style: TextStyle(
+                                    fontSize: kBodyMSize,
+                                  ),
+                                ),
+                              ),
+                              schedulesAndAlarmsLine(note)
+                            ],
                           ),
                           subtitle: Text(
                             note.categoriesNames ?? "",
@@ -86,5 +94,78 @@ class _NotesListWidgetState extends State<NotesListWidget> {
           }
         }
     );
+  }
+
+  Widget schedulesAndAlarmsLine(NoteListViewData note){
+    if(note.schedulesCount > 0 || note.recurringSchedulesCount > 0){
+      return Flexible(
+        child: Padding(
+          padding: const EdgeInsets.only(
+              top: kGap4
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if(note.schedulesCount > 0)
+                Row(
+                  children: [
+                    Text(
+                      "${note.schedulesCount}",
+                      style: TextStyle(
+                        fontSize: kLabelSSize,
+                      ),
+                    ),
+                    Icon(
+                      Icons.calendar_today,
+                      size: kLabelSSize,
+                    ),
+                  ],
+                ),
+              if(note.recurringSchedulesCount > 0)
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: kGap4
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        "${note.recurringSchedulesCount}",
+                        style: TextStyle(
+                          fontSize: kLabelSSize,
+                        ),
+                      ),
+                      Icon(
+                        Icons.repeat,
+                        size: kLabelSSize,
+                      ),
+                    ],
+                  ),
+                ),
+              if(note.alarmsCount > 0)
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: kGap4
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        "${note.alarmsCount}",
+                        style: TextStyle(
+                          fontSize: kLabelSSize,
+                        ),
+                      ),
+                      Icon(
+                        Icons.alarm,
+                        size: kLabelSSize,
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        ),
+      );
+    }
+    return kEmptyWidget;
   }
 }
