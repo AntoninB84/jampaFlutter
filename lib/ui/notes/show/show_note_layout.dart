@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/ui/notes/widgets/inputs/note_content_text_field.dart';
+import 'package:jampa_flutter/ui/notes/widgets/lists/note_schedules_list.dart';
 import 'package:jampa_flutter/ui/widgets/app_bar_config_widget.dart';
 import 'package:jampa_flutter/ui/widgets/buttons/buttons.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
@@ -77,7 +78,8 @@ class ShowNoteLayout extends StatelessWidget {
                      onChanged: (document) {
                        context.read<NoteBloc>().add(OnChangeNoteContent(document));
                      },
-                   )
+                   ),
+                   NoteSchedulesList(schedules: state.schedulesAndAlarms)
                  ],
               ),
             )

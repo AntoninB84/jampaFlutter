@@ -1,7 +1,10 @@
 
+import 'package:collection/collection.dart';
 import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
 import 'package:jampa_flutter/data/models/alarm.dart';
 import 'package:jampa_flutter/data/models/schedule.dart';
+import 'package:jampa_flutter/data/objects/schedule_with_next_occurrence.dart';
+import 'package:jampa_flutter/utils/extensions/schedule_extension.dart';
 
 import '../data/dao/schedule_dao.dart';
 import '../utils/service_locator.dart';
@@ -86,6 +89,23 @@ class ScheduleRepository {
 
   Stream<List<ScheduleEntity>> watchAllSchedulesByNoteId(int noteId) {
     return ScheduleDao.watchAllSchedulesByNoteId(noteId);
+  }
+
+  Stream<List<ScheduleWithNextOccurrence>> watchAllSchedulesAndAlarmsByNoteId(int noteId) {
+    return ScheduleDao.watchAllSchedulesAndAlarmsByNoteId(noteId).map((schedules) {
+      return schedules.map((schedule) {
+        DateTime? nextOccurrence = schedule.nextOccurrence(null);
+        return ScheduleWithNextOccurrence(
+          schedule: schedule,
+          nextOccurrence: nextOccurrence,
+        );
+      }).sorted((ScheduleWithNextOccurrence a, ScheduleWithNextOccurrence b) {
+        if(a.nextOccurrence == null && b.nextOccurrence == null) return 0;
+        if(a.nextOccurrence == null) return 1;
+        if(b.nextOccurrence == null) return -1;
+        return a.nextOccurrence!.compareTo(b.nextOccurrence!);
+      }).toList();
+    });
   }
 
   Future<List<ScheduleEntity>> getAllSchedules() async {

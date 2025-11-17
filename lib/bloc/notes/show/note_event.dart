@@ -14,6 +14,15 @@ final class WatchNoteById extends NoteEvent {
   List<Object?> get props => [noteId];
 }
 
+final class WatchSchedulesAndAlarmsByNoteId extends NoteEvent {
+  final String? noteId;
+
+  WatchSchedulesAndAlarmsByNoteId(this.noteId);
+
+  @override
+  List<Object?> get props => [noteId];
+}
+
 final class OnChangeNoteContent extends NoteEvent {
   final Document? content;
 

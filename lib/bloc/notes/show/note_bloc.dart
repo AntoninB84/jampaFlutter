@@ -4,11 +4,13 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:jampa_flutter/data/objects/schedule_with_next_occurrence.dart';
 import 'package:jampa_flutter/repository/notes_repository.dart';
 import 'package:jampa_flutter/utils/helpers/utils.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
 import '../../../data/models/note.dart';
+import '../../../repository/schedule_repository.dart';
 
 part 'note_event.dart';
 part 'note_state.dart';
@@ -16,6 +18,7 @@ part 'note_state.dart';
 class NoteBloc extends Bloc<NoteEvent, NoteState> {
   NoteBloc() : super(const NoteState()) {
     on<WatchNoteById>(_watchNoteById);
+    on<WatchSchedulesAndAlarmsByNoteId>(_watchSchedulesAndAlarmsByNoteId);
     on<OnChangeNoteContent>(
       _onNoteContentChanged,
       transformer: Utils.debounceTransformer(const Duration(seconds: 1))
@@ -24,15 +27,20 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
   }
 
   final NotesRepository notesRepository = serviceLocator<NotesRepository>();
+  final ScheduleRepository scheduleRepository = serviceLocator<ScheduleRepository>();
 
   void _watchNoteById(WatchNoteById event, Emitter<NoteState> emit) async {
-    emit(state.copyWith(status: NoteStatus.loading));
+    emit(state.copyWith(
+      status: NoteStatus.loading,
+      schedulesLoadingStatus: NoteStatus.loading,
+    ));
+
     try {
       if(event.noteId != null) {
-        String noteId = event.noteId!;
+        int noteId = int.parse(event.noteId!);
 
         await emit.onEach<NoteEntity?>(
-          notesRepository.watchNoteById(int.parse(noteId)),
+          notesRepository.watchNoteById(noteId),
           onData: (note) {
             if(note != null) {
               final content = note.content != null
@@ -60,6 +68,34 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
       }
     } catch (e) {
       emit(state.copyWith(status: NoteStatus.failure));
+    }
+  }
+
+  void _watchSchedulesAndAlarmsByNoteId(WatchSchedulesAndAlarmsByNoteId event, Emitter<NoteState> emit) async {
+    emit(state.copyWith(schedulesLoadingStatus: NoteStatus.loading));
+
+    try {
+      if(event.noteId != null) {
+        int noteId = int.parse(event.noteId!);
+
+        await emit.onEach<List<ScheduleWithNextOccurrence>>(
+          scheduleRepository.watchAllSchedulesAndAlarmsByNoteId(noteId),
+          onData: (schedulesWithNextOccurrences){
+            emit(state.copyWith(
+              schedulesAndAlarms: schedulesWithNextOccurrences,
+              schedulesLoadingStatus: NoteStatus.success,
+            ));
+          },
+          onError: (error, stackTrace){
+            debugPrint("Error watching schedules and alarms by note id: $error");
+            emit(state.copyWith(schedulesLoadingStatus: NoteStatus.failure));
+          }
+        );
+      } else {
+        emit(state.copyWith(schedulesLoadingStatus: NoteStatus.failure));
+      }
+    } catch (e) {
+      emit(state.copyWith(schedulesLoadingStatus: NoteStatus.failure));
     }
   }
 

@@ -108,4 +108,47 @@ class ScheduleDao {
     }
     return schedules;
   }
+
+  static Stream<List<ScheduleEntity>> watchAllSchedulesAndAlarmsByNoteId(int noteId) {
+    AppDatabase db = serviceLocator<AppDatabase>();
+    final query = db.select(db.scheduleTable).join([
+      leftOuterJoin(
+        db.alarmTable,
+        db.alarmTable.scheduleId.equalsExp(db.scheduleTable.id),
+      ),
+    ])
+      ..where(db.scheduleTable.noteId.equals(noteId));
+
+    return query.watch().map((rows) {
+      List<ScheduleEntity> schedules = [];
+      for(final row in rows){
+        ScheduleEntity scheduleEntity = row.readTable(db.scheduleTable);
+        AlarmEntity? alarmEntity;
+        try {
+          alarmEntity = row.readTableOrNull(db.alarmTable);
+        } catch (_) {
+          alarmEntity = null;
+        }
+
+        // Check if the schedule already exists in the list
+        final existingScheduleIndex = schedules.indexWhere((s) => s.id == scheduleEntity.id);
+        if(existingScheduleIndex != -1){
+          // If it exists, add the alarm to the existing schedule's alarms list
+          if(alarmEntity != null){
+            if(schedules[existingScheduleIndex].alarms == null){
+              schedules[existingScheduleIndex].alarms = [];
+            }
+            schedules[existingScheduleIndex].alarms!.add(alarmEntity);
+          }
+        }else {
+          // If it doesn't exist, create a new schedule with the alarm
+          if(alarmEntity != null){
+            scheduleEntity.alarms = [alarmEntity];
+          }
+          schedules.add(scheduleEntity);
+        }
+      }
+      return schedules;
+    });
+  }
 }
