@@ -11,6 +11,7 @@ import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 import '../../../bloc/home/app_bar_cubit.dart';
 import '../../../bloc/notes/show/note_bloc.dart';
+import '../../../utils/constants/styles/sizes.dart';
 import '../../widgets/confirmation_dialog.dart';
 
 class ShowNoteLayout extends StatelessWidget {
@@ -71,13 +72,23 @@ class ShowNoteLayout extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                  children: [
                    Text(state.note?.title ?? 'No Title', style: Theme.of(context).textTheme.headlineMedium),
-                   const SizedBox(height: 16),
+                   const SizedBox(height: kGap16),
                    NoteContentTextField(
                      value: state.noteContent,
                      editorMaxHeight: MediaQuery.sizeOf(context).height * 0.5,
                      onChanged: (document) {
                        context.read<NoteBloc>().add(OnChangeNoteContent(document));
                      },
+                   ),
+                   const SizedBox(height: kGap10,),
+                   Padding(
+                     padding: const EdgeInsets.symmetric(
+                       vertical: kGap16
+                     ),
+                     child: Text(
+                       context.strings.show_note_schedules_and_alarms,
+                       style: Theme.of(context).textTheme.titleLarge,
+                     ),
                    ),
                    NoteSchedulesList(schedules: state.schedulesAndAlarms)
                  ],

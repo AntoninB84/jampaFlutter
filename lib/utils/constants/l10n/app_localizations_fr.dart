@@ -1,5 +1,6 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
+
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -66,7 +67,16 @@ class AppLocalizationsFr extends AppLocalizations {
   String get sunday => 'Dimanche';
 
   @override
+  String get today => 'Aujourd\'hui';
+
+  @override
+  String get tomorrow => 'Demain';
+
+  @override
   String get everyday => 'Tous les jours';
+
+  @override
+  String get passed => 'Passées';
 
   @override
   String get datetime_hint => 'Choisir une date et une heure';
@@ -304,7 +314,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String recurrent_date_weekday_display_text(Object weekdays) {
-    return 'Tous les semaines, le: $weekdays';
+    return 'Toutes les semaines, le: $weekdays';
   }
 
   @override
@@ -454,4 +464,23 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get alarm_silent_checkbox_title => 'Rappel silencieux';
+
+  @override
+  String get show_note => '';
+
+  @override
+  String get show_note_schedules_and_alarms => 'Dates et rappels';
+
+  @override
+  String show_note_next_occurrence(Object date) {
+    return 'Prochaine date : $date';
+  }
+
+  @override
+  String show_note_previous_occurrence(Object date) {
+    return 'Dernière date : $date';
+  }
+
+  @override
+  String get show_note_no_schedules => 'Aucune date programmée';
 }

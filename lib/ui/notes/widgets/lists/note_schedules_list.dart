@@ -6,6 +6,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:jampa_flutter/data/objects/schedule_with_next_occurrence.dart';
+import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
+import 'package:jampa_flutter/utils/extensions/datetime_extension.dart';
+import 'package:jampa_flutter/utils/extensions/schedule_extension.dart';
+
+import '../../../../utils/constants/styles/sizes.dart';
 
 class NoteSchedulesList extends StatefulWidget {
   final List<ScheduleWithNextOccurrence> schedules;
@@ -22,7 +27,7 @@ class _NoteSchedulesListState extends State<NoteSchedulesList> {
     if(widget.schedules.isEmpty) {
       return Center(
         child: Text(
-          "No schedules available.",
+          context.strings.show_note_no_schedules,
           style: Theme.of(context).textTheme.bodyMedium,
         ),
       );
@@ -32,7 +37,7 @@ class _NoteSchedulesListState extends State<NoteSchedulesList> {
 
     return Container(
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.4,
+        maxHeight: MediaQuery.of(context).size.height * 0.8,
       ),
       child: ListView.separated(
         itemCount: widget.schedules.length,
@@ -40,28 +45,118 @@ class _NoteSchedulesListState extends State<NoteSchedulesList> {
           DateTime? currentScheduleDate = widget.schedules[index].nextOccurrence;
           DateTime? nextScheduleDate = widget.schedules[index + 1].nextOccurrence;
 
-          bool isCurrentBeforeNow = currentScheduleDate?.isBefore(now) ?? true;
-          bool isNextAfterNow = nextScheduleDate?.isAfter(now) ?? false;
+          bool isCurrentBeforeNow = currentScheduleDate?.isAfter(now) ?? true;
+          bool isNextAfterNow = nextScheduleDate?.isBefore(now) ?? false;
 
           if(isCurrentBeforeNow && isNextAfterNow) {
-            return Divider(
-              thickness: 2.0,
-              color: Theme.of(context).colorScheme.primary,
-            );
+            return listTimelineSeparator();
           } else {
-            return SizedBox.shrink();
+            return kEmptyWidget;
           }
         },
         itemBuilder: (context, index) {
-          ScheduleWithNextOccurrence schedule = widget.schedules[index];
-          return ListTile(
-            title: Text(
-              "Schedule on ${schedule.nextOccurrence}",
-              style: Theme.of(context).textTheme.bodyMedium,
+          ScheduleWithNextOccurrence item = widget.schedules[index];
+
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: kGap4),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Material(
+                  child: ListTile(
+                    title: Text(
+                      item.schedule.displayNameAndValue(context),
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    subtitle: nextOrLastOccurrenceWidget(item),
+                  ),
+                ),
+                alarmSubListWidget(item),
+              ],
             ),
           );
         },
       ),
     );
+  }
+
+  Widget alarmSubListWidget(ScheduleWithNextOccurrence item) {
+    return ListView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: item.schedule.alarms?.length ?? 0,
+        itemBuilder: (context, subIndex) {
+          final alarm = item.schedule.alarms?[subIndex];
+          if(alarm == null) return kEmptyWidget;
+          final String displayText = context.strings
+              .alarm_display_text(
+            alarm.offsetValue,
+            (subIndex + 1),
+            alarm.offsetType.getLabel(context),
+          );
+
+          return Padding(
+            padding: const EdgeInsets.only(
+                top: kGap4,
+                left: kGap16
+            ),
+            child: Material(
+              child: ListTile(
+                dense: true,
+                title: Text(
+                  displayText,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ),
+            ),
+          );
+        }
+    );
+  }
+
+  Widget listTimelineSeparator() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: kGap8),
+      child: Row(
+        children: [
+          Expanded(
+            child: Divider(
+              thickness: 2.0,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: kGap8),
+            child: Text(
+                context.strings.passed,
+                style: Theme.of(context).textTheme.bodyMedium
+            ),
+          ),
+          Expanded(
+            child: Divider(
+              thickness: 2.0,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget? nextOrLastOccurrenceWidget(ScheduleWithNextOccurrence item) {
+    if(item.schedule.isRecurring
+        && item.nextOccurrence != null)
+    {
+      String nextOrLastOccurrenceDate = item.nextOccurrence!.toFullFormat(context);
+      String displayText = item.nextOccurrence!.isBefore(DateTime.now())
+          ? context.strings.show_note_previous_occurrence(nextOrLastOccurrenceDate)
+          : context.strings.show_note_next_occurrence(nextOrLastOccurrenceDate);
+
+      return Text(
+        displayText,
+        style: Theme.of(context).textTheme.bodySmall,
+      );
+    }
+    return null;
   }
 }

@@ -208,11 +208,29 @@ abstract class AppLocalizations {
   /// **'Dimanche'**
   String get sunday;
 
+  /// No description provided for @today.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aujourd\'hui'**
+  String get today;
+
+  /// No description provided for @tomorrow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Demain'**
+  String get tomorrow;
+
   /// No description provided for @everyday.
   ///
   /// In fr, this message translates to:
   /// **'Tous les jours'**
   String get everyday;
+
+  /// No description provided for @passed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Passées'**
+  String get passed;
 
   /// No description provided for @datetime_hint.
   ///
@@ -583,7 +601,7 @@ abstract class AppLocalizations {
   /// No description provided for @recurrent_date_weekday_display_text.
   ///
   /// In fr, this message translates to:
-  /// **'Tous les semaines, le: {weekdays}'**
+  /// **'Toutes les semaines, le: {weekdays}'**
   String recurrent_date_weekday_display_text(Object weekdays);
 
   /// No description provided for @date_recurrence_days.
@@ -825,6 +843,36 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Rappel silencieux'**
   String get alarm_silent_checkbox_title;
+
+  /// No description provided for @show_note.
+  ///
+  /// In fr, this message translates to:
+  /// **''**
+  String get show_note;
+
+  /// No description provided for @show_note_schedules_and_alarms.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dates et rappels'**
+  String get show_note_schedules_and_alarms;
+
+  /// No description provided for @show_note_next_occurrence.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prochaine date : {date}'**
+  String show_note_next_occurrence(Object date);
+
+  /// No description provided for @show_note_previous_occurrence.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernière date : {date}'**
+  String show_note_previous_occurrence(Object date);
+
+  /// No description provided for @show_note_no_schedules.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune date programmée'**
+  String get show_note_no_schedules;
 }
 
 class _AppLocalizationsDelegate

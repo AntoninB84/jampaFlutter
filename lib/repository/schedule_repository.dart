@@ -94,7 +94,7 @@ class ScheduleRepository {
   Stream<List<ScheduleWithNextOccurrence>> watchAllSchedulesAndAlarmsByNoteId(int noteId) {
     return ScheduleDao.watchAllSchedulesAndAlarmsByNoteId(noteId).map((schedules) {
       return schedules.map((schedule) {
-        DateTime? nextOccurrence = schedule.nextOccurrence(null);
+        DateTime? nextOccurrence = schedule.nextOrLastOccurrence();
         return ScheduleWithNextOccurrence(
           schedule: schedule,
           nextOccurrence: nextOccurrence,
@@ -103,7 +103,7 @@ class ScheduleRepository {
         if(a.nextOccurrence == null && b.nextOccurrence == null) return 0;
         if(a.nextOccurrence == null) return 1;
         if(b.nextOccurrence == null) return -1;
-        return a.nextOccurrence!.compareTo(b.nextOccurrence!);
+        return b.nextOccurrence!.compareTo(a.nextOccurrence!);
       }).toList();
     });
   }

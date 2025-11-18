@@ -18,7 +18,10 @@
     "friday": "Vendredi",
     "saturday": "Samedi",
     "sunday": "Dimanche",
+    "today": "Aujourd'hui",
+    "tomorrow": "Demain",
     "everyday": "Tous les jours",
+    "passed": "Passées",
     "datetime_hint": "Choisir une date et une heure",
     "no_results_found": "Aucun résultat trouvé",
     "@create_category": {},
@@ -87,7 +90,7 @@
     "recurrent_date_day_interval_display_text": "Tous les {count} jours",
     "recurrent_date_years_interval_display_text": "Tous les {count} ans",
     "recurrent_date_month_date_display_text": "Tous les {count} du mois",
-    "recurrent_date_weekday_display_text": "Tous les semaines, le: {weekdays}",
+    "recurrent_date_weekday_display_text": "Toutes les semaines, le: {weekdays}",
     "date_recurrence_days": "Jours",
     "date_recurrence_weeks": "Semaines",
     "date_recurrence_months": "Mois",
@@ -131,5 +134,10 @@
     "alarm_offset_value_field_title": "Valeur du décalage",
     "alarm_offset_value_field_hint": "Entrez la valeur du décalage",
     "alarm_offset_value_invalid": "La valeur du décalage doit être positive et strictement numérique",
-    "alarm_silent_checkbox_title" : "Rappel silencieux"
+    "alarm_silent_checkbox_title" : "Rappel silencieux",
+    "show_note": "",
+    "show_note_schedules_and_alarms" : "Dates et rappels",
+    "show_note_next_occurrence" : "Prochaine date : {date}",
+    "show_note_previous_occurrence" : "Dernière date : {date}",
+    "show_note_no_schedules": "Aucune date programmée"
 }
