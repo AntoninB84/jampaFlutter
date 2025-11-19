@@ -6,7 +6,7 @@ class NotificationPayload {
   int? notificationId;
   int? alarmId;
   String objectType;
-  int objectId;
+  String? objectId;
 
   NotificationPayload({
     this.notificationId,
@@ -48,12 +48,12 @@ abstract class NotificationHelpers {
     return values;
   }
 
-  static int extractObjectIdFromPayload(String payload){
+  static String? extractObjectIdFromPayload(String payload){
     Map<String, String> values = extractPayloadValues(payload);
     if(values.containsKey("objectId")){
-      return int.tryParse(values["objectId"] ?? "") ?? 0;
+      return values["objectId"];
     }
-    return 0;
+    return null;
   }
 
   static NotificationPayload getNotificationPayload({

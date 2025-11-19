@@ -18,6 +18,7 @@ dependencies:
   go_router: ^16.3.0
 
   # Data management
+  uuid: ^4.5.2
   get_it: ^8.2.0
   drift: ^2.29.0
   drift_flutter: ^0.2.7

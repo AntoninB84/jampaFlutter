@@ -2,23 +2,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
+import 'package:jampa_flutter/bloc/notes/form/note_form_helpers.dart';
+import 'package:jampa_flutter/bloc/notes/save/save_note_bloc.dart';
 import 'package:jampa_flutter/ui/widgets/buttons/buttons.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:jampa_flutter/utils/extensions/datetime_extension.dart';
 
-import '../../../bloc/notes/edit/edit_note_bloc.dart';
 import '../../../utils/constants/styles/sizes.dart';
 import '../../widgets/confirmation_dialog.dart';
 
 class SaveSingleDateList extends StatefulWidget {
   const SaveSingleDateList({
     super.key,
+    required this.noteId,
     this.isSavingPersistentData = false,
     required this.listElements,
     required this.onDateDeleted,
   });
 
+  final String noteId;
   final bool isSavingPersistentData;
   final List<SingleDateFormElements> listElements;
   final Function(int) onDateDeleted;
@@ -34,10 +36,10 @@ class _SaveSingleDateListState extends State<SaveSingleDateList> {
       children: [
         ElevatedButton(
             onPressed: (){
-              context.pushNamed(widget.isSavingPersistentData
-                  ? 'SavePersistentSingleDate'
-                  : 'SaveMemorySingleDate',
-              );
+              context.pushNamed('SingleDateForm', extra: {
+                'noteId': widget.noteId,
+                'isSavingPersistentData': widget.isSavingPersistentData,
+              });
             },
             child: Text(context.strings.create_note_add_single_date_button)
         ),
@@ -60,11 +62,11 @@ class _SaveSingleDateListState extends State<SaveSingleDateList> {
                     dense: true,
                     title: Text(displayText),
                     onTap: (){
-                      context.pushNamed(widget.isSavingPersistentData
-                          ? 'SavePersistentSingleDate'
-                          : 'SaveMemorySingleDate',
-                          extra: {'dateIndex': index, 'scheduleId': date.scheduleId}
-                      );
+                      context.pushNamed('SingleDateForm', extra: {
+                        'scheduleId': date.scheduleId,
+                        'noteId': date.noteId,
+                        'isSavingPersistentData': widget.isSavingPersistentData,
+                      });
                     },
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -83,9 +85,9 @@ class _SaveSingleDateListState extends State<SaveSingleDateList> {
                                   cancelButtonText: context.strings.cancel,
                                   onConfirm: (){
                                     if(widget.isSavingPersistentData) {
-                                      context.read<EditNoteBloc>()
-                                          .add(OnDeletePersistentSchedule(
-                                          scheduleId: date.scheduleId!));
+                                      context.read<SaveNoteBloc>()
+                                          .add(RemoveSingleDateEvent(
+                                          date.scheduleId));
                                     }else{
                                       widget.onDateDeleted(index);
                                     }

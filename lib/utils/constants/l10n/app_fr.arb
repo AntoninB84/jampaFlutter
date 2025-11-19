@@ -68,7 +68,7 @@
     "create_note_recurrent_date_count" : "Récurrences ({count})",
     "create_note_add_single_date_button": "Ajouter une date",
     "create_note_add_recurrent_date_button": "Ajouter une récurrence",
-    "create_note_success_feedback": "Note créée avec succès",
+    "save_note_success_feedback": "Note enregistrée avec succès",
     "@create_date": {},
     "create_date_title": "Ajouter une date",
     "create_recurrence_title": "Ajouter une récurrence",

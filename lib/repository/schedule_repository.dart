@@ -1,14 +1,13 @@
 
 import 'package:collection/collection.dart';
-import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
-import 'package:jampa_flutter/data/models/alarm.dart';
+import 'package:jampa_flutter/bloc/notes/form/note_form_helpers.dart';
 import 'package:jampa_flutter/data/models/schedule.dart';
 import 'package:jampa_flutter/data/objects/schedule_with_next_occurrence.dart';
 import 'package:jampa_flutter/utils/extensions/schedule_extension.dart';
 
 import '../data/dao/schedule_dao.dart';
 import '../utils/service_locator.dart';
-import 'alarm_repository.dart';
+import 'reminder_repository.dart';
 
 class ScheduleRepository {
   const ScheduleRepository();
@@ -16,7 +15,7 @@ class ScheduleRepository {
   Future<List<ScheduleEntity>> saveDateFormElements({
     List<SingleDateFormElements> singleFormElementsList = const [],
     List<RecurrenceFormElements> recurrenceFormElementsList = const [],
-    required int noteId
+    required String noteId
   }) async {
     List<ScheduleEntity> schedulesSaved = [];
     // Convert form elements to ScheduleEntity list
@@ -33,38 +32,18 @@ class ScheduleRepository {
 
   Future<ScheduleEntity> saveSingleDateFormElement({
     required SingleDateFormElements formElements,
-    required int noteId
+    required String noteId
   }) async {
-    final schedule = ScheduleEntity.fromSingleDateFormElements(formElements, noteId);
-    final ScheduleEntity savedSchedule = await ScheduleDao.saveSingleSchedule(schedule);
-    // If there are alarms associated with this single date, save them too
-    List<AlarmEntity> alarms = [];
-    for (var alarm in formElements.alarmsForSingleDate) {
-      await serviceLocator<AlarmRepository>().saveAlarmFormElement(
-          formElements: alarm,
-          scheduleId: savedSchedule.id!,
-      );
-    }
-    if(alarms.isNotEmpty) savedSchedule.alarms = alarms;
-    return savedSchedule;
+    final schedule = ScheduleEntity.fromSingleDateFormElements(formElements);
+    return await ScheduleDao.saveSingleSchedule(schedule);
   }
 
   Future<ScheduleEntity> saveRecurrenceFormElement({
     required RecurrenceFormElements formElements,
-    required int noteId
+    required String noteId
   }) async {
-    final schedule = ScheduleEntity.fromRecurrenceFormElements(formElements, noteId);
-    final ScheduleEntity savedSchedule = await ScheduleDao.saveSingleSchedule(schedule);
-    // If there are alarms associated with this recurrent date, save them too
-    List<AlarmEntity> alarms = [];
-    for (var alarm in formElements.alarmsForRecurrence) {
-      alarms.add(await serviceLocator<AlarmRepository>().saveAlarmFormElement(
-        formElements: alarm,
-        scheduleId: savedSchedule.id!,
-      ));
-    }
-    if(alarms.isNotEmpty) savedSchedule.alarms = alarms;
-    return savedSchedule;
+    final schedule = ScheduleEntity.fromRecurrenceFormElements(formElements);
+    return await ScheduleDao.saveSingleSchedule(schedule);
   }
 
   Future<ScheduleEntity> saveSchedule(ScheduleEntity schedule) async {
@@ -75,24 +54,24 @@ class ScheduleRepository {
     await ScheduleDao.saveListOfSchedules(schedules);
   }
 
-  Stream<ScheduleEntity?> watchScheduleById(int id)  {
+  Stream<ScheduleEntity?> watchScheduleById(String id)  {
     return ScheduleDao.watchScheduleById(id);
   }
 
-  Future<ScheduleEntity?> getScheduleById(int id) async {
+  Future<ScheduleEntity?> getScheduleById(String id) async {
     return await ScheduleDao.getScheduleById(id);
   }
 
-  Future<List<ScheduleEntity>> getAllSchedulesByNoteId(int noteId) async {
+  Future<List<ScheduleEntity>> getAllSchedulesByNoteId(String noteId) async {
     return await ScheduleDao.getAllSchedulesByNoteId(noteId);
   }
 
-  Stream<List<ScheduleEntity>> watchAllSchedulesByNoteId(int noteId) {
+  Stream<List<ScheduleEntity>> watchAllSchedulesByNoteId(String noteId) {
     return ScheduleDao.watchAllSchedulesByNoteId(noteId);
   }
 
-  Stream<List<ScheduleWithNextOccurrence>> watchAllSchedulesAndAlarmsByNoteId(int noteId) {
-    return ScheduleDao.watchAllSchedulesAndAlarmsByNoteId(noteId).map((schedules) {
+  Stream<List<ScheduleWithNextOccurrence>> watchAllSchedulesAndAlarmsByNoteId(String noteId) {
+    return ScheduleDao.watchAllSchedulesAndRemindersByNoteId(noteId).map((schedules) {
       return schedules.map((schedule) {
         DateTime? nextOccurrence = schedule.nextOrLastOccurrence();
         return ScheduleWithNextOccurrence(
@@ -116,15 +95,15 @@ class ScheduleRepository {
     return ScheduleDao.watchAllSchedules();
   }
 
-  Future<void> deleteScheduleById(int id) async {
-    await serviceLocator<AlarmRepository>().deleteAlarmsByScheduleId(id);
+  Future<void> deleteScheduleById(String id) async {
+    await serviceLocator<ReminderRepository>().deleteRemindersByScheduleId(id);
     await ScheduleDao.deleteScheduleById(id);
   }
 
-  Future<void> deleteSchedulesByNoteId(int noteId) async {
+  Future<void> deleteSchedulesByNoteId(String noteId) async {
     List<ScheduleEntity> schedules = await getAllSchedulesByNoteId(noteId);
     for(var schedule in schedules) {
-      await deleteScheduleById(schedule.id!);
+      await deleteScheduleById(schedule.id);
     }
   }
 

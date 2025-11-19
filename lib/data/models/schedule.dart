@@ -1,17 +1,18 @@
 
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
-import 'package:jampa_flutter/bloc/notes/create/create_note_form_helpers.dart';
-import 'package:jampa_flutter/data/models/alarm.dart';
+import 'package:jampa_flutter/bloc/notes/form/note_form_helpers.dart';
+import 'package:jampa_flutter/data/models/reminder.dart';
 import 'package:jampa_flutter/utils/enums/recurrence_type_enum.dart';
 import 'package:jampa_flutter/utils/enums/weekdays_enum.dart';
+
 import '../database.dart';
 import 'note.dart';
 
 @UseRowClass(ScheduleEntity)
 class ScheduleTable extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  IntColumn get noteId => integer().customConstraint('NOT NULL REFERENCES note_table(id) ON DELETE CASCADE')();
+  TextColumn get id => text()();
+  TextColumn get noteId => text().customConstraint('NOT NULL REFERENCES note_table(id) ON DELETE CASCADE')();
   DateTimeColumn get startDateTime => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get endDateTime => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
@@ -23,8 +24,8 @@ class ScheduleTable extends Table {
 }
 
 class ScheduleEntity {
-  final int? id;
-  final int noteId;
+  final String id;
+  final String noteId;
   NoteEntity? note;
   final DateTime? startDateTime;
   final DateTime? endDateTime;
@@ -34,10 +35,10 @@ class ScheduleEntity {
   final int? recurrenceInterval; // e.g., every 2 days/years
   final int? recurrenceDay; // e.g., day of the month / days of the week
   final DateTime? recurrenceEndDate; // Optional end date for the recurrence
-  List<AlarmEntity>? alarms;
+  List<ReminderEntity>? reminders;
 
   ScheduleEntity({
-    this.id,
+    required this.id,
     required this.noteId,
     this.note,
     required this.startDateTime,
@@ -48,12 +49,12 @@ class ScheduleEntity {
     this.recurrenceInterval,
     this.recurrenceDay,
     this.recurrenceEndDate,
-    this.alarms
+    this.reminders
   });
 
   ScheduleTableCompanion toCompanion() {
     return ScheduleTableCompanion(
-      id: id == null ? Value.absent() : Value(id!),
+      id: Value(id),
       noteId: Value(noteId),
       startDateTime: Value(startDateTime!),
       endDateTime: endDateTime == null ? Value.absent() : Value(endDateTime!),
@@ -80,13 +81,13 @@ class ScheduleEntity {
         'recurrenceInterval: $recurrenceInterval, '
         'recurrenceDay: $recurrenceDay, '
         'recurrenceEndDate: $recurrenceEndDate, '
-        'alarms: $alarms'
+        'alarms: $reminders'
       '}';
   }
 
   ScheduleEntity copyWith({
-    int? id,
-    int? noteId,
+    String? id,
+    String? noteId,
     NoteEntity? note,
     DateTime? startDateTime,
     DateTime? endDateTime,
@@ -96,7 +97,7 @@ class ScheduleEntity {
     int? recurrenceInterval,
     int? recurrenceDay,
     DateTime? recurrenceEndDate,
-    List<AlarmEntity>? alarms
+    List<ReminderEntity>? reminders
   }) {
     return ScheduleEntity(
       id: id ?? this.id,
@@ -110,13 +111,13 @@ class ScheduleEntity {
       recurrenceInterval: recurrenceInterval ?? this.recurrenceInterval,
       recurrenceDay: recurrenceDay ?? this.recurrenceDay,
       recurrenceEndDate: recurrenceEndDate ?? this.recurrenceEndDate,
-      alarms: alarms ?? this.alarms,
+      reminders: reminders ?? this.reminders,
     );
   }
 
   ScheduleEntity.fromJson(Map<String, dynamic> json)
-      : id = json['id'] as int?,
-        noteId = json['noteId'] as int,
+      : id = json['id'] as String,
+        noteId = json['noteId'] as String,
         note = NoteEntity.fromJson(json['note']),
         startDateTime = json['startDateTime'] != null ? DateTime.parse(json['startDateTime'] as String) : null,
         endDateTime = json['endDateTime'] != null ? DateTime.parse(json['endDateTime'] as String) : null,
@@ -127,7 +128,7 @@ class ScheduleEntity {
         recurrenceInterval = json['recurrenceInterval'] as int?,
         recurrenceDay = json['recurrenceDay'] as int?,
         recurrenceEndDate = json['recurrenceEndDate'] != null ? DateTime.parse(json['recurrenceEndDate'] as String) : null,
-        alarms = AlarmEntity.fromJsonArray(json['alarms'])
+        reminders = ReminderEntity.fromJsonArray(json['reminders'])
   ;
 
 
@@ -141,10 +142,10 @@ class ScheduleEntity {
     );
   }
 
-  static ScheduleEntity fromSingleDateFormElements(SingleDateFormElements elements, int noteId) {
+  static ScheduleEntity fromSingleDateFormElements(SingleDateFormElements elements) {
     return ScheduleEntity(
       id: elements.scheduleId,
-      noteId: noteId,
+      noteId: elements.noteId,
       startDateTime: elements.selectedStartDateTime,
       endDateTime: elements.selectedEndDateTime,
       createdAt: elements.createdAt ?? DateTime.now(),
@@ -202,7 +203,7 @@ class ScheduleEntity {
     );
   }
 
-  static ScheduleEntity fromRecurrenceFormElements(RecurrenceFormElements elements, int noteId) {
+  static ScheduleEntity fromRecurrenceFormElements(RecurrenceFormElements elements) {
 
     RecurrenceType? recurrenceType;
     int? recurrenceInterval;
@@ -219,7 +220,7 @@ class ScheduleEntity {
         if(elements.selectedRecurrenceWeekdays?.isNotEmpty ?? false){
           // Join the list of integers into a single integer (e.g., [1,3,5] -> 135)
           recurrenceDay = int.parse(elements.selectedRecurrenceWeekdays!
-              .map((weekday){ return weekday.asInt;}).toList().join() //TODO test
+              .map((weekday){ return weekday.asInt;}).toList().join()
           );
         }
         break;
@@ -239,7 +240,7 @@ class ScheduleEntity {
 
     return ScheduleEntity(
       id: elements.scheduleId,
-      noteId: noteId,
+      noteId: elements.noteId,
       startDateTime: elements.selectedStartDateTime,
       endDateTime: elements.selectedEndDateTime,
       createdAt: elements.createdAt ?? DateTime.now(),

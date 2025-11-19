@@ -62,4 +62,19 @@ abstract class Buttons {
       onPressed: onPressed,
     );
   }
+
+  static Widget saveButtonIcon({
+    required BuildContext context,
+    required Function()? onPressed,
+    VisualDensity visualDensity = VisualDensity.compact,
+  }) {
+    return IconButton(
+      icon: Icon(
+        Icons.save,
+        color: Theme.of(context).colorScheme.primary,
+      ),
+      visualDensity: visualDensity,
+      onPressed: onPressed,
+    );
+  }
 }

@@ -11,20 +11,16 @@ class NotesRepository {
 
 
   Future<NoteEntity> saveNote(NoteEntity note) async {
-    bool isUpdate = note.id != null;
-    
     return await NoteDao.saveSingleNote(note).then((insertedNote) async {
       // Re-assign categories to the inserted note
       insertedNote.categories = note.categories;
-      if(isUpdate){
-        // Clean existing relationships for the note
-        await NoteCategoryDao.cleanRelationshipsByNoteId(insertedNote.id!);
-      }
+      // Clean existing relationships for the note
+      await NoteCategoryDao.cleanRelationshipsByNoteId(insertedNote.id);
       // Then, re-establish relationships
       if(insertedNote.categories?.isNotEmpty ?? false) {
         List<NoteCategoryEntity> noteCategories = insertedNote.categories!.map((category) {
           return NoteCategoryEntity(
-            noteId: insertedNote.id!,
+            noteId: insertedNote.id,
             categoryId: category.id!,
           );
         }).toList();
@@ -39,19 +35,19 @@ class NotesRepository {
     await NoteDao.saveListOfNotes(notes);
   }
 
-  Future<void> updateNoteContent(int id, String content) async {
+  Future<void> updateNoteContent(String id, String content) async {
     await NoteDao.updateNoteContent(id, content);
   }
 
-  Future<void> deleteNoteById(int id) async {
+  Future<void> deleteNoteById(String id) async {
     await serviceLocator<ScheduleRepository>().deleteSchedulesByNoteId(id);
     await NoteDao.deleteNoteById(id);
   }
 
-  Stream<NoteEntity?> watchNoteById(int id)  {
+  Stream<NoteEntity?> watchNoteById(String id)  {
     return NoteDao.watchNoteById(id);
   }
-  Future<NoteEntity?> getNoteById(int id) async {
+  Future<NoteEntity?> getNoteById(String id) async {
     return await NoteDao.getNoteById(id);
   }
 }

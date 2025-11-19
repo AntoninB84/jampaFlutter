@@ -19,7 +19,7 @@ class NoteCategoryDao {
     });
   }
 
-  static Future<void> cleanRelationshipsByNoteId(int noteId) async {
+  static Future<void> cleanRelationshipsByNoteId(String noteId) async {
     AppDatabase db = serviceLocator<AppDatabase>();
     await (db.delete(db.noteCategoryTable)
       ..where((tbl) => tbl.noteId.equals(noteId))).go();
@@ -30,7 +30,7 @@ class NoteCategoryDao {
       ..where((tbl) => tbl.categoryId.equals(categoryId))).go();
   }
 
-  static Future<List<NoteCategoryEntity>> getNoteCategoriesByNoteId(int noteId) async {
+  static Future<List<NoteCategoryEntity>> getNoteCategoriesByNoteId(String noteId) async {
     AppDatabase db = serviceLocator<AppDatabase>();
     return await (db.select(db.noteCategoryTable)
       ..where((tbl) => tbl.noteId.equals(noteId))).get();

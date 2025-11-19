@@ -9,8 +9,8 @@ import 'package:jampa_flutter/utils/constants/data/initial_data.dart';
 import '../utils/enums/alarm_offset_type_enum.dart';
 import '../utils/enums/note_status_enum.dart';
 import '../utils/enums/recurrence_type_enum.dart';
-import 'models/alarm.dart';
 import 'models/note_category.dart';
+import 'models/reminder.dart';
 import 'models/schedule.dart';
 import 'models/user.dart';
 
@@ -18,7 +18,7 @@ part 'database.g.dart';
 
 @DriftDatabase(
   tables: [
-    AlarmTable,
+    ReminderTable,
     CategoryTable,
     NoteCategoryTable,
     NoteTypeTable,
@@ -58,7 +58,7 @@ class AppDatabase extends _$AppDatabase {
           await into(scheduleTable).insert(schedule.toCompanion());
         }
         for(var alarm in InitialData.alarms) {
-          await into(alarmTable).insert(alarm.toCompanion());
+          await into(reminderTable).insert(alarm.toCompanion());
         }
       },
       onUpgrade: (Migrator m, int from, int to) async {

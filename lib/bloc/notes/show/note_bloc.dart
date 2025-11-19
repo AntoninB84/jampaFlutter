@@ -37,10 +37,8 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
 
     try {
       if(event.noteId != null) {
-        int noteId = int.parse(event.noteId!);
-
         await emit.onEach<NoteEntity?>(
-          notesRepository.watchNoteById(noteId),
+          notesRepository.watchNoteById(event.noteId!),
           onData: (note) {
             if(note != null) {
               final content = note.content != null
@@ -76,10 +74,8 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
 
     try {
       if(event.noteId != null) {
-        int noteId = int.parse(event.noteId!);
-
         await emit.onEach<List<ScheduleWithNextOccurrence>>(
-          scheduleRepository.watchAllSchedulesAndAlarmsByNoteId(noteId),
+          scheduleRepository.watchAllSchedulesAndAlarmsByNoteId(event.noteId!),
           onData: (schedulesWithNextOccurrences){
             emit(state.copyWith(
               schedulesAndAlarms: schedulesWithNextOccurrences,
@@ -120,9 +116,7 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
     emit(state.copyWith(status: NoteStatus.loading, deletionSuccess: false, deletionFailure: false));
     try {
       if(event.noteId != null) {
-        int noteId = event.noteId!;
-
-        await notesRepository.deleteNoteById(noteId)
+        await notesRepository.deleteNoteById(event.noteId!)
         .then((_){
           emit(state.copyWith(deletionSuccess: true));
         }).catchError((error){

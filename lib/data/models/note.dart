@@ -7,7 +7,7 @@ import 'package:jampa_flutter/utils/enums/note_status_enum.dart';
 
 @UseRowClass(NoteEntity)
 class NoteTable extends Table {
-  IntColumn get id => integer().autoIncrement()();
+  TextColumn get id => text()();
   TextColumn get title => text().withLength(min: 1, max: 100)();
   TextColumn get content => text().nullable()();
   BoolColumn get isImportant => boolean().withDefault(const Constant(false))();
@@ -19,7 +19,7 @@ class NoteTable extends Table {
 }
 
 class NoteEntity {
-  int? id;
+  String id;
   String title;
   String? content;
   bool isImportant;
@@ -32,7 +32,7 @@ class NoteEntity {
   List<CategoryEntity>? categories;
 
   NoteEntity({
-    this.id,
+    required this.id,
     required this.title,
     required this.content,
     this.isImportant = false,
@@ -47,7 +47,7 @@ class NoteEntity {
 
   NoteTableCompanion toCompanion() {
     return NoteTableCompanion(
-      id: id == null ? Value.absent() : Value(id!),
+      id: Value(id),
       title: Value(title),
       content: content == null ? Value.absent() : Value(content!),
       isImportant: Value(isImportant),
@@ -76,7 +76,7 @@ class NoteEntity {
   }
 
   NoteEntity copyWith({
-    int? id,
+    String? id,
     String? title,
     String? content,
     bool? isImportant,
@@ -104,7 +104,7 @@ class NoteEntity {
   }
 
   NoteEntity.fromJson(Map<String, dynamic> json)
-    : id = json['id'] as int?,
+    : id = json['id'] as String,
       title = json['title'] as String,
       content = json['content'] as String?,
       isImportant = json['isImportant'] as bool? ?? false,

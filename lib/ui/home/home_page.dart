@@ -8,10 +8,10 @@ import 'package:jampa_flutter/ui/home/widgets/app_bar.dart';
 import 'package:jampa_flutter/utils/constants/styles/sizes.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
-import '../../repository/alarm_repository.dart';
 import '../../repository/categories_repository.dart';
 import '../../repository/note_types_repository.dart';
 import '../../repository/notes_list_view_repository.dart';
+import '../../repository/reminder_repository.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.navigationShell});
@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
             create: (context) => serviceLocator<ScheduleRepository>()
         ),
         RepositoryProvider(
-            create: (context) => serviceLocator<AlarmRepository>()
+            create: (context) => serviceLocator<ReminderRepository>()
         ),
       ],
       child: MultiBlocProvider(

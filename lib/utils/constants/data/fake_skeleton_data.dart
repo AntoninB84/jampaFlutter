@@ -5,7 +5,7 @@ import 'package:jampa_flutter/data/models/note_type.dart';
 import '../../../data/database.dart';
 
 NoteListViewData get fakeSkeletonNoteListViewData => NoteListViewData(
-  noteId: 0,
+  noteId: "0",
   noteTitle: 'Loading...',
   noteTypeName: 'Loading...',
   categoriesNames: 'Loading...',

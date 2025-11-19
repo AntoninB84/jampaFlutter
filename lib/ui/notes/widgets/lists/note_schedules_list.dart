@@ -1,9 +1,3 @@
-// This is a list widget that displays the schedules and its related alarms for a note.
-// The schedules are given to this widget already sorted by date and time.
-// The list implements a separator only between the dates anteriorly and posteriorly to the current date.
-// The given list is a list of ScheduleWithNextOccurrence objects.
-// The comparison is made using the nextOccurrence property of the ScheduleWithNextOccurrence object.
-
 import 'package:flutter/material.dart';
 import 'package:jampa_flutter/data/objects/schedule_with_next_occurrence.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
@@ -84,9 +78,9 @@ class _NoteSchedulesListState extends State<NoteSchedulesList> {
     return ListView.builder(
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
-        itemCount: item.schedule.alarms?.length ?? 0,
+        itemCount: item.schedule.reminders?.length ?? 0,
         itemBuilder: (context, subIndex) {
-          final alarm = item.schedule.alarms?[subIndex];
+          final alarm = item.schedule.reminders?[subIndex];
           if(alarm == null) return kEmptyWidget;
           final String displayText = context.strings
               .alarm_display_text(

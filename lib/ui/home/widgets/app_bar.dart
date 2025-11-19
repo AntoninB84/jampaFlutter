@@ -23,7 +23,9 @@ class JampaAppBar extends StatelessWidget implements PreferredSizeWidget {
               leading: state.leading ?? Buttons.backButtonIcon(
                 context: context,
                 onPressed: (){
-                  context.pop();
+                  if(context.canPop()){
+                    context.pop();
+                  }
                 }
               ),
               actions: state.actions ?? [

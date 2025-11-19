@@ -33,7 +33,7 @@ final class OnChangeNoteContent extends NoteEvent {
 }
 
 final class DeleteNoteById extends NoteEvent {
-  final int? noteId;
+  final String? noteId;
 
   DeleteNoteById(this.noteId);
 

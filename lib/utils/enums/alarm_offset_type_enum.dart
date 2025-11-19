@@ -1,18 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
-enum AlarmOffsetType {
+enum ReminderOffsetType {
   minutes,
   hours,
   days;
 
   String getLabel(BuildContext context) {
     switch (this) {
-      case AlarmOffsetType.days:
+      case ReminderOffsetType.days:
         return context.strings.alarm_offset_type_days;
-      case AlarmOffsetType.hours:
+      case ReminderOffsetType.hours:
         return context.strings.alarm_offset_type_hours;
-      case AlarmOffsetType.minutes:
+      case ReminderOffsetType.minutes:
         return context.strings.alarm_offset_type_minutes;
     }
   }

@@ -21,7 +21,7 @@ class NoteDao {
     });
   }
 
-  static Future<void> updateNoteContent(int id, String content) async {
+  static Future<void> updateNoteContent(String id, String content) async {
     AppDatabase db = serviceLocator<AppDatabase>();
     await (db.update(db.noteTable)..where((note) => note.id.equals(id)))
         .write(NoteTableCompanion(
@@ -30,7 +30,7 @@ class NoteDao {
     ));
   }
 
-  static JoinedSelectStatement _getNoteDataQuery(AppDatabase db, int id) {
+  static JoinedSelectStatement _getNoteDataQuery(AppDatabase db, String id) {
     return (db.select(db.noteTable)
       ..where((note) => note.id.equals(id)))
       .join([
@@ -72,14 +72,14 @@ class NoteDao {
     );
   }
 
-  static Future<NoteEntity?> getNoteById(int id) async {
+  static Future<NoteEntity?> getNoteById(String id) async {
     AppDatabase db = serviceLocator<AppDatabase>();
     final rows = await _getNoteDataQuery(db, id).get();
     return _mapNoteWithRelations(db, rows);
   }
 
 
-  static Stream<NoteEntity?> watchNoteById(int id) {
+  static Stream<NoteEntity?> watchNoteById(String id) {
     AppDatabase db = serviceLocator<AppDatabase>();
     
     return _getNoteDataQuery(db, id).watch().map((rows) {
@@ -88,7 +88,7 @@ class NoteDao {
   }
   
   
-  static Future<void> deleteNoteById(int id) async {
+  static Future<void> deleteNoteById(String id) async {
     AppDatabase db = serviceLocator<AppDatabase>();
     await (db.delete(db.noteTable)..where((note) => note.id.equals(id))).go();
   }

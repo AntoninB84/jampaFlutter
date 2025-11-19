@@ -1,9 +1,9 @@
 enum ObjectTypeEnum {
-  alarmEntity,
   categoryEntity,
   noteEntity,
   noteCategoryEntity,
   noteTypeEntity,
+  reminderEntity,
   scheduleEntity,
   userEntity;
 }

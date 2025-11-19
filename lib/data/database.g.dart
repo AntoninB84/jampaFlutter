@@ -503,16 +503,12 @@ class $NoteTableTable extends NoteTable
   $NoteTableTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
     'id',
     aliasedName,
     false,
-    hasAutoIncrement: true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'PRIMARY KEY AUTOINCREMENT',
-    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
   );
   static const VerificationMeta _titleMeta = const VerificationMeta('title');
   @override
@@ -639,6 +635,8 @@ class $NoteTableTable extends NoteTable
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
     }
     if (data.containsKey('title')) {
       context.handle(
@@ -694,13 +692,13 @@ class $NoteTableTable extends NoteTable
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => const {};
   @override
   NoteEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return NoteEntity(
       id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
+        DriftSqlType.string,
         data['${effectivePrefix}id'],
       )!,
       title: attachedDatabase.typeMapping.read(
@@ -750,7 +748,7 @@ class $NoteTableTable extends NoteTable
 }
 
 class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
-  final Value<int> id;
+  final Value<String> id;
   final Value<String> title;
   final Value<String?> content;
   final Value<bool> isImportant;
@@ -759,6 +757,7 @@ class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
   final Value<DateTime> updatedAt;
   final Value<int?> noteTypeId;
   final Value<int?> userId;
+  final Value<int> rowid;
   const NoteTableCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
@@ -769,9 +768,10 @@ class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
     this.updatedAt = const Value.absent(),
     this.noteTypeId = const Value.absent(),
     this.userId = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   NoteTableCompanion.insert({
-    this.id = const Value.absent(),
+    required String id,
     required String title,
     this.content = const Value.absent(),
     this.isImportant = const Value.absent(),
@@ -780,9 +780,11 @@ class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
     this.updatedAt = const Value.absent(),
     this.noteTypeId = const Value.absent(),
     this.userId = const Value.absent(),
-  }) : title = Value(title);
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       title = Value(title);
   static Insertable<NoteEntity> custom({
-    Expression<int>? id,
+    Expression<String>? id,
     Expression<String>? title,
     Expression<String>? content,
     Expression<bool>? isImportant,
@@ -791,6 +793,7 @@ class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
     Expression<DateTime>? updatedAt,
     Expression<int>? noteTypeId,
     Expression<int>? userId,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -802,11 +805,12 @@ class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
       if (updatedAt != null) 'updated_at': updatedAt,
       if (noteTypeId != null) 'note_type_id': noteTypeId,
       if (userId != null) 'user_id': userId,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   NoteTableCompanion copyWith({
-    Value<int>? id,
+    Value<String>? id,
     Value<String>? title,
     Value<String?>? content,
     Value<bool>? isImportant,
@@ -815,6 +819,7 @@ class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
     Value<DateTime>? updatedAt,
     Value<int?>? noteTypeId,
     Value<int?>? userId,
+    Value<int>? rowid,
   }) {
     return NoteTableCompanion(
       id: id ?? this.id,
@@ -826,6 +831,7 @@ class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
       updatedAt: updatedAt ?? this.updatedAt,
       noteTypeId: noteTypeId ?? this.noteTypeId,
       userId: userId ?? this.userId,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -833,7 +839,7 @@ class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (id.present) {
-      map['id'] = Variable<int>(id.value);
+      map['id'] = Variable<String>(id.value);
     }
     if (title.present) {
       map['title'] = Variable<String>(title.value);
@@ -861,6 +867,9 @@ class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
     if (userId.present) {
       map['user_id'] = Variable<int>(userId.value);
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
@@ -875,7 +884,8 @@ class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('noteTypeId: $noteTypeId, ')
-          ..write('userId: $userId')
+          ..write('userId: $userId, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -1091,11 +1101,11 @@ class $NoteCategoryTableTable extends NoteCategoryTable
   $NoteCategoryTableTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _noteIdMeta = const VerificationMeta('noteId');
   @override
-  late final GeneratedColumn<int> noteId = GeneratedColumn<int>(
+  late final GeneratedColumn<String> noteId = GeneratedColumn<String>(
     'note_id',
     aliasedName,
     false,
-    type: DriftSqlType.int,
+    type: DriftSqlType.string,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
       'REFERENCES note_table (id)',
@@ -1155,7 +1165,7 @@ class $NoteCategoryTableTable extends NoteCategoryTable
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return NoteCategoryEntity(
       noteId: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
+        DriftSqlType.string,
         data['${effectivePrefix}note_id'],
       )!,
       categoryId: attachedDatabase.typeMapping.read(
@@ -1172,7 +1182,7 @@ class $NoteCategoryTableTable extends NoteCategoryTable
 }
 
 class NoteCategoryTableCompanion extends UpdateCompanion<NoteCategoryEntity> {
-  final Value<int> noteId;
+  final Value<String> noteId;
   final Value<int> categoryId;
   final Value<int> rowid;
   const NoteCategoryTableCompanion({
@@ -1181,13 +1191,13 @@ class NoteCategoryTableCompanion extends UpdateCompanion<NoteCategoryEntity> {
     this.rowid = const Value.absent(),
   });
   NoteCategoryTableCompanion.insert({
-    required int noteId,
+    required String noteId,
     required int categoryId,
     this.rowid = const Value.absent(),
   }) : noteId = Value(noteId),
        categoryId = Value(categoryId);
   static Insertable<NoteCategoryEntity> custom({
-    Expression<int>? noteId,
+    Expression<String>? noteId,
     Expression<int>? categoryId,
     Expression<int>? rowid,
   }) {
@@ -1199,7 +1209,7 @@ class NoteCategoryTableCompanion extends UpdateCompanion<NoteCategoryEntity> {
   }
 
   NoteCategoryTableCompanion copyWith({
-    Value<int>? noteId,
+    Value<String>? noteId,
     Value<int>? categoryId,
     Value<int>? rowid,
   }) {
@@ -1214,7 +1224,7 @@ class NoteCategoryTableCompanion extends UpdateCompanion<NoteCategoryEntity> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (noteId.present) {
-      map['note_id'] = Variable<int>(noteId.value);
+      map['note_id'] = Variable<String>(noteId.value);
     }
     if (categoryId.present) {
       map['category_id'] = Variable<int>(categoryId.value);
@@ -1244,24 +1254,20 @@ class $ScheduleTableTable extends ScheduleTable
   $ScheduleTableTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
     'id',
     aliasedName,
     false,
-    hasAutoIncrement: true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'PRIMARY KEY AUTOINCREMENT',
-    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
   );
   static const VerificationMeta _noteIdMeta = const VerificationMeta('noteId');
   @override
-  late final GeneratedColumn<int> noteId = GeneratedColumn<int>(
+  late final GeneratedColumn<String> noteId = GeneratedColumn<String>(
     'note_id',
     aliasedName,
     false,
-    type: DriftSqlType.int,
+    type: DriftSqlType.string,
     requiredDuringInsert: true,
     $customConstraints: 'NOT NULL REFERENCES note_table(id) ON DELETE CASCADE',
   );
@@ -1386,6 +1392,8 @@ class $ScheduleTableTable extends ScheduleTable
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
     }
     if (data.containsKey('note_id')) {
       context.handle(
@@ -1456,17 +1464,17 @@ class $ScheduleTableTable extends ScheduleTable
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => const {};
   @override
   ScheduleEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ScheduleEntity(
       id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
+        DriftSqlType.string,
         data['${effectivePrefix}id'],
       )!,
       noteId: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
+        DriftSqlType.string,
         data['${effectivePrefix}note_id'],
       )!,
       startDateTime: attachedDatabase.typeMapping.read(
@@ -1522,8 +1530,8 @@ class $ScheduleTableTable extends ScheduleTable
 }
 
 class ScheduleTableCompanion extends UpdateCompanion<ScheduleEntity> {
-  final Value<int> id;
-  final Value<int> noteId;
+  final Value<String> id;
+  final Value<String> noteId;
   final Value<DateTime> startDateTime;
   final Value<DateTime> endDateTime;
   final Value<DateTime> createdAt;
@@ -1532,6 +1540,7 @@ class ScheduleTableCompanion extends UpdateCompanion<ScheduleEntity> {
   final Value<int?> recurrenceInterval;
   final Value<int?> recurrenceDay;
   final Value<DateTime?> recurrenceEndDate;
+  final Value<int> rowid;
   const ScheduleTableCompanion({
     this.id = const Value.absent(),
     this.noteId = const Value.absent(),
@@ -1543,10 +1552,11 @@ class ScheduleTableCompanion extends UpdateCompanion<ScheduleEntity> {
     this.recurrenceInterval = const Value.absent(),
     this.recurrenceDay = const Value.absent(),
     this.recurrenceEndDate = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   ScheduleTableCompanion.insert({
-    this.id = const Value.absent(),
-    required int noteId,
+    required String id,
+    required String noteId,
     this.startDateTime = const Value.absent(),
     this.endDateTime = const Value.absent(),
     this.createdAt = const Value.absent(),
@@ -1555,10 +1565,12 @@ class ScheduleTableCompanion extends UpdateCompanion<ScheduleEntity> {
     this.recurrenceInterval = const Value.absent(),
     this.recurrenceDay = const Value.absent(),
     this.recurrenceEndDate = const Value.absent(),
-  }) : noteId = Value(noteId);
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       noteId = Value(noteId);
   static Insertable<ScheduleEntity> custom({
-    Expression<int>? id,
-    Expression<int>? noteId,
+    Expression<String>? id,
+    Expression<String>? noteId,
     Expression<DateTime>? startDateTime,
     Expression<DateTime>? endDateTime,
     Expression<DateTime>? createdAt,
@@ -1567,6 +1579,7 @@ class ScheduleTableCompanion extends UpdateCompanion<ScheduleEntity> {
     Expression<int>? recurrenceInterval,
     Expression<int>? recurrenceDay,
     Expression<DateTime>? recurrenceEndDate,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1579,12 +1592,13 @@ class ScheduleTableCompanion extends UpdateCompanion<ScheduleEntity> {
       if (recurrenceInterval != null) 'recurrence_interval': recurrenceInterval,
       if (recurrenceDay != null) 'recurrence_day': recurrenceDay,
       if (recurrenceEndDate != null) 'recurrence_end_date': recurrenceEndDate,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   ScheduleTableCompanion copyWith({
-    Value<int>? id,
-    Value<int>? noteId,
+    Value<String>? id,
+    Value<String>? noteId,
     Value<DateTime>? startDateTime,
     Value<DateTime>? endDateTime,
     Value<DateTime>? createdAt,
@@ -1593,6 +1607,7 @@ class ScheduleTableCompanion extends UpdateCompanion<ScheduleEntity> {
     Value<int?>? recurrenceInterval,
     Value<int?>? recurrenceDay,
     Value<DateTime?>? recurrenceEndDate,
+    Value<int>? rowid,
   }) {
     return ScheduleTableCompanion(
       id: id ?? this.id,
@@ -1605,6 +1620,7 @@ class ScheduleTableCompanion extends UpdateCompanion<ScheduleEntity> {
       recurrenceInterval: recurrenceInterval ?? this.recurrenceInterval,
       recurrenceDay: recurrenceDay ?? this.recurrenceDay,
       recurrenceEndDate: recurrenceEndDate ?? this.recurrenceEndDate,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -1612,10 +1628,10 @@ class ScheduleTableCompanion extends UpdateCompanion<ScheduleEntity> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (id.present) {
-      map['id'] = Variable<int>(id.value);
+      map['id'] = Variable<String>(id.value);
     }
     if (noteId.present) {
-      map['note_id'] = Variable<int>(noteId.value);
+      map['note_id'] = Variable<String>(noteId.value);
     }
     if (startDateTime.present) {
       map['start_date_time'] = Variable<DateTime>(startDateTime.value);
@@ -1645,6 +1661,9 @@ class ScheduleTableCompanion extends UpdateCompanion<ScheduleEntity> {
     if (recurrenceEndDate.present) {
       map['recurrence_end_date'] = Variable<DateTime>(recurrenceEndDate.value);
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
@@ -1660,332 +1679,15 @@ class ScheduleTableCompanion extends UpdateCompanion<ScheduleEntity> {
           ..write('recurrenceType: $recurrenceType, ')
           ..write('recurrenceInterval: $recurrenceInterval, ')
           ..write('recurrenceDay: $recurrenceDay, ')
-          ..write('recurrenceEndDate: $recurrenceEndDate')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $AlarmTableTable extends AlarmTable
-    with TableInfo<$AlarmTableTable, AlarmEntity> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $AlarmTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-    'id',
-    aliasedName,
-    false,
-    hasAutoIncrement: true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'PRIMARY KEY AUTOINCREMENT',
-    ),
-  );
-  static const VerificationMeta _scheduleIdMeta = const VerificationMeta(
-    'scheduleId',
-  );
-  @override
-  late final GeneratedColumn<int> scheduleId = GeneratedColumn<int>(
-    'schedule_id',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: true,
-    $customConstraints:
-        'NOT NULL REFERENCES schedule_table(id) ON DELETE CASCADE',
-  );
-  static const VerificationMeta _offsetValueMeta = const VerificationMeta(
-    'offsetValue',
-  );
-  @override
-  late final GeneratedColumn<int> offsetValue = GeneratedColumn<int>(
-    'offset_value',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: true,
-  );
-  @override
-  late final GeneratedColumnWithTypeConverter<AlarmOffsetType, String>
-  offsetType = GeneratedColumn<String>(
-    'offset_type',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  ).withConverter<AlarmOffsetType>($AlarmTableTable.$converteroffsetType);
-  static const VerificationMeta _isSilentMeta = const VerificationMeta(
-    'isSilent',
-  );
-  @override
-  late final GeneratedColumn<bool> isSilent = GeneratedColumn<bool>(
-    'is_silent',
-    aliasedName,
-    false,
-    type: DriftSqlType.bool,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'CHECK ("is_silent" IN (0, 1))',
-    ),
-    defaultValue: const Constant(true),
-  );
-  static const VerificationMeta _createdAtMeta = const VerificationMeta(
-    'createdAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-    'created_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: false,
-    defaultValue: currentDateAndTime,
-  );
-  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
-    'updatedAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
-    'updated_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: false,
-    defaultValue: currentDateAndTime,
-  );
-  @override
-  List<GeneratedColumn> get $columns => [
-    id,
-    scheduleId,
-    offsetValue,
-    offsetType,
-    isSilent,
-    createdAt,
-    updatedAt,
-  ];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'alarm_table';
-  @override
-  VerificationContext validateIntegrity(
-    Insertable<AlarmEntity> instance, {
-    bool isInserting = false,
-  }) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('schedule_id')) {
-      context.handle(
-        _scheduleIdMeta,
-        scheduleId.isAcceptableOrUnknown(data['schedule_id']!, _scheduleIdMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_scheduleIdMeta);
-    }
-    if (data.containsKey('offset_value')) {
-      context.handle(
-        _offsetValueMeta,
-        offsetValue.isAcceptableOrUnknown(
-          data['offset_value']!,
-          _offsetValueMeta,
-        ),
-      );
-    } else if (isInserting) {
-      context.missing(_offsetValueMeta);
-    }
-    if (data.containsKey('is_silent')) {
-      context.handle(
-        _isSilentMeta,
-        isSilent.isAcceptableOrUnknown(data['is_silent']!, _isSilentMeta),
-      );
-    }
-    if (data.containsKey('created_at')) {
-      context.handle(
-        _createdAtMeta,
-        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
-      );
-    }
-    if (data.containsKey('updated_at')) {
-      context.handle(
-        _updatedAtMeta,
-        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
-      );
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  AlarmEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return AlarmEntity(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}id'],
-      )!,
-      scheduleId: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}schedule_id'],
-      )!,
-      offsetValue: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}offset_value'],
-      )!,
-      offsetType: $AlarmTableTable.$converteroffsetType.fromSql(
-        attachedDatabase.typeMapping.read(
-          DriftSqlType.string,
-          data['${effectivePrefix}offset_type'],
-        )!,
-      ),
-      isSilent: attachedDatabase.typeMapping.read(
-        DriftSqlType.bool,
-        data['${effectivePrefix}is_silent'],
-      )!,
-      createdAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}created_at'],
-      )!,
-      updatedAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}updated_at'],
-      )!,
-    );
-  }
-
-  @override
-  $AlarmTableTable createAlias(String alias) {
-    return $AlarmTableTable(attachedDatabase, alias);
-  }
-
-  static JsonTypeConverter2<AlarmOffsetType, String, String>
-  $converteroffsetType = const EnumNameConverter<AlarmOffsetType>(
-    AlarmOffsetType.values,
-  );
-}
-
-class AlarmTableCompanion extends UpdateCompanion<AlarmEntity> {
-  final Value<int> id;
-  final Value<int> scheduleId;
-  final Value<int> offsetValue;
-  final Value<AlarmOffsetType> offsetType;
-  final Value<bool> isSilent;
-  final Value<DateTime> createdAt;
-  final Value<DateTime> updatedAt;
-  const AlarmTableCompanion({
-    this.id = const Value.absent(),
-    this.scheduleId = const Value.absent(),
-    this.offsetValue = const Value.absent(),
-    this.offsetType = const Value.absent(),
-    this.isSilent = const Value.absent(),
-    this.createdAt = const Value.absent(),
-    this.updatedAt = const Value.absent(),
-  });
-  AlarmTableCompanion.insert({
-    this.id = const Value.absent(),
-    required int scheduleId,
-    required int offsetValue,
-    required AlarmOffsetType offsetType,
-    this.isSilent = const Value.absent(),
-    this.createdAt = const Value.absent(),
-    this.updatedAt = const Value.absent(),
-  }) : scheduleId = Value(scheduleId),
-       offsetValue = Value(offsetValue),
-       offsetType = Value(offsetType);
-  static Insertable<AlarmEntity> custom({
-    Expression<int>? id,
-    Expression<int>? scheduleId,
-    Expression<int>? offsetValue,
-    Expression<String>? offsetType,
-    Expression<bool>? isSilent,
-    Expression<DateTime>? createdAt,
-    Expression<DateTime>? updatedAt,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (scheduleId != null) 'schedule_id': scheduleId,
-      if (offsetValue != null) 'offset_value': offsetValue,
-      if (offsetType != null) 'offset_type': offsetType,
-      if (isSilent != null) 'is_silent': isSilent,
-      if (createdAt != null) 'created_at': createdAt,
-      if (updatedAt != null) 'updated_at': updatedAt,
-    });
-  }
-
-  AlarmTableCompanion copyWith({
-    Value<int>? id,
-    Value<int>? scheduleId,
-    Value<int>? offsetValue,
-    Value<AlarmOffsetType>? offsetType,
-    Value<bool>? isSilent,
-    Value<DateTime>? createdAt,
-    Value<DateTime>? updatedAt,
-  }) {
-    return AlarmTableCompanion(
-      id: id ?? this.id,
-      scheduleId: scheduleId ?? this.scheduleId,
-      offsetValue: offsetValue ?? this.offsetValue,
-      offsetType: offsetType ?? this.offsetType,
-      isSilent: isSilent ?? this.isSilent,
-      createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
-    if (scheduleId.present) {
-      map['schedule_id'] = Variable<int>(scheduleId.value);
-    }
-    if (offsetValue.present) {
-      map['offset_value'] = Variable<int>(offsetValue.value);
-    }
-    if (offsetType.present) {
-      map['offset_type'] = Variable<String>(
-        $AlarmTableTable.$converteroffsetType.toSql(offsetType.value),
-      );
-    }
-    if (isSilent.present) {
-      map['is_silent'] = Variable<bool>(isSilent.value);
-    }
-    if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
-    }
-    if (updatedAt.present) {
-      map['updated_at'] = Variable<DateTime>(updatedAt.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('AlarmTableCompanion(')
-          ..write('id: $id, ')
-          ..write('scheduleId: $scheduleId, ')
-          ..write('offsetValue: $offsetValue, ')
-          ..write('offsetType: $offsetType, ')
-          ..write('isSilent: $isSilent, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt')
+          ..write('recurrenceEndDate: $recurrenceEndDate, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
 }
 
 class NoteListViewData extends DataClass {
-  final int noteId;
+  final String noteId;
   final String noteTitle;
   final DateTime noteCreatedAt;
   final int? noteTypeId;
@@ -2013,7 +1715,7 @@ class NoteListViewData extends DataClass {
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return NoteListViewData(
-      noteId: serializer.fromJson<int>(json['note_id']),
+      noteId: serializer.fromJson<String>(json['note_id']),
       noteTitle: serializer.fromJson<String>(json['note_title']),
       noteCreatedAt: serializer.fromJson<DateTime>(json['note_created_at']),
       noteTypeId: serializer.fromJson<int?>(json['note_type_id']),
@@ -2031,7 +1733,7 @@ class NoteListViewData extends DataClass {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'note_id': serializer.toJson<int>(noteId),
+      'note_id': serializer.toJson<String>(noteId),
       'note_title': serializer.toJson<String>(noteTitle),
       'note_created_at': serializer.toJson<DateTime>(noteCreatedAt),
       'note_type_id': serializer.toJson<int?>(noteTypeId),
@@ -2047,7 +1749,7 @@ class NoteListViewData extends DataClass {
   }
 
   NoteListViewData copyWith({
-    int? noteId,
+    String? noteId,
     String? noteTitle,
     DateTime? noteCreatedAt,
     Value<int?> noteTypeId = const Value.absent(),
@@ -2155,7 +1857,7 @@ class NoteListView extends ViewInfo<NoteListView, NoteListViewData>
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return NoteListViewData(
       noteId: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
+        DriftSqlType.string,
         data['${effectivePrefix}note_id'],
       )!,
       noteTitle: attachedDatabase.typeMapping.read(
@@ -2197,11 +1899,11 @@ class NoteListView extends ViewInfo<NoteListView, NoteListViewData>
     );
   }
 
-  late final GeneratedColumn<int> noteId = GeneratedColumn<int>(
+  late final GeneratedColumn<String> noteId = GeneratedColumn<String>(
     'note_id',
     aliasedName,
     false,
-    type: DriftSqlType.int,
+    type: DriftSqlType.string,
   );
   late final GeneratedColumn<String> noteTitle = GeneratedColumn<String>(
     'note_title',
@@ -2273,8 +1975,338 @@ class NoteListView extends ViewInfo<NoteListView, NoteListViewData>
     'note_category_table',
     'category_table',
     'schedule_table',
-    'alarm_table',
   };
+}
+
+class $ReminderTableTable extends ReminderTable
+    with TableInfo<$ReminderTableTable, ReminderEntity> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ReminderTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _scheduleIdMeta = const VerificationMeta(
+    'scheduleId',
+  );
+  @override
+  late final GeneratedColumn<String> scheduleId = GeneratedColumn<String>(
+    'schedule_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints:
+        'NOT NULL REFERENCES schedule_table(id) ON DELETE CASCADE',
+  );
+  static const VerificationMeta _offsetValueMeta = const VerificationMeta(
+    'offsetValue',
+  );
+  @override
+  late final GeneratedColumn<int> offsetValue = GeneratedColumn<int>(
+    'offset_value',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<ReminderOffsetType, String>
+  offsetType = GeneratedColumn<String>(
+    'offset_type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  ).withConverter<ReminderOffsetType>($ReminderTableTable.$converteroffsetType);
+  static const VerificationMeta _isNotificationMeta = const VerificationMeta(
+    'isNotification',
+  );
+  @override
+  late final GeneratedColumn<bool> isNotification = GeneratedColumn<bool>(
+    'is_notification',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_notification" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    scheduleId,
+    offsetValue,
+    offsetType,
+    isNotification,
+    createdAt,
+    updatedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'reminder_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ReminderEntity> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('schedule_id')) {
+      context.handle(
+        _scheduleIdMeta,
+        scheduleId.isAcceptableOrUnknown(data['schedule_id']!, _scheduleIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_scheduleIdMeta);
+    }
+    if (data.containsKey('offset_value')) {
+      context.handle(
+        _offsetValueMeta,
+        offsetValue.isAcceptableOrUnknown(
+          data['offset_value']!,
+          _offsetValueMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_offsetValueMeta);
+    }
+    if (data.containsKey('is_notification')) {
+      context.handle(
+        _isNotificationMeta,
+        isNotification.isAcceptableOrUnknown(
+          data['is_notification']!,
+          _isNotificationMeta,
+        ),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => const {};
+  @override
+  ReminderEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ReminderEntity(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      scheduleId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}schedule_id'],
+      )!,
+      offsetValue: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}offset_value'],
+      )!,
+      offsetType: $ReminderTableTable.$converteroffsetType.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}offset_type'],
+        )!,
+      ),
+      isNotification: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_notification'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+    );
+  }
+
+  @override
+  $ReminderTableTable createAlias(String alias) {
+    return $ReminderTableTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<ReminderOffsetType, String, String>
+  $converteroffsetType = const EnumNameConverter<ReminderOffsetType>(
+    ReminderOffsetType.values,
+  );
+}
+
+class ReminderTableCompanion extends UpdateCompanion<ReminderEntity> {
+  final Value<String> id;
+  final Value<String> scheduleId;
+  final Value<int> offsetValue;
+  final Value<ReminderOffsetType> offsetType;
+  final Value<bool> isNotification;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  final Value<int> rowid;
+  const ReminderTableCompanion({
+    this.id = const Value.absent(),
+    this.scheduleId = const Value.absent(),
+    this.offsetValue = const Value.absent(),
+    this.offsetType = const Value.absent(),
+    this.isNotification = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ReminderTableCompanion.insert({
+    required String id,
+    required String scheduleId,
+    required int offsetValue,
+    required ReminderOffsetType offsetType,
+    this.isNotification = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       scheduleId = Value(scheduleId),
+       offsetValue = Value(offsetValue),
+       offsetType = Value(offsetType);
+  static Insertable<ReminderEntity> custom({
+    Expression<String>? id,
+    Expression<String>? scheduleId,
+    Expression<int>? offsetValue,
+    Expression<String>? offsetType,
+    Expression<bool>? isNotification,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (scheduleId != null) 'schedule_id': scheduleId,
+      if (offsetValue != null) 'offset_value': offsetValue,
+      if (offsetType != null) 'offset_type': offsetType,
+      if (isNotification != null) 'is_notification': isNotification,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ReminderTableCompanion copyWith({
+    Value<String>? id,
+    Value<String>? scheduleId,
+    Value<int>? offsetValue,
+    Value<ReminderOffsetType>? offsetType,
+    Value<bool>? isNotification,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<int>? rowid,
+  }) {
+    return ReminderTableCompanion(
+      id: id ?? this.id,
+      scheduleId: scheduleId ?? this.scheduleId,
+      offsetValue: offsetValue ?? this.offsetValue,
+      offsetType: offsetType ?? this.offsetType,
+      isNotification: isNotification ?? this.isNotification,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (scheduleId.present) {
+      map['schedule_id'] = Variable<String>(scheduleId.value);
+    }
+    if (offsetValue.present) {
+      map['offset_value'] = Variable<int>(offsetValue.value);
+    }
+    if (offsetType.present) {
+      map['offset_type'] = Variable<String>(
+        $ReminderTableTable.$converteroffsetType.toSql(offsetType.value),
+      );
+    }
+    if (isNotification.present) {
+      map['is_notification'] = Variable<bool>(isNotification.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ReminderTableCompanion(')
+          ..write('id: $id, ')
+          ..write('scheduleId: $scheduleId, ')
+          ..write('offsetValue: $offsetValue, ')
+          ..write('offsetType: $offsetType, ')
+          ..write('isNotification: $isNotification, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
 }
 
 abstract class _$AppDatabase extends GeneratedDatabase {
@@ -2287,8 +2319,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $NoteCategoryTableTable noteCategoryTable =
       $NoteCategoryTableTable(this);
   late final $ScheduleTableTable scheduleTable = $ScheduleTableTable(this);
-  late final $AlarmTableTable alarmTable = $AlarmTableTable(this);
   late final NoteListView noteListView = NoteListView(this);
+  late final $ReminderTableTable reminderTable = $ReminderTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2300,8 +2332,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     categoryTable,
     noteCategoryTable,
     scheduleTable,
-    alarmTable,
     noteListView,
+    reminderTable,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -2317,7 +2349,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         'schedule_table',
         limitUpdateKind: UpdateKind.delete,
       ),
-      result: [TableUpdate('alarm_table', kind: UpdateKind.delete)],
+      result: [TableUpdate('reminder_table', kind: UpdateKind.delete)],
     ),
   ]);
 }
@@ -2923,7 +2955,7 @@ typedef $$UserTableTableProcessedTableManager =
     >;
 typedef $$NoteTableTableCreateCompanionBuilder =
     NoteTableCompanion Function({
-      Value<int> id,
+      required String id,
       required String title,
       Value<String?> content,
       Value<bool> isImportant,
@@ -2932,10 +2964,11 @@ typedef $$NoteTableTableCreateCompanionBuilder =
       Value<DateTime> updatedAt,
       Value<int?> noteTypeId,
       Value<int?> userId,
+      Value<int> rowid,
     });
 typedef $$NoteTableTableUpdateCompanionBuilder =
     NoteTableCompanion Function({
-      Value<int> id,
+      Value<String> id,
       Value<String> title,
       Value<String?> content,
       Value<bool> isImportant,
@@ -2944,6 +2977,7 @@ typedef $$NoteTableTableUpdateCompanionBuilder =
       Value<DateTime> updatedAt,
       Value<int?> noteTypeId,
       Value<int?> userId,
+      Value<int> rowid,
     });
 
 final class $$NoteTableTableReferences
@@ -3000,7 +3034,7 @@ final class $$NoteTableTableReferences
     final manager = $$NoteCategoryTableTableTableManager(
       $_db,
       $_db.noteCategoryTable,
-    ).filter((f) => f.noteId.id.sqlEquals($_itemColumn<int>('id')!));
+    ).filter((f) => f.noteId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(
       _noteCategoryTableRefsTable($_db),
@@ -3020,7 +3054,7 @@ final class $$NoteTableTableReferences
     final manager = $$ScheduleTableTableTableManager(
       $_db,
       $_db.scheduleTable,
-    ).filter((f) => f.noteId.id.sqlEquals($_itemColumn<int>('id')!));
+    ).filter((f) => f.noteId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_scheduleTableRefsTable($_db));
     return ProcessedTableManager(
@@ -3038,7 +3072,7 @@ class $$NoteTableTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<int> get id => $composableBuilder(
+  ColumnFilters<String> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnFilters(column),
   );
@@ -3180,7 +3214,7 @@ class $$NoteTableTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<int> get id => $composableBuilder(
+  ColumnOrderings<String> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnOrderings(column),
   );
@@ -3271,7 +3305,7 @@ class $$NoteTableTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<int> get id =>
+  GeneratedColumn<String> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
   GeneratedColumn<String> get title =>
@@ -3425,7 +3459,7 @@ class $$NoteTableTableTableManager
               $$NoteTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
+                Value<String> id = const Value.absent(),
                 Value<String> title = const Value.absent(),
                 Value<String?> content = const Value.absent(),
                 Value<bool> isImportant = const Value.absent(),
@@ -3434,6 +3468,7 @@ class $$NoteTableTableTableManager
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<int?> noteTypeId = const Value.absent(),
                 Value<int?> userId = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
               }) => NoteTableCompanion(
                 id: id,
                 title: title,
@@ -3444,10 +3479,11 @@ class $$NoteTableTableTableManager
                 updatedAt: updatedAt,
                 noteTypeId: noteTypeId,
                 userId: userId,
+                rowid: rowid,
               ),
           createCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
+                required String id,
                 required String title,
                 Value<String?> content = const Value.absent(),
                 Value<bool> isImportant = const Value.absent(),
@@ -3456,6 +3492,7 @@ class $$NoteTableTableTableManager
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<int?> noteTypeId = const Value.absent(),
                 Value<int?> userId = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
               }) => NoteTableCompanion.insert(
                 id: id,
                 title: title,
@@ -3466,6 +3503,7 @@ class $$NoteTableTableTableManager
                 updatedAt: updatedAt,
                 noteTypeId: noteTypeId,
                 userId: userId,
+                rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
               .map(
@@ -3895,13 +3933,13 @@ typedef $$CategoryTableTableProcessedTableManager =
     >;
 typedef $$NoteCategoryTableTableCreateCompanionBuilder =
     NoteCategoryTableCompanion Function({
-      required int noteId,
+      required String noteId,
       required int categoryId,
       Value<int> rowid,
     });
 typedef $$NoteCategoryTableTableUpdateCompanionBuilder =
     NoteCategoryTableCompanion Function({
-      Value<int> noteId,
+      Value<String> noteId,
       Value<int> categoryId,
       Value<int> rowid,
     });
@@ -3925,7 +3963,7 @@ final class $$NoteCategoryTableTableReferences
       );
 
   $$NoteTableTableProcessedTableManager get noteId {
-    final $_column = $_itemColumn<int>('note_id')!;
+    final $_column = $_itemColumn<String>('note_id')!;
 
     final manager = $$NoteTableTableTableManager(
       $_db,
@@ -4162,7 +4200,7 @@ class $$NoteCategoryTableTableTableManager
               ),
           updateCompanionCallback:
               ({
-                Value<int> noteId = const Value.absent(),
+                Value<String> noteId = const Value.absent(),
                 Value<int> categoryId = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => NoteCategoryTableCompanion(
@@ -4172,7 +4210,7 @@ class $$NoteCategoryTableTableTableManager
               ),
           createCompanionCallback:
               ({
-                required int noteId,
+                required String noteId,
                 required int categoryId,
                 Value<int> rowid = const Value.absent(),
               }) => NoteCategoryTableCompanion.insert(
@@ -4266,8 +4304,8 @@ typedef $$NoteCategoryTableTableProcessedTableManager =
     >;
 typedef $$ScheduleTableTableCreateCompanionBuilder =
     ScheduleTableCompanion Function({
-      Value<int> id,
-      required int noteId,
+      required String id,
+      required String noteId,
       Value<DateTime> startDateTime,
       Value<DateTime> endDateTime,
       Value<DateTime> createdAt,
@@ -4276,11 +4314,12 @@ typedef $$ScheduleTableTableCreateCompanionBuilder =
       Value<int?> recurrenceInterval,
       Value<int?> recurrenceDay,
       Value<DateTime?> recurrenceEndDate,
+      Value<int> rowid,
     });
 typedef $$ScheduleTableTableUpdateCompanionBuilder =
     ScheduleTableCompanion Function({
-      Value<int> id,
-      Value<int> noteId,
+      Value<String> id,
+      Value<String> noteId,
       Value<DateTime> startDateTime,
       Value<DateTime> endDateTime,
       Value<DateTime> createdAt,
@@ -4289,6 +4328,7 @@ typedef $$ScheduleTableTableUpdateCompanionBuilder =
       Value<int?> recurrenceInterval,
       Value<int?> recurrenceDay,
       Value<DateTime?> recurrenceEndDate,
+      Value<int> rowid,
     });
 
 final class $$ScheduleTableTableReferences
@@ -4305,7 +4345,7 @@ final class $$ScheduleTableTableReferences
       );
 
   $$NoteTableTableProcessedTableManager get noteId {
-    final $_column = $_itemColumn<int>('note_id')!;
+    final $_column = $_itemColumn<String>('note_id')!;
 
     final manager = $$NoteTableTableTableManager(
       $_db,
@@ -4318,22 +4358,22 @@ final class $$ScheduleTableTableReferences
     );
   }
 
-  static MultiTypedResultKey<$AlarmTableTable, List<AlarmEntity>>
-  _alarmTableRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
-    db.alarmTable,
+  static MultiTypedResultKey<$ReminderTableTable, List<ReminderEntity>>
+  _reminderTableRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.reminderTable,
     aliasName: $_aliasNameGenerator(
       db.scheduleTable.id,
-      db.alarmTable.scheduleId,
+      db.reminderTable.scheduleId,
     ),
   );
 
-  $$AlarmTableTableProcessedTableManager get alarmTableRefs {
-    final manager = $$AlarmTableTableTableManager(
+  $$ReminderTableTableProcessedTableManager get reminderTableRefs {
+    final manager = $$ReminderTableTableTableManager(
       $_db,
-      $_db.alarmTable,
-    ).filter((f) => f.scheduleId.id.sqlEquals($_itemColumn<int>('id')!));
+      $_db.reminderTable,
+    ).filter((f) => f.scheduleId.id.sqlEquals($_itemColumn<String>('id')!));
 
-    final cache = $_typedResult.readTableOrNull(_alarmTableRefsTable($_db));
+    final cache = $_typedResult.readTableOrNull(_reminderTableRefsTable($_db));
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
     );
@@ -4349,7 +4389,7 @@ class $$ScheduleTableTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<int> get id => $composableBuilder(
+  ColumnFilters<String> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnFilters(column),
   );
@@ -4418,22 +4458,22 @@ class $$ScheduleTableTableFilterComposer
     return composer;
   }
 
-  Expression<bool> alarmTableRefs(
-    Expression<bool> Function($$AlarmTableTableFilterComposer f) f,
+  Expression<bool> reminderTableRefs(
+    Expression<bool> Function($$ReminderTableTableFilterComposer f) f,
   ) {
-    final $$AlarmTableTableFilterComposer composer = $composerBuilder(
+    final $$ReminderTableTableFilterComposer composer = $composerBuilder(
       composer: this,
       getCurrentColumn: (t) => t.id,
-      referencedTable: $db.alarmTable,
+      referencedTable: $db.reminderTable,
       getReferencedColumn: (t) => t.scheduleId,
       builder:
           (
             joinBuilder, {
             $addJoinBuilderToRootComposer,
             $removeJoinBuilderFromRootComposer,
-          }) => $$AlarmTableTableFilterComposer(
+          }) => $$ReminderTableTableFilterComposer(
             $db: $db,
-            $table: $db.alarmTable,
+            $table: $db.reminderTable,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -4453,7 +4493,7 @@ class $$ScheduleTableTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<int> get id => $composableBuilder(
+  ColumnOrderings<String> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnOrderings(column),
   );
@@ -4531,7 +4571,7 @@ class $$ScheduleTableTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<int> get id =>
+  GeneratedColumn<String> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
   GeneratedColumn<DateTime> get startDateTime => $composableBuilder(
@@ -4594,22 +4634,22 @@ class $$ScheduleTableTableAnnotationComposer
     return composer;
   }
 
-  Expression<T> alarmTableRefs<T extends Object>(
-    Expression<T> Function($$AlarmTableTableAnnotationComposer a) f,
+  Expression<T> reminderTableRefs<T extends Object>(
+    Expression<T> Function($$ReminderTableTableAnnotationComposer a) f,
   ) {
-    final $$AlarmTableTableAnnotationComposer composer = $composerBuilder(
+    final $$ReminderTableTableAnnotationComposer composer = $composerBuilder(
       composer: this,
       getCurrentColumn: (t) => t.id,
-      referencedTable: $db.alarmTable,
+      referencedTable: $db.reminderTable,
       getReferencedColumn: (t) => t.scheduleId,
       builder:
           (
             joinBuilder, {
             $addJoinBuilderToRootComposer,
             $removeJoinBuilderFromRootComposer,
-          }) => $$AlarmTableTableAnnotationComposer(
+          }) => $$ReminderTableTableAnnotationComposer(
             $db: $db,
-            $table: $db.alarmTable,
+            $table: $db.reminderTable,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -4633,7 +4673,7 @@ class $$ScheduleTableTableTableManager
           $$ScheduleTableTableUpdateCompanionBuilder,
           (ScheduleEntity, $$ScheduleTableTableReferences),
           ScheduleEntity,
-          PrefetchHooks Function({bool noteId, bool alarmTableRefs})
+          PrefetchHooks Function({bool noteId, bool reminderTableRefs})
         > {
   $$ScheduleTableTableTableManager(_$AppDatabase db, $ScheduleTableTable table)
     : super(
@@ -4648,8 +4688,8 @@ class $$ScheduleTableTableTableManager
               $$ScheduleTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
-                Value<int> noteId = const Value.absent(),
+                Value<String> id = const Value.absent(),
+                Value<String> noteId = const Value.absent(),
                 Value<DateTime> startDateTime = const Value.absent(),
                 Value<DateTime> endDateTime = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
@@ -4658,6 +4698,7 @@ class $$ScheduleTableTableTableManager
                 Value<int?> recurrenceInterval = const Value.absent(),
                 Value<int?> recurrenceDay = const Value.absent(),
                 Value<DateTime?> recurrenceEndDate = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
               }) => ScheduleTableCompanion(
                 id: id,
                 noteId: noteId,
@@ -4669,11 +4710,12 @@ class $$ScheduleTableTableTableManager
                 recurrenceInterval: recurrenceInterval,
                 recurrenceDay: recurrenceDay,
                 recurrenceEndDate: recurrenceEndDate,
+                rowid: rowid,
               ),
           createCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
-                required int noteId,
+                required String id,
+                required String noteId,
                 Value<DateTime> startDateTime = const Value.absent(),
                 Value<DateTime> endDateTime = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
@@ -4682,6 +4724,7 @@ class $$ScheduleTableTableTableManager
                 Value<int?> recurrenceInterval = const Value.absent(),
                 Value<int?> recurrenceDay = const Value.absent(),
                 Value<DateTime?> recurrenceEndDate = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
               }) => ScheduleTableCompanion.insert(
                 id: id,
                 noteId: noteId,
@@ -4693,6 +4736,7 @@ class $$ScheduleTableTableTableManager
                 recurrenceInterval: recurrenceInterval,
                 recurrenceDay: recurrenceDay,
                 recurrenceEndDate: recurrenceEndDate,
+                rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
               .map(
@@ -4702,10 +4746,12 @@ class $$ScheduleTableTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({noteId = false, alarmTableRefs = false}) {
+          prefetchHooksCallback: ({noteId = false, reminderTableRefs = false}) {
             return PrefetchHooks(
               db: db,
-              explicitlyWatchedTables: [if (alarmTableRefs) db.alarmTable],
+              explicitlyWatchedTables: [
+                if (reminderTableRefs) db.reminderTable,
+              ],
               addJoins:
                   <
                     T extends TableManagerState<
@@ -4740,21 +4786,21 @@ class $$ScheduleTableTableTableManager
                   },
               getPrefetchedDataCallback: (items) async {
                 return [
-                  if (alarmTableRefs)
+                  if (reminderTableRefs)
                     await $_getPrefetchedData<
                       ScheduleEntity,
                       $ScheduleTableTable,
-                      AlarmEntity
+                      ReminderEntity
                     >(
                       currentTable: table,
                       referencedTable: $$ScheduleTableTableReferences
-                          ._alarmTableRefsTable(db),
+                          ._reminderTableRefsTable(db),
                       managerFromTypedResult: (p0) =>
                           $$ScheduleTableTableReferences(
                             db,
                             table,
                             p0,
-                          ).alarmTableRefs,
+                          ).reminderTableRefs,
                       referencedItemsForCurrentItem: (item, referencedItems) =>
                           referencedItems.where((e) => e.scheduleId == item.id),
                       typedResults: items,
@@ -4779,40 +4825,46 @@ typedef $$ScheduleTableTableProcessedTableManager =
       $$ScheduleTableTableUpdateCompanionBuilder,
       (ScheduleEntity, $$ScheduleTableTableReferences),
       ScheduleEntity,
-      PrefetchHooks Function({bool noteId, bool alarmTableRefs})
+      PrefetchHooks Function({bool noteId, bool reminderTableRefs})
     >;
-typedef $$AlarmTableTableCreateCompanionBuilder =
-    AlarmTableCompanion Function({
-      Value<int> id,
-      required int scheduleId,
+typedef $$ReminderTableTableCreateCompanionBuilder =
+    ReminderTableCompanion Function({
+      required String id,
+      required String scheduleId,
       required int offsetValue,
-      required AlarmOffsetType offsetType,
-      Value<bool> isSilent,
+      required ReminderOffsetType offsetType,
+      Value<bool> isNotification,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
+      Value<int> rowid,
     });
-typedef $$AlarmTableTableUpdateCompanionBuilder =
-    AlarmTableCompanion Function({
-      Value<int> id,
-      Value<int> scheduleId,
+typedef $$ReminderTableTableUpdateCompanionBuilder =
+    ReminderTableCompanion Function({
+      Value<String> id,
+      Value<String> scheduleId,
       Value<int> offsetValue,
-      Value<AlarmOffsetType> offsetType,
-      Value<bool> isSilent,
+      Value<ReminderOffsetType> offsetType,
+      Value<bool> isNotification,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
+      Value<int> rowid,
     });
 
-final class $$AlarmTableTableReferences
-    extends BaseReferences<_$AppDatabase, $AlarmTableTable, AlarmEntity> {
-  $$AlarmTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
+final class $$ReminderTableTableReferences
+    extends BaseReferences<_$AppDatabase, $ReminderTableTable, ReminderEntity> {
+  $$ReminderTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
 
   static $ScheduleTableTable _scheduleIdTable(_$AppDatabase db) =>
       db.scheduleTable.createAlias(
-        $_aliasNameGenerator(db.alarmTable.scheduleId, db.scheduleTable.id),
+        $_aliasNameGenerator(db.reminderTable.scheduleId, db.scheduleTable.id),
       );
 
   $$ScheduleTableTableProcessedTableManager get scheduleId {
-    final $_column = $_itemColumn<int>('schedule_id')!;
+    final $_column = $_itemColumn<String>('schedule_id')!;
 
     final manager = $$ScheduleTableTableTableManager(
       $_db,
@@ -4826,16 +4878,16 @@ final class $$AlarmTableTableReferences
   }
 }
 
-class $$AlarmTableTableFilterComposer
-    extends Composer<_$AppDatabase, $AlarmTableTable> {
-  $$AlarmTableTableFilterComposer({
+class $$ReminderTableTableFilterComposer
+    extends Composer<_$AppDatabase, $ReminderTableTable> {
+  $$ReminderTableTableFilterComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<int> get id => $composableBuilder(
+  ColumnFilters<String> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnFilters(column),
   );
@@ -4845,14 +4897,14 @@ class $$AlarmTableTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<AlarmOffsetType, AlarmOffsetType, String>
+  ColumnWithTypeConverterFilters<ReminderOffsetType, ReminderOffsetType, String>
   get offsetType => $composableBuilder(
     column: $table.offsetType,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnFilters<bool> get isSilent => $composableBuilder(
-    column: $table.isSilent,
+  ColumnFilters<bool> get isNotification => $composableBuilder(
+    column: $table.isNotification,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -4890,16 +4942,16 @@ class $$AlarmTableTableFilterComposer
   }
 }
 
-class $$AlarmTableTableOrderingComposer
-    extends Composer<_$AppDatabase, $AlarmTableTable> {
-  $$AlarmTableTableOrderingComposer({
+class $$ReminderTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $ReminderTableTable> {
+  $$ReminderTableTableOrderingComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<int> get id => $composableBuilder(
+  ColumnOrderings<String> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnOrderings(column),
   );
@@ -4914,8 +4966,8 @@ class $$AlarmTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<bool> get isSilent => $composableBuilder(
-    column: $table.isSilent,
+  ColumnOrderings<bool> get isNotification => $composableBuilder(
+    column: $table.isNotification,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -4953,16 +5005,16 @@ class $$AlarmTableTableOrderingComposer
   }
 }
 
-class $$AlarmTableTableAnnotationComposer
-    extends Composer<_$AppDatabase, $AlarmTableTable> {
-  $$AlarmTableTableAnnotationComposer({
+class $$ReminderTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ReminderTableTable> {
+  $$ReminderTableTableAnnotationComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<int> get id =>
+  GeneratedColumn<String> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
   GeneratedColumn<int> get offsetValue => $composableBuilder(
@@ -4970,14 +5022,16 @@ class $$AlarmTableTableAnnotationComposer
     builder: (column) => column,
   );
 
-  GeneratedColumnWithTypeConverter<AlarmOffsetType, String> get offsetType =>
+  GeneratedColumnWithTypeConverter<ReminderOffsetType, String> get offsetType =>
       $composableBuilder(
         column: $table.offsetType,
         builder: (column) => column,
       );
 
-  GeneratedColumn<bool> get isSilent =>
-      $composableBuilder(column: $table.isSilent, builder: (column) => column);
+  GeneratedColumn<bool> get isNotification => $composableBuilder(
+    column: $table.isNotification,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -5009,73 +5063,77 @@ class $$AlarmTableTableAnnotationComposer
   }
 }
 
-class $$AlarmTableTableTableManager
+class $$ReminderTableTableTableManager
     extends
         RootTableManager<
           _$AppDatabase,
-          $AlarmTableTable,
-          AlarmEntity,
-          $$AlarmTableTableFilterComposer,
-          $$AlarmTableTableOrderingComposer,
-          $$AlarmTableTableAnnotationComposer,
-          $$AlarmTableTableCreateCompanionBuilder,
-          $$AlarmTableTableUpdateCompanionBuilder,
-          (AlarmEntity, $$AlarmTableTableReferences),
-          AlarmEntity,
+          $ReminderTableTable,
+          ReminderEntity,
+          $$ReminderTableTableFilterComposer,
+          $$ReminderTableTableOrderingComposer,
+          $$ReminderTableTableAnnotationComposer,
+          $$ReminderTableTableCreateCompanionBuilder,
+          $$ReminderTableTableUpdateCompanionBuilder,
+          (ReminderEntity, $$ReminderTableTableReferences),
+          ReminderEntity,
           PrefetchHooks Function({bool scheduleId})
         > {
-  $$AlarmTableTableTableManager(_$AppDatabase db, $AlarmTableTable table)
+  $$ReminderTableTableTableManager(_$AppDatabase db, $ReminderTableTable table)
     : super(
         TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
-              $$AlarmTableTableFilterComposer($db: db, $table: table),
+              $$ReminderTableTableFilterComposer($db: db, $table: table),
           createOrderingComposer: () =>
-              $$AlarmTableTableOrderingComposer($db: db, $table: table),
+              $$ReminderTableTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
-              $$AlarmTableTableAnnotationComposer($db: db, $table: table),
+              $$ReminderTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
-                Value<int> scheduleId = const Value.absent(),
+                Value<String> id = const Value.absent(),
+                Value<String> scheduleId = const Value.absent(),
                 Value<int> offsetValue = const Value.absent(),
-                Value<AlarmOffsetType> offsetType = const Value.absent(),
-                Value<bool> isSilent = const Value.absent(),
+                Value<ReminderOffsetType> offsetType = const Value.absent(),
+                Value<bool> isNotification = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
-              }) => AlarmTableCompanion(
+                Value<int> rowid = const Value.absent(),
+              }) => ReminderTableCompanion(
                 id: id,
                 scheduleId: scheduleId,
                 offsetValue: offsetValue,
                 offsetType: offsetType,
-                isSilent: isSilent,
+                isNotification: isNotification,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
+                rowid: rowid,
               ),
           createCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
-                required int scheduleId,
+                required String id,
+                required String scheduleId,
                 required int offsetValue,
-                required AlarmOffsetType offsetType,
-                Value<bool> isSilent = const Value.absent(),
+                required ReminderOffsetType offsetType,
+                Value<bool> isNotification = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
-              }) => AlarmTableCompanion.insert(
+                Value<int> rowid = const Value.absent(),
+              }) => ReminderTableCompanion.insert(
                 id: id,
                 scheduleId: scheduleId,
                 offsetValue: offsetValue,
                 offsetType: offsetType,
-                isSilent: isSilent,
+                isNotification: isNotification,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
+                rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
                   e.readTable(table),
-                  $$AlarmTableTableReferences(db, table, e),
+                  $$ReminderTableTableReferences(db, table, e),
                 ),
               )
               .toList(),
@@ -5104,9 +5162,9 @@ class $$AlarmTableTableTableManager
                           state.withJoin(
                                 currentTable: table,
                                 currentColumn: table.scheduleId,
-                                referencedTable: $$AlarmTableTableReferences
+                                referencedTable: $$ReminderTableTableReferences
                                     ._scheduleIdTable(db),
-                                referencedColumn: $$AlarmTableTableReferences
+                                referencedColumn: $$ReminderTableTableReferences
                                     ._scheduleIdTable(db)
                                     .id,
                               )
@@ -5124,18 +5182,18 @@ class $$AlarmTableTableTableManager
       );
 }
 
-typedef $$AlarmTableTableProcessedTableManager =
+typedef $$ReminderTableTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDatabase,
-      $AlarmTableTable,
-      AlarmEntity,
-      $$AlarmTableTableFilterComposer,
-      $$AlarmTableTableOrderingComposer,
-      $$AlarmTableTableAnnotationComposer,
-      $$AlarmTableTableCreateCompanionBuilder,
-      $$AlarmTableTableUpdateCompanionBuilder,
-      (AlarmEntity, $$AlarmTableTableReferences),
-      AlarmEntity,
+      $ReminderTableTable,
+      ReminderEntity,
+      $$ReminderTableTableFilterComposer,
+      $$ReminderTableTableOrderingComposer,
+      $$ReminderTableTableAnnotationComposer,
+      $$ReminderTableTableCreateCompanionBuilder,
+      $$ReminderTableTableUpdateCompanionBuilder,
+      (ReminderEntity, $$ReminderTableTableReferences),
+      ReminderEntity,
       PrefetchHooks Function({bool scheduleId})
     >;
 
@@ -5154,6 +5212,6 @@ class $AppDatabaseManager {
       $$NoteCategoryTableTableTableManager(_db, _db.noteCategoryTable);
   $$ScheduleTableTableTableManager get scheduleTable =>
       $$ScheduleTableTableTableManager(_db, _db.scheduleTable);
-  $$AlarmTableTableTableManager get alarmTable =>
-      $$AlarmTableTableTableManager(_db, _db.alarmTable);
+  $$ReminderTableTableTableManager get reminderTable =>
+      $$ReminderTableTableTableManager(_db, _db.reminderTable);
 }
