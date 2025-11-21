@@ -22,7 +22,7 @@ class CategoryDao {
     });
   }
 
-  static Future<List<CategoryEntity>> getCategoriesByIds(List<int> ids) async {
+  static Future<List<CategoryEntity>> getCategoriesByIds(List<String> ids) async {
     AppDatabase db = serviceLocator<AppDatabase>();
     return await (db.select(db.categoryTable)..where((category) => category.id.isIn(ids))..orderBy([(t)=>OrderingTerm(expression: t.name)])).get();
   }
@@ -58,7 +58,7 @@ class CategoryDao {
     });
   }
 
-  static Future<CategoryEntity?> getCategoryById(int id) async {
+  static Future<CategoryEntity?> getCategoryById(String id) async {
     AppDatabase db = serviceLocator<AppDatabase>();
     return await (db.select(db.categoryTable)..where((category) => category.id.equals(id))).getSingleOrNull();
   }
@@ -67,7 +67,7 @@ class CategoryDao {
     return await (db.select(db.categoryTable)..where((category) => category.name.equals(name))).getSingleOrNull();
   }
 
-  static Future<void> deleteCategoryById(int id) async {
+  static Future<void> deleteCategoryById(String id) async {
     AppDatabase db = serviceLocator<AppDatabase>();
     await (db.delete(db.categoryTable)..where((category) => category.id.equals(id))).go();
   }

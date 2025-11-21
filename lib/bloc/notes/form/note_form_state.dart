@@ -21,9 +21,8 @@ class NoteFormState extends Equatable {
   final String noteId;
 
   final NameValidator title;
-  final bool isValidTitle;
 
-  final Document? content;
+  final QuillController quillController;
 
   final NoteTypeEntity? selectedNoteType;
 
@@ -37,8 +36,7 @@ class NoteFormState extends Equatable {
     this.isSavingPersistentData = false,
     required this.noteId,
     this.title = const NameValidator.pure(),
-    this.isValidTitle = true,
-    this.content,
+    required this.quillController,
     this.selectedNoteType,
     this.selectedCategories = const [],
     this.isImportantChecked = false,
@@ -50,8 +48,7 @@ class NoteFormState extends Equatable {
     isSavingPersistentData,
     noteId,
     title,
-    isValidTitle,
-    content,
+    quillController,
     selectedNoteType,
     selectedCategories,
     isImportantChecked,
@@ -62,8 +59,7 @@ class NoteFormState extends Equatable {
     bool? isSavingPersistentData,
     String? noteId,
     NameValidator? title,
-    bool? isValidTitle,
-    Document? content,
+    QuillController? quillController,
     NoteTypeEntity? selectedNoteType,
     List<CategoryEntity>? selectedCategories,
     bool? isImportantChecked,
@@ -73,12 +69,19 @@ class NoteFormState extends Equatable {
       isSavingPersistentData: isSavingPersistentData ?? this.isSavingPersistentData,
       noteId: noteId ?? this.noteId,
       title: title ?? this.title,
-      isValidTitle: isValidTitle ?? this.isValidTitle,
-      content: content ?? this.content,
+      quillController: quillController ?? this.quillController,
       selectedNoteType: selectedNoteType ?? this.selectedNoteType,
       selectedCategories: selectedCategories ?? this.selectedCategories,
       isImportantChecked: isImportantChecked ?? this.isImportantChecked,
       status: status ?? this.status,
     );
+  }
+
+  bool get isValidForm {
+    return title.isValid && !title.isPure;
+  }
+
+  bool get canSubmitForm {
+    return isValidForm && !status.isLoading;
   }
 }

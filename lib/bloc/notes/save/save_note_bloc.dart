@@ -92,13 +92,14 @@ class SaveNoteBloc extends Bloc<SaveNoteEvent, SaveNoteState> {
   /// Handles the persistent saving of the note and its related data
   void _onSaveNoteEvent(SaveNoteEventSubmit event, Emitter<SaveNoteState> emit) async {
     if(state.note == null) return;
+    emit(state.copyWith(noteSavingStatus: SavingStatus.saving));
 
     await notesRepository.saveNote(state.note!);
     add(SaveSingleDateListEvent());
     add(SaveRecurrentDateListEvent());
 
     // Clear the note from state after saving
-    emit(state.copyWith(note: null)); // TODO check if okay
+    emit(state.copyWith(noteSavingStatus: SavingStatus.success, note: null)); // TODO check if okay
   }
   //endregion
 

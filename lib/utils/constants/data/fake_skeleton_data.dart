@@ -11,13 +11,13 @@ NoteListViewData get fakeSkeletonNoteListViewData => NoteListViewData(
   categoriesNames: 'Loading...',
   schedulesCount: 0,
   recurringSchedulesCount: 0,
-  alarmsCount: 0,
+  remindersCount: 0,
   noteCreatedAt: DateTime.now(),
 );
 
 CategoryWithCount get fakeSkeletonCategoryWithCount => CategoryWithCount(
   category: CategoryEntity(
-    id: 0,
+    id: "0",
     name: 'Loading...',
     createdAt: DateTime.now(),
     updatedAt: DateTime.now(),
@@ -27,7 +27,7 @@ CategoryWithCount get fakeSkeletonCategoryWithCount => CategoryWithCount(
 
 NoteTypeWithCount get fakeSkeletonNoteTypeWithCount => NoteTypeWithCount(
   noteType: NoteTypeEntity(
-    id: 0,
+    id: "0",
     name: 'Loading...',
     createdAt: DateTime.now(),
     updatedAt: DateTime.now(),

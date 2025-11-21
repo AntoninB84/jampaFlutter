@@ -466,11 +466,11 @@ abstract class AppLocalizations {
   /// **'Ajouter une récurrence'**
   String get create_note_add_recurrent_date_button;
 
-  /// No description provided for @create_note_success_feedback.
+  /// No description provided for @save_note_success_feedback.
   ///
   /// In fr, this message translates to:
-  /// **'Note créée avec succès'**
-  String get create_note_success_feedback;
+  /// **'Note enregistrée avec succès'**
+  String get save_note_success_feedback;
 
   /// No description provided for @create_date_title.
   ///

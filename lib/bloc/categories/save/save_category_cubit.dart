@@ -6,6 +6,7 @@ import 'package:jampa_flutter/data/models/category.dart';
 import 'package:jampa_flutter/utils/forms/name_validator.dart';
 import 'package:jampa_flutter/repository/categories_repository.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
+import 'package:uuid/uuid.dart';
 
 part 'save_category_state.dart';
 
@@ -18,25 +19,22 @@ class SaveCategoryCubit extends Cubit<SaveCategoryState> {
   void fetchCategoryForUpdate(String? categoryId) {
     if(categoryId != null){
       try {
-        int? id = int.tryParse(categoryId);
-        if(id != null){
-          // Fetch the category by ID and update the state
-          categoriesRepository.getCategoryById(id)
-            .then((category) {
-              if (category != null) {
-                emit(state.copyWith(
-                  category: category,
-                  name: NameValidator.dirty(category.name),
-                  isValidName: Formz.validate([NameValidator.dirty(category.name)]),
-                ));
-              } else {
-                emit(state.copyWith(isError: true));
-              }
-            }).catchError((error) {
+        // Fetch the category by ID and update the state
+        categoriesRepository.getCategoryById(categoryId)
+          .then((category) {
+            if (category != null) {
+              emit(state.copyWith(
+                category: category,
+                name: NameValidator.dirty(category.name),
+                isValidName: Formz.validate([NameValidator.dirty(category.name)]),
+              ));
+            } else {
               emit(state.copyWith(isError: true));
-              debugPrint('Error fetching category for update: $error');
-            });
-        }
+            }
+          }).catchError((error) {
+            emit(state.copyWith(isError: true));
+            debugPrint('Error fetching category for update: $error');
+          });
       } catch (e) {
         emit(state.copyWith(isError: true));
         debugPrint('Error initializing fetchCategoryForUpdate: $e');
@@ -90,6 +88,7 @@ class SaveCategoryCubit extends Cubit<SaveCategoryState> {
             );
           }else{
             category = CategoryEntity(
+                id: Uuid().v4(),
                 name: state.name.value,
                 createdAt: DateTime.now(),
                 updatedAt: DateTime.now()

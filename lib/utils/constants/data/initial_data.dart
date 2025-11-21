@@ -9,22 +9,25 @@ import 'package:uuid/uuid.dart';
 import '../../../data/models/note.dart';
 
 class InitialData {
-  static List<CategoryEntity> categories = [
-    CategoryEntity(id: null, name: "Sport", createdAt: DateTime.now(), updatedAt: DateTime.now()),
-    CategoryEntity(id: null, name: "Musique", createdAt: DateTime.now(), updatedAt: DateTime.now()),
-    CategoryEntity(id: null, name: "Projet", createdAt: DateTime.now(), updatedAt: DateTime.now()),
-    CategoryEntity(id: null, name: "Travail", createdAt: DateTime.now(), updatedAt: DateTime.now()),
-  ];
-  static List<NoteTypeEntity> noteTypes = [
-    NoteTypeEntity(id: null, name: "Idée", createdAt: DateTime.now(), updatedAt: DateTime.now()),
-    NoteTypeEntity(id: null, name: "Reminder", createdAt: DateTime.now(), updatedAt: DateTime.now()),
-    NoteTypeEntity(id: null, name: "Event", createdAt: DateTime.now(), updatedAt: DateTime.now()),
-  ];
-
   static final _uuid = Uuid();
 
+  static List<String> categoryIds = List.generate(4, (_) => _uuid.v4());
+  static List<String> noteTypeIds = List.generate(3, (_) => _uuid.v4());
   static List<String> noteIds = List.generate(4, (_) => _uuid.v4());
   static List<String> schedulesIds = List.generate(3, (_) => _uuid.v4());
+
+
+  static List<CategoryEntity> categories = [
+    CategoryEntity(id: categoryIds[0], name: "Sport", createdAt: DateTime.now(), updatedAt: DateTime.now()),
+    CategoryEntity(id: categoryIds[1], name: "Musique", createdAt: DateTime.now(), updatedAt: DateTime.now()),
+    CategoryEntity(id: categoryIds[2], name: "Projet", createdAt: DateTime.now(), updatedAt: DateTime.now()),
+    CategoryEntity(id: categoryIds[3], name: "Travail", createdAt: DateTime.now(), updatedAt: DateTime.now()),
+  ];
+  static List<NoteTypeEntity> noteTypes = [
+    NoteTypeEntity(id: noteTypeIds[0], name: "Idée", createdAt: DateTime.now(), updatedAt: DateTime.now()),
+    NoteTypeEntity(id: noteTypeIds[1], name: "Reminder", createdAt: DateTime.now(), updatedAt: DateTime.now()),
+    NoteTypeEntity(id: noteTypeIds[2], name: "Event", createdAt: DateTime.now(), updatedAt: DateTime.now()),
+  ];
 
   static List<NoteEntity> notes = [
     NoteEntity(

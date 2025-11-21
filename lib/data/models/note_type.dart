@@ -1,5 +1,6 @@
 
 import 'package:drift/drift.dart';
+
 import '../database.dart';
 
 class NoteTypeWithCount {
@@ -14,20 +15,23 @@ class NoteTypeWithCount {
 
 @UseRowClass(NoteTypeEntity)
 class NoteTypeTable extends Table {
-  IntColumn get id => integer().autoIncrement()();
+  TextColumn get id => text()();
   TextColumn get name => text().withLength(min: 1, max: 100)();
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
 }
 
 class NoteTypeEntity {
-  int? id;
+  String id;
   String name;
   DateTime createdAt;
   DateTime updatedAt;
 
   NoteTypeEntity({
-    this.id,
+    required this.id,
     required this.name,
     required this.createdAt,
     required this.updatedAt,
@@ -39,7 +43,7 @@ class NoteTypeEntity {
   }
 
   NoteTypeEntity copyWith({
-    int? id,
+    String? id,
     String? name,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -65,7 +69,7 @@ class NoteTypeEntity {
 
   NoteTypeTableCompanion toCompanion() {
     return NoteTypeTableCompanion(
-      id: id == null ? Value.absent() : Value(id!),
+      id: Value(id),
       name: Value(name),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
@@ -73,7 +77,7 @@ class NoteTypeEntity {
   }
 
   NoteTypeEntity.fromJson(Map<String, dynamic> json)
-      : id = json['id'] as int?,
+      : id = json['id'] as String,
         name = json['name'] as String,
         createdAt = DateTime.parse(json['createdAt'] as String),
         updatedAt = DateTime.parse(json['updatedAt'] as String);

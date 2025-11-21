@@ -19,10 +19,12 @@ part 'note_form_event.dart';
 part 'note_form_state.dart';
 
 class NoteFormBloc extends Bloc<NoteFormEvent, NoteFormState> {
-  NoteFormBloc() : super(NoteFormState(noteId: Uuid().v4())) {
+  NoteFormBloc() : super(NoteFormState(
+    noteId: Uuid().v4(),
+    quillController: QuillController.basic(),
+  )) {
     on<InitializeNoteFormEvent>(_initializeNoteForm);
     on<TitleChangedEvent>(_onNameChanged);
-    on<ContentChangedEvent>(_onContentChanged);
     on<SelectedCategoriesChangedEvent>(_onSelectedCategoriesChanged);
     on<SelectedNoteTypeChangedEvent>(_onSelectedNoteTypeChanged);
     on<ImportantCheckedChangedEvent>(_onImportantCheckedChanged);
@@ -39,15 +41,13 @@ class NoteFormBloc extends Bloc<NoteFormEvent, NoteFormState> {
         return;
       }
 
-      final content = note.content != null
+      state.quillController.document = note.content != null
           ? Document.fromJson(jsonDecode(note.content!))
-          : null;
+          : Document();
 
       emit(state.copyWith(
         noteId: note.id,
         title: NameValidator.dirty(note.title),
-        isValidTitle: Formz.validate([NameValidator.dirty(note.title)]),
-        content: content,
         selectedNoteType: note.noteType,
         selectedCategories: note.categories,
         isImportantChecked: note.isImportant,
@@ -61,20 +61,10 @@ class NoteFormBloc extends Bloc<NoteFormEvent, NoteFormState> {
 
   void _onNameChanged(TitleChangedEvent event, Emitter<NoteFormState> emit) {
     final title = NameValidator.dirty(event.title);
+    Formz.validate([title]);
     emit(
         state.copyWith(
           title: title,
-          isValidTitle: Formz.validate([title]),
-          // Reset error state on title change
-          status: NoteFormStatus.initial
-        )
-    );
-  }
-
-  void _onContentChanged(ContentChangedEvent event, Emitter<NoteFormState> emit) {
-    emit(
-        state.copyWith(
-          content: event.content,
           // Reset error state on title change
           status: NoteFormStatus.initial
         )
@@ -109,11 +99,16 @@ class NoteFormBloc extends Bloc<NoteFormEvent, NoteFormState> {
     emit(state.copyWith(status: NoteFormStatus.loading));
     SaveNoteBloc dataBloc = serviceLocator<SaveNoteBloc>();
     NoteEntity? note = dataBloc.state.note;
+
+    // Convert Quill document to JSON string
+    String? content = state.quillController.document.isEmpty()
+        ? null : jsonEncode(state.quillController.document.toDelta().toJson());
+
     if(note != null) {
       // Update existing note
       note = note.copyWith(
         title: state.title.value,
-        content: state.content != null ? jsonEncode(state.content!.toDelta().toJson()) : null,
+        content: content,
         noteType: state.selectedNoteType,
         categories: state.selectedCategories,
         isImportant: state.isImportantChecked,
@@ -124,7 +119,7 @@ class NoteFormBloc extends Bloc<NoteFormEvent, NoteFormState> {
       note = NoteEntity(
         id: state.noteId,
         title: state.title.value,
-        content: state.content != null ? jsonEncode(state.content!.toDelta().toJson()) : null,
+        content: content,
         noteType: state.selectedNoteType,
         categories: state.selectedCategories,
         isImportant: state.isImportantChecked,

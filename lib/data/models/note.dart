@@ -14,8 +14,11 @@ class NoteTable extends Table {
   TextColumn get status => textEnum<NoteStatusEnum>().withDefault(Constant(NoteStatusEnum.todo.name))();
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
-  IntColumn get noteTypeId => integer().references(NoteTypeTable, #id).nullable()();
-  IntColumn get userId => integer().references(UserTable, #id).nullable()();
+  TextColumn get noteTypeId => text().references(NoteTypeTable, #id).nullable()();
+  TextColumn get userId => text().references(UserTable, #id).nullable()();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
 }
 
 class NoteEntity {
@@ -26,9 +29,9 @@ class NoteEntity {
   NoteStatusEnum status;
   DateTime createdAt;
   DateTime updatedAt;
-  int? noteTypeId;
+  String? noteTypeId;
   NoteTypeEntity? noteType;
-  int? userId;
+  String? userId;
   List<CategoryEntity>? categories;
 
   NoteEntity({
@@ -83,9 +86,9 @@ class NoteEntity {
     NoteStatusEnum? status,
     DateTime? createdAt,
     DateTime? updatedAt,
-    int? noteTypeId,
+    String? noteTypeId,
     NoteTypeEntity? noteType,
-    int? userId,
+    String? userId,
     List<CategoryEntity>? categories
   }) {
     return NoteEntity(
@@ -113,8 +116,8 @@ class NoteEntity {
           orElse: () => NoteStatusEnum.todo),
       createdAt = DateTime.parse(json['createdAt'] as String),
       updatedAt = DateTime.parse(json['updatedAt'] as String),
-      noteTypeId = json['noteTypeId'] as int?,
-      userId = json['userId'] as int,
+      noteTypeId = json['noteTypeId'] as String?,
+      userId = json['userId'] as String,
       categories = CategoryEntity.fromJsonArray(json['categories']);
 
   static Future<List<NoteEntity>> fromJsonArray(List jsonArray) async {

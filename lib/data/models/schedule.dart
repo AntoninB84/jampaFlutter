@@ -21,6 +21,9 @@ class ScheduleTable extends Table {
   IntColumn get recurrenceInterval => integer().nullable()();
   IntColumn get recurrenceDay => integer().nullable()();
   DateTimeColumn get recurrenceEndDate => dateTime().nullable()();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
 }
 
 class ScheduleEntity {

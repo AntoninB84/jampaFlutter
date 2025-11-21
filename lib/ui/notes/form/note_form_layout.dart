@@ -49,7 +49,7 @@ class NoteFormLayout extends StatelessWidget {
               actions: [
                 Buttons.saveButtonIcon(
                   context: context,
-                  onPressed: state.isValidTitle && !state.status.isLoading
+                  onPressed: state.canSubmitForm
                       ? () => context.read<NoteFormBloc>().add(SaveNoteFormEvent())
                       : null,
                 )
@@ -67,7 +67,6 @@ class NoteFormLayout extends StatelessWidget {
                     ),
                     const SizedBox(height: kGap16),
                     NoteTitleTextField(
-                      isValid: state.isValidTitle,
                       value: state.title.value,
                       validator: state.title,
                       onChanged: (value) => context.read<NoteFormBloc>()
@@ -75,10 +74,8 @@ class NoteFormLayout extends StatelessWidget {
                     ),
                     const SizedBox(height: kGap16),
                     NoteContentTextField(
-                      value: state.content,
+                      quillController: state.quillController,
                       editorMaxHeight: MediaQuery.sizeOf(context).height * 0.3,
-                      onChanged: (value) => context.read<NoteFormBloc>()
-                          .add(ContentChangedEvent(content: value)),
                     ),
                     const SizedBox(height: kGap16),
                     NoteTypeSelector(

@@ -57,7 +57,7 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
   void _deleteCategory(DeleteCategory event, Emitter<CategoriesState> emit) async {
     emit(state.copyWith(deletionError: false));
     try {
-      int categoryId = event.selectedCategoryId;
+      String categoryId = event.selectedCategoryId;
       await categoriesRepository.deleteCategory(categoryId);
     } catch (error) {
       emit(state.copyWith(deletionError: true));

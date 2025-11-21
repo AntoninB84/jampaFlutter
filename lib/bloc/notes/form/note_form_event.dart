@@ -26,15 +26,6 @@ class TitleChangedEvent extends NoteFormEvent {
   List<Object?> get props => [title];
 }
 
-class ContentChangedEvent extends NoteFormEvent {
-  final Document? content;
-
-  const ContentChangedEvent({required this.content});
-
-  @override
-  List<Object?> get props => [content];
-}
-
 class SelectedNoteTypeChangedEvent extends NoteFormEvent {
   final NoteTypeEntity? noteType;
 

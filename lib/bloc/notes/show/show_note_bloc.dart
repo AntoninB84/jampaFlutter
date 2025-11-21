@@ -12,16 +12,18 @@ import 'package:jampa_flutter/utils/service_locator.dart';
 import '../../../data/models/note.dart';
 import '../../../repository/schedule_repository.dart';
 
-part 'note_event.dart';
-part 'note_state.dart';
+part 'show_note_event.dart';
+part 'show_note_state.dart';
 
-class NoteBloc extends Bloc<NoteEvent, NoteState> {
-  NoteBloc() : super(const NoteState()) {
-    on<WatchNoteById>(_watchNoteById);
+class ShowNoteBloc extends Bloc<ShowNoteEvent, ShowNoteState> {
+  ShowNoteBloc() : super(ShowNoteState(
+    quillController: QuillController.basic(),
+  )) {
+    on<GetNoteById>(_getNoteById);
     on<WatchSchedulesAndAlarmsByNoteId>(_watchSchedulesAndAlarmsByNoteId);
     on<OnChangeNoteContent>(
       _onNoteContentChanged,
-      transformer: Utils.debounceTransformer(const Duration(seconds: 1))
+      transformer: Utils.debounceTransformer(const Duration(seconds: 2))
     );
     on<DeleteNoteById>(_deleteNoteById);
   }
@@ -29,7 +31,7 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
   final NotesRepository notesRepository = serviceLocator<NotesRepository>();
   final ScheduleRepository scheduleRepository = serviceLocator<ScheduleRepository>();
 
-  void _watchNoteById(WatchNoteById event, Emitter<NoteState> emit) async {
+  void _getNoteById(GetNoteById event, Emitter<ShowNoteState> emit) async {
     emit(state.copyWith(
       status: NoteStatus.loading,
       schedulesLoadingStatus: NoteStatus.loading,
@@ -37,30 +39,26 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
 
     try {
       if(event.noteId != null) {
-        await emit.onEach<NoteEntity?>(
-          notesRepository.watchNoteById(event.noteId!),
-          onData: (note) {
-            if(note != null) {
-              final content = note.content != null
-                  ? Document.fromJson(jsonDecode(note.content!))
-                  : null;
+        // Fetching note by id
+        NoteEntity? note = await notesRepository.getNoteById(event.noteId!);
+        if(note != null) {
+          // Setting up the Quill controller with the note content
+          state.quillController.document = note.content != null
+              ? Document.fromJson(jsonDecode(note.content!))
+              : Document();
 
-              emit(state.copyWith(
-                  status: NoteStatus.success,
-                  note: note,
-                  noteContent: content
-              ));
-            } else {
-              if(!state.deletionSuccess){
-                emit(state.copyWith(status: NoteStatus.failure));
-              }
-            }
-          },
-          onError: (error, stackTrace) {
-            debugPrint("Error watching note by id: $error");
+          // Listening to changes in the Quill controller to update note content
+          state.quillController.changes.listen((event) => add(OnChangeNoteContent()));
+
+          emit(state.copyWith(
+            status: NoteStatus.success,
+            note: note,
+          ));
+        } else {
+          if(!state.deletionSuccess){
             emit(state.copyWith(status: NoteStatus.failure));
           }
-        );
+        }
       } else {
         emit(state.copyWith(status: NoteStatus.failure));
       }
@@ -69,7 +67,7 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
     }
   }
 
-  void _watchSchedulesAndAlarmsByNoteId(WatchSchedulesAndAlarmsByNoteId event, Emitter<NoteState> emit) async {
+  void _watchSchedulesAndAlarmsByNoteId(WatchSchedulesAndAlarmsByNoteId event, Emitter<ShowNoteState> emit) async {
     emit(state.copyWith(schedulesLoadingStatus: NoteStatus.loading));
 
     try {
@@ -95,24 +93,20 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
     }
   }
 
-  void _onNoteContentChanged(OnChangeNoteContent event, Emitter<NoteState> emit) async {
-    emit(state.copyWith(
-      noteContent: event.content,
-    ));
-
-    final String? content =
-    (state.noteContent != null && !state.noteContent!.isEmpty())
-        ? jsonEncode(state.noteContent?.toDelta().toJson())
-        : null;
+  void _onNoteContentChanged(OnChangeNoteContent event, Emitter<ShowNoteState> emit) async {
+    // Convert Quill document to JSON string
+    String? content = state.quillController.document.isEmpty()
+        ? null : jsonEncode(state.quillController.document.toDelta().toJson());
 
     if(state.note != null){
-      await notesRepository.updateNoteContent(state.note!.id!, content ?? "")
+      await notesRepository.updateNoteContent(state.note!.id, content ?? "")
       .catchError((error){
         debugPrint("Error updating note content: $error");
       });
     }
   }
-  void _deleteNoteById(DeleteNoteById event, Emitter<NoteState> emit) async {
+
+  void _deleteNoteById(DeleteNoteById event, Emitter<ShowNoteState> emit) async {
     emit(state.copyWith(status: NoteStatus.loading, deletionSuccess: false, deletionFailure: false));
     try {
       if(event.noteId != null) {

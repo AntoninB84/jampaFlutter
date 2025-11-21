@@ -6,16 +6,19 @@ import '../database.dart';
 
 @UseRowClass(UserEntity)
 class UserTable extends Table {
-  IntColumn get id => integer().autoIncrement()();
+  TextColumn get id => text()();
   TextColumn get username => text().withLength(min: 1, max: 50)();
   TextColumn get email => text().withLength(min: 1, max: 100)();
   TextColumn get passwordHash => text().withLength(min: 1, max: 255)();
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
 }
 
 class UserEntity extends Equatable {
-  int? id;
+  String id;
   String username;
   String email;
   String passwordHash;
@@ -23,7 +26,7 @@ class UserEntity extends Equatable {
   DateTime updatedAt;
 
   UserEntity({
-    this.id,
+    required this.id,
     required this.username,
     required this.email,
     required this.passwordHash,
@@ -38,7 +41,7 @@ class UserEntity extends Equatable {
 
   UserTableCompanion toCompanion() {
     return UserTableCompanion(
-      id: id == null ? Value.absent() : Value(id!),
+      id: Value(id),
       username: Value(username),
       email: Value(email),
       passwordHash: Value(passwordHash),
@@ -48,7 +51,7 @@ class UserEntity extends Equatable {
   }
 
   UserEntity.fromJson(Map<String, dynamic> json)
-      : id = json['id'] as int?,
+      : id = json['id'] as String,
         username = json['username'] as String,
         email = json['email'] as String,
         passwordHash = json['passwordHash'] as String,

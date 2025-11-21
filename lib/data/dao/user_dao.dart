@@ -25,12 +25,12 @@ class UserDao {
     return await db.select(db.userTable).get();
   }
 
-  static Future<UserEntity?> getUserById(int id) async {
+  static Future<UserEntity?> getUserById(String id) async {
     AppDatabase db = serviceLocator<AppDatabase>();
     return await (db.select(db.userTable)..where((user) => user.id.equals(id))).getSingleOrNull();
   }
 
-  static Future<void> deleteUserById(int id) async {
+  static Future<void> deleteUserById(String id) async {
     AppDatabase db = serviceLocator<AppDatabase>();
     await (db.delete(db.userTable)..where((user) => user.id.equals(id))).go();
   }

@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jampa_flutter/repository/note_types_repository.dart';
 import 'package:jampa_flutter/data/models/note_type.dart';
+import 'package:jampa_flutter/repository/note_types_repository.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
-part 'note_types_state.dart';
 part 'note_types_event.dart';
+part 'note_types_state.dart';
 
 class NoteTypesBloc extends Bloc<NoteTypesEvent, NoteTypesState> {
   NoteTypesBloc() : super(const NoteTypesState()) {
@@ -56,7 +56,7 @@ class NoteTypesBloc extends Bloc<NoteTypesEvent, NoteTypesState> {
   void _deleteNoteType(DeleteNoteType event, Emitter<NoteTypesState> emit) async {
     emit(state.copyWith(deletionError: false));
     try {
-      int noteTypeId = event.selectedNoteTypeId;
+      String noteTypeId = event.selectedNoteTypeId;
       await noteTypesRepository.deleteNoteType(noteTypeId);
     } catch (error) {
       emit(state.copyWith(deletionError: true));

@@ -10,7 +10,7 @@ import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 import '../../../bloc/home/app_bar_cubit.dart';
-import '../../../bloc/notes/show/note_bloc.dart';
+import '../../../bloc/notes/show/show_note_bloc.dart';
 import '../../../utils/constants/styles/sizes.dart';
 import '../../widgets/confirmation_dialog.dart';
 
@@ -19,7 +19,7 @@ class ShowNoteLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<NoteBloc, NoteState>(
+    return BlocConsumer<ShowNoteBloc, ShowNoteState>(
       listener: (context, state) {
         if(state.status.isFailure) {
           SnackBarX.showError(context, context.strings.generic_error_message);
@@ -41,8 +41,8 @@ class ShowNoteLayout extends StatelessWidget {
                 context: context,
                 onPressed: () {
                   // Navigate to edit note page
-                  context.pushNamed("EditNote", extra: {
-                    "id": state.note?.id.toString() ?? ''
+                  context.pushNamed("NoteForm", extra: {
+                    "noteId": state.note?.id.toString() ?? ''
                   });
                 },
               ),
@@ -56,7 +56,7 @@ class ShowNoteLayout extends StatelessWidget {
                         confirmButtonText: context.strings.delete,
                         cancelButtonText: context.strings.cancel,
                         onConfirm: (){
-                          context.read<NoteBloc>().add(DeleteNoteById(state.note?.id));
+                          context.read<ShowNoteBloc>().add(DeleteNoteById(state.note?.id));
                           context.pop();
                         },
                         onCancel: (){dialogContext.pop();}
@@ -74,11 +74,8 @@ class ShowNoteLayout extends StatelessWidget {
                    Text(state.note?.title ?? 'No Title', style: Theme.of(context).textTheme.headlineMedium),
                    const SizedBox(height: kGap16),
                    NoteContentTextField(
-                     value: state.noteContent,
+                     quillController: state.quillController,
                      editorMaxHeight: MediaQuery.sizeOf(context).height * 0.5,
-                     onChanged: (document) {
-                       context.read<NoteBloc>().add(OnChangeNoteContent(document));
-                     },
                    ),
                    const SizedBox(height: kGap10,),
                    Padding(

@@ -71,7 +71,9 @@ abstract class Buttons {
     return IconButton(
       icon: Icon(
         Icons.save,
-        color: Theme.of(context).colorScheme.primary,
+        color: onPressed != null
+            ? Theme.of(context).colorScheme.primary
+            : Theme.of(context).colorScheme.onSurface,
       ),
       visualDensity: visualDensity,
       onPressed: onPressed,

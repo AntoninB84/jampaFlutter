@@ -41,7 +41,7 @@ class NotesLayout extends StatelessWidget {
                   context: context,
                   title: context.strings.notes,
                   onAddPressed: (){
-                    context.pushNamed("CreateNote");
+                    context.pushNamed("NoteForm");
                   },
                 ),
                 Expanded(

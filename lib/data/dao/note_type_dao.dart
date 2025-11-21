@@ -58,7 +58,7 @@ class NoteTypeDao {
     });
   }
 
-  static Future<NoteTypeEntity?> getNoteTypeById(int id) async {
+  static Future<NoteTypeEntity?> getNoteTypeById(String id) async {
     AppDatabase db = serviceLocator<AppDatabase>();
     return await (db.select(db.noteTypeTable)..where((noteType) => noteType.id.equals(id))).getSingleOrNull();
   }
@@ -67,7 +67,7 @@ class NoteTypeDao {
     return await (db.select(db.noteTypeTable)..where((noteType) => noteType.name.equals(name))).getSingleOrNull();
   }
 
-  static Future<void> deleteNoteTypeById(int id) async {
+  static Future<void> deleteNoteTypeById(String id) async {
     AppDatabase db = serviceLocator<AppDatabase>();
     await (db.delete(db.noteTypeTable)..where((noteType) => noteType.id.equals(id))).go();
   }

@@ -10,7 +10,7 @@ final class WatchNoteTypes extends NoteTypesEvent {}
 final class WatchNoteTypesWithCount extends NoteTypesEvent {}
 
 final class DeleteNoteType extends NoteTypesEvent {
-  final int selectedNoteTypeId;
+  final String selectedNoteTypeId;
 
   DeleteNoteType(this.selectedNoteTypeId);
 

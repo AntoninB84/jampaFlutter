@@ -15,7 +15,7 @@ class NoteTypesRepository {
     return NoteTypeDao.watchAllNoteTypesWithCount();
   }
 
-  Future<NoteTypeEntity?> getNoteTypeById(int id) async {
+  Future<NoteTypeEntity?> getNoteTypeById(String id) async {
     return await NoteTypeDao.getNoteTypeById(id);
   }
 
@@ -27,7 +27,7 @@ class NoteTypesRepository {
     await NoteTypeDao.saveSingleNoteType(noteType);
   }
 
-  Future<void> deleteNoteType(int id) async {
+  Future<void> deleteNoteType(String id) async {
     await NoteTypeDao.deleteNoteTypeById(id);
   }
 }

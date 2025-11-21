@@ -9,7 +9,7 @@ final class WatchCategories extends CategoriesEvent {}
 final class WatchCategoriesWithCount extends CategoriesEvent {}
 
 final class DeleteCategory extends CategoriesEvent {
-  final int selectedCategoryId;
+  final String selectedCategoryId;
 
   DeleteCategory(this.selectedCategoryId);
 

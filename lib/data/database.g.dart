@@ -11,16 +11,12 @@ class $NoteTypeTableTable extends NoteTypeTable
   $NoteTypeTableTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
     'id',
     aliasedName,
     false,
-    hasAutoIncrement: true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'PRIMARY KEY AUTOINCREMENT',
-    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
   );
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
@@ -75,6 +71,8 @@ class $NoteTypeTableTable extends NoteTypeTable
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
     }
     if (data.containsKey('name')) {
       context.handle(
@@ -106,7 +104,7 @@ class $NoteTypeTableTable extends NoteTypeTable
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return NoteTypeEntity(
       id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
+        DriftSqlType.string,
         data['${effectivePrefix}id'],
       )!,
       name: attachedDatabase.typeMapping.read(
@@ -131,47 +129,55 @@ class $NoteTypeTableTable extends NoteTypeTable
 }
 
 class NoteTypeTableCompanion extends UpdateCompanion<NoteTypeEntity> {
-  final Value<int> id;
+  final Value<String> id;
   final Value<String> name;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
+  final Value<int> rowid;
   const NoteTypeTableCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   NoteTypeTableCompanion.insert({
-    this.id = const Value.absent(),
+    required String id,
     required String name,
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
-  }) : name = Value(name);
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       name = Value(name);
   static Insertable<NoteTypeEntity> custom({
-    Expression<int>? id,
+    Expression<String>? id,
     Expression<String>? name,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   NoteTypeTableCompanion copyWith({
-    Value<int>? id,
+    Value<String>? id,
     Value<String>? name,
     Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
+    Value<int>? rowid,
   }) {
     return NoteTypeTableCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -179,7 +185,7 @@ class NoteTypeTableCompanion extends UpdateCompanion<NoteTypeEntity> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (id.present) {
-      map['id'] = Variable<int>(id.value);
+      map['id'] = Variable<String>(id.value);
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
@@ -190,6 +196,9 @@ class NoteTypeTableCompanion extends UpdateCompanion<NoteTypeEntity> {
     if (updatedAt.present) {
       map['updated_at'] = Variable<DateTime>(updatedAt.value);
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
@@ -199,7 +208,8 @@ class NoteTypeTableCompanion extends UpdateCompanion<NoteTypeEntity> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -213,16 +223,12 @@ class $UserTableTable extends UserTable
   $UserTableTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
     'id',
     aliasedName,
     false,
-    hasAutoIncrement: true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'PRIMARY KEY AUTOINCREMENT',
-    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
   );
   static const VerificationMeta _usernameMeta = const VerificationMeta(
     'username',
@@ -314,6 +320,8 @@ class $UserTableTable extends UserTable
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
     }
     if (data.containsKey('username')) {
       context.handle(
@@ -364,7 +372,7 @@ class $UserTableTable extends UserTable
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return UserEntity(
       id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
+        DriftSqlType.string,
         data['${effectivePrefix}id'],
       )!,
       username: attachedDatabase.typeMapping.read(
@@ -397,12 +405,13 @@ class $UserTableTable extends UserTable
 }
 
 class UserTableCompanion extends UpdateCompanion<UserEntity> {
-  final Value<int> id;
+  final Value<String> id;
   final Value<String> username;
   final Value<String> email;
   final Value<String> passwordHash;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
+  final Value<int> rowid;
   const UserTableCompanion({
     this.id = const Value.absent(),
     this.username = const Value.absent(),
@@ -410,24 +419,28 @@ class UserTableCompanion extends UpdateCompanion<UserEntity> {
     this.passwordHash = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   UserTableCompanion.insert({
-    this.id = const Value.absent(),
+    required String id,
     required String username,
     required String email,
     required String passwordHash,
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
-  }) : username = Value(username),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       username = Value(username),
        email = Value(email),
        passwordHash = Value(passwordHash);
   static Insertable<UserEntity> custom({
-    Expression<int>? id,
+    Expression<String>? id,
     Expression<String>? username,
     Expression<String>? email,
     Expression<String>? passwordHash,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -436,16 +449,18 @@ class UserTableCompanion extends UpdateCompanion<UserEntity> {
       if (passwordHash != null) 'password_hash': passwordHash,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   UserTableCompanion copyWith({
-    Value<int>? id,
+    Value<String>? id,
     Value<String>? username,
     Value<String>? email,
     Value<String>? passwordHash,
     Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
+    Value<int>? rowid,
   }) {
     return UserTableCompanion(
       id: id ?? this.id,
@@ -454,6 +469,7 @@ class UserTableCompanion extends UpdateCompanion<UserEntity> {
       passwordHash: passwordHash ?? this.passwordHash,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -461,7 +477,7 @@ class UserTableCompanion extends UpdateCompanion<UserEntity> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (id.present) {
-      map['id'] = Variable<int>(id.value);
+      map['id'] = Variable<String>(id.value);
     }
     if (username.present) {
       map['username'] = Variable<String>(username.value);
@@ -478,6 +494,9 @@ class UserTableCompanion extends UpdateCompanion<UserEntity> {
     if (updatedAt.present) {
       map['updated_at'] = Variable<DateTime>(updatedAt.value);
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
@@ -489,7 +508,8 @@ class UserTableCompanion extends UpdateCompanion<UserEntity> {
           ..write('email: $email, ')
           ..write('passwordHash: $passwordHash, ')
           ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -587,11 +607,11 @@ class $NoteTableTable extends NoteTable
     'noteTypeId',
   );
   @override
-  late final GeneratedColumn<int> noteTypeId = GeneratedColumn<int>(
+  late final GeneratedColumn<String> noteTypeId = GeneratedColumn<String>(
     'note_type_id',
     aliasedName,
     true,
-    type: DriftSqlType.int,
+    type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
       'REFERENCES note_type_table (id)',
@@ -599,11 +619,11 @@ class $NoteTableTable extends NoteTable
   );
   static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
   @override
-  late final GeneratedColumn<int> userId = GeneratedColumn<int>(
+  late final GeneratedColumn<String> userId = GeneratedColumn<String>(
     'user_id',
     aliasedName,
     true,
-    type: DriftSqlType.int,
+    type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
       'REFERENCES user_table (id)',
@@ -692,7 +712,7 @@ class $NoteTableTable extends NoteTable
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => const {};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   NoteEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -728,11 +748,11 @@ class $NoteTableTable extends NoteTable
         data['${effectivePrefix}updated_at'],
       )!,
       userId: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
+        DriftSqlType.string,
         data['${effectivePrefix}user_id'],
       ),
       noteTypeId: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
+        DriftSqlType.string,
         data['${effectivePrefix}note_type_id'],
       ),
     );
@@ -755,8 +775,8 @@ class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
   final Value<NoteStatusEnum> status;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
-  final Value<int?> noteTypeId;
-  final Value<int?> userId;
+  final Value<String?> noteTypeId;
+  final Value<String?> userId;
   final Value<int> rowid;
   const NoteTableCompanion({
     this.id = const Value.absent(),
@@ -791,8 +811,8 @@ class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
     Expression<String>? status,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
-    Expression<int>? noteTypeId,
-    Expression<int>? userId,
+    Expression<String>? noteTypeId,
+    Expression<String>? userId,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -817,8 +837,8 @@ class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
     Value<NoteStatusEnum>? status,
     Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
-    Value<int?>? noteTypeId,
-    Value<int?>? userId,
+    Value<String?>? noteTypeId,
+    Value<String?>? userId,
     Value<int>? rowid,
   }) {
     return NoteTableCompanion(
@@ -862,10 +882,10 @@ class NoteTableCompanion extends UpdateCompanion<NoteEntity> {
       map['updated_at'] = Variable<DateTime>(updatedAt.value);
     }
     if (noteTypeId.present) {
-      map['note_type_id'] = Variable<int>(noteTypeId.value);
+      map['note_type_id'] = Variable<String>(noteTypeId.value);
     }
     if (userId.present) {
-      map['user_id'] = Variable<int>(userId.value);
+      map['user_id'] = Variable<String>(userId.value);
     }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
@@ -899,16 +919,12 @@ class $CategoryTableTable extends CategoryTable
   $CategoryTableTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
     'id',
     aliasedName,
     false,
-    hasAutoIncrement: true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'PRIMARY KEY AUTOINCREMENT',
-    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
   );
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
@@ -963,6 +979,8 @@ class $CategoryTableTable extends CategoryTable
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
     }
     if (data.containsKey('name')) {
       context.handle(
@@ -994,7 +1012,7 @@ class $CategoryTableTable extends CategoryTable
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return CategoryEntity(
       id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
+        DriftSqlType.string,
         data['${effectivePrefix}id'],
       )!,
       name: attachedDatabase.typeMapping.read(
@@ -1019,47 +1037,55 @@ class $CategoryTableTable extends CategoryTable
 }
 
 class CategoryTableCompanion extends UpdateCompanion<CategoryEntity> {
-  final Value<int> id;
+  final Value<String> id;
   final Value<String> name;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
+  final Value<int> rowid;
   const CategoryTableCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   CategoryTableCompanion.insert({
-    this.id = const Value.absent(),
+    required String id,
     required String name,
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
-  }) : name = Value(name);
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       name = Value(name);
   static Insertable<CategoryEntity> custom({
-    Expression<int>? id,
+    Expression<String>? id,
     Expression<String>? name,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   CategoryTableCompanion copyWith({
-    Value<int>? id,
+    Value<String>? id,
     Value<String>? name,
     Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
+    Value<int>? rowid,
   }) {
     return CategoryTableCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -1067,7 +1093,7 @@ class CategoryTableCompanion extends UpdateCompanion<CategoryEntity> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (id.present) {
-      map['id'] = Variable<int>(id.value);
+      map['id'] = Variable<String>(id.value);
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
@@ -1078,6 +1104,9 @@ class CategoryTableCompanion extends UpdateCompanion<CategoryEntity> {
     if (updatedAt.present) {
       map['updated_at'] = Variable<DateTime>(updatedAt.value);
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
@@ -1087,7 +1116,8 @@ class CategoryTableCompanion extends UpdateCompanion<CategoryEntity> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -1115,11 +1145,11 @@ class $NoteCategoryTableTable extends NoteCategoryTable
     'categoryId',
   );
   @override
-  late final GeneratedColumn<int> categoryId = GeneratedColumn<int>(
+  late final GeneratedColumn<String> categoryId = GeneratedColumn<String>(
     'category_id',
     aliasedName,
     false,
-    type: DriftSqlType.int,
+    type: DriftSqlType.string,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
       'REFERENCES category_table (id)',
@@ -1169,7 +1199,7 @@ class $NoteCategoryTableTable extends NoteCategoryTable
         data['${effectivePrefix}note_id'],
       )!,
       categoryId: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
+        DriftSqlType.string,
         data['${effectivePrefix}category_id'],
       )!,
     );
@@ -1183,7 +1213,7 @@ class $NoteCategoryTableTable extends NoteCategoryTable
 
 class NoteCategoryTableCompanion extends UpdateCompanion<NoteCategoryEntity> {
   final Value<String> noteId;
-  final Value<int> categoryId;
+  final Value<String> categoryId;
   final Value<int> rowid;
   const NoteCategoryTableCompanion({
     this.noteId = const Value.absent(),
@@ -1192,13 +1222,13 @@ class NoteCategoryTableCompanion extends UpdateCompanion<NoteCategoryEntity> {
   });
   NoteCategoryTableCompanion.insert({
     required String noteId,
-    required int categoryId,
+    required String categoryId,
     this.rowid = const Value.absent(),
   }) : noteId = Value(noteId),
        categoryId = Value(categoryId);
   static Insertable<NoteCategoryEntity> custom({
     Expression<String>? noteId,
-    Expression<int>? categoryId,
+    Expression<String>? categoryId,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -1210,7 +1240,7 @@ class NoteCategoryTableCompanion extends UpdateCompanion<NoteCategoryEntity> {
 
   NoteCategoryTableCompanion copyWith({
     Value<String>? noteId,
-    Value<int>? categoryId,
+    Value<String>? categoryId,
     Value<int>? rowid,
   }) {
     return NoteCategoryTableCompanion(
@@ -1227,7 +1257,7 @@ class NoteCategoryTableCompanion extends UpdateCompanion<NoteCategoryEntity> {
       map['note_id'] = Variable<String>(noteId.value);
     }
     if (categoryId.present) {
-      map['category_id'] = Variable<int>(categoryId.value);
+      map['category_id'] = Variable<String>(categoryId.value);
     }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
@@ -1464,7 +1494,7 @@ class $ScheduleTableTable extends ScheduleTable
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => const {};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   ScheduleEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -1686,298 +1716,6 @@ class ScheduleTableCompanion extends UpdateCompanion<ScheduleEntity> {
   }
 }
 
-class NoteListViewData extends DataClass {
-  final String noteId;
-  final String noteTitle;
-  final DateTime noteCreatedAt;
-  final int? noteTypeId;
-  final String? noteTypeName;
-  final String? categoriesIds;
-  final String? categoriesNames;
-  final int alarmsCount;
-  final int schedulesCount;
-  final int recurringSchedulesCount;
-  const NoteListViewData({
-    required this.noteId,
-    required this.noteTitle,
-    required this.noteCreatedAt,
-    this.noteTypeId,
-    this.noteTypeName,
-    this.categoriesIds,
-    this.categoriesNames,
-    required this.alarmsCount,
-    required this.schedulesCount,
-    required this.recurringSchedulesCount,
-  });
-  factory NoteListViewData.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return NoteListViewData(
-      noteId: serializer.fromJson<String>(json['note_id']),
-      noteTitle: serializer.fromJson<String>(json['note_title']),
-      noteCreatedAt: serializer.fromJson<DateTime>(json['note_created_at']),
-      noteTypeId: serializer.fromJson<int?>(json['note_type_id']),
-      noteTypeName: serializer.fromJson<String?>(json['note_type_name']),
-      categoriesIds: serializer.fromJson<String?>(json['categories_ids']),
-      categoriesNames: serializer.fromJson<String?>(json['categories_names']),
-      alarmsCount: serializer.fromJson<int>(json['alarms_count']),
-      schedulesCount: serializer.fromJson<int>(json['schedules_count']),
-      recurringSchedulesCount: serializer.fromJson<int>(
-        json['recurring_schedules_count'],
-      ),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'note_id': serializer.toJson<String>(noteId),
-      'note_title': serializer.toJson<String>(noteTitle),
-      'note_created_at': serializer.toJson<DateTime>(noteCreatedAt),
-      'note_type_id': serializer.toJson<int?>(noteTypeId),
-      'note_type_name': serializer.toJson<String?>(noteTypeName),
-      'categories_ids': serializer.toJson<String?>(categoriesIds),
-      'categories_names': serializer.toJson<String?>(categoriesNames),
-      'alarms_count': serializer.toJson<int>(alarmsCount),
-      'schedules_count': serializer.toJson<int>(schedulesCount),
-      'recurring_schedules_count': serializer.toJson<int>(
-        recurringSchedulesCount,
-      ),
-    };
-  }
-
-  NoteListViewData copyWith({
-    String? noteId,
-    String? noteTitle,
-    DateTime? noteCreatedAt,
-    Value<int?> noteTypeId = const Value.absent(),
-    Value<String?> noteTypeName = const Value.absent(),
-    Value<String?> categoriesIds = const Value.absent(),
-    Value<String?> categoriesNames = const Value.absent(),
-    int? alarmsCount,
-    int? schedulesCount,
-    int? recurringSchedulesCount,
-  }) => NoteListViewData(
-    noteId: noteId ?? this.noteId,
-    noteTitle: noteTitle ?? this.noteTitle,
-    noteCreatedAt: noteCreatedAt ?? this.noteCreatedAt,
-    noteTypeId: noteTypeId.present ? noteTypeId.value : this.noteTypeId,
-    noteTypeName: noteTypeName.present ? noteTypeName.value : this.noteTypeName,
-    categoriesIds: categoriesIds.present
-        ? categoriesIds.value
-        : this.categoriesIds,
-    categoriesNames: categoriesNames.present
-        ? categoriesNames.value
-        : this.categoriesNames,
-    alarmsCount: alarmsCount ?? this.alarmsCount,
-    schedulesCount: schedulesCount ?? this.schedulesCount,
-    recurringSchedulesCount:
-        recurringSchedulesCount ?? this.recurringSchedulesCount,
-  );
-  @override
-  String toString() {
-    return (StringBuffer('NoteListViewData(')
-          ..write('noteId: $noteId, ')
-          ..write('noteTitle: $noteTitle, ')
-          ..write('noteCreatedAt: $noteCreatedAt, ')
-          ..write('noteTypeId: $noteTypeId, ')
-          ..write('noteTypeName: $noteTypeName, ')
-          ..write('categoriesIds: $categoriesIds, ')
-          ..write('categoriesNames: $categoriesNames, ')
-          ..write('alarmsCount: $alarmsCount, ')
-          ..write('schedulesCount: $schedulesCount, ')
-          ..write('recurringSchedulesCount: $recurringSchedulesCount')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(
-    noteId,
-    noteTitle,
-    noteCreatedAt,
-    noteTypeId,
-    noteTypeName,
-    categoriesIds,
-    categoriesNames,
-    alarmsCount,
-    schedulesCount,
-    recurringSchedulesCount,
-  );
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is NoteListViewData &&
-          other.noteId == this.noteId &&
-          other.noteTitle == this.noteTitle &&
-          other.noteCreatedAt == this.noteCreatedAt &&
-          other.noteTypeId == this.noteTypeId &&
-          other.noteTypeName == this.noteTypeName &&
-          other.categoriesIds == this.categoriesIds &&
-          other.categoriesNames == this.categoriesNames &&
-          other.alarmsCount == this.alarmsCount &&
-          other.schedulesCount == this.schedulesCount &&
-          other.recurringSchedulesCount == this.recurringSchedulesCount);
-}
-
-class NoteListView extends ViewInfo<NoteListView, NoteListViewData>
-    implements HasResultSet {
-  final String? _alias;
-  @override
-  final _$AppDatabase attachedDatabase;
-  NoteListView(this.attachedDatabase, [this._alias]);
-  @override
-  List<GeneratedColumn> get $columns => [
-    noteId,
-    noteTitle,
-    noteCreatedAt,
-    noteTypeId,
-    noteTypeName,
-    categoriesIds,
-    categoriesNames,
-    alarmsCount,
-    schedulesCount,
-    recurringSchedulesCount,
-  ];
-  @override
-  String get aliasedName => _alias ?? entityName;
-  @override
-  String get entityName => 'note_list_view';
-  @override
-  Map<SqlDialect, String> get createViewStatements => {
-    SqlDialect.sqlite:
-        'CREATE VIEW note_list_view AS SELECT n.id AS note_id, n.title AS note_title, n.created_at AS note_created_at, n.note_type_id AS note_type_id, nt.name AS note_type_name, GROUP_CONCAT(DISTINCT c.id) AS categories_ids, GROUP_CONCAT(DISTINCT c.name) AS categories_names, COUNT(DISTINCT a.id) AS alarms_count, COUNT(DISTINCT s.id) AS schedules_count, COUNT(DISTINCT sr.id) AS recurring_schedules_count FROM note_table AS n LEFT JOIN note_type_table AS nt ON nt.id = n.note_type_id LEFT JOIN note_category_table AS nc ON nc.note_id = n.id LEFT JOIN category_table AS c ON c.id = nc.category_id LEFT JOIN schedule_table AS s ON s.note_id = n.id AND s.recurrence_type IS NULL LEFT JOIN schedule_table AS sr ON sr.note_id = n.id AND sr.recurrence_type IS NOT NULL LEFT JOIN alarm_table AS a ON a.schedule_id = s.id OR a.schedule_id = sr.id WHERE n.id IS NOT NULL GROUP BY n.id, n.title, n.created_at, n.note_type_id, nt.name',
-  };
-  @override
-  NoteListView get asDslTable => this;
-  @override
-  NoteListViewData map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return NoteListViewData(
-      noteId: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}note_id'],
-      )!,
-      noteTitle: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}note_title'],
-      )!,
-      noteCreatedAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}note_created_at'],
-      )!,
-      noteTypeId: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}note_type_id'],
-      ),
-      noteTypeName: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}note_type_name'],
-      ),
-      categoriesIds: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}categories_ids'],
-      ),
-      categoriesNames: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}categories_names'],
-      ),
-      alarmsCount: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}alarms_count'],
-      )!,
-      schedulesCount: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}schedules_count'],
-      )!,
-      recurringSchedulesCount: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}recurring_schedules_count'],
-      )!,
-    );
-  }
-
-  late final GeneratedColumn<String> noteId = GeneratedColumn<String>(
-    'note_id',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-  );
-  late final GeneratedColumn<String> noteTitle = GeneratedColumn<String>(
-    'note_title',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-  );
-  late final GeneratedColumn<DateTime> noteCreatedAt =
-      GeneratedColumn<DateTime>(
-        'note_created_at',
-        aliasedName,
-        false,
-        type: DriftSqlType.dateTime,
-      );
-  late final GeneratedColumn<int> noteTypeId = GeneratedColumn<int>(
-    'note_type_id',
-    aliasedName,
-    true,
-    type: DriftSqlType.int,
-  );
-  late final GeneratedColumn<String> noteTypeName = GeneratedColumn<String>(
-    'note_type_name',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-  );
-  late final GeneratedColumn<String> categoriesIds = GeneratedColumn<String>(
-    'categories_ids',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-  );
-  late final GeneratedColumn<String> categoriesNames = GeneratedColumn<String>(
-    'categories_names',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-  );
-  late final GeneratedColumn<int> alarmsCount = GeneratedColumn<int>(
-    'alarms_count',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-  );
-  late final GeneratedColumn<int> schedulesCount = GeneratedColumn<int>(
-    'schedules_count',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-  );
-  late final GeneratedColumn<int> recurringSchedulesCount =
-      GeneratedColumn<int>(
-        'recurring_schedules_count',
-        aliasedName,
-        false,
-        type: DriftSqlType.int,
-      );
-  @override
-  NoteListView createAlias(String alias) {
-    return NoteListView(attachedDatabase, alias);
-  }
-
-  @override
-  Query? get query => null;
-  @override
-  Set<String> get readTables => const {
-    'note_table',
-    'note_type_table',
-    'note_category_table',
-    'category_table',
-    'schedule_table',
-  };
-}
-
 class $ReminderTableTable extends ReminderTable
     with TableInfo<$ReminderTableTable, ReminderEntity> {
   @override
@@ -2136,7 +1874,7 @@ class $ReminderTableTable extends ReminderTable
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => const {};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   ReminderEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -2309,6 +2047,299 @@ class ReminderTableCompanion extends UpdateCompanion<ReminderEntity> {
   }
 }
 
+class NoteListViewData extends DataClass {
+  final String noteId;
+  final String noteTitle;
+  final DateTime noteCreatedAt;
+  final String? noteTypeId;
+  final String? noteTypeName;
+  final String? categoriesIds;
+  final String? categoriesNames;
+  final int remindersCount;
+  final int schedulesCount;
+  final int recurringSchedulesCount;
+  const NoteListViewData({
+    required this.noteId,
+    required this.noteTitle,
+    required this.noteCreatedAt,
+    this.noteTypeId,
+    this.noteTypeName,
+    this.categoriesIds,
+    this.categoriesNames,
+    required this.remindersCount,
+    required this.schedulesCount,
+    required this.recurringSchedulesCount,
+  });
+  factory NoteListViewData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return NoteListViewData(
+      noteId: serializer.fromJson<String>(json['note_id']),
+      noteTitle: serializer.fromJson<String>(json['note_title']),
+      noteCreatedAt: serializer.fromJson<DateTime>(json['note_created_at']),
+      noteTypeId: serializer.fromJson<String?>(json['note_type_id']),
+      noteTypeName: serializer.fromJson<String?>(json['note_type_name']),
+      categoriesIds: serializer.fromJson<String?>(json['categories_ids']),
+      categoriesNames: serializer.fromJson<String?>(json['categories_names']),
+      remindersCount: serializer.fromJson<int>(json['reminders_count']),
+      schedulesCount: serializer.fromJson<int>(json['schedules_count']),
+      recurringSchedulesCount: serializer.fromJson<int>(
+        json['recurring_schedules_count'],
+      ),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'note_id': serializer.toJson<String>(noteId),
+      'note_title': serializer.toJson<String>(noteTitle),
+      'note_created_at': serializer.toJson<DateTime>(noteCreatedAt),
+      'note_type_id': serializer.toJson<String?>(noteTypeId),
+      'note_type_name': serializer.toJson<String?>(noteTypeName),
+      'categories_ids': serializer.toJson<String?>(categoriesIds),
+      'categories_names': serializer.toJson<String?>(categoriesNames),
+      'reminders_count': serializer.toJson<int>(remindersCount),
+      'schedules_count': serializer.toJson<int>(schedulesCount),
+      'recurring_schedules_count': serializer.toJson<int>(
+        recurringSchedulesCount,
+      ),
+    };
+  }
+
+  NoteListViewData copyWith({
+    String? noteId,
+    String? noteTitle,
+    DateTime? noteCreatedAt,
+    Value<String?> noteTypeId = const Value.absent(),
+    Value<String?> noteTypeName = const Value.absent(),
+    Value<String?> categoriesIds = const Value.absent(),
+    Value<String?> categoriesNames = const Value.absent(),
+    int? remindersCount,
+    int? schedulesCount,
+    int? recurringSchedulesCount,
+  }) => NoteListViewData(
+    noteId: noteId ?? this.noteId,
+    noteTitle: noteTitle ?? this.noteTitle,
+    noteCreatedAt: noteCreatedAt ?? this.noteCreatedAt,
+    noteTypeId: noteTypeId.present ? noteTypeId.value : this.noteTypeId,
+    noteTypeName: noteTypeName.present ? noteTypeName.value : this.noteTypeName,
+    categoriesIds: categoriesIds.present
+        ? categoriesIds.value
+        : this.categoriesIds,
+    categoriesNames: categoriesNames.present
+        ? categoriesNames.value
+        : this.categoriesNames,
+    remindersCount: remindersCount ?? this.remindersCount,
+    schedulesCount: schedulesCount ?? this.schedulesCount,
+    recurringSchedulesCount:
+        recurringSchedulesCount ?? this.recurringSchedulesCount,
+  );
+  @override
+  String toString() {
+    return (StringBuffer('NoteListViewData(')
+          ..write('noteId: $noteId, ')
+          ..write('noteTitle: $noteTitle, ')
+          ..write('noteCreatedAt: $noteCreatedAt, ')
+          ..write('noteTypeId: $noteTypeId, ')
+          ..write('noteTypeName: $noteTypeName, ')
+          ..write('categoriesIds: $categoriesIds, ')
+          ..write('categoriesNames: $categoriesNames, ')
+          ..write('remindersCount: $remindersCount, ')
+          ..write('schedulesCount: $schedulesCount, ')
+          ..write('recurringSchedulesCount: $recurringSchedulesCount')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    noteId,
+    noteTitle,
+    noteCreatedAt,
+    noteTypeId,
+    noteTypeName,
+    categoriesIds,
+    categoriesNames,
+    remindersCount,
+    schedulesCount,
+    recurringSchedulesCount,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is NoteListViewData &&
+          other.noteId == this.noteId &&
+          other.noteTitle == this.noteTitle &&
+          other.noteCreatedAt == this.noteCreatedAt &&
+          other.noteTypeId == this.noteTypeId &&
+          other.noteTypeName == this.noteTypeName &&
+          other.categoriesIds == this.categoriesIds &&
+          other.categoriesNames == this.categoriesNames &&
+          other.remindersCount == this.remindersCount &&
+          other.schedulesCount == this.schedulesCount &&
+          other.recurringSchedulesCount == this.recurringSchedulesCount);
+}
+
+class NoteListView extends ViewInfo<NoteListView, NoteListViewData>
+    implements HasResultSet {
+  final String? _alias;
+  @override
+  final _$AppDatabase attachedDatabase;
+  NoteListView(this.attachedDatabase, [this._alias]);
+  @override
+  List<GeneratedColumn> get $columns => [
+    noteId,
+    noteTitle,
+    noteCreatedAt,
+    noteTypeId,
+    noteTypeName,
+    categoriesIds,
+    categoriesNames,
+    remindersCount,
+    schedulesCount,
+    recurringSchedulesCount,
+  ];
+  @override
+  String get aliasedName => _alias ?? entityName;
+  @override
+  String get entityName => 'note_list_view';
+  @override
+  Map<SqlDialect, String> get createViewStatements => {
+    SqlDialect.sqlite:
+        'CREATE VIEW note_list_view AS SELECT n.id AS note_id, n.title AS note_title, n.created_at AS note_created_at, n.note_type_id AS note_type_id, nt.name AS note_type_name, GROUP_CONCAT(DISTINCT c.id) AS categories_ids, GROUP_CONCAT(DISTINCT c.name) AS categories_names, COUNT(DISTINCT r.id) AS reminders_count, COUNT(DISTINCT s.id) AS schedules_count, COUNT(DISTINCT sr.id) AS recurring_schedules_count FROM note_table AS n LEFT JOIN note_type_table AS nt ON nt.id = n.note_type_id LEFT JOIN note_category_table AS nc ON nc.note_id = n.id LEFT JOIN category_table AS c ON c.id = nc.category_id LEFT JOIN schedule_table AS s ON s.note_id = n.id AND s.recurrence_type IS NULL LEFT JOIN schedule_table AS sr ON sr.note_id = n.id AND sr.recurrence_type IS NOT NULL LEFT JOIN reminder_table AS r ON r.schedule_id = s.id OR r.schedule_id = sr.id WHERE n.id IS NOT NULL GROUP BY n.id, n.title, n.created_at, n.note_type_id, nt.name',
+  };
+  @override
+  NoteListView get asDslTable => this;
+  @override
+  NoteListViewData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return NoteListViewData(
+      noteId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note_id'],
+      )!,
+      noteTitle: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note_title'],
+      )!,
+      noteCreatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}note_created_at'],
+      )!,
+      noteTypeId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note_type_id'],
+      ),
+      noteTypeName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note_type_name'],
+      ),
+      categoriesIds: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}categories_ids'],
+      ),
+      categoriesNames: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}categories_names'],
+      ),
+      remindersCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}reminders_count'],
+      )!,
+      schedulesCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}schedules_count'],
+      )!,
+      recurringSchedulesCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}recurring_schedules_count'],
+      )!,
+    );
+  }
+
+  late final GeneratedColumn<String> noteId = GeneratedColumn<String>(
+    'note_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+  );
+  late final GeneratedColumn<String> noteTitle = GeneratedColumn<String>(
+    'note_title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+  );
+  late final GeneratedColumn<DateTime> noteCreatedAt =
+      GeneratedColumn<DateTime>(
+        'note_created_at',
+        aliasedName,
+        false,
+        type: DriftSqlType.dateTime,
+      );
+  late final GeneratedColumn<String> noteTypeId = GeneratedColumn<String>(
+    'note_type_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+  );
+  late final GeneratedColumn<String> noteTypeName = GeneratedColumn<String>(
+    'note_type_name',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+  );
+  late final GeneratedColumn<String> categoriesIds = GeneratedColumn<String>(
+    'categories_ids',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+  );
+  late final GeneratedColumn<String> categoriesNames = GeneratedColumn<String>(
+    'categories_names',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+  );
+  late final GeneratedColumn<int> remindersCount = GeneratedColumn<int>(
+    'reminders_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+  );
+  late final GeneratedColumn<int> schedulesCount = GeneratedColumn<int>(
+    'schedules_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+  );
+  late final GeneratedColumn<int> recurringSchedulesCount =
+      GeneratedColumn<int>(
+        'recurring_schedules_count',
+        aliasedName,
+        false,
+        type: DriftSqlType.int,
+      );
+  @override
+  NoteListView createAlias(String alias) {
+    return NoteListView(attachedDatabase, alias);
+  }
+
+  @override
+  Query? get query => null;
+  @override
+  Set<String> get readTables => const {
+    'note_table',
+    'note_type_table',
+    'note_category_table',
+    'category_table',
+    'schedule_table',
+    'reminder_table',
+  };
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -2319,8 +2350,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $NoteCategoryTableTable noteCategoryTable =
       $NoteCategoryTableTable(this);
   late final $ScheduleTableTable scheduleTable = $ScheduleTableTable(this);
-  late final NoteListView noteListView = NoteListView(this);
   late final $ReminderTableTable reminderTable = $ReminderTableTable(this);
+  late final NoteListView noteListView = NoteListView(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2332,8 +2363,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     categoryTable,
     noteCategoryTable,
     scheduleTable,
-    noteListView,
     reminderTable,
+    noteListView,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -2356,17 +2387,19 @@ abstract class _$AppDatabase extends GeneratedDatabase {
 
 typedef $$NoteTypeTableTableCreateCompanionBuilder =
     NoteTypeTableCompanion Function({
-      Value<int> id,
+      required String id,
       required String name,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
+      Value<int> rowid,
     });
 typedef $$NoteTypeTableTableUpdateCompanionBuilder =
     NoteTypeTableCompanion Function({
-      Value<int> id,
+      Value<String> id,
       Value<String> name,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
+      Value<int> rowid,
     });
 
 final class $$NoteTypeTableTableReferences
@@ -2390,7 +2423,7 @@ final class $$NoteTypeTableTableReferences
     final manager = $$NoteTableTableTableManager(
       $_db,
       $_db.noteTable,
-    ).filter((f) => f.noteTypeId.id.sqlEquals($_itemColumn<int>('id')!));
+    ).filter((f) => f.noteTypeId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_noteTableRefsTable($_db));
     return ProcessedTableManager(
@@ -2408,7 +2441,7 @@ class $$NoteTypeTableTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<int> get id => $composableBuilder(
+  ColumnFilters<String> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnFilters(column),
   );
@@ -2463,7 +2496,7 @@ class $$NoteTypeTableTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<int> get id => $composableBuilder(
+  ColumnOrderings<String> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnOrderings(column),
   );
@@ -2493,7 +2526,7 @@ class $$NoteTypeTableTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<int> get id =>
+  GeneratedColumn<String> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
   GeneratedColumn<String> get name =>
@@ -2559,27 +2592,31 @@ class $$NoteTypeTableTableTableManager
               $$NoteTypeTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
+                Value<String> id = const Value.absent(),
                 Value<String> name = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
               }) => NoteTypeTableCompanion(
                 id: id,
                 name: name,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
+                rowid: rowid,
               ),
           createCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
+                required String id,
                 required String name,
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
               }) => NoteTypeTableCompanion.insert(
                 id: id,
                 name: name,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
+                rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
               .map(
@@ -2639,21 +2676,23 @@ typedef $$NoteTypeTableTableProcessedTableManager =
     >;
 typedef $$UserTableTableCreateCompanionBuilder =
     UserTableCompanion Function({
-      Value<int> id,
+      required String id,
       required String username,
       required String email,
       required String passwordHash,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
+      Value<int> rowid,
     });
 typedef $$UserTableTableUpdateCompanionBuilder =
     UserTableCompanion Function({
-      Value<int> id,
+      Value<String> id,
       Value<String> username,
       Value<String> email,
       Value<String> passwordHash,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
+      Value<int> rowid,
     });
 
 final class $$UserTableTableReferences
@@ -2670,7 +2709,7 @@ final class $$UserTableTableReferences
     final manager = $$NoteTableTableTableManager(
       $_db,
       $_db.noteTable,
-    ).filter((f) => f.userId.id.sqlEquals($_itemColumn<int>('id')!));
+    ).filter((f) => f.userId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_noteTableRefsTable($_db));
     return ProcessedTableManager(
@@ -2688,7 +2727,7 @@ class $$UserTableTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<int> get id => $composableBuilder(
+  ColumnFilters<String> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnFilters(column),
   );
@@ -2753,7 +2792,7 @@ class $$UserTableTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<int> get id => $composableBuilder(
+  ColumnOrderings<String> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnOrderings(column),
   );
@@ -2793,7 +2832,7 @@ class $$UserTableTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<int> get id =>
+  GeneratedColumn<String> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
   GeneratedColumn<String> get username =>
@@ -2867,12 +2906,13 @@ class $$UserTableTableTableManager
               $$UserTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
+                Value<String> id = const Value.absent(),
                 Value<String> username = const Value.absent(),
                 Value<String> email = const Value.absent(),
                 Value<String> passwordHash = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
               }) => UserTableCompanion(
                 id: id,
                 username: username,
@@ -2880,15 +2920,17 @@ class $$UserTableTableTableManager
                 passwordHash: passwordHash,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
+                rowid: rowid,
               ),
           createCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
+                required String id,
                 required String username,
                 required String email,
                 required String passwordHash,
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
               }) => UserTableCompanion.insert(
                 id: id,
                 username: username,
@@ -2896,6 +2938,7 @@ class $$UserTableTableTableManager
                 passwordHash: passwordHash,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
+                rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
               .map(
@@ -2962,8 +3005,8 @@ typedef $$NoteTableTableCreateCompanionBuilder =
       Value<NoteStatusEnum> status,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
-      Value<int?> noteTypeId,
-      Value<int?> userId,
+      Value<String?> noteTypeId,
+      Value<String?> userId,
       Value<int> rowid,
     });
 typedef $$NoteTableTableUpdateCompanionBuilder =
@@ -2975,8 +3018,8 @@ typedef $$NoteTableTableUpdateCompanionBuilder =
       Value<NoteStatusEnum> status,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
-      Value<int?> noteTypeId,
-      Value<int?> userId,
+      Value<String?> noteTypeId,
+      Value<String?> userId,
       Value<int> rowid,
     });
 
@@ -2990,7 +3033,7 @@ final class $$NoteTableTableReferences
       );
 
   $$NoteTypeTableTableProcessedTableManager? get noteTypeId {
-    final $_column = $_itemColumn<int>('note_type_id');
+    final $_column = $_itemColumn<String>('note_type_id');
     if ($_column == null) return null;
     final manager = $$NoteTypeTableTableTableManager(
       $_db,
@@ -3007,7 +3050,7 @@ final class $$NoteTableTableReferences
       .createAlias($_aliasNameGenerator(db.noteTable.userId, db.userTable.id));
 
   $$UserTableTableProcessedTableManager? get userId {
-    final $_column = $_itemColumn<int>('user_id');
+    final $_column = $_itemColumn<String>('user_id');
     if ($_column == null) return null;
     final manager = $$UserTableTableTableManager(
       $_db,
@@ -3466,8 +3509,8 @@ class $$NoteTableTableTableManager
                 Value<NoteStatusEnum> status = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
-                Value<int?> noteTypeId = const Value.absent(),
-                Value<int?> userId = const Value.absent(),
+                Value<String?> noteTypeId = const Value.absent(),
+                Value<String?> userId = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => NoteTableCompanion(
                 id: id,
@@ -3490,8 +3533,8 @@ class $$NoteTableTableTableManager
                 Value<NoteStatusEnum> status = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
-                Value<int?> noteTypeId = const Value.absent(),
-                Value<int?> userId = const Value.absent(),
+                Value<String?> noteTypeId = const Value.absent(),
+                Value<String?> userId = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => NoteTableCompanion.insert(
                 id: id,
@@ -3644,17 +3687,19 @@ typedef $$NoteTableTableProcessedTableManager =
     >;
 typedef $$CategoryTableTableCreateCompanionBuilder =
     CategoryTableCompanion Function({
-      Value<int> id,
+      required String id,
       required String name,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
+      Value<int> rowid,
     });
 typedef $$CategoryTableTableUpdateCompanionBuilder =
     CategoryTableCompanion Function({
-      Value<int> id,
+      Value<String> id,
       Value<String> name,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
+      Value<int> rowid,
     });
 
 final class $$CategoryTableTableReferences
@@ -3679,7 +3724,7 @@ final class $$CategoryTableTableReferences
     final manager = $$NoteCategoryTableTableTableManager(
       $_db,
       $_db.noteCategoryTable,
-    ).filter((f) => f.categoryId.id.sqlEquals($_itemColumn<int>('id')!));
+    ).filter((f) => f.categoryId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(
       _noteCategoryTableRefsTable($_db),
@@ -3699,7 +3744,7 @@ class $$CategoryTableTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<int> get id => $composableBuilder(
+  ColumnFilters<String> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnFilters(column),
   );
@@ -3754,7 +3799,7 @@ class $$CategoryTableTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<int> get id => $composableBuilder(
+  ColumnOrderings<String> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnOrderings(column),
   );
@@ -3784,7 +3829,7 @@ class $$CategoryTableTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<int> get id =>
+  GeneratedColumn<String> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
   GeneratedColumn<String> get name =>
@@ -3851,27 +3896,31 @@ class $$CategoryTableTableTableManager
               $$CategoryTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
+                Value<String> id = const Value.absent(),
                 Value<String> name = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
               }) => CategoryTableCompanion(
                 id: id,
                 name: name,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
+                rowid: rowid,
               ),
           createCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
+                required String id,
                 required String name,
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
               }) => CategoryTableCompanion.insert(
                 id: id,
                 name: name,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
+                rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
               .map(
@@ -3934,13 +3983,13 @@ typedef $$CategoryTableTableProcessedTableManager =
 typedef $$NoteCategoryTableTableCreateCompanionBuilder =
     NoteCategoryTableCompanion Function({
       required String noteId,
-      required int categoryId,
+      required String categoryId,
       Value<int> rowid,
     });
 typedef $$NoteCategoryTableTableUpdateCompanionBuilder =
     NoteCategoryTableCompanion Function({
       Value<String> noteId,
-      Value<int> categoryId,
+      Value<String> categoryId,
       Value<int> rowid,
     });
 
@@ -3985,7 +4034,7 @@ final class $$NoteCategoryTableTableReferences
       );
 
   $$CategoryTableTableProcessedTableManager get categoryId {
-    final $_column = $_itemColumn<int>('category_id')!;
+    final $_column = $_itemColumn<String>('category_id')!;
 
     final manager = $$CategoryTableTableTableManager(
       $_db,
@@ -4201,7 +4250,7 @@ class $$NoteCategoryTableTableTableManager
           updateCompanionCallback:
               ({
                 Value<String> noteId = const Value.absent(),
-                Value<int> categoryId = const Value.absent(),
+                Value<String> categoryId = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => NoteCategoryTableCompanion(
                 noteId: noteId,
@@ -4211,7 +4260,7 @@ class $$NoteCategoryTableTableTableManager
           createCompanionCallback:
               ({
                 required String noteId,
-                required int categoryId,
+                required String categoryId,
                 Value<int> rowid = const Value.absent(),
               }) => NoteCategoryTableCompanion.insert(
                 noteId: noteId,

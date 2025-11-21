@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:jampa_flutter/utils/constants/styles/sizes.dart';
@@ -8,14 +6,12 @@ import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 class NoteContentTextField extends StatefulWidget {
   const NoteContentTextField({super.key,
-    this.value,
-    required this.onChanged,
+    required this.quillController,
     this.editorMaxHeight = 300.0
   });
 
-  final Document? value;
-  final Function(Document?) onChanged;
   final double editorMaxHeight;
+  final QuillController quillController;
 
   @override
   State<NoteContentTextField> createState() => _NoteContentTextFieldState();
@@ -23,48 +19,17 @@ class NoteContentTextField extends StatefulWidget {
 
 class _NoteContentTextFieldState extends State<NoteContentTextField> {
 
-  final QuillController _quillController = QuillController.basic();
-  StreamSubscription? _docChangesSubscription;
   final FocusNode _focusNode = FocusNode();
-  bool _hasInitialized = false;
 
   @override
   void initState() {
-    _handleInitParameterChangeOnce();
     super.initState();
   }
 
   @override
   void dispose() {
-    if(_docChangesSubscription != null) {
-      _docChangesSubscription?.cancel();
-    }
     _focusNode.dispose();
-    _quillController.dispose();
     super.dispose();
-  }
-
-  @override
-  void didUpdateWidget(covariant NoteContentTextField oldWidget) {
-    if(oldWidget.value != widget.value){
-      _handleInitParameterChangeOnce();
-    }
-    super.didUpdateWidget(oldWidget);
-  }
-
-  void _handleInitParameterChangeOnce(){
-    if(widget.value != null && !widget.value!.isEmpty() && !_hasInitialized) {
-      _hasInitialized = true;
-      _quillController.document = widget.value!;
-      _startListeningToChanges();
-    }
-  }
-
-  void _startListeningToChanges() async {
-    await _docChangesSubscription?.cancel();
-    _docChangesSubscription = _quillController.changes.listen((event) {
-      widget.onChanged(_quillController.document);
-    });
   }
 
   @override
@@ -80,7 +45,7 @@ class _NoteContentTextFieldState extends State<NoteContentTextField> {
       child: Column(
         children: [
           QuillSimpleToolbar(
-            controller: _quillController,
+            controller: widget.quillController,
             config: QuillSimpleToolbarConfig(
               multiRowsDisplay: false,
               showFontFamily: false,
@@ -106,14 +71,14 @@ class _NoteContentTextFieldState extends State<NoteContentTextField> {
               maxHeight: widget.editorMaxHeight,
             ),
             child: QuillEditor.basic(
-              controller: _quillController,
+              controller: widget.quillController,
               focusNode: _focusNode,
               config: QuillEditorConfig(
                 placeholder: context.strings.create_note_content_field_hint,
                 expands: true,
                 padding: const EdgeInsets.all(kGap4),
                 // onTapOutside: (event, focusNode) {
-                //   focusNode.unfocus();
+                //   // focusNode.unfocus();
                 // },
               ),
             ),

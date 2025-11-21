@@ -3,9 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:jampa_flutter/data/models/note_type.dart';
-import 'package:jampa_flutter/utils/forms/name_validator.dart';
 import 'package:jampa_flutter/repository/note_types_repository.dart';
+import 'package:jampa_flutter/utils/forms/name_validator.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
+import 'package:uuid/uuid.dart';
 
 part 'save_note_type_state.dart';
 
@@ -18,25 +19,22 @@ class SaveNoteTypeCubit extends Cubit<SaveNoteTypeState> {
   void fetchNoteTypeForUpdate(String? noteTypeId) {
     if(noteTypeId != null){
       try {
-        int? id = int.tryParse(noteTypeId);
-        if(id != null){
-          // Fetch the noteType by ID and update the state
-          noteTypesRepository.getNoteTypeById(id)
-            .then((noteType) {
-              if (noteType != null) {
-                emit(state.copyWith(
-                  noteType: noteType,
-                  name: NameValidator.dirty(noteType.name),
-                  isValidName: Formz.validate([NameValidator.dirty(noteType.name)]),
-                ));
-              } else {
-                emit(state.copyWith(isError: true));
-              }
-            }).catchError((error) {
+        // Fetch the noteType by ID and update the state
+        noteTypesRepository.getNoteTypeById(noteTypeId)
+          .then((noteType) {
+            if (noteType != null) {
+              emit(state.copyWith(
+                noteType: noteType,
+                name: NameValidator.dirty(noteType.name),
+                isValidName: Formz.validate([NameValidator.dirty(noteType.name)]),
+              ));
+            } else {
               emit(state.copyWith(isError: true));
-              debugPrint('Error fetching noteType for update: $error');
-            });
-        }
+            }
+          }).catchError((error) {
+            emit(state.copyWith(isError: true));
+            debugPrint('Error fetching noteType for update: $error');
+          });
       } catch (e) {
         emit(state.copyWith(isError: true));
         debugPrint('Error initializing fetchNoteTypeForUpdate: $e');
@@ -90,6 +88,7 @@ class SaveNoteTypeCubit extends Cubit<SaveNoteTypeState> {
             );
           }else{
             noteType = NoteTypeEntity(
+                id: Uuid().v4(),
                 name: state.name.value,
                 createdAt: DateTime.now(),
                 updatedAt: DateTime.now()

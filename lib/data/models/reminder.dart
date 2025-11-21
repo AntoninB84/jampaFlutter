@@ -14,6 +14,9 @@ class ReminderTable extends Table {
   BoolColumn get isNotification => boolean().withDefault(const Constant(true))();
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
 }
 
 class ReminderEntity {

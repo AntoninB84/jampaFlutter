@@ -12,7 +12,7 @@ class UserRepository {
     if (_userEntity != null) return _userEntity;
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final int? currentUserId = prefs.getInt('CURRENT_USER_ID');
+    final String? currentUserId = prefs.getString('CURRENT_USER_ID');
 
     if(currentUserId != null){
       return await UserDao.getUserById(currentUserId);

@@ -1,4 +1,4 @@
-part of 'note_bloc.dart';
+part of 'show_note_bloc.dart';
 
 enum NoteStatus { initial, loading, success, failure }
 
@@ -9,19 +9,19 @@ extension NoteStatusX on NoteStatus {
   bool get isFailure => this == NoteStatus.failure;
 }
 
-class NoteState extends Equatable {
+class ShowNoteState extends Equatable {
 
   final NoteEntity? note;
-  final Document? noteContent;
+  final QuillController quillController;
   final List<ScheduleWithNextOccurrence> schedulesAndAlarms;
   final NoteStatus status;
   final NoteStatus schedulesLoadingStatus;
   final bool deletionSuccess;
   final bool deletionFailure;
 
-  const NoteState({
+  const ShowNoteState({
     this.note,
-    this.noteContent,
+    required this.quillController,
     this.schedulesAndAlarms = const [],
     this.status = NoteStatus.initial,
     this.schedulesLoadingStatus = NoteStatus.initial,
@@ -32,7 +32,7 @@ class NoteState extends Equatable {
   @override
   List<Object?> get props => [
     note,
-    noteContent,
+    quillController,
     schedulesAndAlarms,
     status,
     schedulesLoadingStatus,
@@ -40,18 +40,18 @@ class NoteState extends Equatable {
     deletionFailure
   ];
 
-  NoteState copyWith({
+  ShowNoteState copyWith({
     NoteEntity? note,
-    Document? noteContent,
+    QuillController? quillController,
     List<ScheduleWithNextOccurrence> ?schedulesAndAlarms,
     NoteStatus? status,
     NoteStatus? schedulesLoadingStatus,
     bool? deletionSuccess,
     bool? deletionFailure,
   }) {
-    return NoteState(
+    return ShowNoteState(
       note: note ?? this.note,
-      noteContent: noteContent ?? this.noteContent,
+      quillController: quillController ?? this.quillController,
       schedulesAndAlarms: schedulesAndAlarms ?? this.schedulesAndAlarms,
       status: status ?? this.status,
       schedulesLoadingStatus: schedulesLoadingStatus ?? this.schedulesLoadingStatus,

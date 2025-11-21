@@ -5,7 +5,7 @@ import 'package:jampa_flutter/data/database.dart';
 class NotesListViewRepository {
   const NotesListViewRepository();
 
-  Stream<List<NoteListViewData>> watchNotesWithFilters(int? noteTypeId, List<int>? categoryIds) {
+  Stream<List<NoteListViewData>> watchNotesWithFilters(String? noteTypeId, List<String>? categoryIds) {
     return NoteListViewDao.watchAllNotesWithFilters(noteTypeId, categoryIds);
   }
 }

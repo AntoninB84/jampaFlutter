@@ -217,7 +217,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get create_note_add_recurrent_date_button => 'Ajouter une récurrence';
 
   @override
-  String get create_note_success_feedback => 'Note créée avec succès';
+  String get save_note_success_feedback => 'Note enregistrée avec succès';
 
   @override
   String get create_date_title => 'Ajouter une date';

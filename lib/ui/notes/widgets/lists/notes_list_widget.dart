@@ -141,7 +141,7 @@ class _NotesListWidgetState extends State<NotesListWidget> {
                     ],
                   ),
                 ),
-              if(note.alarmsCount > 0)
+              if(note.remindersCount > 0)
                 Padding(
                   padding: const EdgeInsets.only(
                       left: kGap4
@@ -149,7 +149,7 @@ class _NotesListWidgetState extends State<NotesListWidget> {
                   child: Row(
                     children: [
                       Text(
-                        "${note.alarmsCount}",
+                        "${note.remindersCount}",
                         style: TextStyle(
                           fontSize: kLabelSSize,
                         ),

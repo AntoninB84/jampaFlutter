@@ -92,11 +92,11 @@ class NoteDao {
     AppDatabase db = serviceLocator<AppDatabase>();
     await (db.delete(db.noteTable)..where((note) => note.id.equals(id))).go();
   }
-  static Future<List<NoteEntity>> getAllNotesByTypeId(int noteTypeId) async {
+  static Future<List<NoteEntity>> getAllNotesByTypeId(String noteTypeId) async {
     AppDatabase db = serviceLocator<AppDatabase>();
     return await (db.select(db.noteTable)..where((note) => note.noteTypeId.equals(noteTypeId))).get();
   }
-  static Future<List<NoteEntity>> getAllNotesByUserId(int userId) async {
+  static Future<List<NoteEntity>> getAllNotesByUserId(String userId) async {
     AppDatabase db = serviceLocator<AppDatabase>();
     return await (db.select(db.noteTable)..where((note) => note.userId.equals(userId))).get();
   }

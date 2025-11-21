@@ -15,11 +15,11 @@ class CategoriesRepository {
     return CategoryDao().watchCategoriesWithUseCount();
   }
 
-  Future<List<CategoryEntity>> getCategoriesByIds(List<int> ids) async {
+  Future<List<CategoryEntity>> getCategoriesByIds(List<String> ids) async {
     return await CategoryDao.getCategoriesByIds(ids);
   }
 
-  Future<CategoryEntity?> getCategoryById(int id) async {
+  Future<CategoryEntity?> getCategoryById(String id) async {
     return await CategoryDao.getCategoryById(id);
   }
 
@@ -31,7 +31,7 @@ class CategoriesRepository {
     await CategoryDao.saveSingleCategory(category);
   }
 
-  Future<void> deleteCategory(int id) async {
+  Future<void> deleteCategory(String id) async {
     await CategoryDao.deleteCategoryById(id);
   }
 }

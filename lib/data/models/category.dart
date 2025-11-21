@@ -21,20 +21,23 @@ class CategoryWithCount {
 
 @UseRowClass(CategoryEntity)
 class CategoryTable extends Table {
-  IntColumn get id => integer().autoIncrement()();
+  TextColumn get id => text()();
   TextColumn get name => text().withLength(min: 1, max: 100)();
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
 }
 
 class CategoryEntity extends Equatable {
-  int? id;
+  String id;
   String name;
   DateTime createdAt;
   DateTime updatedAt;
 
   CategoryEntity({
-    this.id,
+    required this.id,
     required this.name,
     required this.createdAt,
     required this.updatedAt,
@@ -49,7 +52,7 @@ class CategoryEntity extends Equatable {
   }
 
   CategoryEntity copyWith({
-    int? id,
+    String? id,
     String? name,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -64,7 +67,7 @@ class CategoryEntity extends Equatable {
 
   CategoryTableCompanion toCompanion() {
     return CategoryTableCompanion(
-      id: id == null ? Value.absent() : Value(id!),
+      id: Value(id),
       name: Value(name),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
@@ -72,7 +75,7 @@ class CategoryEntity extends Equatable {
   }
 
   CategoryEntity.fromJson(Map<String, dynamic> json)
-      : id = json['id'] as int?,
+      : id = json['id'] as String,
         name = json['name'] as String,
         createdAt = DateTime.parse(json['createdAt'] as String),
         updatedAt = DateTime.parse(json['updatedAt'] as String);

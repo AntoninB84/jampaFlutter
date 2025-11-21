@@ -5,7 +5,7 @@ import 'package:jampa_flutter/utils/service_locator.dart';
 
 class NoteListViewDao {
 
-  static Stream<List<NoteListViewData>> watchAllNotesWithFilters(int? noteTypeId, List<int>? categoryIds) {
+  static Stream<List<NoteListViewData>> watchAllNotesWithFilters(String? noteTypeId, List<String>? categoryIds) {
     final db = serviceLocator<AppDatabase>();
     final query = db.select(db.noteListView)
       ..where((tbl) => tbl.noteId.isNotNull());
@@ -16,7 +16,7 @@ class NoteListViewDao {
 
     if(categoryIds != null && categoryIds.isNotEmpty) {
       for (final id in categoryIds) {
-        query.where((tbl) => tbl.categoriesIds.like('%,' + id.toString() + ',%'));
+        query.where((tbl) => tbl.categoriesIds.like('%,$id,%'));
       }
     }
 
