@@ -1,11 +1,12 @@
 part of 'save_note_bloc.dart';
 
-enum SavingStatus { initial, saving, success, failure }
+enum SavingStatus { initial, saving, added, saved, failure }
 
 extension SavingStatusX on SavingStatus {
   bool get isInitial => this == SavingStatus.initial;
   bool get isSaving => this == SavingStatus.saving;
-  bool get isSuccess => this == SavingStatus.success;
+  bool get isAdded => this == SavingStatus.added;
+  bool get isSaved => this == SavingStatus.saved;
   bool get isFailure => this == SavingStatus.failure;
 }
 

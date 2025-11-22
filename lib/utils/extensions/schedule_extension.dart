@@ -22,9 +22,7 @@ extension ScheduleExtension on ScheduleEntity {
         );break;
       case RecurrenceType.dayBasedWeekly:
         displayText = recurrenceType!.displayName(context,
-          value: WeekdaysEnum.weekdaysString(context,
-              recurrenceDayAsList.map((e) => WeekdaysEnum.fromInt(e)).toList()
-          ),
+          value: WeekdaysEnum.weekdaysString(context, recurrenceDayAsList),
         ); break;
       case RecurrenceType.dayBasedMonthly:
         displayText = recurrenceType!.displayName(context,

@@ -15,25 +15,33 @@ extension NoteFormStatusX on NoteFormStatus {
 }
 
 class NoteFormState extends Equatable {
-  /// To determine how to handle calls to [SaveNoteBloc]
-  final bool isSavingPersistentData;
 
+  /// Indicates whether the form is in editing mode (editing an existing note) or creating a new note.
+  final bool isEditing;
+
+  /// The unique identifier of the note being created or edited.
   final String noteId;
 
+  /// The title of the note, validated using [NameValidator].
   final NameValidator title;
 
+  /// The Quill controller managing the rich text content of the note.
   final QuillController quillController;
 
+  /// The selected type of the note, if any.
   final NoteTypeEntity? selectedNoteType;
 
+  /// The selected categories associated with the note, if any.
   final List<CategoryEntity> selectedCategories;
 
+  /// Indicates whether the note is marked as important.
   final bool isImportantChecked;
 
+  /// The current status of the note form.
   final NoteFormStatus status;
 
   const NoteFormState({
-    this.isSavingPersistentData = false,
+    this.isEditing = false,
     required this.noteId,
     this.title = const NameValidator.pure(),
     required this.quillController,
@@ -45,7 +53,7 @@ class NoteFormState extends Equatable {
 
   @override
   List<Object?> get props => [
-    isSavingPersistentData,
+    isEditing,
     noteId,
     title,
     quillController,
@@ -56,7 +64,7 @@ class NoteFormState extends Equatable {
   ];
 
   NoteFormState copyWith({
-    bool? isSavingPersistentData,
+    bool? isEditing,
     String? noteId,
     NameValidator? title,
     QuillController? quillController,
@@ -66,7 +74,7 @@ class NoteFormState extends Equatable {
     NoteFormStatus? status,
   }) {
     return NoteFormState(
-      isSavingPersistentData: isSavingPersistentData ?? this.isSavingPersistentData,
+      isEditing: isEditing ?? this.isEditing,
       noteId: noteId ?? this.noteId,
       title: title ?? this.title,
       quillController: quillController ?? this.quillController,

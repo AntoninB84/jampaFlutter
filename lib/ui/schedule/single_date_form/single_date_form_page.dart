@@ -12,12 +12,10 @@ class SingleDateFormPage extends StatelessWidget {
     super.key,
     this.scheduleId,
     required this.noteId,
-    required this.isSavingPersistentData,
   });
 
   final String noteId;
   final String? scheduleId;
-  final bool isSavingPersistentData;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +29,6 @@ class SingleDateFormPage extends StatelessWidget {
                 InitializeSingleDateFormEvent(
                   noteId: noteId,
                   scheduleId: scheduleId,
-                  isSavingPersistentData: isSavingPersistentData,
                 )
             )
         )

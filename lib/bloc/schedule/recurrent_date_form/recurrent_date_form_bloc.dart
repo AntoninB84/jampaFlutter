@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:formz/formz.dart';
@@ -46,7 +47,6 @@ class RecurrentDateFormBloc extends Bloc<RecurrentDateFormEvent, RecurrentDateFo
       if(event.scheduleId == null){
         // New recurrent date
         emit(state.copyWith(
-          isSavingPersistentData: event.isSavingPersistentData,
           newRecurrentDateFormElements: RecurrenceFormElements(
             noteId: event.noteId,
             scheduleId: Uuid().v4(),
@@ -56,15 +56,23 @@ class RecurrentDateFormBloc extends Bloc<RecurrentDateFormEvent, RecurrentDateFo
         ));
         return;
       } else{
-        // Editing existing recurrent date
+        // Fetching schedule from repository
         final schedule = await scheduleRepository.getScheduleById(event.scheduleId!);
-        if (schedule == null) {
-          emit(state.copyWith()); //TODO
-          return;
+        if(schedule == null) {
+          // Try to retrieve from [SaveNoteBloc] if not found in repository
+          SaveNoteBloc dataBloc = serviceLocator<SaveNoteBloc>();
+          final schedule = dataBloc.state.recurrentSchedules.firstWhereOrNull(
+              (schedule) => schedule.id == event.scheduleId
+          );
+          if (schedule == null) {
+            // Handle schedule not found
+            debugPrint('Error initializing recurrent date form: Schedule not found');
+            return;
+          }
         }
         emit(state.copyWith(
-            isSavingPersistentData: event.isSavingPersistentData,
-            newRecurrentDateFormElements: schedule.toRecurrenceFormElements()
+          isEditing: true,
+          newRecurrentDateFormElements: schedule!.toRecurrenceFormElements()
         ));
       }
     } catch (e) {
@@ -177,33 +185,13 @@ class RecurrentDateFormBloc extends Bloc<RecurrentDateFormEvent, RecurrentDateFo
   }
 
   void _onSubmitForm(OnSubmitRecurrentDateEvent event, Emitter<RecurrentDateFormState> emit) {
-    //TODO loading state
     SaveNoteBloc dataBloc = serviceLocator<SaveNoteBloc>();
-    if(state.isSavingPersistentData){
-      // Directly save to persistent storage
-      ScheduleEntity recurrentDateSchedule = ScheduleEntity.fromRecurrenceFormElements(
+    // Convert form elements to ScheduleEntity
+    ScheduleEntity recurrentDateSchedule = ScheduleEntity.fromRecurrenceFormElements(
         state.newRecurrentDateFormElements
-      );
-      dataBloc.add(SaveRecurrentDateEvent(recurrentDateSchedule));
-    }else{
-      List<ScheduleEntity> recurrentSchedules = dataBloc.state.recurrentSchedules;
-      ScheduleEntity recurrentDateSchedule = ScheduleEntity.fromRecurrenceFormElements(
-          state.newRecurrentDateFormElements
-      );
-
-      if(recurrentSchedules.isNotEmpty &&
-          recurrentSchedules.any((element)
-          => element.id == recurrentDateSchedule.id)) {
-        // This is the edit of a non persistent schedule ->
-        // Update the schedule in the SaveNoteBloc
-        dataBloc.add(UpdateRecurrentDateEvent(recurrentDateSchedule));
-      } else {
-        // This is the creation of a non persistent schedule ->
-        // Just add the schedule to the SaveNoteBloc
-        dataBloc.add(AddRecurrentDateEvent(recurrentDateSchedule));
-      }
-    }
-    //TODO success state
+    );
+    // Dispatch event to SaveNoteBloc to handle the recurrent date schedule
+    dataBloc.add(SaveRecurrentDateEvent(recurrentDateSchedule));
   }
 //endregion
 }

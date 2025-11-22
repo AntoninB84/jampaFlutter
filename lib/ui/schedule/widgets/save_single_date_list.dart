@@ -8,6 +8,7 @@ import 'package:jampa_flutter/ui/widgets/buttons/buttons.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:jampa_flutter/utils/extensions/datetime_extension.dart';
 
+import '../../../data/models/schedule.dart';
 import '../../../utils/constants/styles/sizes.dart';
 import '../../widgets/confirmation_dialog.dart';
 
@@ -15,15 +16,13 @@ class SaveSingleDateList extends StatefulWidget {
   const SaveSingleDateList({
     super.key,
     required this.noteId,
-    this.isSavingPersistentData = false,
     required this.listElements,
-    required this.onDateDeleted,
+    this.isEditing = false,
   });
 
   final String noteId;
-  final bool isSavingPersistentData;
-  final List<SingleDateFormElements> listElements;
-  final Function(int) onDateDeleted;
+  final List<ScheduleEntity> listElements;
+  final bool isEditing;
 
   @override
   State<SaveSingleDateList> createState() => _SaveSingleDateListState();
@@ -38,7 +37,6 @@ class _SaveSingleDateListState extends State<SaveSingleDateList> {
             onPressed: (){
               context.pushNamed('SingleDateForm', extra: {
                 'noteId': widget.noteId,
-                'isSavingPersistentData': widget.isSavingPersistentData,
               });
             },
             child: Text(context.strings.create_note_add_single_date_button)
@@ -49,8 +47,8 @@ class _SaveSingleDateListState extends State<SaveSingleDateList> {
             itemCount: widget.listElements.length,
             itemBuilder: (context, index) {
               final date = widget.listElements[index];
-              final String displayText = date.selectedStartDateTime != null
-                  ? date.selectedStartDateTime!.toFullFormat(context)
+              final String displayText = date.startDateTime != null
+                  ? date.startDateTime!.toFullFormat(context)
                   : 'null';
 
               return Material(
@@ -63,9 +61,8 @@ class _SaveSingleDateListState extends State<SaveSingleDateList> {
                     title: Text(displayText),
                     onTap: (){
                       context.pushNamed('SingleDateForm', extra: {
-                        'scheduleId': date.scheduleId,
+                        'scheduleId': date.id,
                         'noteId': date.noteId,
-                        'isSavingPersistentData': widget.isSavingPersistentData,
                       });
                     },
                     trailing: Row(
@@ -79,18 +76,14 @@ class _SaveSingleDateListState extends State<SaveSingleDateList> {
                                   title: context.strings.delete_single_date_confirmation_title,
                                   content: context.strings.delete_single_date_confirmation_message(
                                       displayText,
-                                      widget.isSavingPersistentData.toString()
+                                      widget.isEditing.toString()
                                   ),
                                   confirmButtonText: context.strings.delete,
                                   cancelButtonText: context.strings.cancel,
                                   onConfirm: (){
-                                    if(widget.isSavingPersistentData) {
-                                      context.read<SaveNoteBloc>()
-                                          .add(RemoveSingleDateEvent(
-                                          date.scheduleId));
-                                    }else{
-                                      widget.onDateDeleted(index);
-                                    }
+                                    context.read<SaveNoteBloc>()
+                                      .add(RemoveOrDeleteSingleDateEvent(
+                                        date.id));
                                     dialogContext.pop();
                                   },
                                   onCancel: (){dialogContext.pop();}

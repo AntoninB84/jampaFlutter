@@ -12,12 +12,10 @@ class RecurrentDateFormPage extends StatelessWidget {
     super.key,
     required this.noteId,
     this.scheduleId,
-    required this.isSavingPersistentData,
   });
 
   final String noteId;
   final String? scheduleId;
-  final bool isSavingPersistentData;
 
   @override
   Widget build(BuildContext widgetContext) {
@@ -31,7 +29,6 @@ class RecurrentDateFormPage extends StatelessWidget {
             InitializeRecurrentDateFormEvent(
               noteId: noteId,
               scheduleId: scheduleId,
-              isSavingPersistentData: isSavingPersistentData,
             )
           )
         )

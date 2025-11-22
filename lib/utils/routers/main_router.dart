@@ -67,7 +67,6 @@ final GoRouter mainRouter = GoRouter(
                       builder: (context, state) => RecurrentDateFormPage(
                         noteId: (state.extra as Map?)?['noteId'] as String,
                         scheduleId: (state.extra as Map?)?['scheduleId'] as String?,
-                        isSavingPersistentData: (state.extra as Map?)?['isSavingPersistentData'] as bool,
                       ),
                     ),
                     GoRoute(
@@ -76,7 +75,6 @@ final GoRouter mainRouter = GoRouter(
                       builder: (context, state) => SingleDateFormPage(
                         noteId: (state.extra as Map?)?['noteId'] as String,
                         scheduleId: (state.extra as Map?)?['scheduleId'] as String?,
-                        isSavingPersistentData: (state.extra as Map?)?['isSavingPersistentData'] as bool,
                       ),
                     ),
                     GoRoute(
@@ -85,7 +83,6 @@ final GoRouter mainRouter = GoRouter(
                       builder: (context, state) => ReminderFormPage(
                         scheduleId: (state.extra as Map?)?['scheduleId'] as String,
                         reminderId: (state.extra as Map?)?['reminderId'] as String?,
-                        isSavingPersistentData: (state.extra as Map?)?['isSavingPersistentData'] as bool,
                       )
                     )
                   ]

@@ -10,6 +10,7 @@ SELECT
   n.id AS note_id,
   n.title AS note_title,
   n.created_at AS note_created_at,
+  n.updated_at AS note_updated_at,
   n.note_type_id AS note_type_id,
   nt.name AS note_type_name,
   GROUP_CONCAT(DISTINCT c.id) AS categories_ids,

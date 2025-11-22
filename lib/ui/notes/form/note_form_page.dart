@@ -16,28 +16,24 @@ class NoteFormPage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider.value(
-        value: serviceLocator<SaveNoteBloc>()
-          ..add(
-              FetchNoteEvent(noteId: noteId)
-          ),
+          value: serviceLocator<SaveNoteBloc>()
+            ..add(FetchNoteEvent(noteId: noteId)),
         ),
         BlocProvider<NoteFormBloc>(
-            create: (context) {
-              final bloc = NoteFormBloc();
-              // Initialize the form if noteId is provided
-              if (noteId != null) {
-                bloc.add(
-                    InitializeNoteFormEvent(
-                        noteId: noteId!,
-                        isSavingPersistentData: true
-                    )
-                );
-              }
-              return bloc;
-            },
-        )
+          create: (context) {
+            final bloc = NoteFormBloc();
+            // Initialize the form if noteId is provided
+            if (noteId != null) {
+              bloc.add(InitializeNoteFormEvent(
+                  noteId: noteId!,
+                  isEditing: true
+              ));
+            }
+            return bloc;
+          },
+        ),
       ],
-      child: NoteFormLayout()
+      child: NoteFormLayout(),
     );
   }
 }

@@ -19,6 +19,7 @@ import '../../../bloc/notes/save/save_note_bloc.dart';
 import '../../../bloc/schedule/recurrent_date_form/recurrent_date_form_bloc.dart';
 import '../../../utils/constants/styles/sizes.dart';
 import '../../../utils/enums/recurrence_type_enum.dart';
+import '../../reminder/widgets/save_alarm_list.dart';
 import '../../widgets/error_text.dart';
 
 class RecurrentDateFormLayout extends StatelessWidget {
@@ -30,7 +31,7 @@ class RecurrentDateFormLayout extends StatelessWidget {
       listener: (context, state) {
         if (state.recurrentSavingStatus.isFailure) {
           SnackBarX.showError(context, context.strings.generic_error_message);
-        } else if (state.recurrentSavingStatus.isSuccess) {
+        } else if (state.recurrentSavingStatus.isSaved) {
           //TODO message
           SnackBarX.showSuccess(context, context.strings.edit_recurrent_date_success_feedback);
           // Back to the previous screen after success
@@ -194,29 +195,12 @@ class RecurrentDateFormLayout extends StatelessWidget {
                         );
                       },
                     ),
-                    // const SizedBox(height: kGap16),
-                    // Align(
-                    //   alignment: Alignment.topLeft,
-                    //   child: Text(
-                    //     context.strings.create_date_alarm_count(
-                    //         state.newRecurrentDateFormElements.remindersForRecurrence.length
-                    //     ),
-                    //     style: Theme.of(context).textTheme.titleMedium,
-                    //   ),
-                    // ),
-                    // const SizedBox(height: kGap8),
-                    // Commons.secondaryListsContainer(
-                    //   context: context,
-                    //   child: SaveAlarmList(
-                    //     isSavingPersistentData: state.scheduleId != null,
-                    //     isForRecurrentDate: true,
-                    //     listElements: state.newRecurrentDateFormElements.remindersForRecurrence,
-                    //     onDateDeleted: (value) {
-                    //       context.read<SaveRecurrentDateBloc>()
-                    //           .add(RemoveAlarmForRecurrence(index: value));
-                    //     },
-                    //   ),
-                    // ),
+                    const SizedBox(height: kGap16),
+                    SaveAlarmList(
+                      noteId: state.newRecurrentDateFormElements.noteId,
+                      scheduleId: state.newRecurrentDateFormElements.scheduleId,
+                      isEditing: state.isEditing,
+                    ),
                     const SizedBox(height: kGap32,),
                   ],
                 ),

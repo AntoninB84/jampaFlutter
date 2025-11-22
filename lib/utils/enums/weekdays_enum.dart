@@ -22,15 +22,15 @@ enum WeekdaysEnum {
     return weekdayIntToString(context, asInt);
   }
 
-  static String weekdaysString (BuildContext context, List<WeekdaysEnum> weekDays) {
+  static String weekdaysString (BuildContext context, List<int> weekDays) {
     if(weekDays.isEmpty) return '';
     if(weekDays.length == 1) {
-      return weekdayIntToString(context, weekDays[0].asInt);
+      return weekdayIntToString(context, weekDays[0]);
     }
     if(weekDays.length > 1 && weekDays.length < 7) {
       String result = '';
       for(int i = 0; i < weekDays.length; i++) {
-        result += weekdayIntToString(context, weekDays[i].asInt).substring(0, 2);
+        result += weekdayIntToString(context, weekDays[i]).substring(0, 2);
         if(i < weekDays.length - 1) result += ', ';
       }
       return result;

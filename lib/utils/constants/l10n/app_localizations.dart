@@ -505,8 +505,8 @@ abstract class AppLocalizations {
   /// No description provided for @create_date_alarm_count.
   ///
   /// In fr, this message translates to:
-  /// **'Rappels ({count})'**
-  String create_date_alarm_count(Object count);
+  /// **'Rappels'**
+  String get create_date_alarm_count;
 
   /// No description provided for @create_date_add_alarm_button.
   ///

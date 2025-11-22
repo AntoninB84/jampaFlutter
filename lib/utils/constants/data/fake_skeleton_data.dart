@@ -13,6 +13,7 @@ NoteListViewData get fakeSkeletonNoteListViewData => NoteListViewData(
   recurringSchedulesCount: 0,
   remindersCount: 0,
   noteCreatedAt: DateTime.now(),
+  noteUpdatedAt: DateTime.now(),
 );
 
 CategoryWithCount get fakeSkeletonCategoryWithCount => CategoryWithCount(

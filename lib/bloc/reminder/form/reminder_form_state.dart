@@ -1,47 +1,46 @@
 part of 'reminder_form_bloc.dart';
 
 class ReminderFormState extends Equatable {
+  /// Indicates whether the form is editing an existing reminder or creating a new one.
+  final bool isEditing;
 
-  // Whether saving to a persistent schedule or just in-memory
-  final bool isSavingPersistentData;
-
+  /// Holds the form elements for the new reminder.
   final ReminderFormElements newReminderFormElements;
 
+  /// Validator for the offset number input field.
   final PositiveValueValidator offsetNumberValidator;
-  final bool isValidOffsetNumber;
-
-  final bool isValidReminder;
 
   const ReminderFormState({
-    this.isSavingPersistentData = false,
+    this.isEditing = false,
     required this.newReminderFormElements,
     this.offsetNumberValidator = const PositiveValueValidator.dirty(10),
-    this.isValidOffsetNumber = true,
-    this.isValidReminder = true,
   });
 
   @override
   List<Object?> get props => [
-    isSavingPersistentData,
+    isEditing,
     newReminderFormElements,
     offsetNumberValidator,
-    isValidOffsetNumber,
-    isValidReminder,
   ];
 
   ReminderFormState copyWith({
-    bool? isSavingPersistentData,
+    bool? isEditing,
     ReminderFormElements? newReminderFormElements,
     PositiveValueValidator? offsetNumberValidator,
-    bool? isValidOffsetNumber,
     bool? isValidReminder,
   }) {
     return ReminderFormState(
-      isSavingPersistentData: isSavingPersistentData ?? this.isSavingPersistentData,
+      isEditing: isEditing ?? this.isEditing,
       newReminderFormElements: newReminderFormElements ?? this.newReminderFormElements,
       offsetNumberValidator: offsetNumberValidator ?? this.offsetNumberValidator,
-      isValidOffsetNumber: isValidOffsetNumber ?? this.isValidOffsetNumber,
-      isValidReminder: isValidReminder ?? this.isValidReminder,
     );
+  }
+
+  bool get isValidOffsetNumber {
+    return !offsetNumberValidator.isPure && offsetNumberValidator.isValid;
+  }
+
+  bool get canSubmitForm {
+    return isValidOffsetNumber;
   }
 }

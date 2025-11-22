@@ -6,18 +6,15 @@ sealed class ReminderFormEvent extends Equatable {
 
 final class InitializeReminderFormEvent extends ReminderFormEvent {
   const InitializeReminderFormEvent({
-    this.isSavingPersistentData = false,
     required this.scheduleId,
     this.reminderId
   });
 
-  final bool isSavingPersistentData;
   final String scheduleId;
   final String? reminderId;
 
   @override
   List<Object?> get props => [
-    isSavingPersistentData,
     scheduleId,
     reminderId
   ];
@@ -48,11 +45,6 @@ final class ToggleIsNotificationEvent extends ReminderFormEvent {
 
   @override
   List<Object?> get props => [isNotification];
-}
-
-final class ValidateOffsetNumberEvent extends ReminderFormEvent {
-  @override
-  List<Object?> get props => [];
 }
 
 final class OnSubmitReminderFormEvent extends ReminderFormEvent {

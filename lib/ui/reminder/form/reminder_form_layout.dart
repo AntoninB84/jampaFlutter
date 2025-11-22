@@ -24,7 +24,7 @@ class ReminderFormLayout extends StatelessWidget {
       listener: (context, state) {
         if (state.remindersSavingStatus.isFailure) {
           SnackBarX.showError(context, context.strings.generic_error_message);
-        } else if (state.remindersSavingStatus.isSuccess) {
+        } else if (state.remindersSavingStatus.isSaved) {
           //TODO message
           SnackBarX.showSuccess(context, context.strings.edit_recurrent_date_success_feedback);
           // Back to the previous screen after success
@@ -41,7 +41,7 @@ class ReminderFormLayout extends StatelessWidget {
                 actions: [
                   Buttons.saveButtonIcon(
                     context: context,
-                    onPressed: state.isValidReminder
+                    onPressed: state.canSubmitForm
                         ? () => context.read<ReminderFormBloc>().add(
                             OnSubmitReminderFormEvent())
                         : null,
@@ -67,7 +67,6 @@ class ReminderFormLayout extends StatelessWidget {
                       AlarmOffsetTextField(
                         value: state.offsetNumberValidator.value.toString(),
                         validator: state.offsetNumberValidator,
-                        isValid: state.isValidOffsetNumber,
                         onChanged: (value) => context.read<ReminderFormBloc>()
                             .add(SelectOffsetNumberEvent(offsetNumber: value)),
                       ),

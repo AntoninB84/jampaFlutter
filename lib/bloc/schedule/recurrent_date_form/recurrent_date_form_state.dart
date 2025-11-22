@@ -1,21 +1,29 @@
 part of 'recurrent_date_form_bloc.dart';
 
 class RecurrentDateFormState extends Equatable {
-  /// To determine how to handle calls to [SaveNoteBloc]
-  final bool isSavingPersistentData;
 
+  /// Indicates whether the form is in editing mode or creating a new recurrent date.
+  final bool isEditing;
+
+  /// Holds the current values of the recurrent date form elements.
   final RecurrenceFormElements newRecurrentDateFormElements;
 
+  /// Validator for the interval days input field.
   final PositiveValueValidator intervalDaysValidator;
+  /// Validator for the interval years input field.
   final PositiveValueValidator intervalYearsValidator;
+  /// Validator for the month day input field.
   final MonthDayValidator monthDateValidator;
 
+  /// Validation flags for start date
   final bool isValidStartDate;
+  /// Validation flags for end date
   final bool isValidEndDate;
+  /// Validation flags for end recurrence date
   final bool isValidEndRecurrenceDate;
 
   const RecurrentDateFormState({
-    this.isSavingPersistentData = false,
+    this.isEditing = false,
     required this.newRecurrentDateFormElements,
     this.intervalDaysValidator = const PositiveValueValidator.pure(),
     this.intervalYearsValidator = const PositiveValueValidator.pure(),
@@ -27,7 +35,7 @@ class RecurrentDateFormState extends Equatable {
 
   @override
   List<Object?> get props => [
-    isSavingPersistentData,
+    isEditing,
     newRecurrentDateFormElements,
     intervalDaysValidator,
     intervalYearsValidator,
@@ -38,7 +46,7 @@ class RecurrentDateFormState extends Equatable {
   ];
 
   RecurrentDateFormState copyWith({
-    bool? isSavingPersistentData,
+    bool? isEditing,
     RecurrenceFormElements? newRecurrentDateFormElements,
     PositiveValueValidator? intervalDaysValidator,
     PositiveValueValidator? intervalYearsValidator,
@@ -48,7 +56,7 @@ class RecurrentDateFormState extends Equatable {
     bool? isValidEndRecurrenceDate,
   }) {
     return RecurrentDateFormState(
-      isSavingPersistentData: isSavingPersistentData ?? this.isSavingPersistentData,
+      isEditing: isEditing ?? this.isEditing,
       newRecurrentDateFormElements: newRecurrentDateFormElements ?? this.newRecurrentDateFormElements,
       intervalDaysValidator: intervalDaysValidator ?? this.intervalDaysValidator,
       intervalYearsValidator: intervalYearsValidator ?? this.intervalYearsValidator,

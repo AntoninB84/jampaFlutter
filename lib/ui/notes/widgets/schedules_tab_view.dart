@@ -1,27 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:jampa_flutter/bloc/notes/form/note_form_helpers.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jampa_flutter/ui/schedule/widgets/save_recurrent_date_list.dart';
 import 'package:jampa_flutter/ui/schedule/widgets/save_single_date_list.dart';
 import 'package:jampa_flutter/ui/widgets/Commons.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
+import '../../../bloc/notes/save/save_note_bloc.dart';
+
 class SchedulesTabView extends StatefulWidget {
   const SchedulesTabView({
     super.key,
     required this.noteId,
-    this.isSavingPersistentData = false,
-    required this.recurrenceListElements,
-    required this.singleDateListElements,
-    required this.onRecurrentDateDeleted,
-    required this.onSingleDateDeleted,
+    this.isEditing = false,
   });
 
   final String noteId;
-  final bool isSavingPersistentData;
-  final List<RecurrenceFormElements> recurrenceListElements;
-  final List<SingleDateFormElements> singleDateListElements;
-  final Function(int) onRecurrentDateDeleted;
-  final Function(int) onSingleDateDeleted;
+  final bool isEditing;
 
   @override
   State<SchedulesTabView> createState() => _SchedulesTabViewState();
@@ -46,44 +40,50 @@ class _SchedulesTabViewState extends State<SchedulesTabView>
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TabBar(
-          controller: _tabController,
-          tabs: [
-            Tab(
-              text: context.strings.create_note_single_date_count(
-                  widget.singleDateListElements.length
-              ),
-            ),
-            Tab(
-              text: context.strings.create_note_recurrent_date_count(
-                  widget.recurrenceListElements.length
-              ),
-            ),
-          ]
-        ),
-        Commons.secondaryListsContainer(
-          context: context,
-          child: TabBarView(
-            controller: _tabController,
+    return BlocBuilder<SaveNoteBloc, SaveNoteState>(
+        buildWhen: (previous, current) {
+          return (previous.singleDateSchedules != current.singleDateSchedules)
+              || (previous.recurrentSchedules != current.recurrentSchedules);
+        },
+        builder: (context, dataState) {
+          return Column(
             children: [
-              SaveSingleDateList(
-                noteId: widget.noteId,
-                isSavingPersistentData: widget.isSavingPersistentData,
-                listElements: widget.singleDateListElements,
-                onDateDeleted: widget.onSingleDateDeleted
+              TabBar(
+                  controller: _tabController,
+                  tabs: [
+                    Tab(
+                      text: context.strings.create_note_single_date_count(
+                          dataState.singleDateSchedules.length
+                      ),
+                    ),
+                    Tab(
+                      text: context.strings.create_note_recurrent_date_count(
+                          dataState.recurrentSchedules.length
+                      ),
+                    ),
+                  ]
               ),
-              SaveRecurrentDateList(
-                noteId: widget.noteId,
-                isSavingPersistentData: widget.isSavingPersistentData,
-                listElements: widget.recurrenceListElements,
-                onDateDeleted: widget.onRecurrentDateDeleted
-              )
+              Commons.secondaryListsContainer(
+                context: context,
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    SaveSingleDateList(
+                      noteId: widget.noteId,
+                      listElements: dataState.singleDateSchedules,
+                      isEditing: widget.isEditing,
+                    ),
+                    SaveRecurrentDateList(
+                      noteId: widget.noteId,
+                      listElements: dataState.recurrentSchedules,
+                      isEditing: widget.isEditing
+                    )
+                  ],
+                ),
+              ),
             ],
-          ),
-        ),
-      ],
+          );
+        }
     );
   }
 }

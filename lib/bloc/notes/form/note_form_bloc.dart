@@ -13,6 +13,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../data/models/category.dart';
 import '../../../data/models/note_type.dart';
+import '../../../utils/helpers/utils.dart';
 import '../save/save_note_bloc.dart';
 
 part 'note_form_event.dart';
@@ -20,11 +21,13 @@ part 'note_form_state.dart';
 
 class NoteFormBloc extends Bloc<NoteFormEvent, NoteFormState> {
   NoteFormBloc() : super(NoteFormState(
-    noteId: Uuid().v4(),
+    noteId: const Uuid().v4(),
     quillController: QuillController.basic(),
   )) {
     on<InitializeNoteFormEvent>(_initializeNoteForm);
-    on<TitleChangedEvent>(_onNameChanged);
+    on<TitleChangedEvent>(_onNameChanged,
+        transformer: Utils.debounceTransformer(const Duration(milliseconds: 500))
+    );
     on<SelectedCategoriesChangedEvent>(_onSelectedCategoriesChanged);
     on<SelectedNoteTypeChangedEvent>(_onSelectedNoteTypeChanged);
     on<ImportantCheckedChangedEvent>(_onImportantCheckedChanged);
@@ -109,6 +112,7 @@ class NoteFormBloc extends Bloc<NoteFormEvent, NoteFormState> {
       note = note.copyWith(
         title: state.title.value,
         content: content,
+        noteTypeId: state.selectedNoteType?.id,
         noteType: state.selectedNoteType,
         categories: state.selectedCategories,
         isImportant: state.isImportantChecked,
@@ -120,6 +124,7 @@ class NoteFormBloc extends Bloc<NoteFormEvent, NoteFormState> {
         id: state.noteId,
         title: state.title.value,
         content: content,
+        noteTypeId: state.selectedNoteType?.id,
         noteType: state.selectedNoteType,
         categories: state.selectedCategories,
         isImportant: state.isImportantChecked,

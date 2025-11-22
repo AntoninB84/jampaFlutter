@@ -15,6 +15,7 @@ import '../widgets/inputs/note_categories_multiselector.dart';
 import '../widgets/inputs/note_content_text_field.dart';
 import '../widgets/inputs/note_title_text_field.dart';
 import '../widgets/inputs/note_type_selector.dart';
+import '../widgets/schedules_tab_view.dart';
 
 class NoteFormLayout extends StatelessWidget {
   const NoteFormLayout({super.key});
@@ -22,10 +23,10 @@ class NoteFormLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<SaveNoteBloc, SaveNoteState>(
-      listener: (context, state) {
-        if (state.noteSavingStatus.isFailure) {
+      listener: (context, dataState) {
+        if (dataState.noteSavingStatus.isFailure) {
           SnackBarX.showError(context, context.strings.generic_error_message);
-        } else if (state.noteSavingStatus.isSuccess) {
+        } else if (dataState.noteSavingStatus.isSaved) {
           SnackBarX.showSuccess(context, context.strings.save_note_success_feedback);
           // Back to the previous screen after success
           context.pop();
@@ -61,7 +62,7 @@ class NoteFormLayout extends StatelessWidget {
                   children: [
                     Headers.basicHeader(
                       context: context,
-                      title: state.isSavingPersistentData
+                      title: state.isEditing
                           ? context.strings.edit_note_title
                           : context.strings.create_note_title,
                     ),
@@ -90,28 +91,9 @@ class NoteFormLayout extends StatelessWidget {
                           .add(SelectedCategoriesChangedEvent(categories: values)),
                     ),
                     const SizedBox(height: kGap8),
-                    BlocBuilder<SaveNoteBloc, SaveNoteState>(
-                        buildWhen: (previous, current) {
-                          return (previous.singleDateSchedules != current.singleDateSchedules)
-                              || (previous.recurrentSchedules != current.recurrentSchedules);
-                        },
-                        builder: (context, state) {
-                          return Column(
-                            children: [
-                              // SchedulesTabView(
-                              //   isSavingPersistentData: true,
-                              //   recurrenceListElements: state.re,
-                              //   singleDateListElements: state.singleDates,
-                              //   onSingleDateDeleted: (value) {
-                              //     //Do nothing
-                              //   },
-                              //   onRecurrentDateDeleted: (value) {
-                              //     //Do nothing
-                              //   },
-                              // ),
-                            ],
-                          );
-                        }
+                    SchedulesTabView(
+                      noteId: state.noteId,
+                      isEditing: state.isEditing,
                     ),
                     const SizedBox(height: kGap32),
                   ],

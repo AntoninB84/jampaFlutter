@@ -21,7 +21,7 @@ class NoteListViewDao {
     }
 
     query.orderBy([
-      (tbl) => OrderingTerm(expression: tbl.noteId, mode: OrderingMode.desc)
+      (tbl) => OrderingTerm(expression: tbl.noteUpdatedAt, mode: OrderingMode.desc)
     ]);
 
     return query.watch();

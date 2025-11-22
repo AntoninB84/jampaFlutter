@@ -6,15 +6,15 @@ sealed class NoteFormEvent extends Equatable {
 
 class InitializeNoteFormEvent extends NoteFormEvent {
   final String noteId;
-  final bool isSavingPersistentData;
+  final bool isEditing;
 
   const InitializeNoteFormEvent({
     required this.noteId,
-    this.isSavingPersistentData = false
+    this.isEditing = false,
   });
 
   @override
-  List<Object?> get props => [noteId, isSavingPersistentData];
+  List<Object?> get props => [noteId];
 }
 
 class TitleChangedEvent extends NoteFormEvent {

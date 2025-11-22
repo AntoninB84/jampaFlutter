@@ -32,6 +32,14 @@ class _NoteTitleTextFieldState extends State<NoteTitleTextField> {
   }
 
   @override
+  void didUpdateWidget(covariant NoteTitleTextField oldWidget) {
+    if(oldWidget.value != widget.value){
+      _textEditingController.text = widget.value ?? '';
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   void dispose() {
     _textEditingController.dispose();
     super.dispose();

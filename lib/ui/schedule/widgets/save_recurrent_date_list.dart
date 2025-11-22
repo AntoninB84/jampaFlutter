@@ -2,12 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jampa_flutter/bloc/notes/form/note_form_helpers.dart';
 import 'package:jampa_flutter/bloc/notes/save/save_note_bloc.dart';
 import 'package:jampa_flutter/ui/widgets/buttons/buttons.dart';
 import 'package:jampa_flutter/utils/enums/recurrence_type_enum.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
+import 'package:jampa_flutter/utils/extensions/schedule_extension.dart';
 
+import '../../../data/models/schedule.dart';
 import '../../../utils/constants/styles/sizes.dart';
 import '../../../utils/enums/weekdays_enum.dart';
 import '../../widgets/confirmation_dialog.dart';
@@ -16,15 +17,13 @@ class SaveRecurrentDateList extends StatefulWidget {
   const SaveRecurrentDateList({
     super.key,
     required this.noteId,
-    this.isSavingPersistentData = false,
     required this.listElements,
-    required this.onDateDeleted,
+    this.isEditing = false,
   });
 
   final String noteId;
-  final bool isSavingPersistentData;
-  final List<RecurrenceFormElements> listElements;
-  final Function(int) onDateDeleted;
+  final List<ScheduleEntity> listElements;
+  final bool isEditing;
 
   @override
   State<SaveRecurrentDateList> createState() => _SaveRecurrentDateListState();
@@ -39,7 +38,6 @@ class _SaveRecurrentDateListState extends State<SaveRecurrentDateList> {
             onPressed: (){
               context.pushNamed('RecurrentDateForm', extra: {
                 'noteId': widget.noteId,
-                'isSavingPersistentData': widget.isSavingPersistentData,
               });
             },
             child: Text(context.strings.create_note_add_recurrent_date_button)
@@ -52,24 +50,24 @@ class _SaveRecurrentDateListState extends State<SaveRecurrentDateList> {
               final recurrence = widget.listElements[index];
               String displayText = 'null';
 
-              switch(recurrence.selectedRecurrenceType){
+              switch(recurrence.recurrenceType){
                 case null:throw UnimplementedError();
                 case RecurrenceType.intervalDays:
-                  displayText = recurrence.selectedRecurrenceType!.displayName(context,
-                    value: recurrence.selectedRecurrenceDaysInterval.toString(),
+                  displayText = recurrence.recurrenceType!.displayName(context,
+                    value: recurrence.recurrenceInterval.toString(),
                   );break;
                 case RecurrenceType.intervalYears:
-                  displayText = recurrence.selectedRecurrenceType!.displayName(context,
-                    value: recurrence.selectedRecurrenceYearsInterval.toString(),
+                  displayText = recurrence.recurrenceType!.displayName(context,
+                    value: recurrence.recurrenceInterval.toString(),
                   ); break;
                 case RecurrenceType.dayBasedWeekly:
-                  displayText = recurrence.selectedRecurrenceType!.displayName(context,
+                  displayText = recurrence.recurrenceType!.displayName(context,
                     value: WeekdaysEnum.weekdaysString(context,
-                        recurrence.selectedRecurrenceWeekdays ?? []),
+                        recurrence.recurrenceDayAsList),
                   ); break;
                 case RecurrenceType.dayBasedMonthly:
-                  displayText = recurrence.selectedRecurrenceType!.displayName(context,
-                    value: recurrence.selectedRecurrenceMonthDate.toString(),
+                  displayText = recurrence.recurrenceType!.displayName(context,
+                    value: recurrence.recurrenceDay.toString(),
                   ); break;
               }
 
@@ -83,9 +81,8 @@ class _SaveRecurrentDateListState extends State<SaveRecurrentDateList> {
                     title: Text(displayText),
                     onTap: (){
                       context.pushNamed('RecurrentDateForm', extra: {
-                        'scheduleId': recurrence.scheduleId,
+                        'scheduleId': recurrence.id,
                         'noteId': recurrence.noteId,
-                        'isSavingPersistentData': widget.isSavingPersistentData,
                       });
                     },
                     trailing: Row(
@@ -99,18 +96,14 @@ class _SaveRecurrentDateListState extends State<SaveRecurrentDateList> {
                                   title: context.strings.delete_recurrent_date_confirmation_title,
                                   content: context.strings.delete_recurrent_date_confirmation_message(
                                       displayText,
-                                      widget.isSavingPersistentData.toString()
+                                      widget.isEditing.toString()
                                   ),
                                   confirmButtonText: context.strings.delete,
                                   cancelButtonText: context.strings.cancel,
                                   onConfirm: (){
-                                    if(widget.isSavingPersistentData) {
-                                      context.read<SaveNoteBloc>()
-                                          .add(RemoveRecurrentDateEvent(
-                                          recurrence.scheduleId));
-                                    }else{
-                                      widget.onDateDeleted(index);
-                                    }
+                                    context.read<SaveNoteBloc>()
+                                      .add(RemoveOrDeleteRecurrentDateEvent(
+                                        recurrence.id));
                                     dialogContext.pop();
                                   },
                                   onCancel: (){dialogContext.pop();}

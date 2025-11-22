@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:jampa_flutter/bloc/notes/save/save_note_bloc.dart';
@@ -35,7 +36,6 @@ class SingleDateFormBloc extends Bloc<SingleDateFormEvent, SingleDateFormState> 
       if (event.scheduleId == null) {
         // New single date
         emit(state.copyWith(
-            isSavingPersistentData: event.isSavingPersistentData,
             newSingleDateFormElements: SingleDateFormElements(
               noteId: event.noteId,
               scheduleId: Uuid().v4(),
@@ -45,15 +45,23 @@ class SingleDateFormBloc extends Bloc<SingleDateFormEvent, SingleDateFormState> 
         ));
         return;
       } else {
-        // Editing existing single date
+        // Fetching schedule from repository
         final schedule = await scheduleRepository.getScheduleById(event.scheduleId!);
-        if (schedule == null) {
-          emit(state.copyWith()); //TODO
-          return;
+        if(schedule == null) {
+          // Try to retrieve from [SaveNoteBloc] if not found in repository
+          SaveNoteBloc dataBloc = serviceLocator<SaveNoteBloc>();
+          final schedule = dataBloc.state.singleDateSchedules.firstWhereOrNull(
+                  (schedule) => schedule.id == event.scheduleId
+          );
+          if (schedule == null) {
+            // Handle schedule not found
+            debugPrint('Error initializing single date form: Schedule not found');
+            return;
+          }
         }
         emit(state.copyWith(
-            isSavingPersistentData: event.isSavingPersistentData,
-            newSingleDateFormElements: schedule.toSingleDateFormElements()
+          isEditing: true,
+          newSingleDateFormElements: schedule!.toSingleDateFormElements()
         ));
       }
     } catch (e) {
@@ -95,33 +103,13 @@ class SingleDateFormBloc extends Bloc<SingleDateFormEvent, SingleDateFormState> 
     }
 
     void _onSubmitForm(OnSubmitSingleDateEvent event, Emitter<SingleDateFormState> emit) {
-      //TODO loading state
       SaveNoteBloc dataBloc = serviceLocator<SaveNoteBloc>();
-      if(state.isSavingPersistentData){
-        // Save to persistent storage
-        ScheduleEntity singleDateSchedule = ScheduleEntity.fromSingleDateFormElements(
-            state.newSingleDateFormElements
-        );
-        dataBloc.add(SaveSingleDateEvent(singleDateSchedule));
-      } else {
-        List<ScheduleEntity> singleDates = dataBloc.state.singleDateSchedules;
-        ScheduleEntity singleDateSchedule = ScheduleEntity.fromSingleDateFormElements(
-            state.newSingleDateFormElements
-        );
-
-        if(singleDates.isNotEmpty &&
-            singleDates.any((element)
-            => element.id == singleDateSchedule.id)) {
-          // This is the edit of a non persistent schedule ->
-          // Update the schedule in the SaveNoteBloc
-          dataBloc.add(UpdateSingleDateEvent(singleDateSchedule));
-        } else {
-          // This is the creation of a non persistent schedule ->
-          // Just add the schedule to the SaveNoteBloc
-          dataBloc.add(AddSingleDateEvent(singleDateSchedule));
-        }
-      }
-      //TODO emit success state
+      // Convert form elements to ScheduleEntity
+      ScheduleEntity singleDateSchedule = ScheduleEntity.fromSingleDateFormElements(
+          state.newSingleDateFormElements
+      );
+      // Dispatch event to save the single date schedule
+      dataBloc.add(SaveSingleDateEvent(singleDateSchedule));
     }
 
   }

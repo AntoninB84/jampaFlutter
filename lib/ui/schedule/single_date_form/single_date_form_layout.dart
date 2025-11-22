@@ -7,6 +7,7 @@ import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 import '../../../bloc/home/app_bar_cubit.dart';
 import '../../../bloc/notes/save/save_note_bloc.dart';
+import '../../reminder/widgets/save_alarm_list.dart';
 import '../../widgets/app_bar_config_widget.dart';
 import '../../widgets/buttons/buttons.dart';
 import '../../widgets/headers.dart';
@@ -22,7 +23,7 @@ class SingleDateFormLayout extends StatelessWidget {
       listener: (context, state) {
         if (state.singleDateSavingStatus.isFailure) {
           SnackBarX.showError(context, context.strings.generic_error_message);
-        } else if (state.singleDateSavingStatus.isSuccess) {
+        } else if (state.singleDateSavingStatus.isSaved) {
           //TODO message
           SnackBarX.showSuccess(context, context.strings.edit_recurrent_date_success_feedback);
           // Back to the previous screen after success
@@ -84,27 +85,12 @@ class SingleDateFormLayout extends StatelessWidget {
                         );
                       },
                     ),
-                    // const SizedBox(height: kGap16),
-                    // Align(
-                    //   alignment: Alignment.topLeft,
-                    //   child: Text(
-                    //     context.strings.create_date_alarm_count(
-                    //         state.newSingleDateFormElements.remindersForSingleDate.length
-                    //     ),
-                    //     style: Theme.of(context).textTheme.titleMedium,
-                    //   ),
-                    // ),
-                    // const SizedBox(height: kGap8),
-                    // Commons.secondaryListsContainer(
-                    //   context: context,
-                    //   child: SaveAlarmList(
-                    //     isSavingPersistentData: state.scheduleId != null,
-                    //     listElements: state.newSingleDateFormElements.remindersForSingleDate,
-                    //     onDateDeleted: (value) {
-                    //       context.read<SaveSingleDateBloc>().add(RemoveAlarm(index: value));
-                    //     },
-                    //   ),
-                    // ),
+                    const SizedBox(height: kGap16),
+                    SaveAlarmList(
+                      noteId: state.newSingleDateFormElements.noteId,
+                      scheduleId: state.newSingleDateFormElements.scheduleId,
+                      isEditing: state.isEditing,
+                    ),
                     const SizedBox(height: kGap32,),
                   ],
                 ),

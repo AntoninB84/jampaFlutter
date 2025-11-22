@@ -12,12 +12,10 @@ class ReminderFormPage extends StatelessWidget {
     super.key,
     required this.scheduleId,
     this.reminderId,
-    required this.isSavingPersistentData,
   });
 
   final String scheduleId;
   final String? reminderId;
-  final bool isSavingPersistentData;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +29,6 @@ class ReminderFormPage extends StatelessWidget {
                 InitializeReminderFormEvent(
                   reminderId: reminderId,
                   scheduleId: scheduleId,
-                  isSavingPersistentData: isSavingPersistentData,
                 )
             )
         )

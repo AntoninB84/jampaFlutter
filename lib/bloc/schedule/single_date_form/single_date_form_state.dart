@@ -1,33 +1,36 @@
 part of 'single_date_form_bloc.dart';
 
 class SingleDateFormState extends Equatable {
-  /// To determine how to handle calls to [SaveNoteBloc]
-  final bool isSavingPersistentData;
 
+  /// Indicates whether the form is in editing mode
+  final bool isEditing;
+
+  /// The form elements for the single date form
   final SingleDateFormElements newSingleDateFormElements;
 
+  /// Indicates whether the selected dates are valid
   final bool isValidDate;
 
   const SingleDateFormState({
-    this.isSavingPersistentData = false,
+    this.isEditing = false,
     required this.newSingleDateFormElements,
     this.isValidDate = true,
   });
 
   @override
   List<Object?> get props => [
-    isSavingPersistentData,
+    isEditing,
     newSingleDateFormElements,
     isValidDate,
   ];
 
   SingleDateFormState copyWith({
-    bool? isSavingPersistentData,
+    bool? isEditing,
     SingleDateFormElements? newSingleDateFormElements,
     bool? isValidDate,
   }) {
     return SingleDateFormState(
-      isSavingPersistentData: isSavingPersistentData ?? this.isSavingPersistentData,
+      isEditing: isEditing ?? this.isEditing,
       newSingleDateFormElements: newSingleDateFormElements ?? this.newSingleDateFormElements,
       isValidDate: isValidDate ?? this.isValidDate,
     );

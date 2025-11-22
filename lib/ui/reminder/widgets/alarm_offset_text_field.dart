@@ -7,13 +7,11 @@ import 'package:jampa_flutter/utils/forms/positive_number_validator.dart';
 class AlarmOffsetTextField extends StatefulWidget {
   const AlarmOffsetTextField({super.key,
     this.value,
-    this.isValid = true,
     required this.validator,
     required this.onChanged,
   });
 
   final String? value;
-  final bool isValid;
   final PositiveValueValidator validator;
   final Function(String) onChanged;
 
@@ -54,7 +52,7 @@ class _AlarmOffsetTextFieldState extends State<AlarmOffsetTextField> {
       onChanged: widget.onChanged,
       keyboardType: TextInputType.number,
       hintText: context.strings.alarm_offset_value_field_hint,
-      errorWidget: !widget.isValid ? ErrorText(
+      errorWidget: (!widget.validator.isPure && widget.validator.isNotValid) ? ErrorText(
           errorText: (){
             if (widget.validator.displayError?.isInvalidValue ?? false) {
               return context.strings.alarm_offset_value_invalid;

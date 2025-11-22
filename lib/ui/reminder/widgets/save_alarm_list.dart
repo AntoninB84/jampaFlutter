@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jampa_flutter/bloc/notes/form/note_form_helpers.dart';
 import 'package:jampa_flutter/bloc/notes/save/save_note_bloc.dart';
+import 'package:jampa_flutter/data/models/reminder.dart';
+import 'package:jampa_flutter/ui/widgets/Commons.dart';
 import 'package:jampa_flutter/ui/widgets/buttons/buttons.dart';
 import 'package:jampa_flutter/ui/widgets/confirmation_dialog.dart';
-import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 import '../../../utils/constants/styles/sizes.dart';
@@ -14,17 +14,13 @@ class SaveAlarmList extends StatefulWidget {
   const SaveAlarmList({
     super.key,
     required this.noteId,
-    this.isForRecurrentDate = false,
-    this.isSavingPersistentData = false,
-    required this.listElements,
-    required this.onDateDeleted,
+    required this.scheduleId,
+    this.isEditing = false,
   });
 
   final String noteId;
-  final bool isForRecurrentDate;
-  final bool isSavingPersistentData;
-  final List<ReminderFormElements> listElements;
-  final Function(int) onDateDeleted;
+  final String scheduleId;
+  final bool isEditing;
 
   @override
   State<SaveAlarmList> createState() => _SaveAlarmListState();
@@ -33,92 +29,107 @@ class SaveAlarmList extends StatefulWidget {
 class _SaveAlarmListState extends State<SaveAlarmList> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ElevatedButton(
-            onPressed: (){
-              context.pushNamed("ReminderForm", extra: {
-                'scheduleId': widget.noteId,
-                'isSavingPersistentData': widget.isSavingPersistentData,
-              });
-            },
-            child: Text(context.strings.create_date_add_alarm_button)
-        ),
-        Expanded(
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: widget.listElements.length,
-            itemBuilder: (context, index) {
+    return BlocConsumer<SaveNoteBloc, SaveNoteState>(
+      listener: (context, state) {
+        // TODO: implement listener
+      },
+      buildWhen: (previous, current) {
+        return previous.reminders != current.reminders;
+      },
+      builder: (context, state) {
+        List<ReminderEntity> listElements = state.reminders
+            .where((reminder) => reminder.scheduleId == widget.scheduleId)
+            .toList();
 
-              final reminder = widget.listElements[index];
-              final String displayText = context.strings
-                  .alarm_display_text(
-                reminder.selectedOffsetNumber,
-                (index + 1),
-                reminder.selectedOffsetType.getLabel(context),
-              );
-
-              return Material(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: kGap4,
+        return Column(
+          children: [
+            Align(
+              alignment: Alignment.topLeft,
+              child: Text(
+                context.strings.create_date_alarm_count,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            ),
+            const SizedBox(height: kGap8),
+            Commons.secondaryListsContainer(
+              context: context,
+              child: Column(
+                children: [
+                  ElevatedButton(
+                      onPressed: (){
+                        context.pushNamed("ReminderForm", extra: {
+                          'scheduleId': widget.noteId,
+                        });
+                      },
+                      child: Text(context.strings.create_date_add_alarm_button)
                   ),
-                  child: ListTile(
-                    dense: true,
-                    title: Text(displayText),
-                    onTap: (){
-                      context.pushNamed("ReminderForm", extra: {
-                        'scheduleId': reminder.scheduleId,
-                        'reminderId': reminder.reminderId,
-                        'isSavingPersistentData': widget.isSavingPersistentData,
-                      });
-                    },
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Buttons.deleteButtonIcon(
-                          context: context,
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (dialogContext) => ConfirmationDialog(
-                                  title: context.strings.alarm_delete_confirmation_title,
-                                  content: context.strings.alarm_delete_confirmation_message(
-                                      index, widget.isSavingPersistentData.toString()
-                                  ),
-                                  confirmButtonText: context.strings.delete,
-                                  cancelButtonText: context.strings.cancel,
-                                  onCancel: () {dialogContext.pop();},
-                                  onConfirm: () {
-                                    if(widget.isSavingPersistentData) {
-                                      if(widget.isForRecurrentDate){
-                                        context.read<SaveNoteBloc>()
-                                            .add(RemoveReminderEvent(reminder.reminderId));
-                                      }else{
-                                        context.read<SaveNoteBloc>()
-                                            .add(RemoveReminderEvent(reminder.reminderId));
-                                      }
-                                      SnackBarX.showSuccess(context, context.strings.alarm_delete_success_feedback);
+                  Expanded(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: listElements.length,
+                      itemBuilder: (context, index) {
 
-                                    }else{
-                                      //Notify parent
-                                      widget.onDateDeleted(index);
-                                    }
-                                    dialogContext.pop();
-                                  }
+                        final reminder = listElements[index];
+                        final String displayText = context.strings
+                            .alarm_display_text(
+                          reminder.offsetValue,
+                          (index + 1),
+                          reminder.offsetType.getLabel(context),
+                        );
+
+                        return Material(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: kGap4,
+                            ),
+                            child: ListTile(
+                              dense: true,
+                              title: Text(displayText),
+                              onTap: (){
+                                context.pushNamed("ReminderForm", extra: {
+                                  'scheduleId': reminder.scheduleId,
+                                  'reminderId': reminder.id,
+                                });
+                              },
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Buttons.deleteButtonIcon(
+                                    context: context,
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (dialogContext) => ConfirmationDialog(
+                                            title: context.strings.alarm_delete_confirmation_title,
+                                            content: context.strings.alarm_delete_confirmation_message(
+                                                index, widget.isEditing.toString()
+                                            ),
+                                            confirmButtonText: context.strings.delete,
+                                            cancelButtonText: context.strings.cancel,
+                                            onCancel: () {dialogContext.pop();},
+                                            onConfirm: () {
+                                              context.read<SaveNoteBloc>()
+                                                  .add(RemoveOrDeleteReminderEvent(reminder.id));
+                                              dialogContext.pop();
+                                            }
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
                               ),
-                            );
-                          },
-                        ),
-                      ],
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
-                ),
-              );
-            },
-          ),
-        ),
-      ],
+                ],
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

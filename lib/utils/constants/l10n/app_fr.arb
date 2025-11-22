@@ -75,7 +75,7 @@
     "create_start_date_field_title": "Début de l'événement",
     "create_end_date_field_title": "Fin de l'événement (optionnelle)",
     "create_date_timeline_error" : "La date de fin ne peut pas être antérieure à la date de début",
-    "create_date_alarm_count": "Rappels ({count})",
+    "create_date_alarm_count": "Rappels",
     "create_date_add_alarm_button": "Ajouter un rappel",
     "delete_single_date_confirmation_title": "Supprimer la date",
     "delete_single_date_confirmation_message": "Êtes-vous sûr de vouloir supprimer la date: {date}? {isFromEdit, select, true{Cette action est irréversible et indépendante de la modification de la note.} other{}}",
