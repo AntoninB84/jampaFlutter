@@ -32,7 +32,7 @@ Personal note:
  - recurrenceType: [RecurrenceType]?
  - recurrenceDay: int?
 
-[RecurrenceType] can be:
+[RecurrenceType](lib/utils/enums/recurrence_type_enum.dart) can be:
  - intervalDays (every n days)
  - dayBasedWeekly (on one or more days of the week)
  - dayBasedMonthly (on a specific day of the month)
@@ -41,36 +41,36 @@ Personal note:
 Example schedules:
  - Reminder on a specific date (not recurring)
    - startDateTime: DateTime
-     endDateTime: DateTime?
-     recurrenceEndDate: null
-     recurrenceInterval: null
-     recurrenceType: null
-     recurrenceDay: null
+   - endDateTime: DateTime?
+   - recurrenceEndDate: null
+   - recurrenceInterval: null
+   - recurrenceType: null
+   - recurrenceDay: null
  - Reminder every 3 days
    - startDateTime: DateTime
-     endDateTime: DateTime?
-     recurrenceEndDate: DateTime?
-     recurrenceInterval: 3
-     recurrenceType: intervalDays
-     recurrenceDay: null
+   - endDateTime: DateTime?
+   - recurrenceEndDate: DateTime?
+   - recurrenceInterval: 3
+   - recurrenceType: intervalDays
+   - recurrenceDay: null
  - Reminder every week on Monday, Wednesday, and Friday
    - startDateTime: DateTime
-     endDateTime: DateTime?
-     recurrenceEndDate: DateTime?
-     recurrenceInterval: null
-     recurrenceType: dayBasedWeekly
-     recurrenceDay: 135 (1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat, 7=Sun)
+   - endDateTime: DateTime?
+   - recurrenceEndDate: DateTime?
+   - recurrenceInterval: null
+   - recurrenceType: dayBasedWeekly
+   - recurrenceDay: 135 (1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat, 7=Sun)
  - Reminder every month on the 15th
    - startDateTime: DateTime
-     endDateTime: DateTime?
-     recurrenceEndDate: DateTime?
-     recurrenceInterval: null
-     recurrenceType: dayBasedMonthly
-     recurrenceDay: 15
+   - endDateTime: DateTime?
+   - recurrenceEndDate: DateTime?
+   - recurrenceInterval: null
+   - recurrenceType: dayBasedMonthly
+   - recurrenceDay: 15
  - Reminder every 2 years on (DateTime)
    - startDateTime: DateTime
-     endDateTime: DateTime?
-     recurrenceEndDate: DateTime?
-     recurrenceInterval: 2
-     recurrenceType: intervalYears
-     recurrenceDay: null
+   - endDateTime: DateTime?
+   - recurrenceEndDate: DateTime?
+   - recurrenceInterval: 2
+   - recurrenceType: intervalYears
+   - recurrenceDay: null
