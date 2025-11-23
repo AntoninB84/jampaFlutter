@@ -11,6 +11,7 @@ import '../../widgets/headers.dart';
 import '../../widgets/jampa_scaffolded_app_bar_widget.dart';
 import '../../widgets/snackbar.dart';
 import '../widgets/inputs/note_categories_multiselector.dart';
+import '../widgets/inputs/note_content_text_field.dart';
 import '../widgets/inputs/note_title_text_field.dart';
 import '../widgets/inputs/note_type_selector.dart';
 import '../widgets/schedules_tab_view.dart';
@@ -71,10 +72,10 @@ class NoteFormLayout extends StatelessWidget {
                         .add(TitleChangedEvent(title: value)),
                   ),
                   const SizedBox(height: kGap16),
-                  // NoteContentTextField(
-                  //   quillController: state.quillController,
-                  //   editorMaxHeight: MediaQuery.sizeOf(context).height * 0.3,
-                  // ),
+                  NoteContentTextField(
+                    quillController: state.quillController,
+                    editorMaxHeight: MediaQuery.sizeOf(context).height * 0.3,
+                  ),
                   const SizedBox(height: kGap16),
                   NoteTypeSelector(
                     value: state.selectedNoteType,
