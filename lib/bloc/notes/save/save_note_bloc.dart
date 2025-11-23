@@ -45,7 +45,7 @@ class SaveNoteBloc extends Bloc<SaveNoteEvent, SaveNoteState> {
   //region note
   /// Fetches the note by ID and updates the state with the note and its schedules and reminders
   Future<void> _onFetchNote(FetchNoteEvent event, Emitter<SaveNoteState> emit) async {
-    if(event.noteId != null){
+    if(event.noteId != null && !state.hasFetchedData){
       NoteEntity? fetchedNote = await notesRepository.getNoteById(event.noteId!);
       emit(state.copyWith(note: fetchedNote));
 
@@ -60,6 +60,7 @@ class SaveNoteBloc extends Bloc<SaveNoteEvent, SaveNoteState> {
         singleDateSchedules.removeWhere((schedule) => schedule.isRecurring);
 
         emit(state.copyWith(
+          hasFetchedData: true,
           note: fetchedNote,
           singleDateSchedules: singleDateSchedules,
           recurrentSchedules: recurrentDateSchedules,
@@ -97,9 +98,18 @@ class SaveNoteBloc extends Bloc<SaveNoteEvent, SaveNoteState> {
     if(state.note == null) return;
     emit(state.copyWith(noteSavingStatus: SavingStatus.saving));
 
+    // Save the note entity itself
     await notesRepository.saveNote(state.note!);
+
+    // Save all single date schedules
+    emit(state.copyWith(singleDateSavingStatus: SavingStatus.saving));
     await _onSaveAllSingleDates();
+    emit(state.copyWith(singleDateSavingStatus: SavingStatus.saved));
+
+    // Save all recurrent date schedules
+    emit(state.copyWith(recurrentSavingStatus: SavingStatus.saving));
     await _onSaveAllRecurrentDates();
+    emit(state.copyWith(recurrentSavingStatus: SavingStatus.saved));
 
     // Clear the note from state after saving
     emit(state.copyWith(noteSavingStatus: SavingStatus.saved));
@@ -120,46 +130,56 @@ class SaveNoteBloc extends Bloc<SaveNoteEvent, SaveNoteState> {
     }
   }
 
+  ///Calls [_saveSingleDateSchedule] to save the single date schedule
+  Future<void> _onSaveSingleDate(SaveSingleDateEvent event, Emitter<SaveNoteState> emit) async {
+    emit(state.copyWith(singleDateSavingStatus: SavingStatus.saving));
+    List<ScheduleEntity>? result = await _saveSingleDateSchedule(event.singleDateSchedule);
+    if(result != null){
+      emit(state.copyWith(
+          singleDateSchedules: result,
+          singleDateSavingStatus: SavingStatus.added
+      ));
+    }else{
+      emit(state.copyWith(singleDateSavingStatus: SavingStatus.saved));
+    }
+  }
+
   ///Checks if the parent note is registered in database
   ///
   /// If not, it only adds the single date schedule to the in-memory list.
   /// If yes, it saves the single date schedule to persistent storage.
-  Future<void> _onSaveSingleDate(SaveSingleDateEvent event, Emitter<SaveNoteState> emit) async {
-    emit(state.copyWith(singleDateSavingStatus: SavingStatus.saving));
+  Future<List<ScheduleEntity>?> _saveSingleDateSchedule(ScheduleEntity schedule) async {
     //Check if parent note exists in database
-    NoteEntity? parentNote = await notesRepository.getNoteById(event.singleDateSchedule.noteId);
+    NoteEntity? parentNote = await notesRepository.getNoteById(schedule.noteId);
     if(parentNote != null) {
       // The parent note is persistent, so we can save the schedule directly
-      await scheduleRepository.saveSchedule(event.singleDateSchedule);
-      await serviceLocator<ReminderCubit>().checkAndSetFromSchedules([event.singleDateSchedule]);
-      await _onSaveAllRemindersOfSchedule(scheduleId: event.singleDateSchedule.id);
-      emit(state.copyWith(singleDateSavingStatus: SavingStatus.saved));
-      return;
+      ScheduleEntity result = await scheduleRepository.saveSchedule(schedule);
+      // Check and set reminders in ReminderCubit
+      await serviceLocator<ReminderCubit>().checkAndSetFromSchedules([schedule]);
+      // Save all reminders associated with this schedule
+      await _onSaveAllRemindersOfSchedule(scheduleId: schedule.id);
+      // Update in-memory list
+      List<ScheduleEntity> updatedSchedules = List<ScheduleEntity>.from(state.singleDateSchedules)
+        ..add(result);
+      return updatedSchedules;
     } else {
       // The parent note is not yet persistent, so we only update the in-memory list
       // Check if the schedule already exists in the in-memory list
-      bool exists = state.singleDateSchedules.any((schedule) => schedule.id == event.singleDateSchedule.id);
+      bool exists = state.singleDateSchedules.any((s) => s.id == schedule.id);
       if (!exists) {
         // If it doesn't exist in the in-memory list, add it
         List<ScheduleEntity> updatedSchedules = List<ScheduleEntity>.from(state.singleDateSchedules)
-          ..add(event.singleDateSchedule);
-        emit(state.copyWith(
-          singleDateSchedules: updatedSchedules,
-          singleDateSavingStatus: SavingStatus.added
-        ));
-        return;
+          ..add(schedule);
+        return updatedSchedules;
       } else {
         // If it exists in the in-memory list, update it
-        List<ScheduleEntity> updatedSchedules = state.singleDateSchedules.map((schedule) {
-          if (schedule.id == event.singleDateSchedule.id) {
-            return event.singleDateSchedule;
+        List<ScheduleEntity> updatedSchedules = state.singleDateSchedules.map((s) {
+          if (s.id == schedule.id) {
+            return schedule;
           }
           return schedule;
         }).toList();
-        emit(state.copyWith(
-            singleDateSchedules: updatedSchedules,
-            singleDateSavingStatus: SavingStatus.saved
-        ));
+        return updatedSchedules;
       }
     }
   }
@@ -167,7 +187,7 @@ class SaveNoteBloc extends Bloc<SaveNoteEvent, SaveNoteState> {
   ///Saves all single date schedules to persistent storage
   Future<void> _onSaveAllSingleDates() async {
     for(final schedule in state.singleDateSchedules){
-      add(SaveSingleDateEvent(schedule));
+      await _saveSingleDateSchedule(schedule);
     }
   }
   //endregion
@@ -186,46 +206,52 @@ class SaveNoteBloc extends Bloc<SaveNoteEvent, SaveNoteState> {
     }
   }
 
+  /// Calls [_saveRecurrentDateSchedule] to save the recurrent date schedule
+  Future<void> _onSaveRecurrentDate(SaveRecurrentDateEvent event, Emitter<SaveNoteState> emit) async {
+    emit(state.copyWith(recurrentSavingStatus: SavingStatus.saving));
+    List<ScheduleEntity>? result = await _saveRecurrentDateSchedule(event.recurrentDateSchedule);
+    emit(state.copyWith(
+        recurrentSchedules: result,
+        recurrentSavingStatus: SavingStatus.added
+    ));
+  }
+
   ///Checks if the parent note is registered in database
   ///
   /// If not, it only adds the recurrent date schedule to the in-memory list.
   /// If yes, it saves the recurrent date schedule to persistent storage.
-  Future<void> _onSaveRecurrentDate(SaveRecurrentDateEvent event, Emitter<SaveNoteState> emit) async {
-    emit(state.copyWith(recurrentSavingStatus: SavingStatus.saving));
+  Future<List<ScheduleEntity>?> _saveRecurrentDateSchedule(ScheduleEntity schedule) async {
     //Check if parent note exists in database
-    NoteEntity? parentNote = await notesRepository.getNoteById(event.recurrentDateSchedule.noteId);
+    NoteEntity? parentNote = await notesRepository.getNoteById(schedule.noteId);
     if(parentNote != null) {
       // The parent note is persistent, so we can save the schedule directly
-      await scheduleRepository.saveSchedule(event.recurrentDateSchedule);
-      await serviceLocator<ReminderCubit>().checkAndSetFromSchedules([event.recurrentDateSchedule]);
-      await _onSaveAllRemindersOfSchedule(scheduleId: event.recurrentDateSchedule.id);
-      emit(state.copyWith(recurrentSavingStatus: SavingStatus.saved));
-      return;
+      ScheduleEntity result = await scheduleRepository.saveSchedule(schedule);
+      // Check and set reminders in ReminderCubit
+      await serviceLocator<ReminderCubit>().checkAndSetFromSchedules([schedule]);
+      // Save all reminders associated with this schedule
+      await _onSaveAllRemindersOfSchedule(scheduleId: schedule.id);
+      // Update in-memory list
+      List<ScheduleEntity> updatedSchedules = List<ScheduleEntity>.from(state.recurrentSchedules)
+        ..add(result);
+      return updatedSchedules;
     } else {
       // The parent note is not yet persistent, so we only update the in-memory list
       // Check if the schedule already exists in the in-memory list
-      bool exists = state.recurrentSchedules.any((schedule) => schedule.id == event.recurrentDateSchedule.id);
+      bool exists = state.recurrentSchedules.any((s) => s.id == schedule.id);
       if (!exists) {
         // If it doesn't exist in the in-memory list, add it
         List<ScheduleEntity> updatedSchedules = List<ScheduleEntity>.from(state.recurrentSchedules)
-          ..add(event.recurrentDateSchedule);
-        emit(state.copyWith(
-            recurrentSchedules: updatedSchedules,
-            recurrentSavingStatus: SavingStatus.added
-        ));
-        return;
+          ..add(schedule);
+        return updatedSchedules;
       } else {
         // If it exists in the in-memory list, update it
-        List<ScheduleEntity> updatedSchedules = state.recurrentSchedules.map((schedule) {
-          if (schedule.id == event.recurrentDateSchedule.id) {
-            return event.recurrentDateSchedule;
+        List<ScheduleEntity> updatedSchedules = state.recurrentSchedules.map((s) {
+          if (s.id == schedule.id) {
+            return schedule;
           }
-          return schedule;
+          return s;
         }).toList();
-        emit(state.copyWith(
-            recurrentSchedules: updatedSchedules,
-            recurrentSavingStatus: SavingStatus.saved
-        ));
+        return updatedSchedules;
       }
     }
   }
@@ -233,7 +259,7 @@ class SaveNoteBloc extends Bloc<SaveNoteEvent, SaveNoteState> {
   ///Saves all recurrent date schedules to persistent storage
   Future<void> _onSaveAllRecurrentDates() async {
     for(final schedule in state.recurrentSchedules){
-      add(SaveRecurrentDateEvent(schedule));
+      await _saveRecurrentDateSchedule(schedule);
     }
   }
   //endregion
@@ -252,45 +278,50 @@ class SaveNoteBloc extends Bloc<SaveNoteEvent, SaveNoteState> {
     }
   }
 
+  /// Calls [_saveReminder] to save the reminder
+  Future<void> _onSaveReminder(SaveReminderEvent event, Emitter<SaveNoteState> emit) async {
+    emit(state.copyWith(remindersSavingStatus: SavingStatus.saving));
+    List<ReminderEntity>? result = await _saveReminder(event.reminder);
+    emit(state.copyWith(
+        reminders: result,
+        remindersSavingStatus: SavingStatus.saved
+    ));
+  }
+
   ///Checks if the parent schedule is registered in database
   ///
   /// If not, it only adds the reminder to the in-memory list.
   /// If yes, it saves the reminder to persistent storage.
-  Future<void> _onSaveReminder(SaveReminderEvent event, Emitter<SaveNoteState> emit) async {
-    emit(state.copyWith(remindersSavingStatus: SavingStatus.saving));
+  Future<List<ReminderEntity>?> _saveReminder(ReminderEntity reminder) async {
     //Check if parent schedule exists in database
-    ScheduleEntity? parentSchedule = await scheduleRepository.getScheduleById(event.reminder.scheduleId);
+    ScheduleEntity? parentSchedule = await scheduleRepository.getScheduleById(reminder.scheduleId);
     if(parentSchedule != null) {
       // The parent schedule is persistent, so we can save the reminder directly
-      await reminderRepository.saveReminder(event.reminder);
+      ReminderEntity result = await reminderRepository.saveReminder(reminder);
+      // Check and set reminders in ReminderCubit
       await serviceLocator<ReminderCubit>().checkAndSetFromSchedules([parentSchedule]);
-      emit(state.copyWith(recurrentSavingStatus: SavingStatus.saved));
-      return;
+      // Update in-memory list
+      List<ReminderEntity> updatedReminders = List<ReminderEntity>.from(state.reminders)
+        ..add(result);
+      return updatedReminders;
     } else {
       // The parent schedule is not yet persistent, so we only update the in-memory list
       // Check if the reminder already exists in the in-memory list
-      bool exists = state.reminders.any((reminder) => reminder.id == event.reminder.id);
+      bool exists = state.reminders.any((r) => r.id == reminder.id);
       if (!exists) {
         // If it doesn't exist in the in-memory list, add it
         List<ReminderEntity> updatedReminders = List<ReminderEntity>.from(state.reminders)
-          ..add(event.reminder);
-        emit(state.copyWith(
-            reminders: updatedReminders,
-            remindersSavingStatus: SavingStatus.added
-        ));
-        return;
+          ..add(reminder);
+        return updatedReminders;
       } else {
         // If it exists in the in-memory list, update it
-        List<ReminderEntity> updatedReminders = state.reminders.map((reminder) {
-          if (reminder.id == event.reminder.id) {
-            return event.reminder;
+        List<ReminderEntity> updatedReminders = state.reminders.map((r) {
+          if (r.id == reminder.id) {
+            return reminder;
           }
-          return reminder;
+          return r;
         }).toList();
-        emit(state.copyWith(
-            reminders: updatedReminders,
-            remindersSavingStatus: SavingStatus.saved
-        ));
+        return updatedReminders;
       }
     }
   }
@@ -301,7 +332,7 @@ class SaveNoteBloc extends Bloc<SaveNoteEvent, SaveNoteState> {
         .where((reminder) => reminder.scheduleId == scheduleId)
         .toList();
     for(final reminder in remindersToSave){
-      add(SaveReminderEvent(reminder));
+      await _saveReminder(reminder);
     }
   }
 

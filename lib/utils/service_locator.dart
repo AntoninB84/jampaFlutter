@@ -1,5 +1,4 @@
 import 'package:get_it/get_it.dart';
-import 'package:jampa_flutter/bloc/home/app_bar_cubit.dart';
 import 'package:jampa_flutter/bloc/home/settings_menu/settings_menu_bloc.dart';
 import 'package:jampa_flutter/bloc/notes/save/save_note_bloc.dart';
 import 'package:jampa_flutter/bloc/permissions/permissions_bloc.dart';
@@ -28,7 +27,6 @@ void setupServiceLocator() {
   serviceLocator.registerLazySingleton<ScheduleRepository>(() => ScheduleRepository());
   serviceLocator.registerLazySingleton<UserRepository>(() => UserRepository());
   serviceLocator.registerLazySingleton<PermissionsBloc>(() => PermissionsBloc());
-  serviceLocator.registerLazySingleton<AppBarCubit>(() => AppBarCubit());
   serviceLocator.registerLazySingleton<SettingsMenuCubit>(() => SettingsMenuCubit());
   serviceLocator.registerLazySingleton<ReminderCubit>(() => ReminderCubit());
   serviceLocator.registerLazySingleton(() => SaveNoteBloc());

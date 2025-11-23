@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/bloc/categories/categories_bloc.dart';
-import 'package:jampa_flutter/bloc/home/app_bar_cubit.dart';
 import 'package:jampa_flutter/ui/categories/widgets/categories_list_widget.dart';
-import 'package:jampa_flutter/ui/widgets/app_bar_config_widget.dart';
+import 'package:jampa_flutter/ui/widgets/jampa_scaffolded_app_bar_widget.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
@@ -17,9 +16,8 @@ class CategoriesLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBarConfigWidget(
-      config: AppBarConfig(),
-      child: BlocConsumer<CategoriesBloc, CategoriesState>(
+    return JampaScaffoldedAppBarWidget(
+      body: BlocConsumer<CategoriesBloc, CategoriesState>(
         bloc: context.read<CategoriesBloc>(),
         listener: (context, state) {
           if (state.deletionError) {

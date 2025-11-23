@@ -14,6 +14,7 @@ extension SavingStatusX on SavingStatus {
 class SaveNoteState extends Equatable {
   const SaveNoteState(
   {
+    this.hasFetchedData = false,
     this.note,
     this.noteSavingStatus = SavingStatus.initial,
     this.singleDateSchedules = const [],
@@ -23,6 +24,9 @@ class SaveNoteState extends Equatable {
     this.reminders = const [],
     this.remindersSavingStatus = SavingStatus.initial,
   });
+
+  /// Prevent calls to fetch data multiple times
+  final bool hasFetchedData;
 
   /// The note being created or edited, if any
   final NoteEntity? note;
@@ -46,6 +50,7 @@ class SaveNoteState extends Equatable {
 
   @override
   List<Object?> get props => [
+    hasFetchedData,
     note,
     noteSavingStatus,
     singleDateSchedules,
@@ -57,6 +62,7 @@ class SaveNoteState extends Equatable {
   ];
 
   SaveNoteState copyWith({
+    bool? hasFetchedData,
     NoteEntity? note,
     SavingStatus? noteSavingStatus,
     List<ScheduleEntity>? singleDateSchedules,
@@ -67,6 +73,7 @@ class SaveNoteState extends Equatable {
     SavingStatus? remindersSavingStatus,
   }) {
     return SaveNoteState(
+      hasFetchedData: hasFetchedData ?? this.hasFetchedData,
       note: note ?? this.note,
       noteSavingStatus: noteSavingStatus ?? this.noteSavingStatus,
       singleDateSchedules: singleDateSchedules ?? this.singleDateSchedules,
@@ -76,5 +83,12 @@ class SaveNoteState extends Equatable {
       reminders: reminders ?? this.reminders,
       remindersSavingStatus: remindersSavingStatus ?? this.remindersSavingStatus,
     );
+  }
+
+  bool get isSavingInProgress {
+    return noteSavingStatus.isSaving ||
+        singleDateSavingStatus.isSaving ||
+        recurrentSavingStatus.isSaving ||
+        remindersSavingStatus.isSaving;
   }
 }

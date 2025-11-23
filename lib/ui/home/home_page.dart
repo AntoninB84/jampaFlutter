@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/bloc/permissions/permissions_bloc.dart';
 import 'package:jampa_flutter/repository/notes_repository.dart';
 import 'package:jampa_flutter/repository/schedule_repository.dart';
-import 'package:jampa_flutter/ui/home/widgets/app_bar.dart';
 import 'package:jampa_flutter/utils/constants/styles/sizes.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
@@ -61,7 +60,6 @@ class _HomePageState extends State<HomePage> {
             ),
             child: widget.navigationShell,
           ),
-          appBar: JampaAppBar(),
         ),
       ),
     );

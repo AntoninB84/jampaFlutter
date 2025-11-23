@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jampa_flutter/bloc/home/app_bar_cubit.dart';
 import 'package:jampa_flutter/bloc/notes/list_view/notes_list_view_bloc.dart';
 import 'package:jampa_flutter/ui/home/widgets/settings_menu.dart';
 import 'package:jampa_flutter/ui/notes/widgets/lists/notes_list_widget.dart';
-import 'package:jampa_flutter/ui/widgets/app_bar_config_widget.dart';
 import 'package:jampa_flutter/ui/widgets/headers.dart';
+import 'package:jampa_flutter/ui/widgets/jampa_scaffolded_app_bar_widget.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 class NotesLayout extends StatelessWidget {
@@ -14,21 +13,19 @@ class NotesLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBarConfigWidget(
-      config: AppBarConfig(
-        leading: IconButton(
-          icon: Icon(Icons.calendar_month),
+    return JampaScaffoldedAppBarWidget(
+      leading: IconButton(
+        icon: Icon(Icons.calendar_month),
+        onPressed: null,
+      ),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.search),
           onPressed: null,
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: null,
-          ),
-          SettingsMenu().settingsMenu(context),
-        ]
-      ),
-      child: BlocConsumer<NotesListViewBloc, NotesListViewState>(
+        SettingsMenu().settingsMenu(context),
+      ],
+      body: BlocConsumer<NotesListViewBloc, NotesListViewState>(
           bloc: context.read<NotesListViewBloc>(),
           listener: (context, state) {
             // Do nothing for now
