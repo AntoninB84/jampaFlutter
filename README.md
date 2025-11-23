@@ -1,10 +1,14 @@
-## Inside
+## Introduction
 
-- SQLite database with Drift.
-- GetIt for dependency injection.
-- State management with Bloc/Cubit.
-- Routing with GoRouter.
+This is a Flutter application that serves as a note-taking tool with advanced features such as dynamic note types, categories and reminders with recurrence options.
+The app is built using various packages and is trying to follow best practices for state management, dependency injection, and database handling.
 
+**Database** : SQLite with Drift  
+**Dependency Injection** : GetIt  
+**State Management** : Bloc/Cubit  
+**Routing** : GoRouter
+**Localization** : Flutter's l10n
+Incoming tools: Freezed, unit/integration testing
 
 ## l10n
 
@@ -19,15 +23,54 @@ Personal note:
 - Options -> Apps -> Permissions -> Background autostart -> Enable for the app
 - AppInfo -> Battery -> No restrictions
 
-## Logic
+## Recurring reminders
+ The schedule class has the following properties:
+ - startDateTime: DateTime
+ - endDateTime: DateTime?
+ - recurrenceEndDate: DateTime?
+ - recurrenceInterval: int?
+ - recurrenceType: [RecurrenceType](lib/utils/enums/recurrence_type_enum.dart)?
+ - recurrenceDay: int?
 
-The main feature is the note-taking functionality. You can create, edit, and delete notes.
-Theses notes can be of different dynamic types such as basic text, event, task, or reminder...
-You can also categorize notes using dynamic categories. Categories can be created, edited, and deleted.
-Any note can have a date and time associated with it, which can be used for reminders or scheduling.
-They can also have a recurring pattern, allowing for repeated reminders or events.
-Recurrence can be of two types: interval-based (e.g., every 2 days) or specific days of the week (e.g., every Monday and Wednesday) or monthly (e.g., every 15th of the month).
-Available interval units are days, weeks, months, and years.
-Available recurrence periods are weekly and monthly
-For interval-based recurrence, you can set a start date and an optional end date.
-For day-based recurrence, you can select specific days of the week or a specific day of the month, along with a start date and an optional end date.
+[RecurrenceType](lib/utils/enums/recurrence_type_enum.dart) can be:
+ - intervalDays (every n days)
+ - dayBasedWeekly (on one or more days of the week)
+ - dayBasedMonthly (on a specific day of the month)
+ - intervalYears (every n years on a specific month and day)
+
+Example schedules:
+ - Reminder on a specific date (not recurring)
+   - startDateTime: DateTime
+   - endDateTime: DateTime?
+   - recurrenceEndDate: null
+   - recurrenceInterval: null
+   - recurrenceType: null
+   - recurrenceDay: null
+ - Reminder every 3 days
+   - startDateTime: DateTime
+   - endDateTime: DateTime?
+   - recurrenceEndDate: DateTime?
+   - recurrenceInterval: 3
+   - recurrenceType: intervalDays
+   - recurrenceDay: null
+ - Reminder every week on Monday, Wednesday, and Friday
+   - startDateTime: DateTime
+   - endDateTime: DateTime?
+   - recurrenceEndDate: DateTime?
+   - recurrenceInterval: null
+   - recurrenceType: dayBasedWeekly
+   - recurrenceDay: 135 (1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat, 7=Sun)
+ - Reminder every month on the 15th
+   - startDateTime: DateTime
+   - endDateTime: DateTime?
+   - recurrenceEndDate: DateTime?
+   - recurrenceInterval: null
+   - recurrenceType: dayBasedMonthly
+   - recurrenceDay: 15
+ - Reminder every 2 years on (DateTime)
+   - startDateTime: DateTime
+   - endDateTime: DateTime?
+   - recurrenceEndDate: DateTime?
+   - recurrenceInterval: 2
+   - recurrenceType: intervalYears
+   - recurrenceDay: null

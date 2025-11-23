@@ -11,6 +11,7 @@ import '../../../bloc/notes/show/show_note_bloc.dart';
 import '../../../utils/constants/styles/sizes.dart';
 import '../../widgets/confirmation_dialog.dart';
 import '../../widgets/jampa_scaffolded_app_bar_widget.dart';
+import '../widgets/inputs/note_content_text_field.dart';
 
 class ShowNoteLayout extends StatelessWidget {
   const ShowNoteLayout({super.key});
@@ -68,10 +69,10 @@ class ShowNoteLayout extends StatelessWidget {
               children: [
                 Text(state.note?.title ?? 'No Title', style: Theme.of(context).textTheme.headlineMedium),
                 const SizedBox(height: kGap16),
-                // NoteContentTextField(
-                //   quillController: state.quillController,
-                //   editorMaxHeight: MediaQuery.sizeOf(context).height * 0.5,
-                // ),
+                NoteContentTextField(
+                  quillController: state.quillController,
+                  editorMaxHeight: MediaQuery.sizeOf(context).height * 0.5,
+                ),
                 const SizedBox(height: kGap10,),
                 Padding(
                   padding: const EdgeInsets.symmetric(
