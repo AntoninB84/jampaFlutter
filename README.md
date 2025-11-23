@@ -6,9 +6,9 @@ The app is built using various packages and is trying to follow best practices f
 **Database** : SQLite with Drift  
 **Dependency Injection** : GetIt  
 **State Management** : Bloc/Cubit  
-**Routing** : GoRouter
-**Localization** : Flutter's l10n
-Incoming tools: Freezed, unit/integration testing
+**Routing** : GoRouter 
+**Localization** : Flutter's l10n 
+Incoming tools: Freezed, unit/integration testing 
 
 ## l10n
 
