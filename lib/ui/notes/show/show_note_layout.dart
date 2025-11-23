@@ -83,11 +83,11 @@ class ShowNoteLayout extends StatelessWidget {
                        vertical: kGap16
                      ),
                      child: Text(
-                       context.strings.show_note_schedules_and_alarms,
+                       context.strings.show_note_schedules_and_reminders,
                        style: Theme.of(context).textTheme.titleLarge,
                      ),
                    ),
-                   NoteSchedulesList(schedules: state.schedulesAndAlarms)
+                   NoteSchedulesList(schedules: state.schedulesAndReminders)
                  ],
               ),
             )

@@ -2,7 +2,7 @@
 import 'package:drift/drift.dart';
 import 'package:jampa_flutter/bloc/notes/form/note_form_helpers.dart';
 
-import '../../utils/enums/alarm_offset_type_enum.dart';
+import '../../utils/enums/reminder_offset_type_enum.dart';
 import '../database.dart';
 
 @UseRowClass(ReminderEntity)

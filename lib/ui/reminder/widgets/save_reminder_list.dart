@@ -10,8 +10,8 @@ import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 import '../../../utils/constants/styles/sizes.dart';
 
-class SaveAlarmList extends StatefulWidget {
-  const SaveAlarmList({
+class SaveReminderList extends StatefulWidget {
+  const SaveReminderList({
     super.key,
     required this.noteId,
     required this.scheduleId,
@@ -23,10 +23,10 @@ class SaveAlarmList extends StatefulWidget {
   final bool isEditing;
 
   @override
-  State<SaveAlarmList> createState() => _SaveAlarmListState();
+  State<SaveReminderList> createState() => _SaveReminderListState();
 }
 
-class _SaveAlarmListState extends State<SaveAlarmList> {
+class _SaveReminderListState extends State<SaveReminderList> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<SaveNoteBloc, SaveNoteState>(
@@ -46,7 +46,7 @@ class _SaveAlarmListState extends State<SaveAlarmList> {
             Align(
               alignment: Alignment.topLeft,
               child: Text(
-                context.strings.create_date_alarm_count,
+                context.strings.create_date_reminder_count,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
             ),
@@ -58,10 +58,10 @@ class _SaveAlarmListState extends State<SaveAlarmList> {
                   ElevatedButton(
                       onPressed: (){
                         context.pushNamed("ReminderForm", extra: {
-                          'scheduleId': widget.noteId,
+                          'scheduleId': widget.scheduleId,
                         });
                       },
-                      child: Text(context.strings.create_date_add_alarm_button)
+                      child: Text(context.strings.create_date_add_reminder_button)
                   ),
                   Expanded(
                     child: ListView.builder(
@@ -71,7 +71,7 @@ class _SaveAlarmListState extends State<SaveAlarmList> {
 
                         final reminder = listElements[index];
                         final String displayText = context.strings
-                            .alarm_display_text(
+                            .reminder_display_text(
                           reminder.offsetValue,
                           (index + 1),
                           reminder.offsetType.getLabel(context),
@@ -100,8 +100,8 @@ class _SaveAlarmListState extends State<SaveAlarmList> {
                                       showDialog(
                                         context: context,
                                         builder: (dialogContext) => ConfirmationDialog(
-                                            title: context.strings.alarm_delete_confirmation_title,
-                                            content: context.strings.alarm_delete_confirmation_message(
+                                            title: context.strings.reminder_delete_confirmation_title,
+                                            content: context.strings.reminder_delete_confirmation_message(
                                                 index, widget.isEditing.toString()
                                             ),
                                             confirmButtonText: context.strings.delete,

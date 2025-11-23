@@ -26,7 +26,7 @@ class NoteFormLayout extends StatelessWidget {
       listener: (context, dataState) {
         if (dataState.noteSavingStatus.isFailure) {
           SnackBarX.showError(context, context.strings.generic_error_message);
-        } else if (dataState.noteSavingStatus.isSaved) {
+        } else if (dataState.noteSavingStatus.isSuccessful) {
           SnackBarX.showSuccess(context, context.strings.save_note_success_feedback);
           // Back to the previous screen after success
           context.pop();

@@ -4,8 +4,8 @@ import 'package:jampa_flutter/ui/widgets/inputs/custom_text_field.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:jampa_flutter/utils/forms/positive_number_validator.dart';
 
-class AlarmOffsetTextField extends StatefulWidget {
-  const AlarmOffsetTextField({super.key,
+class ReminderOffsetTextField extends StatefulWidget {
+  const ReminderOffsetTextField({super.key,
     this.value,
     required this.validator,
     required this.onChanged,
@@ -16,10 +16,10 @@ class AlarmOffsetTextField extends StatefulWidget {
   final Function(String) onChanged;
 
   @override
-  State<AlarmOffsetTextField> createState() => _AlarmOffsetTextFieldState();
+  State<ReminderOffsetTextField> createState() => _ReminderOffsetTextFieldState();
 }
 
-class _AlarmOffsetTextFieldState extends State<AlarmOffsetTextField> {
+class _ReminderOffsetTextFieldState extends State<ReminderOffsetTextField> {
 
   final TextEditingController _textEditingController = TextEditingController();
 
@@ -32,7 +32,7 @@ class _AlarmOffsetTextFieldState extends State<AlarmOffsetTextField> {
   }
 
   @override
-  void didUpdateWidget(covariant AlarmOffsetTextField oldWidget) {
+  void didUpdateWidget(covariant ReminderOffsetTextField oldWidget) {
     if(oldWidget.value != widget.value && widget.value != null){
       _textEditingController.text = widget.value!;
     }
@@ -51,11 +51,11 @@ class _AlarmOffsetTextFieldState extends State<AlarmOffsetTextField> {
       controller: _textEditingController,
       onChanged: widget.onChanged,
       keyboardType: TextInputType.number,
-      hintText: context.strings.alarm_offset_value_field_hint,
+      hintText: context.strings.reminder_offset_value_field_hint,
       errorWidget: (!widget.validator.isPure && widget.validator.isNotValid) ? ErrorText(
           errorText: (){
             if (widget.validator.displayError?.isInvalidValue ?? false) {
-              return context.strings.alarm_offset_value_invalid;
+              return context.strings.reminder_offset_value_invalid;
             }
             return context.strings.generic_error_message;
           }()

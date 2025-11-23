@@ -5,7 +5,7 @@ import 'package:jampa_flutter/utils/enums/object_type_enum.dart';
 import 'package:jampa_flutter/utils/enums/recurrence_type_enum.dart';
 import 'package:jampa_flutter/utils/helpers/utils.dart';
 
-import '../enums/alarm_offset_type_enum.dart';
+import '../enums/reminder_offset_type_enum.dart';
 import '../local_notification_manager.dart';
 import 'notification_helpers.dart';
 

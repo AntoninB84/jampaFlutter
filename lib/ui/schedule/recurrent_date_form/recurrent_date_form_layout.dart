@@ -19,7 +19,7 @@ import '../../../bloc/notes/save/save_note_bloc.dart';
 import '../../../bloc/schedule/recurrent_date_form/recurrent_date_form_bloc.dart';
 import '../../../utils/constants/styles/sizes.dart';
 import '../../../utils/enums/recurrence_type_enum.dart';
-import '../../reminder/widgets/save_alarm_list.dart';
+import '../../reminder/widgets/save_reminder_list.dart';
 import '../../widgets/error_text.dart';
 
 class RecurrentDateFormLayout extends StatelessWidget {
@@ -31,9 +31,8 @@ class RecurrentDateFormLayout extends StatelessWidget {
       listener: (context, state) {
         if (state.recurrentSavingStatus.isFailure) {
           SnackBarX.showError(context, context.strings.generic_error_message);
-        } else if (state.recurrentSavingStatus.isSaved) {
-          //TODO message
-          SnackBarX.showSuccess(context, context.strings.edit_recurrent_date_success_feedback);
+        } else if (state.recurrentSavingStatus.isSuccessful) {
+          SnackBarX.showSuccess(context, context.strings.save_recurrent_date_success_feedback);
           // Back to the previous screen after success
           context.pop();
         }
@@ -68,7 +67,7 @@ class RecurrentDateFormLayout extends StatelessWidget {
                   children: [
                     Headers.basicHeader(
                       context: context,
-                      title: context.strings.create_recurrence_title,
+                      title: context.strings.create_recurrent_schedule_title,
                     ),
                     const SizedBox(height: kGap16),
                     RecurrenceTypeSelector(
@@ -165,7 +164,7 @@ class RecurrentDateFormLayout extends StatelessWidget {
                     ),
                     const SizedBox(height: kGap16),
                     DatetimeInputField(
-                      label: context.strings.create_start_date_field_title,
+                      label: context.strings.create_schedule_start_date_field_title,
                       initialDateTime: state.newRecurrentDateFormElements.selectedStartDateTime,
                       onDateTimeSelected: (dateTime) {
                         context.read<RecurrentDateFormBloc>().add(
@@ -175,9 +174,9 @@ class RecurrentDateFormLayout extends StatelessWidget {
                     ),
                     const SizedBox(height: kGap16),
                     DatetimeInputField(
-                      label: context.strings.create_end_date_field_title,
+                      label: context.strings.create_schedule_end_date_field_title,
                       initialDateTime: state.newRecurrentDateFormElements.selectedEndDateTime,
-                      errorText: state.isValidEndDate ? null : context.strings.create_date_timeline_error,
+                      errorText: state.isValidEndDate ? null : context.strings.create_schedule_timeline_error,
                       onDateTimeSelected: (dateTime) {
                         context.read<RecurrentDateFormBloc>().add(
                             SelectEndDateTimeEvent(dateTime: dateTime)
@@ -196,7 +195,7 @@ class RecurrentDateFormLayout extends StatelessWidget {
                       },
                     ),
                     const SizedBox(height: kGap16),
-                    SaveAlarmList(
+                    SaveReminderList(
                       noteId: state.newRecurrentDateFormElements.noteId,
                       scheduleId: state.newRecurrentDateFormElements.scheduleId,
                       isEditing: state.isEditing,

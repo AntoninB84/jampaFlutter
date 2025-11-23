@@ -22,7 +22,7 @@ class RecurrentDateFormBloc extends Bloc<RecurrentDateFormEvent, RecurrentDateFo
   RecurrentDateFormBloc() : super(RecurrentDateFormState(
       newRecurrentDateFormElements: RecurrenceFormElements(
         noteId: 'noteId',
-        scheduleId: Uuid().v4(),
+        scheduleId: 'scheduleId',
         selectedStartDateTime: DateTime.now(),
         selectedEndDateTime: DateTime.now().add(const Duration(hours: 1)),
       ),
@@ -57,11 +57,11 @@ class RecurrentDateFormBloc extends Bloc<RecurrentDateFormEvent, RecurrentDateFo
         return;
       } else{
         // Fetching schedule from repository
-        final schedule = await scheduleRepository.getScheduleById(event.scheduleId!);
+        ScheduleEntity? schedule = await scheduleRepository.getScheduleById(event.scheduleId!);
         if(schedule == null) {
           // Try to retrieve from [SaveNoteBloc] if not found in repository
           SaveNoteBloc dataBloc = serviceLocator<SaveNoteBloc>();
-          final schedule = dataBloc.state.recurrentSchedules.firstWhereOrNull(
+          schedule = dataBloc.state.recurrentSchedules.firstWhereOrNull(
               (schedule) => schedule.id == event.scheduleId
           );
           if (schedule == null) {
@@ -72,7 +72,7 @@ class RecurrentDateFormBloc extends Bloc<RecurrentDateFormEvent, RecurrentDateFo
         }
         emit(state.copyWith(
           isEditing: true,
-          newRecurrentDateFormElements: schedule!.toRecurrenceFormElements()
+          newRecurrentDateFormElements: schedule.toRecurrenceFormElements()
         ));
       }
     } catch (e) {
@@ -97,7 +97,7 @@ class RecurrentDateFormBloc extends Bloc<RecurrentDateFormEvent, RecurrentDateFo
     );
     // Validate interval (>0)
     final PositiveValueValidator intervalValidator = PositiveValueValidator.dirty(interval);
-    final bool isValid = Formz.validate([intervalValidator]);
+    Formz.validate([intervalValidator]);
     // Emit state update
     emit(state.copyWith(
         newRecurrentDateFormElements: currentElements,
@@ -113,7 +113,7 @@ class RecurrentDateFormBloc extends Bloc<RecurrentDateFormEvent, RecurrentDateFo
     );
     // Validate interval (>0)
     final PositiveValueValidator intervalValidator = PositiveValueValidator.dirty(interval);
-    final bool isValid = Formz.validate([intervalValidator]);
+    Formz.validate([intervalValidator]);
     // Emit state update
     emit(state.copyWith(
         newRecurrentDateFormElements: currentElements,
@@ -129,7 +129,7 @@ class RecurrentDateFormBloc extends Bloc<RecurrentDateFormEvent, RecurrentDateFo
     );
     // Validate day of month (1-31)
     final MonthDayValidator monthDayValidator = MonthDayValidator.dirty(day);
-    final bool isValid = Formz.validate([monthDayValidator]);
+    Formz.validate([monthDayValidator]);
     // Emit state update
     emit(state.copyWith(
         newRecurrentDateFormElements: currentElements,

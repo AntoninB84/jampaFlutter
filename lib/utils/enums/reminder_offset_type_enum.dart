@@ -9,11 +9,11 @@ enum ReminderOffsetType {
   String getLabel(BuildContext context) {
     switch (this) {
       case ReminderOffsetType.days:
-        return context.strings.alarm_offset_type_days;
+        return context.strings.reminder_offset_type_days;
       case ReminderOffsetType.hours:
-        return context.strings.alarm_offset_type_hours;
+        return context.strings.reminder_offset_type_hours;
       case ReminderOffsetType.minutes:
-        return context.strings.alarm_offset_type_minutes;
+        return context.strings.reminder_offset_type_minutes;
     }
   }
 }

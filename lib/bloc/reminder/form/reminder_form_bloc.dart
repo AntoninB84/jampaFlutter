@@ -8,7 +8,7 @@ import 'package:jampa_flutter/data/models/reminder.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../repository/reminder_repository.dart';
-import '../../../utils/enums/alarm_offset_type_enum.dart';
+import '../../../utils/enums/reminder_offset_type_enum.dart';
 import '../../../utils/forms/positive_number_validator.dart';
 import '../../../utils/service_locator.dart';
 import '../../notes/form/note_form_helpers.dart';
@@ -20,7 +20,7 @@ class ReminderFormBloc extends Bloc<ReminderFormEvent, ReminderFormState> {
   ReminderFormBloc() : super(ReminderFormState(
       newReminderFormElements: ReminderFormElements(
         scheduleId: 'scheduleId',
-        reminderId: Uuid().v4(),
+        reminderId: 'reminderId',
         selectedOffsetNumber: 10,
         selectedOffsetType: ReminderOffsetType.minutes,
         isNotification: true
@@ -51,11 +51,11 @@ class ReminderFormBloc extends Bloc<ReminderFormEvent, ReminderFormState> {
         return;
       } else {
         // Fetching reminder from repository
-        final reminder = await alarmRepository.getReminderById(event.reminderId!);
+        ReminderEntity? reminder = await alarmRepository.getReminderById(event.reminderId!);
         if (reminder == null) {
           // Try to retrieve from [SaveNoteBloc] if not found in repository
           SaveNoteBloc dataBloc = serviceLocator<SaveNoteBloc>();
-          final reminder = dataBloc.state.reminders.firstWhereOrNull(
+          reminder = dataBloc.state.reminders.firstWhereOrNull(
                   (reminder) => reminder.id == event.reminderId
           );
           if (reminder == null) {
@@ -66,7 +66,7 @@ class ReminderFormBloc extends Bloc<ReminderFormEvent, ReminderFormState> {
         }
         emit(state.copyWith(
             isEditing: true,
-            newReminderFormElements: reminder!.toReminderFormElements(),
+            newReminderFormElements: reminder.toReminderFormElements(),
             offsetNumberValidator: PositiveValueValidator.dirty(reminder.offsetValue)
         ));
       }

@@ -13,7 +13,7 @@ class ShowNoteState extends Equatable {
 
   final NoteEntity? note;
   final QuillController quillController;
-  final List<ScheduleWithNextOccurrence> schedulesAndAlarms;
+  final List<ScheduleWithNextOccurrence> schedulesAndReminders;
   final NoteStatus status;
   final NoteStatus schedulesLoadingStatus;
   final bool deletionSuccess;
@@ -22,7 +22,7 @@ class ShowNoteState extends Equatable {
   const ShowNoteState({
     this.note,
     required this.quillController,
-    this.schedulesAndAlarms = const [],
+    this.schedulesAndReminders = const [],
     this.status = NoteStatus.initial,
     this.schedulesLoadingStatus = NoteStatus.initial,
     this.deletionSuccess = false,
@@ -33,7 +33,7 @@ class ShowNoteState extends Equatable {
   List<Object?> get props => [
     note,
     quillController,
-    schedulesAndAlarms,
+    schedulesAndReminders,
     status,
     schedulesLoadingStatus,
     deletionSuccess,
@@ -43,7 +43,7 @@ class ShowNoteState extends Equatable {
   ShowNoteState copyWith({
     NoteEntity? note,
     QuillController? quillController,
-    List<ScheduleWithNextOccurrence> ?schedulesAndAlarms,
+    List<ScheduleWithNextOccurrence>? schedulesAndReminders,
     NoteStatus? status,
     NoteStatus? schedulesLoadingStatus,
     bool? deletionSuccess,
@@ -52,7 +52,7 @@ class ShowNoteState extends Equatable {
     return ShowNoteState(
       note: note ?? this.note,
       quillController: quillController ?? this.quillController,
-      schedulesAndAlarms: schedulesAndAlarms ?? this.schedulesAndAlarms,
+      schedulesAndReminders: schedulesAndReminders ?? this.schedulesAndReminders,
       status: status ?? this.status,
       schedulesLoadingStatus: schedulesLoadingStatus ?? this.schedulesLoadingStatus,
       deletionSuccess: deletionSuccess ?? this.deletionSuccess,

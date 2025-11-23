@@ -7,6 +7,7 @@ extension SavingStatusX on SavingStatus {
   bool get isSaving => this == SavingStatus.saving;
   bool get isAdded => this == SavingStatus.added;
   bool get isSaved => this == SavingStatus.saved;
+  bool get isSuccessful => this == SavingStatus.added || this == SavingStatus.saved;
   bool get isFailure => this == SavingStatus.failure;
 }
 

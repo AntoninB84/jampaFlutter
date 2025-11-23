@@ -12,8 +12,8 @@ import '../../widgets/app_bar_config_widget.dart';
 import '../../widgets/buttons/buttons.dart';
 import '../../widgets/headers.dart';
 import '../../widgets/snackbar.dart';
-import '../widgets/alarm_offset_text_field.dart';
-import '../widgets/alarm_offset_type_selector.dart';
+import '../widgets/reminder_offset_text_field.dart';
+import '../widgets/reminder_offset_type_selector.dart';
 
 class ReminderFormLayout extends StatelessWidget {
   const ReminderFormLayout({super.key});
@@ -24,9 +24,8 @@ class ReminderFormLayout extends StatelessWidget {
       listener: (context, state) {
         if (state.remindersSavingStatus.isFailure) {
           SnackBarX.showError(context, context.strings.generic_error_message);
-        } else if (state.remindersSavingStatus.isSaved) {
-          //TODO message
-          SnackBarX.showSuccess(context, context.strings.edit_recurrent_date_success_feedback);
+        } else if (state.remindersSavingStatus.isSuccessful) {
+          SnackBarX.showSuccess(context, context.strings.save_reminder_success_feedback);
           // Back to the previous screen after success
           context.pop();
         }
@@ -54,17 +53,17 @@ class ReminderFormLayout extends StatelessWidget {
                     children: [
                       Headers.basicHeader(
                         context: context,
-                        title: context.strings.alarm_title,
+                        title: context.strings.reminder_title,
                       ),
                       const SizedBox(height: kGap16),
-                      AlarmOffsetTypeSelector(
+                      ReminderOffsetTypeSelector(
                           selectedValue: state.newReminderFormElements.selectedOffsetType,
                           onChanged: (offsetType) => context.read<ReminderFormBloc>()
                               .add(SelectOffsetTypeEvent(offsetType: offsetType)
                           )
                       ),
                       const SizedBox(height: kGap16),
-                      AlarmOffsetTextField(
+                      ReminderOffsetTextField(
                         value: state.offsetNumberValidator.value.toString(),
                         validator: state.offsetNumberValidator,
                         onChanged: (value) => context.read<ReminderFormBloc>()
@@ -82,7 +81,7 @@ class ReminderFormLayout extends StatelessWidget {
                               )
                           ),
                           const SizedBox(width: kGap8),
-                          Text(context.strings.alarm_silent_checkbox_title,
+                          Text(context.strings.reminder_silent_checkbox_title,
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
                         ],

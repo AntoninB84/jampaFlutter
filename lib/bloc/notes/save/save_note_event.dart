@@ -61,12 +61,6 @@ class SaveSingleDateEvent extends SaveNoteEvent {
   @override
   List<Object?> get props => [];
 }
-
-/// Save the entire single date schedule list to the database
-class SaveSingleDateListEvent extends SaveNoteEvent {
-  @override
-  List<Object?> get props => [];
-}
 //endregion
 
 //region recurrent date schedule
@@ -91,12 +85,6 @@ class SaveRecurrentDateEvent extends SaveNoteEvent {
   @override
   List<Object?> get props => [];
 }
-
-/// Save the entire recurrent date schedule list to the database
-class SaveRecurrentDateListEvent extends SaveNoteEvent {
-  @override
-  List<Object?> get props => [];
-}
 //endregion
 
 //region reminders
@@ -118,12 +106,6 @@ class SaveReminderEvent extends SaveNoteEvent {
 
   const SaveReminderEvent(this.reminder);
 
-  @override
-  List<Object?> get props => [];
-}
-
-/// Save the entire reminder list to the database
-class SaveReminderListEvent extends SaveNoteEvent {
   @override
   List<Object?> get props => [];
 }

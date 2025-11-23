@@ -65,7 +65,7 @@ class _NoteSchedulesListState extends State<NoteSchedulesList> {
                     subtitle: nextOrLastOccurrenceWidget(item),
                   ),
                 ),
-                alarmSubListWidget(item),
+                reminderSubListWidget(item),
               ],
             ),
           );
@@ -74,19 +74,19 @@ class _NoteSchedulesListState extends State<NoteSchedulesList> {
     );
   }
 
-  Widget alarmSubListWidget(ScheduleWithNextOccurrence item) {
+  Widget reminderSubListWidget(ScheduleWithNextOccurrence item) {
     return ListView.builder(
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         itemCount: item.schedule.reminders?.length ?? 0,
         itemBuilder: (context, subIndex) {
-          final alarm = item.schedule.reminders?[subIndex];
-          if(alarm == null) return kEmptyWidget;
+          final reminder = item.schedule.reminders?[subIndex];
+          if(reminder == null) return kEmptyWidget;
           final String displayText = context.strings
-              .alarm_display_text(
-            alarm.offsetValue,
+              .reminder_display_text(
+            reminder.offsetValue,
             (subIndex + 1),
-            alarm.offsetType.getLabel(context),
+            reminder.offsetType.getLabel(context),
           );
 
           return Padding(

@@ -17,7 +17,7 @@ class SingleDateFormBloc extends Bloc<SingleDateFormEvent, SingleDateFormState> 
   SingleDateFormBloc() : super(SingleDateFormState(
     newSingleDateFormElements: SingleDateFormElements(
       noteId: 'noteId',
-      scheduleId: Uuid().v4(),
+      scheduleId: 'scheduleId',
       selectedStartDateTime: DateTime.now(),
       selectedEndDateTime: DateTime.now().add(const Duration(hours: 1)),
     ),
@@ -46,11 +46,11 @@ class SingleDateFormBloc extends Bloc<SingleDateFormEvent, SingleDateFormState> 
         return;
       } else {
         // Fetching schedule from repository
-        final schedule = await scheduleRepository.getScheduleById(event.scheduleId!);
+        ScheduleEntity? schedule = await scheduleRepository.getScheduleById(event.scheduleId!);
         if(schedule == null) {
           // Try to retrieve from [SaveNoteBloc] if not found in repository
           SaveNoteBloc dataBloc = serviceLocator<SaveNoteBloc>();
-          final schedule = dataBloc.state.singleDateSchedules.firstWhereOrNull(
+          schedule = dataBloc.state.singleDateSchedules.firstWhereOrNull(
                   (schedule) => schedule.id == event.scheduleId
           );
           if (schedule == null) {
@@ -61,7 +61,7 @@ class SingleDateFormBloc extends Bloc<SingleDateFormEvent, SingleDateFormState> 
         }
         emit(state.copyWith(
           isEditing: true,
-          newSingleDateFormElements: schedule!.toSingleDateFormElements()
+          newSingleDateFormElements: schedule.toSingleDateFormElements()
         ));
       }
     } catch (e) {

@@ -145,15 +145,13 @@ class AppLocalizationsFr extends AppLocalizations {
       'Le nom du type de note doit comporter entre 3 et 120 caractères';
 
   @override
-  String get create_note_type_success_feedback =>
-      'Type de note créé avec succès';
+  String get create_note_type_success_feedback => 'Type de note créé';
 
   @override
   String get edit_note_type_title => 'Modifier le type de note';
 
   @override
-  String get edit_note_type_success_feedback =>
-      'Type de note modifié avec succès';
+  String get edit_note_type_success_feedback => 'Type de note modifié';
 
   @override
   String get delete_note_type_confirmation_title => 'Supprimer le type de note';
@@ -168,8 +166,7 @@ class AppLocalizationsFr extends AppLocalizations {
       'Une erreur s\'est produite lors de la suppression du type de note';
 
   @override
-  String get delete_note_type_success_feedback =>
-      'Type de note supprimé avec succès';
+  String get delete_note_type_success_feedback => 'Type de note supprimé';
 
   @override
   String get create_note_title => 'Créer une note';
@@ -217,29 +214,30 @@ class AppLocalizationsFr extends AppLocalizations {
   String get create_note_add_recurrent_date_button => 'Ajouter une récurrence';
 
   @override
-  String get save_note_success_feedback => 'Note enregistrée avec succès';
+  String get save_note_success_feedback => 'Note enregistrée';
 
   @override
-  String get create_date_title => 'Ajouter une date';
+  String get create_single_schedule_title => 'Ajouter une date';
 
   @override
-  String get create_recurrence_title => 'Ajouter une récurrence';
+  String get create_recurrent_schedule_title => 'Ajouter une récurrence';
 
   @override
-  String get create_start_date_field_title => 'Début de l\'événement';
+  String get create_schedule_start_date_field_title => 'Début de l\'événement';
 
   @override
-  String get create_end_date_field_title => 'Fin de l\'événement (optionnelle)';
+  String get create_schedule_end_date_field_title =>
+      'Fin de l\'événement (optionnelle)';
 
   @override
-  String get create_date_timeline_error =>
+  String get create_schedule_timeline_error =>
       'La date de fin ne peut pas être antérieure à la date de début';
 
   @override
-  String get create_date_alarm_count => 'Rappels';
+  String get create_date_reminder_count => 'Rappels';
 
   @override
-  String get create_date_add_alarm_button => 'Ajouter un rappel';
+  String get create_date_add_reminder_button => 'Ajouter un rappel';
 
   @override
   String get delete_single_date_confirmation_title => 'Supprimer la date';
@@ -275,25 +273,16 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get delete_date_success_feedback => 'Date supprimée avec succès';
+  String get delete_date_success_feedback => 'Date supprimée';
 
   @override
-  String get delete_recurrence_success_feedback =>
-      'Récurrence supprimée avec succès';
+  String get delete_recurrence_success_feedback => 'Récurrence supprimée';
 
   @override
-  String get create_single_date_success_feedback => 'Date ajoutée avec succès';
+  String get save_single_date_success_feedback => 'Date enregistrée';
 
   @override
-  String get edit_single_date_success_feedback => 'Date modifiée avec succès';
-
-  @override
-  String get create_recurrent_date_success_feedback =>
-      'Récurrence ajoutée avec succès';
-
-  @override
-  String get edit_recurrent_date_success_feedback =>
-      'Récurrence modifiée avec succès';
+  String get save_recurrent_date_success_feedback => 'Récurrence enregistrée';
 
   @override
   String recurrent_date_day_interval_display_text(Object count) {
@@ -375,9 +364,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get edit_note_title => 'Modifier la note';
 
   @override
-  String get edit_note_success_feedback => 'Note modifiée avec succès';
-
-  @override
   String get delete_note_confirmation_title => 'Supprimer la note';
 
   @override
@@ -390,19 +376,19 @@ class AppLocalizationsFr extends AppLocalizations {
       'Une erreur s\'est produite lors de la suppression de la note';
 
   @override
-  String get delete_note_success_feedback => 'Note supprimée avec succès';
+  String get delete_note_success_feedback => 'Note supprimée';
 
   @override
-  String get alarm_title => 'Rappel';
+  String get reminder_title => 'Rappel';
 
   @override
-  String get alarm_set_button => 'Définir le rappel';
+  String get reminder_set_button => 'Définir le rappel';
 
   @override
-  String get alarm_no_alarms => 'Aucun rappel défini';
+  String get reminder_empty_state => 'Aucun rappel défini';
 
   @override
-  String alarm_display_text(num count, Object index, Object unit) {
+  String reminder_display_text(num count, Object index, Object unit) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -410,23 +396,20 @@ class AppLocalizationsFr extends AppLocalizations {
       one: '1 $unit avant',
       zero: 'Aucun délai',
     );
-    return 'Alarme $index: $_temp0';
+    return 'Rappel $index: $_temp0';
   }
 
   @override
-  String get alarm_delete_button => 'Supprimer le rappel';
+  String get reminder_delete_button => 'Supprimer le rappel';
 
   @override
-  String get alarm_add_success_feedback => 'Rappel ajouté avec succès';
+  String get save_reminder_success_feedback => 'Rappel enregistré';
 
   @override
-  String get alarm_edit_success_feedback => 'Rappel modifié avec succès';
+  String get reminder_delete_confirmation_title => 'Supprimer le rappel';
 
   @override
-  String get alarm_delete_confirmation_title => 'Supprimer le rappel';
-
-  @override
-  String alarm_delete_confirmation_message(Object index, String isFromEdit) {
+  String reminder_delete_confirmation_message(Object index, String isFromEdit) {
     String _temp0 = intl.Intl.selectLogic(isFromEdit, {
       'true':
           'Cette action est irréversible et indépendante de la modification de la note.',
@@ -436,38 +419,38 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get alarm_delete_success_feedback => 'Rappel supprimé avec succès';
+  String get reminder_delete_success_feedback => 'Rappel supprimé';
 
   @override
-  String get alarm_offset_type_days => 'Jour';
+  String get reminder_offset_type_days => 'Jour';
 
   @override
-  String get alarm_offset_type_hours => 'Heure';
+  String get reminder_offset_type_hours => 'Heure';
 
   @override
-  String get alarm_offset_type_minutes => 'Minute';
+  String get reminder_offset_type_minutes => 'Minute';
 
   @override
-  String get alarm_offset_type_field_title => 'Type de décalage';
+  String get reminder_offset_type_field_title => 'Type de décalage';
 
   @override
-  String get alarm_offset_value_field_title => 'Valeur du décalage';
+  String get reminder_offset_value_field_title => 'Valeur du décalage';
 
   @override
-  String get alarm_offset_value_field_hint => 'Entrez la valeur du décalage';
+  String get reminder_offset_value_field_hint => 'Entrez la valeur du décalage';
 
   @override
-  String get alarm_offset_value_invalid =>
+  String get reminder_offset_value_invalid =>
       'La valeur du décalage doit être positive et strictement numérique';
 
   @override
-  String get alarm_silent_checkbox_title => 'Rappel silencieux';
+  String get reminder_silent_checkbox_title => 'Rappel silencieux';
 
   @override
   String get show_note => '';
 
   @override
-  String get show_note_schedules_and_alarms => 'Dates et rappels';
+  String get show_note_schedules_and_reminders => 'Dates et rappels';
 
   @override
   String show_note_next_occurrence(Object date) {

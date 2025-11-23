@@ -76,7 +76,7 @@ class ShowNoteBloc extends Bloc<ShowNoteEvent, ShowNoteState> {
           scheduleRepository.watchAllSchedulesAndAlarmsByNoteId(event.noteId!),
           onData: (schedulesWithNextOccurrences){
             emit(state.copyWith(
-              schedulesAndAlarms: schedulesWithNextOccurrences,
+              schedulesAndReminders: schedulesWithNextOccurrences,
               schedulesLoadingStatus: NoteStatus.success,
             ));
           },

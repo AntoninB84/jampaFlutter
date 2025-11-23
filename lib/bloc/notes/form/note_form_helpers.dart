@@ -1,7 +1,7 @@
 import 'package:jampa_flutter/utils/enums/recurrence_type_enum.dart';
 import 'package:jampa_flutter/utils/enums/weekdays_enum.dart';
 
-import '../../../utils/enums/alarm_offset_type_enum.dart';
+import '../../../utils/enums/reminder_offset_type_enum.dart';
 
 /// Class that holds all form elements for reminder
 class ReminderFormElements {

@@ -349,7 +349,7 @@ abstract class AppLocalizations {
   /// No description provided for @create_note_type_success_feedback.
   ///
   /// In fr, this message translates to:
-  /// **'Type de note créé avec succès'**
+  /// **'Type de note créé'**
   String get create_note_type_success_feedback;
 
   /// No description provided for @edit_note_type_title.
@@ -361,7 +361,7 @@ abstract class AppLocalizations {
   /// No description provided for @edit_note_type_success_feedback.
   ///
   /// In fr, this message translates to:
-  /// **'Type de note modifié avec succès'**
+  /// **'Type de note modifié'**
   String get edit_note_type_success_feedback;
 
   /// No description provided for @delete_note_type_confirmation_title.
@@ -385,7 +385,7 @@ abstract class AppLocalizations {
   /// No description provided for @delete_note_type_success_feedback.
   ///
   /// In fr, this message translates to:
-  /// **'Type de note supprimé avec succès'**
+  /// **'Type de note supprimé'**
   String get delete_note_type_success_feedback;
 
   /// No description provided for @create_note_title.
@@ -469,50 +469,50 @@ abstract class AppLocalizations {
   /// No description provided for @save_note_success_feedback.
   ///
   /// In fr, this message translates to:
-  /// **'Note enregistrée avec succès'**
+  /// **'Note enregistrée'**
   String get save_note_success_feedback;
 
-  /// No description provided for @create_date_title.
+  /// No description provided for @create_single_schedule_title.
   ///
   /// In fr, this message translates to:
   /// **'Ajouter une date'**
-  String get create_date_title;
+  String get create_single_schedule_title;
 
-  /// No description provided for @create_recurrence_title.
+  /// No description provided for @create_recurrent_schedule_title.
   ///
   /// In fr, this message translates to:
   /// **'Ajouter une récurrence'**
-  String get create_recurrence_title;
+  String get create_recurrent_schedule_title;
 
-  /// No description provided for @create_start_date_field_title.
+  /// No description provided for @create_schedule_start_date_field_title.
   ///
   /// In fr, this message translates to:
   /// **'Début de l\'événement'**
-  String get create_start_date_field_title;
+  String get create_schedule_start_date_field_title;
 
-  /// No description provided for @create_end_date_field_title.
+  /// No description provided for @create_schedule_end_date_field_title.
   ///
   /// In fr, this message translates to:
   /// **'Fin de l\'événement (optionnelle)'**
-  String get create_end_date_field_title;
+  String get create_schedule_end_date_field_title;
 
-  /// No description provided for @create_date_timeline_error.
+  /// No description provided for @create_schedule_timeline_error.
   ///
   /// In fr, this message translates to:
   /// **'La date de fin ne peut pas être antérieure à la date de début'**
-  String get create_date_timeline_error;
+  String get create_schedule_timeline_error;
 
-  /// No description provided for @create_date_alarm_count.
+  /// No description provided for @create_date_reminder_count.
   ///
   /// In fr, this message translates to:
   /// **'Rappels'**
-  String get create_date_alarm_count;
+  String get create_date_reminder_count;
 
-  /// No description provided for @create_date_add_alarm_button.
+  /// No description provided for @create_date_add_reminder_button.
   ///
   /// In fr, this message translates to:
   /// **'Ajouter un rappel'**
-  String get create_date_add_alarm_button;
+  String get create_date_add_reminder_button;
 
   /// No description provided for @delete_single_date_confirmation_title.
   ///
@@ -547,38 +547,26 @@ abstract class AppLocalizations {
   /// No description provided for @delete_date_success_feedback.
   ///
   /// In fr, this message translates to:
-  /// **'Date supprimée avec succès'**
+  /// **'Date supprimée'**
   String get delete_date_success_feedback;
 
   /// No description provided for @delete_recurrence_success_feedback.
   ///
   /// In fr, this message translates to:
-  /// **'Récurrence supprimée avec succès'**
+  /// **'Récurrence supprimée'**
   String get delete_recurrence_success_feedback;
 
-  /// No description provided for @create_single_date_success_feedback.
+  /// No description provided for @save_single_date_success_feedback.
   ///
   /// In fr, this message translates to:
-  /// **'Date ajoutée avec succès'**
-  String get create_single_date_success_feedback;
+  /// **'Date enregistrée'**
+  String get save_single_date_success_feedback;
 
-  /// No description provided for @edit_single_date_success_feedback.
+  /// No description provided for @save_recurrent_date_success_feedback.
   ///
   /// In fr, this message translates to:
-  /// **'Date modifiée avec succès'**
-  String get edit_single_date_success_feedback;
-
-  /// No description provided for @create_recurrent_date_success_feedback.
-  ///
-  /// In fr, this message translates to:
-  /// **'Récurrence ajoutée avec succès'**
-  String get create_recurrent_date_success_feedback;
-
-  /// No description provided for @edit_recurrent_date_success_feedback.
-  ///
-  /// In fr, this message translates to:
-  /// **'Récurrence modifiée avec succès'**
-  String get edit_recurrent_date_success_feedback;
+  /// **'Récurrence enregistrée'**
+  String get save_recurrent_date_success_feedback;
 
   /// No description provided for @recurrent_date_day_interval_display_text.
   ///
@@ -706,12 +694,6 @@ abstract class AppLocalizations {
   /// **'Modifier la note'**
   String get edit_note_title;
 
-  /// No description provided for @edit_note_success_feedback.
-  ///
-  /// In fr, this message translates to:
-  /// **'Note modifiée avec succès'**
-  String get edit_note_success_feedback;
-
   /// No description provided for @delete_note_confirmation_title.
   ///
   /// In fr, this message translates to:
@@ -733,116 +715,110 @@ abstract class AppLocalizations {
   /// No description provided for @delete_note_success_feedback.
   ///
   /// In fr, this message translates to:
-  /// **'Note supprimée avec succès'**
+  /// **'Note supprimée'**
   String get delete_note_success_feedback;
 
-  /// No description provided for @alarm_title.
+  /// No description provided for @reminder_title.
   ///
   /// In fr, this message translates to:
   /// **'Rappel'**
-  String get alarm_title;
+  String get reminder_title;
 
-  /// No description provided for @alarm_set_button.
+  /// No description provided for @reminder_set_button.
   ///
   /// In fr, this message translates to:
   /// **'Définir le rappel'**
-  String get alarm_set_button;
+  String get reminder_set_button;
 
-  /// No description provided for @alarm_no_alarms.
+  /// No description provided for @reminder_empty_state.
   ///
   /// In fr, this message translates to:
   /// **'Aucun rappel défini'**
-  String get alarm_no_alarms;
+  String get reminder_empty_state;
 
-  /// No description provided for @alarm_display_text.
+  /// No description provided for @reminder_display_text.
   ///
   /// In fr, this message translates to:
-  /// **'Alarme {index}: {count, plural, =0{Aucun délai} one{1 {unit} avant} other{{count} {unit}s avant}}'**
-  String alarm_display_text(num count, Object index, Object unit);
+  /// **'Rappel {index}: {count, plural, =0{Aucun délai} one{1 {unit} avant} other{{count} {unit}s avant}}'**
+  String reminder_display_text(num count, Object index, Object unit);
 
-  /// No description provided for @alarm_delete_button.
-  ///
-  /// In fr, this message translates to:
-  /// **'Supprimer le rappel'**
-  String get alarm_delete_button;
-
-  /// No description provided for @alarm_add_success_feedback.
-  ///
-  /// In fr, this message translates to:
-  /// **'Rappel ajouté avec succès'**
-  String get alarm_add_success_feedback;
-
-  /// No description provided for @alarm_edit_success_feedback.
-  ///
-  /// In fr, this message translates to:
-  /// **'Rappel modifié avec succès'**
-  String get alarm_edit_success_feedback;
-
-  /// No description provided for @alarm_delete_confirmation_title.
+  /// No description provided for @reminder_delete_button.
   ///
   /// In fr, this message translates to:
   /// **'Supprimer le rappel'**
-  String get alarm_delete_confirmation_title;
+  String get reminder_delete_button;
 
-  /// No description provided for @alarm_delete_confirmation_message.
+  /// No description provided for @save_reminder_success_feedback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rappel enregistré'**
+  String get save_reminder_success_feedback;
+
+  /// No description provided for @reminder_delete_confirmation_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer le rappel'**
+  String get reminder_delete_confirmation_title;
+
+  /// No description provided for @reminder_delete_confirmation_message.
   ///
   /// In fr, this message translates to:
   /// **'Êtes-vous sûr de vouloir supprimer le rappel {index}? {isFromEdit, select, true{Cette action est irréversible et indépendante de la modification de la note.} other{}}'**
-  String alarm_delete_confirmation_message(Object index, String isFromEdit);
+  String reminder_delete_confirmation_message(Object index, String isFromEdit);
 
-  /// No description provided for @alarm_delete_success_feedback.
+  /// No description provided for @reminder_delete_success_feedback.
   ///
   /// In fr, this message translates to:
-  /// **'Rappel supprimé avec succès'**
-  String get alarm_delete_success_feedback;
+  /// **'Rappel supprimé'**
+  String get reminder_delete_success_feedback;
 
-  /// No description provided for @alarm_offset_type_days.
+  /// No description provided for @reminder_offset_type_days.
   ///
   /// In fr, this message translates to:
   /// **'Jour'**
-  String get alarm_offset_type_days;
+  String get reminder_offset_type_days;
 
-  /// No description provided for @alarm_offset_type_hours.
+  /// No description provided for @reminder_offset_type_hours.
   ///
   /// In fr, this message translates to:
   /// **'Heure'**
-  String get alarm_offset_type_hours;
+  String get reminder_offset_type_hours;
 
-  /// No description provided for @alarm_offset_type_minutes.
+  /// No description provided for @reminder_offset_type_minutes.
   ///
   /// In fr, this message translates to:
   /// **'Minute'**
-  String get alarm_offset_type_minutes;
+  String get reminder_offset_type_minutes;
 
-  /// No description provided for @alarm_offset_type_field_title.
+  /// No description provided for @reminder_offset_type_field_title.
   ///
   /// In fr, this message translates to:
   /// **'Type de décalage'**
-  String get alarm_offset_type_field_title;
+  String get reminder_offset_type_field_title;
 
-  /// No description provided for @alarm_offset_value_field_title.
+  /// No description provided for @reminder_offset_value_field_title.
   ///
   /// In fr, this message translates to:
   /// **'Valeur du décalage'**
-  String get alarm_offset_value_field_title;
+  String get reminder_offset_value_field_title;
 
-  /// No description provided for @alarm_offset_value_field_hint.
+  /// No description provided for @reminder_offset_value_field_hint.
   ///
   /// In fr, this message translates to:
   /// **'Entrez la valeur du décalage'**
-  String get alarm_offset_value_field_hint;
+  String get reminder_offset_value_field_hint;
 
-  /// No description provided for @alarm_offset_value_invalid.
+  /// No description provided for @reminder_offset_value_invalid.
   ///
   /// In fr, this message translates to:
   /// **'La valeur du décalage doit être positive et strictement numérique'**
-  String get alarm_offset_value_invalid;
+  String get reminder_offset_value_invalid;
 
-  /// No description provided for @alarm_silent_checkbox_title.
+  /// No description provided for @reminder_silent_checkbox_title.
   ///
   /// In fr, this message translates to:
   /// **'Rappel silencieux'**
-  String get alarm_silent_checkbox_title;
+  String get reminder_silent_checkbox_title;
 
   /// No description provided for @show_note.
   ///
@@ -850,11 +826,11 @@ abstract class AppLocalizations {
   /// **''**
   String get show_note;
 
-  /// No description provided for @show_note_schedules_and_alarms.
+  /// No description provided for @show_note_schedules_and_reminders.
   ///
   /// In fr, this message translates to:
   /// **'Dates et rappels'**
-  String get show_note_schedules_and_alarms;
+  String get show_note_schedules_and_reminders;
 
   /// No description provided for @show_note_next_occurrence.
   ///
