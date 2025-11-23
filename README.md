@@ -29,7 +29,7 @@ Personal note:
  - endDateTime: DateTime?
  - recurrenceEndDate: DateTime?
  - recurrenceInterval: int?
- - recurrenceType: [RecurrenceType]?
+ - recurrenceType: [RecurrenceType](lib/utils/enums/recurrence_type_enum.dart)?
  - recurrenceDay: int?
 
 [RecurrenceType](lib/utils/enums/recurrence_type_enum.dart) can be:
