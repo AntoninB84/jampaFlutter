@@ -4,6 +4,7 @@ import 'package:jampa_flutter/bloc/notes/form/note_form_helpers.dart';
 
 import '../../utils/enums/reminder_offset_type_enum.dart';
 import '../database.dart';
+import 'schedule.dart';
 
 /// Definition of the Reminder table in the database
 @UseRowClass(ReminderEntity)
