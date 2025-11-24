@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../utils/constants/styles/sizes.dart';
 import '../home/widgets/settings_menu.dart';
 import 'buttons/buttons.dart';
 
@@ -54,7 +55,13 @@ class _JampaScaffoldedAppBarWidgetState extends State<JampaScaffoldedAppBarWidge
           SettingsMenu().settingsMenu(context),
         ],
       ),
-      body: widget.body,
+      body: SafeArea(
+        minimum: EdgeInsets.symmetric(
+            horizontal: kGap16,
+            vertical: kGap4
+        ),
+        child: widget.body ?? kEmptyWidget
+      ),
     );
   }
 }

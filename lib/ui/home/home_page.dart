@@ -60,15 +60,7 @@ class _HomePageState extends State<HomePage> {
               ..add(CheckPermissions()),
           ),
         ],
-        child: Scaffold(
-          body: SafeArea(
-            minimum: EdgeInsets.symmetric(
-              horizontal: kGap16,
-              vertical: kGap4
-            ),
-            child: widget.navigationShell,
-          ),
-        ),
+        child: widget.navigationShell
       ),
     );
   }
