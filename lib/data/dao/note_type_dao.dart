@@ -5,8 +5,10 @@ import 'package:jampa_flutter/utils/service_locator.dart';
 import '../database.dart';
 import '../models/note_type.dart';
 
+/// Data Access Object (DAO) for [NoteTypeEntity]
 class NoteTypeDao {
 
+  /// Saves a single [NoteTypeEntity] to the database.
   static Future<void> saveSingleNoteType(NoteTypeEntity noteType) async {
     AppDatabase db = serviceLocator<AppDatabase>();
     await db
@@ -14,6 +16,7 @@ class NoteTypeDao {
         .insertOnConflictUpdate(noteType.toCompanion());
   }
 
+  /// Saves a list of [NoteTypeEntity] to the database in a batch operation.
   static Future<void> saveListOfNoteTypes(List<NoteTypeEntity> noteTypes) async {
     AppDatabase db = serviceLocator<AppDatabase>();
     await db.batch((batch) {
@@ -24,15 +27,19 @@ class NoteTypeDao {
     });
   }
 
+  /// Retrieves all [NoteTypeEntity] from the database, ordered by name.
   static Future<List<NoteTypeEntity>> getAllNoteTypes() async {
     AppDatabase db = serviceLocator<AppDatabase>();
     return await (db.select(db.noteTypeTable)..orderBy([(t) => OrderingTerm(expression: t.name)])).get();
   }
 
+  /// Watches all [NoteTypeEntity] from the database, ordered by name.
   static Stream<List<NoteTypeEntity>> watchAllNoteTypes() {
     AppDatabase db = serviceLocator<AppDatabase>();
     return (db.select(db.noteTypeTable)..orderBy([(t) => OrderingTerm(expression: t.name)])).watch();
   }
+
+  /// Watches all [NoteTypeEntity] along with the count of associated notes.
   static Stream<List<NoteTypeWithCount>> watchAllNoteTypesWithCount() {
     AppDatabase db = serviceLocator<AppDatabase>();
     final noteTypeAlias = db.alias(db.noteTypeTable, 'nt');
@@ -58,15 +65,19 @@ class NoteTypeDao {
     });
   }
 
+  /// Retrieves a single [NoteTypeEntity] by its ID.
   static Future<NoteTypeEntity?> getNoteTypeById(String id) async {
     AppDatabase db = serviceLocator<AppDatabase>();
     return await (db.select(db.noteTypeTable)..where((noteType) => noteType.id.equals(id))).getSingleOrNull();
   }
+
+  /// Retrieves a single [NoteTypeEntity] by its name.
   static Future<NoteTypeEntity?> getNoteTypeByName(String name) async {
     AppDatabase db = serviceLocator<AppDatabase>();
     return await (db.select(db.noteTypeTable)..where((noteType) => noteType.name.equals(name))).getSingleOrNull();
   }
 
+  /// Deletes a [NoteTypeEntity] by its ID.
   static Future<void> deleteNoteTypeById(String id) async {
     AppDatabase db = serviceLocator<AppDatabase>();
     await (db.delete(db.noteTypeTable)..where((noteType) => noteType.id.equals(id))).go();

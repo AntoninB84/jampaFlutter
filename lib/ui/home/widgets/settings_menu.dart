@@ -2,16 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../bloc/home/settings_menu/settings_menu_bloc.dart';
+import '../../../bloc/home/settings_menu/settings_menu_cubit.dart';
 import '../../../utils/constants/styles/sizes.dart';
 import '../../../utils/service_locator.dart';
 
+/// A settings menu widget that provides navigation to different settings pages.
 class SettingsMenu {
+
+  /// Builds the settings menu widget.
   Widget settingsMenu(BuildContext context) {
+    // Using BlocProvider.value to provide the existing instance of SettingsMenuCubit
     return BlocProvider<SettingsMenuCubit>.value(
       value: serviceLocator<SettingsMenuCubit>(),
       child: BlocBuilder<SettingsMenuCubit, SettingsMenuState>(
           builder: (context, state) {
+            // Using a MenuAnchor to create a dropdown menu
+            // placed relative to the icon button
             return MenuAnchor(
                 style: MenuStyle(
                   padding: WidgetStateProperty.all<EdgeInsets>(
@@ -20,6 +26,7 @@ class SettingsMenu {
                 builder: (context, controller, child) {
                   return IconButton(
                     onPressed: () {
+                      // Toggle the menu open/close state
                       if (controller.isOpen) {
                         controller.close();
                       } else {

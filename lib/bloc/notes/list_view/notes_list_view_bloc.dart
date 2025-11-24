@@ -8,6 +8,9 @@ import 'package:jampa_flutter/utils/service_locator.dart';
 part 'notes_list_view_event.dart';
 part 'notes_list_view_state.dart';
 
+/// Bloc for managing the state of the notes list.
+/// Handles events related to watching and updating the notes list.
+/// Based on the database view 'notes_list_view'.
 class NotesListViewBloc extends Bloc<NotesListViewEvent, NotesListViewState> {
   NotesListViewBloc() : super(const NotesListViewState()) {
     on<WatchNotes>(_watchNotesList);
@@ -15,6 +18,7 @@ class NotesListViewBloc extends Bloc<NotesListViewEvent, NotesListViewState> {
   final NotesListViewRepository notesListViewRepository =
       serviceLocator<NotesListViewRepository>();
 
+  /// Watches the notes list and updates the state accordingly.
   void _watchNotesList(WatchNotes event, Emitter<NotesListViewState> emit) async {
     emit(state.copyWith(listStatus: NotesListStatus.loading));
     await emit.onEach(

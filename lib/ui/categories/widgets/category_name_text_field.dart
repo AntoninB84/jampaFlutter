@@ -6,6 +6,7 @@ import 'package:jampa_flutter/ui/widgets/error_text.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:jampa_flutter/utils/forms/name_validator.dart';
 
+/// A text field widget for entering and validating a category name.
 class CategoryNameTextField extends StatefulWidget {
   const CategoryNameTextField({super.key});
 

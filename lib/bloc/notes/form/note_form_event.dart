@@ -4,6 +4,7 @@ sealed class NoteFormEvent extends Equatable {
   const NoteFormEvent();
 }
 
+/// Event to initialize the note form, optionally in editing mode.
 class InitializeNoteFormEvent extends NoteFormEvent {
   final String noteId;
   final bool isEditing;
@@ -17,6 +18,7 @@ class InitializeNoteFormEvent extends NoteFormEvent {
   List<Object?> get props => [noteId];
 }
 
+/// Event triggered when the note title changes.
 class TitleChangedEvent extends NoteFormEvent {
   final String title;
 
@@ -26,6 +28,7 @@ class TitleChangedEvent extends NoteFormEvent {
   List<Object?> get props => [title];
 }
 
+/// Event triggered when the selected note type changes.
 class SelectedNoteTypeChangedEvent extends NoteFormEvent {
   final NoteTypeEntity? noteType;
 
@@ -35,6 +38,7 @@ class SelectedNoteTypeChangedEvent extends NoteFormEvent {
   List<Object?> get props => [noteType];
 }
 
+/// Event triggered when the selected categories change.
 class SelectedCategoriesChangedEvent extends NoteFormEvent {
   final List<CategoryEntity> categories;
 
@@ -44,6 +48,7 @@ class SelectedCategoriesChangedEvent extends NoteFormEvent {
   List<Object?> get props => [categories];
 }
 
+/// Event triggered when the important checkbox state changes.
 class ImportantCheckedChangedEvent extends NoteFormEvent {
   final bool isChecked;
 
@@ -53,6 +58,7 @@ class ImportantCheckedChangedEvent extends NoteFormEvent {
   List<Object?> get props => [isChecked];
 }
 
+/// Event to submit the form and save the note.
 class SaveNoteFormEvent extends NoteFormEvent {
   const SaveNoteFormEvent();
 

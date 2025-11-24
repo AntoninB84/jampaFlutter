@@ -9,6 +9,7 @@ import 'package:jampa_flutter/utils/enums/weekdays_enum.dart';
 import '../database.dart';
 import 'note.dart';
 
+/// Definition of the Schedule table in the database
 @UseRowClass(ScheduleEntity)
 class ScheduleTable extends Table {
   TextColumn get id => text()();
@@ -27,17 +28,47 @@ class ScheduleTable extends Table {
 }
 
 class ScheduleEntity {
+
+  /// Unique identifier for the schedule (UUID)
   final String id;
+
+  /// Identifier of the parent note
   final String noteId;
+
+  /// The parent note entity. Can be null if not loaded
   NoteEntity? note;
+
+  /// Start date and time of the schedule
   final DateTime? startDateTime;
+
+  /// Optional end date and time of the schedule
   final DateTime? endDateTime;
+
+  /// Timestamp when the schedule was created
   final DateTime createdAt;
+
+  /// Timestamp when the schedule was last updated
   final DateTime updatedAt;
+
+  /// Type of recurrence for the schedule.
+  /// Is null if the schedule is a single date schedule
   final RecurrenceType? recurrenceType;
-  final int? recurrenceInterval; // e.g., every 2 days/years
-  final int? recurrenceDay; // e.g., day of the month / days of the week
-  final DateTime? recurrenceEndDate; // Optional end date for the recurrence
+
+  /// Interval value for day-based or year-based recurrences.
+  /// e.g., every 2 days/years
+  final int? recurrenceInterval;
+
+  /// Day value for day-based weekly or monthly recurrences
+  ///
+  /// e.g., for weekly: days of the week as integer (e.g., 135 for Mon, Wed, Fri)
+  ///
+  /// e.g., for monthly: day of the month (e.g., 15 for the 15th of each month)
+  final int? recurrenceDay;
+
+  /// Optional end date for the recurrence
+  final DateTime? recurrenceEndDate;
+
+  /// List of reminders associated with the schedule
   List<ReminderEntity>? reminders;
 
   ScheduleEntity({
@@ -55,6 +86,7 @@ class ScheduleEntity {
     this.reminders
   });
 
+  /// Converts the [ScheduleEntity] to a [ScheduleTableCompanion] for database operations
   ScheduleTableCompanion toCompanion() {
     return ScheduleTableCompanion(
       id: Value(id),
@@ -135,6 +167,7 @@ class ScheduleEntity {
   ;
 
 
+  /// Converts the [ScheduleEntity] to [SingleDateFormElements] for form handling
   SingleDateFormElements toSingleDateFormElements() {
     return SingleDateFormElements(
       noteId: noteId,
@@ -145,6 +178,7 @@ class ScheduleEntity {
     );
   }
 
+  /// Creates a [ScheduleEntity] from [SingleDateFormElements] for data saving
   static ScheduleEntity fromSingleDateFormElements(SingleDateFormElements elements) {
     return ScheduleEntity(
       id: elements.scheduleId,
@@ -156,6 +190,7 @@ class ScheduleEntity {
     );
   }
 
+  /// Converts the [ScheduleEntity] to [RecurrenceFormElements] for form handling
   RecurrenceFormElements toRecurrenceFormElements() {
 
     int? recurrenceDaysInterval;
@@ -206,6 +241,7 @@ class ScheduleEntity {
     );
   }
 
+  /// Creates a [ScheduleEntity] from [RecurrenceFormElements] for data saving
   static ScheduleEntity fromRecurrenceFormElements(RecurrenceFormElements elements) {
 
     RecurrenceType? recurrenceType;

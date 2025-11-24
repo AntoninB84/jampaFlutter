@@ -8,6 +8,7 @@ import 'package:jampa_flutter/utils/service_locator.dart';
 part 'note_types_event.dart';
 part 'note_types_state.dart';
 
+/// Bloc to manage Note Types list state and events
 class NoteTypesBloc extends Bloc<NoteTypesEvent, NoteTypesState> {
   NoteTypesBloc() : super(const NoteTypesState()) {
     on<WatchNoteTypes>(_watchNoteTypes);
@@ -17,6 +18,7 @@ class NoteTypesBloc extends Bloc<NoteTypesEvent, NoteTypesState> {
   final NoteTypesRepository noteTypesRepository =
         serviceLocator<NoteTypesRepository>();
 
+  /// Watches all note types and updates the state accordingly
   void _watchNoteTypes(WatchNoteTypes event, Emitter<NoteTypesState> emit) async {
     await emit.onEach(
         noteTypesRepository.watchAllNotesTypes(),
@@ -35,6 +37,7 @@ class NoteTypesBloc extends Bloc<NoteTypesEvent, NoteTypesState> {
     );
   }
 
+  /// Watches all note types with their associated note counts and updates the state accordingly
   void _watchNoteTypesWithCount(WatchNoteTypesWithCount event, Emitter<NoteTypesState> emit) async {
     await emit.onEach(
         noteTypesRepository.watchAllNotesTypesWithCount(),
@@ -53,6 +56,8 @@ class NoteTypesBloc extends Bloc<NoteTypesEvent, NoteTypesState> {
     );
   }
 
+  /// Deletes a note type by ID
+  /// Emits a deletion error state if the operation fails
   void _deleteNoteType(DeleteNoteType event, Emitter<NoteTypesState> emit) async {
     emit(state.copyWith(deletionError: false));
     try {

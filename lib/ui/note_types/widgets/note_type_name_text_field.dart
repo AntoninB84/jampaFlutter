@@ -6,6 +6,7 @@ import 'package:jampa_flutter/ui/widgets/error_text.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:jampa_flutter/utils/forms/name_validator.dart';
 
+/// A text field for entering the name of a note type.
 class NoteTypeNameTextField extends StatefulWidget {
   const NoteTypeNameTextField({super.key});
 

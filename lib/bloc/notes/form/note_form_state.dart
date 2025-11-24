@@ -85,10 +85,12 @@ class NoteFormState extends Equatable {
     );
   }
 
+  /// Checks if the form is valid based on the title field.
   bool get isValidForm {
     return title.isValid && !title.isPure;
   }
 
+  /// Determines if the form can be submitted based on its validity and loading status.
   bool get canSubmitForm {
     return isValidForm && !status.isLoading;
   }

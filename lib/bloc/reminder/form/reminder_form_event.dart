@@ -4,13 +4,18 @@ sealed class ReminderFormEvent extends Equatable {
   const ReminderFormEvent();
 }
 
+/// Event to initialize the reminder form, optionally with an existing reminder ID.
+/// This event is used to set up the form for either creating a new reminder
+/// or editing an existing one.
 final class InitializeReminderFormEvent extends ReminderFormEvent {
   const InitializeReminderFormEvent({
     required this.scheduleId,
     this.reminderId
   });
 
+  /// The ID of the parent schedule.
   final String scheduleId;
+  /// The ID of the reminder to edit, if any.
   final String? reminderId;
 
   @override
@@ -20,6 +25,7 @@ final class InitializeReminderFormEvent extends ReminderFormEvent {
   ];
 }
 
+/// Event to select the offset number for the reminder.
 final class SelectOffsetNumberEvent extends ReminderFormEvent {
   const SelectOffsetNumberEvent({required this.offsetNumber});
 
@@ -29,6 +35,7 @@ final class SelectOffsetNumberEvent extends ReminderFormEvent {
   List<Object?> get props => [offsetNumber];
 }
 
+/// Event to select the offset type for the reminder.
 final class SelectOffsetTypeEvent extends ReminderFormEvent {
   const SelectOffsetTypeEvent({this.offsetType});
 
@@ -38,6 +45,7 @@ final class SelectOffsetTypeEvent extends ReminderFormEvent {
   List<Object?> get props => [offsetType];
 }
 
+/// Event to toggle whether the reminder is a notification or an alarm
 final class ToggleIsNotificationEvent extends ReminderFormEvent {
   const ToggleIsNotificationEvent({required this.isNotification});
 
@@ -47,6 +55,7 @@ final class ToggleIsNotificationEvent extends ReminderFormEvent {
   List<Object?> get props => [isNotification];
 }
 
+/// Event to submit the reminder form to the [SaveNoteBloc] for saving.
 final class OnSubmitReminderFormEvent extends ReminderFormEvent {
   @override
   List<Object?> get props => [];

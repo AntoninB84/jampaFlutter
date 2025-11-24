@@ -21,7 +21,10 @@ class NotesListViewState extends Equatable {
     List<NoteListViewData>? notes,
   }) : notes = notes ?? const [];
 
+  /// The current status of the notes list view.
   final NotesListStatus listStatus;
+
+  /// The list of notes to be displayed in the list view.
   final List<NoteListViewData> notes;
 
 

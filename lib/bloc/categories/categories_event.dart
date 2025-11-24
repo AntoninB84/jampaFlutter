@@ -5,9 +5,13 @@ class CategoriesEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+/// Event to watch all categories
 final class WatchCategories extends CategoriesEvent {}
+
+/// Event to watch categories along with their usage count
 final class WatchCategoriesWithCount extends CategoriesEvent {}
 
+/// Event to delete a specific category by its ID
 final class DeleteCategory extends CategoriesEvent {
   final String selectedCategoryId;
 

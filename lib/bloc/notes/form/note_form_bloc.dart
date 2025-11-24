@@ -19,6 +19,7 @@ import '../save/save_note_bloc.dart';
 part 'note_form_event.dart';
 part 'note_form_state.dart';
 
+/// Bloc to manage the state of the note form, including initialization, field changes, and saving.
 class NoteFormBloc extends Bloc<NoteFormEvent, NoteFormState> {
   NoteFormBloc() : super(NoteFormState(
     noteId: const Uuid().v4(),
@@ -36,14 +37,19 @@ class NoteFormBloc extends Bloc<NoteFormEvent, NoteFormState> {
 
   final NotesRepository notesRepository = serviceLocator<NotesRepository>();
 
+  /// Initializes the note form with existing note data if a note ID is provided.
   void _initializeNoteForm(InitializeNoteFormEvent event, Emitter<NoteFormState> emit) async {
     try {
+      // Fetch existing note data
       final note = await notesRepository.getNoteById(event.noteId);
       if (note == null) {
+        // If note not found, emit failure state as
+        // this method is not called if not in editing mode
         emit(state.copyWith(status: NoteFormStatus.failure));
         return;
       }
 
+      // Populate the Quill controller with existing content
       state.quillController.document = note.content != null
           ? Document.fromJson(jsonDecode(note.content!))
           : Document();
@@ -62,8 +68,10 @@ class NoteFormBloc extends Bloc<NoteFormEvent, NoteFormState> {
     }
   }
 
+  /// Handles changes to the note title.
   void _onNameChanged(TitleChangedEvent event, Emitter<NoteFormState> emit) {
     final title = NameValidator.dirty(event.title);
+    // Validating input
     Formz.validate([title]);
     emit(
         state.copyWith(
@@ -74,6 +82,7 @@ class NoteFormBloc extends Bloc<NoteFormEvent, NoteFormState> {
     );
   }
 
+  /// Handles changes to the selected categories.
   void _onSelectedCategoriesChanged(SelectedCategoriesChangedEvent event, Emitter<NoteFormState> emit) {
     emit(
         state.copyWith(
@@ -82,6 +91,7 @@ class NoteFormBloc extends Bloc<NoteFormEvent, NoteFormState> {
     );
   }
 
+  /// Handles changes to the selected note type.
   void _onSelectedNoteTypeChanged(SelectedNoteTypeChangedEvent event, Emitter<NoteFormState> emit) {
     emit(
         state.copyWith(
@@ -90,6 +100,7 @@ class NoteFormBloc extends Bloc<NoteFormEvent, NoteFormState> {
     );
   }
 
+  /// Handles changes to the important checkbox
   void _onImportantCheckedChanged(ImportantCheckedChangedEvent event, Emitter<NoteFormState> emit) {
     emit(
         state.copyWith(
@@ -98,9 +109,14 @@ class NoteFormBloc extends Bloc<NoteFormEvent, NoteFormState> {
     );
   }
 
+  /// Handles saving the note form, either creating a new note or updating an existing one.
+  /// The note data is passed to the [SaveNoteBloc] for persistence or in-memory storage.
   Future<void> _onSaveNoteForm(SaveNoteFormEvent event, Emitter<NoteFormState> emit) async {
+    // TODO implement loading indicator in UI
     emit(state.copyWith(status: NoteFormStatus.loading));
+    // Access SaveNoteBloc to handle saving
     SaveNoteBloc dataBloc = serviceLocator<SaveNoteBloc>();
+    // Get existing note if editing
     NoteEntity? note = dataBloc.state.note;
 
     // Convert Quill document to JSON string
@@ -132,7 +148,9 @@ class NoteFormBloc extends Bloc<NoteFormEvent, NoteFormState> {
         updatedAt: DateTime.now(),
       );
     }
+    // Pass note to SaveNoteBloc for saving
     dataBloc.add(SetNoteEntityEvent(note));
+    // Trigger save operation
     dataBloc.add(SaveNoteEventSubmit());
     emit(state.copyWith(status: NoteFormStatus.success, noteId: note.id));
   }

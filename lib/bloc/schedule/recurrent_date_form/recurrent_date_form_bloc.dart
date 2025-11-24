@@ -18,6 +18,7 @@ import '../../notes/save/save_note_bloc.dart';
 part 'recurrent_date_form_event.dart';
 part 'recurrent_date_form_state.dart';
 
+/// Bloc to manage the state of the recurrent date schedule form
 class RecurrentDateFormBloc extends Bloc<RecurrentDateFormEvent, RecurrentDateFormState> {
   RecurrentDateFormBloc() : super(RecurrentDateFormState(
       newRecurrentDateFormElements: RecurrenceFormElements(
@@ -42,6 +43,9 @@ class RecurrentDateFormBloc extends Bloc<RecurrentDateFormEvent, RecurrentDateFo
 
   final ScheduleRepository scheduleRepository = serviceLocator<ScheduleRepository>();
 
+  /// Initializes the recurrent date form.
+  /// If [event.scheduleId] is provided, it fetches the existing schedule for editing.
+  /// Otherwise, it sets up a new form for creating a recurrent date.
   void _initializeRecurrentDateForm(InitializeRecurrentDateFormEvent event, Emitter<RecurrentDateFormState> emit) async {
     try {
       if(event.scheduleId == null){
@@ -80,6 +84,7 @@ class RecurrentDateFormBloc extends Bloc<RecurrentDateFormEvent, RecurrentDateFo
     }
   }
 
+  /// Handles selection of recurrence type
   void _selectRecurrenceType(SelectRecurrenceTypeEvent event, Emitter<RecurrentDateFormState> emit) {
     RecurrenceFormElements currentElements = state.newRecurrentDateFormElements.copyWith(
         selectedRecurrenceType: event.recurrenceType
@@ -89,6 +94,7 @@ class RecurrentDateFormBloc extends Bloc<RecurrentDateFormEvent, RecurrentDateFo
     ));
   }
 
+  /// Handles changes to the recurrence day interval
   void _changeRecurrenceDayInterval(ChangeRecurrenceDayIntervalEvent event, Emitter<RecurrentDateFormState> emit) {
     int? interval = int.tryParse(event.interval);
 
@@ -105,6 +111,7 @@ class RecurrentDateFormBloc extends Bloc<RecurrentDateFormEvent, RecurrentDateFo
     ));
   }
 
+  /// Handles changes to the recurrence year interval
   void _changeRecurrenceYearInterval(ChangeRecurrenceYearIntervalEvent event, Emitter<RecurrentDateFormState> emit) {
     int? interval = int.tryParse(event.interval);
 
@@ -121,6 +128,7 @@ class RecurrentDateFormBloc extends Bloc<RecurrentDateFormEvent, RecurrentDateFo
     ));
   }
 
+  /// Handles changes to the recurrence month date
   void _changeRecurrenceMonthDate(ChangeRecurrenceMonthDateEvent event, Emitter<RecurrentDateFormState> emit) {
     int? day = int.tryParse(event.day);
 
@@ -137,6 +145,7 @@ class RecurrentDateFormBloc extends Bloc<RecurrentDateFormEvent, RecurrentDateFo
     ));
   }
 
+  /// Handles changes to the selected recurrence weekdays
   void _changeRecurrenceWeekDays(ChangeRecurrenceWeekDaysEvent event, Emitter<RecurrentDateFormState> emit) {
     RecurrenceFormElements currentElements = state.newRecurrentDateFormElements.copyWith(
         selectedRecurrenceWeekdays: event.weekDays
@@ -147,6 +156,7 @@ class RecurrentDateFormBloc extends Bloc<RecurrentDateFormEvent, RecurrentDateFo
   }
 
   //region Date selection and validation
+  /// Handles selection of start date and time
   void _selectStartDateTime(SelectStartDateTimeEvent event, Emitter<RecurrentDateFormState> emit) {
     DateTime? selectedEndDateTime = state.newRecurrentDateFormElements.selectedEndDateTime;
     // If the new start date is after the current end date, adjust the end date to be after the start date
@@ -158,25 +168,31 @@ class RecurrentDateFormBloc extends Bloc<RecurrentDateFormEvent, RecurrentDateFo
         selectedEndDateTime: selectedEndDateTime
     );
     emit(state.copyWith(newRecurrentDateFormElements: currentElements));
+    // Validate dates
     add(ValidateDatesEvent());
   }
 
+  /// Handles selection of end date and time
   void _selectEndDateTime(SelectEndDateTimeEvent event, Emitter<RecurrentDateFormState> emit) {
     RecurrenceFormElements currentElements = state.newRecurrentDateFormElements.copyWith(
         selectedEndDateTime: event.dateTime
     );
     emit(state.copyWith(newRecurrentDateFormElements: currentElements));
+    // Validate dates
     add(ValidateDatesEvent());
   }
 
+  /// Handles selection of recurrence end date and time (optional)
   void _selectRecurrenceEndDateTime(SelectRecurrenceEndDateTimeEvent event, Emitter<RecurrentDateFormState> emit) {
     RecurrenceFormElements currentElements = state.newRecurrentDateFormElements.copyWith(
         selectedRecurrenceEndDate: event.dateTime
     );
     emit(state.copyWith(newRecurrentDateFormElements: currentElements));
+    // Validate dates
     add(ValidateDatesEvent());
   }
 
+  /// Validates the start, end, and recurrence end dates
   void _validateDates(ValidateDatesEvent event, Emitter<RecurrentDateFormState> emit) {
     emit(state.copyWith(
         isValidEndDate: state.checkValidEndDate,
@@ -184,6 +200,8 @@ class RecurrentDateFormBloc extends Bloc<RecurrentDateFormEvent, RecurrentDateFo
     ));
   }
 
+  /// Handles form submission for recurrent date schedule
+  /// Converts form elements to [ScheduleEntity] and dispatches event to [SaveNoteBloc]
   void _onSubmitForm(OnSubmitRecurrentDateEvent event, Emitter<RecurrentDateFormState> emit) {
     SaveNoteBloc dataBloc = serviceLocator<SaveNoteBloc>();
     // Convert form elements to ScheduleEntity

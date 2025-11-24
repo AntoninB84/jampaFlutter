@@ -13,6 +13,7 @@ import '../../notes/form/note_form_helpers.dart';
 part 'single_date_form_event.dart';
 part 'single_date_form_state.dart';
 
+/// Bloc to manage the state of a single date schedule form.
 class SingleDateFormBloc extends Bloc<SingleDateFormEvent, SingleDateFormState> {
   SingleDateFormBloc() : super(SingleDateFormState(
     newSingleDateFormElements: SingleDateFormElements(
@@ -31,6 +32,7 @@ class SingleDateFormBloc extends Bloc<SingleDateFormEvent, SingleDateFormState> 
 
   final ScheduleRepository scheduleRepository = serviceLocator<ScheduleRepository>();
 
+  /// Initializes the single date form with existing data if editing, or sets up for a new entry.
   void _initializeSingleDateForm(InitializeSingleDateFormEvent event, Emitter<SingleDateFormState> emit) async {
     try {
       if (event.scheduleId == null) {
@@ -70,46 +72,53 @@ class SingleDateFormBloc extends Bloc<SingleDateFormEvent, SingleDateFormState> 
     }
   }
 
-    void _selectStartDateTime(SelectStartDateTimeEvent event, Emitter<SingleDateFormState> emit) {
-      DateTime? selectedEndDateTime = state.newSingleDateFormElements.selectedEndDateTime;
-      // If the new start date is after the current end date, adjust the end date to be after the start date
-      if(selectedEndDateTime != null && event.dateTime.isAfter(selectedEndDateTime)){
-        selectedEndDateTime = event.dateTime.add(const Duration(hours: 1));
-      }
-
-      SingleDateFormElements currentElements = state.newSingleDateFormElements.copyWith(
-          selectedStartDateTime: event.dateTime,
-          selectedEndDateTime: selectedEndDateTime
-      );
-      emit(state.copyWith(newSingleDateFormElements: currentElements));
-      add(ValidateDatesEvent());
+  /// Handles selection of start date and time.
+  void _selectStartDateTime(SelectStartDateTimeEvent event, Emitter<SingleDateFormState> emit) {
+    DateTime? selectedEndDateTime = state.newSingleDateFormElements.selectedEndDateTime;
+    // If the new start date is after the current end date, adjust the end date to be after the start date
+    if(selectedEndDateTime != null && event.dateTime.isAfter(selectedEndDateTime)){
+      selectedEndDateTime = event.dateTime.add(const Duration(hours: 1));
     }
 
-    void _selectEndDateTime(SelectEndDateTimeEvent event, Emitter<SingleDateFormState> emit) {
-      SingleDateFormElements currentElements = state.newSingleDateFormElements.copyWith(
-          selectedEndDateTime: event.dateTime
-      );
-      emit(state.copyWith(newSingleDateFormElements: currentElements));
-      add(ValidateDatesEvent());
-    }
+    SingleDateFormElements currentElements = state.newSingleDateFormElements.copyWith(
+        selectedStartDateTime: event.dateTime,
+        selectedEndDateTime: selectedEndDateTime
+    );
+    emit(state.copyWith(newSingleDateFormElements: currentElements));
+    // Validate dates
+    add(ValidateDatesEvent());
+  }
 
-    void _validateDates(ValidateDatesEvent event, Emitter<SingleDateFormState> emit) {
-      final isValid = state.newSingleDateFormElements.selectedStartDateTime != null &&
-          state.newSingleDateFormElements.selectedEndDateTime != null &&
-          state.newSingleDateFormElements.selectedStartDateTime!.isBefore(
-              state.newSingleDateFormElements.selectedEndDateTime!
-          );
-      emit(state.copyWith(isValidDate: isValid));
-    }
+  /// Handles selection of end date and time.
+  void _selectEndDateTime(SelectEndDateTimeEvent event, Emitter<SingleDateFormState> emit) {
+    SingleDateFormElements currentElements = state.newSingleDateFormElements.copyWith(
+        selectedEndDateTime: event.dateTime
+    );
+    emit(state.copyWith(newSingleDateFormElements: currentElements));
+    // Validate dates
+    add(ValidateDatesEvent());
+  }
 
-    void _onSubmitForm(OnSubmitSingleDateEvent event, Emitter<SingleDateFormState> emit) {
-      SaveNoteBloc dataBloc = serviceLocator<SaveNoteBloc>();
-      // Convert form elements to ScheduleEntity
-      ScheduleEntity singleDateSchedule = ScheduleEntity.fromSingleDateFormElements(
-          state.newSingleDateFormElements
-      );
-      // Dispatch event to save the single date schedule
-      dataBloc.add(SaveSingleDateEvent(singleDateSchedule));
-    }
+  /// Validates the selected start and end dates.
+  void _validateDates(ValidateDatesEvent event, Emitter<SingleDateFormState> emit) {
+    final isValid = state.newSingleDateFormElements.selectedStartDateTime != null &&
+        state.newSingleDateFormElements.selectedEndDateTime != null &&
+        state.newSingleDateFormElements.selectedStartDateTime!.isBefore(
+            state.newSingleDateFormElements.selectedEndDateTime!
+        );
+    emit(state.copyWith(isValidDate: isValid));
+  }
+
+  /// Handles form submission by converting form elements to a [ScheduleEntity]
+  /// and dispatching a save event to the [SaveNoteBloc].
+  void _onSubmitForm(OnSubmitSingleDateEvent event, Emitter<SingleDateFormState> emit) {
+    SaveNoteBloc dataBloc = serviceLocator<SaveNoteBloc>();
+    // Convert form elements to ScheduleEntity
+    ScheduleEntity singleDateSchedule = ScheduleEntity.fromSingleDateFormElements(
+        state.newSingleDateFormElements
+    );
+    // Dispatch event to save the single date schedule
+    dataBloc.add(SaveSingleDateEvent(singleDateSchedule));
+  }
 
   }

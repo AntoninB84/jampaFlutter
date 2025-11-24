@@ -10,12 +10,16 @@ import 'package:uuid/uuid.dart';
 
 part 'save_category_state.dart';
 
+/// Cubit to manage the state of saving a category
+/// Handles both creating a new category and updating an existing one
 class SaveCategoryCubit extends Cubit<SaveCategoryState> {
   SaveCategoryCubit() : super(const SaveCategoryState());
 
   final CategoriesRepository categoriesRepository =
       serviceLocator<CategoriesRepository>();
 
+  /// Fetches a category by its ID for updating
+  /// If the category is found, updates the state with its details
   void fetchCategoryForUpdate(String? categoryId) {
     if(categoryId != null){
       try {
@@ -42,6 +46,7 @@ class SaveCategoryCubit extends Cubit<SaveCategoryState> {
     }
   }
 
+  /// Handles changes to the category name input field
   void onNameChanged(String value) {
     final name = NameValidator.dirty(value);
     emit(
@@ -55,6 +60,8 @@ class SaveCategoryCubit extends Cubit<SaveCategoryState> {
     );
   }
 
+  /// Submits the category form
+  /// Validates the input and either creates a new category or updates an existing one
   void onSubmit() {
     final name = NameValidator.dirty(state.name.value);
     emit(
@@ -81,12 +88,14 @@ class SaveCategoryCubit extends Cubit<SaveCategoryState> {
         } else {
           late CategoryEntity category;
           if(state.category != null){
+            // If updating an existing category, copy its details with the new name
             category = state.category!.copyWith(
               name: state.name.value,
               createdAt: state.category!.createdAt,
               updatedAt: DateTime.now()
             );
           }else{
+            // If creating a new category, create a new entity
             category = CategoryEntity(
                 id: Uuid().v4(),
                 name: state.name.value,

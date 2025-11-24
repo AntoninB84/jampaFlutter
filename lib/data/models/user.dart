@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 
 import '../database.dart';
 
+/// Represents the 'user' table in the database.
 @UseRowClass(UserEntity)
 class UserTable extends Table {
   TextColumn get id => text()();
@@ -17,12 +18,25 @@ class UserTable extends Table {
   Set<Column<Object>> get primaryKey => {id};
 }
 
+/// Represents a user entity.
 class UserEntity extends Equatable {
+
+  /// Unique identifier for the user (UUID).
   String id;
+
+  /// Username of the user.
   String username;
+
+  /// Email address of the user.
   String email;
+
+  /// Hashed password of the user.
   String passwordHash;
+
+  /// Timestamp when the user was created.
   DateTime createdAt;
+
+  /// Timestamp when the user was last updated.
   DateTime updatedAt;
 
   UserEntity({
@@ -39,6 +53,7 @@ class UserEntity extends Equatable {
     return 'UserEntity{id: $id, username: $username, email: $email, createdAt: $createdAt, updatedAt: $updatedAt}';
   }
 
+  /// Converts the [UserEntity] to a [UserTableCompanion] for database operations.
   UserTableCompanion toCompanion() {
     return UserTableCompanion(
       id: Value(id),

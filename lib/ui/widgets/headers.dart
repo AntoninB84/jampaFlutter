@@ -7,15 +7,9 @@ class Headers {
     required BuildContext context,
     required String title,
     required VoidCallback onAddPressed,
-    VoidCallback? onBackPressed
   }) {
     return Row(
       children: [
-        if(onBackPressed != null)
-          Buttons.backButtonIcon(
-            context: context,
-            onPressed: onBackPressed,
-          ),
         Expanded(
           child: Text(
             title,

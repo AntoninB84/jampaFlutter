@@ -20,6 +20,7 @@ class CategoriesLayout extends StatelessWidget {
       body: BlocConsumer<CategoriesBloc, CategoriesState>(
         bloc: context.read<CategoriesBloc>(),
         listener: (context, state) {
+          // Show feedback snackbars based on deletion outcome
           if (state.deletionError) {
             SnackBarX.showError(context, context.strings.delete_category_error_message);
           } else if (state.deletionSuccess) {
@@ -30,16 +31,15 @@ class CategoriesLayout extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Screen header with add button
               Headers.listHeader(
                 context: context,
                 title: context.strings.categories,
                 onAddPressed: (){
                   context.pushNamed("CreateCategory");
                 },
-                onBackPressed: (){
-                  context.pop();
-                },
               ),
+              // Categories list
               Expanded(
                 child: CategoriesListWidget()
               ),

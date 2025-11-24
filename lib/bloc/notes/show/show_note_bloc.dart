@@ -15,6 +15,7 @@ import '../../../repository/schedule_repository.dart';
 part 'show_note_event.dart';
 part 'show_note_state.dart';
 
+/// Bloc for managing the state of showing a note
 class ShowNoteBloc extends Bloc<ShowNoteEvent, ShowNoteState> {
   ShowNoteBloc() : super(ShowNoteState(
     quillController: QuillController.basic(),
@@ -31,6 +32,7 @@ class ShowNoteBloc extends Bloc<ShowNoteEvent, ShowNoteState> {
   final NotesRepository notesRepository = serviceLocator<NotesRepository>();
   final ScheduleRepository scheduleRepository = serviceLocator<ScheduleRepository>();
 
+  /// Fetches a note by its ID and updates the state accordingly
   void _getNoteById(GetNoteById event, Emitter<ShowNoteState> emit) async {
     emit(state.copyWith(
       status: NoteStatus.loading,
@@ -67,6 +69,7 @@ class ShowNoteBloc extends Bloc<ShowNoteEvent, ShowNoteState> {
     }
   }
 
+  /// Watches schedules and alarms associated with a specific note ID
   void _watchSchedulesAndAlarmsByNoteId(WatchSchedulesAndAlarmsByNoteId event, Emitter<ShowNoteState> emit) async {
     emit(state.copyWith(schedulesLoadingStatus: NoteStatus.loading));
 
@@ -93,6 +96,7 @@ class ShowNoteBloc extends Bloc<ShowNoteEvent, ShowNoteState> {
     }
   }
 
+  /// Handles changes to the note content and updates the database accordingly
   void _onNoteContentChanged(OnChangeNoteContent event, Emitter<ShowNoteState> emit) async {
     // Convert Quill document to JSON string
     String? content = state.quillController.document.isEmpty()
@@ -106,6 +110,7 @@ class ShowNoteBloc extends Bloc<ShowNoteEvent, ShowNoteState> {
     }
   }
 
+  /// Deletes a note by its ID and updates the state accordingly
   void _deleteNoteById(DeleteNoteById event, Emitter<ShowNoteState> emit) async {
     emit(state.copyWith(status: NoteStatus.loading, deletionSuccess: false, deletionFailure: false));
     try {

@@ -21,9 +21,12 @@ class ShowNoteLayout extends StatelessWidget {
     return BlocConsumer<ShowNoteBloc, ShowNoteState>(
       listener: (context, state) {
         if(state.status.isFailure) {
+          // Handle generic failure such as loading note failure
           SnackBarX.showError(context, context.strings.generic_error_message);
+          // Navigate back automatically
           context.pop();
         }else{
+          // Handle deletion feedback
           if(state.deletionSuccess) {
             SnackBarX.showSuccess(context, context.strings.delete_note_success_feedback);
             context.pop();
@@ -38,7 +41,7 @@ class ShowNoteLayout extends StatelessWidget {
             Buttons.editButtonIcon(
               context: context,
               onPressed: () {
-                // Navigate to edit note page
+                // Navigate to edit note page with note ID
                 context.pushNamed("NoteForm", extra: {
                   "noteId": state.note?.id.toString() ?? ''
                 });
@@ -54,10 +57,15 @@ class ShowNoteLayout extends StatelessWidget {
                       confirmButtonText: context.strings.delete,
                       cancelButtonText: context.strings.cancel,
                       onConfirm: (){
+                        // Trigger note deletion in the bloc
                         context.read<ShowNoteBloc>().add(DeleteNoteById(state.note?.id));
+                        // Close the dialog
                         context.pop();
                       },
-                      onCancel: (){dialogContext.pop();}
+                      onCancel: (){
+                        // Just close the dialog
+                        dialogContext.pop();
+                      }
                   );
                 });
               },
@@ -67,13 +75,18 @@ class ShowNoteLayout extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Note title
                 Text(state.note?.title ?? 'No Title', style: Theme.of(context).textTheme.headlineMedium),
                 const SizedBox(height: kGap16),
+
+                // Note content quill editor
                 NoteContentTextField(
                   quillController: state.quillController,
                   editorMaxHeight: MediaQuery.sizeOf(context).height * 0.5,
                 ),
                 const SizedBox(height: kGap10,),
+
+                // Schedules and Reminders Section Title
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: kGap16
@@ -83,6 +96,7 @@ class ShowNoteLayout extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ),
+                // List of schedules and reminders
                 NoteSchedulesList(schedules: state.schedulesAndReminders)
               ],
             ),

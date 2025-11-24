@@ -10,6 +10,7 @@ import 'package:jampa_flutter/utils/constants/styles/sizes.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
+/// A widget that displays a list of note types with their usage counts.
 class NoteTypesListWidget extends StatefulWidget {
   const NoteTypesListWidget({super.key});
 
@@ -28,10 +29,12 @@ class _NoteTypesListWidgetState extends State<NoteTypesListWidget> {
             case NoteTypesListStatus.initial:
             case NoteTypesListStatus.loading:
             case NoteTypesListStatus.success:
+              // Display skeletons if loading
               List<NoteTypeWithCount> noteTypesWithCount = state.listStatus.isLoading
                   ? List.filled(3, fakeSkeletonNoteTypeWithCount)
                   : state.noteTypesWithCount;
 
+              // Show message if no results found
               if(noteTypesWithCount.isEmpty){
                 return Center(child: Text(context.strings.no_results_found));
               }
@@ -58,6 +61,7 @@ class _NoteTypesListWidgetState extends State<NoteTypesListWidget> {
                             )
                           ),
                           onTap: () {
+                            // Navigate to edit note type screen with note type ID
                             context.pushNamed("EditNoteType", extra: {'id': noteType.id.toString()});
                           },
                           trailing: Row(
@@ -73,10 +77,15 @@ class _NoteTypesListWidgetState extends State<NoteTypesListWidget> {
                                         confirmButtonText: context.strings.delete,
                                         cancelButtonText: context.strings.cancel,
                                         onConfirm: (){
-                                          context.read<NoteTypesBloc>().add(DeleteNoteType(noteType.id!));
+                                          // Dispatch delete event to NoteTypesBloc
+                                          context.read<NoteTypesBloc>().add(DeleteNoteType(noteType.id));
+                                          // Close the dialog
                                           dialogContext.pop();
                                         },
-                                        onCancel: (){dialogContext.pop();}
+                                        onCancel: (){
+                                          // Just close the dialog
+                                          dialogContext.pop();
+                                        }
                                     );
                                   });
                                 },

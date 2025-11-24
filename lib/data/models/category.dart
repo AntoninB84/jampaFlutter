@@ -4,6 +4,8 @@ import 'package:equatable/equatable.dart';
 
 import '../database.dart';
 
+/// A data class that combines a [CategoryEntity]
+/// with the count of notes associated with it.
 class CategoryWithCount {
   final CategoryEntity category;
   final int noteCount;
@@ -19,6 +21,7 @@ class CategoryWithCount {
   }
 }
 
+/// Drift table definition for categories.
 @UseRowClass(CategoryEntity)
 class CategoryTable extends Table {
   TextColumn get id => text()();
@@ -30,10 +33,19 @@ class CategoryTable extends Table {
   Set<Column<Object>> get primaryKey => {id};
 }
 
+/// Entity class representing a category.
 class CategoryEntity extends Equatable {
+
+  /// Unique identifier for the category (UUID)
   String id;
+
+  /// Name of the category
   String name;
+
+  /// Timestamp when the category was created
   DateTime createdAt;
+
+  /// Timestamp when the category was last updated
   DateTime updatedAt;
 
   CategoryEntity({
@@ -65,6 +77,7 @@ class CategoryEntity extends Equatable {
     );
   }
 
+  /// Converts this entity to a Drift companion for database operations.
   CategoryTableCompanion toCompanion() {
     return CategoryTableCompanion(
       id: Value(id),

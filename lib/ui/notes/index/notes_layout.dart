@@ -23,6 +23,7 @@ class NotesLayout extends StatelessWidget {
           icon: Icon(Icons.search),
           onPressed: null,
         ),
+        // Display settings menu access
         SettingsMenu().settingsMenu(context),
       ],
       body: BlocConsumer<NotesListViewBloc, NotesListViewState>(
@@ -38,6 +39,7 @@ class NotesLayout extends StatelessWidget {
                   context: context,
                   title: context.strings.notes,
                   onAddPressed: (){
+                    // Navigate to note creation form
                     context.pushNamed("NoteForm");
                   },
                 ),

@@ -11,16 +11,33 @@ class SaveCategoryState extends Equatable {
     this.isSuccess = false,
   });
 
+  /// The category being edited or created
   final CategoryEntity? category;
+
+  /// The name input validator
   final NameValidator name;
+
+  /// Indicates if the name input is valid
   final bool isValidName;
+  /// Indicates if a category with the same name already exists
   final bool existsAlready;
+  /// Indicates if a save operation is in progress or if data is being loaded
   final bool isLoading;
+  /// Indicates if there was an error during the save operation
   final bool isError;
+  /// Indicates if the save operation was successful
   final bool isSuccess;
 
   @override
-  List<Object?> get props => [category, name, isValidName, existsAlready, isLoading, isError, isSuccess];
+  List<Object?> get props => [
+    category,
+    name,
+    isValidName,
+    existsAlready,
+    isLoading,
+    isError,
+    isSuccess
+  ];
 
   SaveCategoryState copyWith({
     CategoryEntity? category,

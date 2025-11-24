@@ -11,12 +11,25 @@ extension NoteStatusX on NoteStatus {
 
 class ShowNoteState extends Equatable {
 
+  /// The note being displayed.
   final NoteEntity? note;
+
+  /// The Quill controller for rich text editing of the note content.
   final QuillController quillController;
+
+  /// List of schedules and their next occurrences associated with the note.
   final List<ScheduleWithNextOccurrence> schedulesAndReminders;
+
+  /// The current status of note operations.
   final NoteStatus status;
+
+  /// The current status of schedules loading operations.
   final NoteStatus schedulesLoadingStatus;
+
+  /// Indicates if the note deletion was successful.
   final bool deletionSuccess;
+
+  /// Indicates if the note deletion failed.
   final bool deletionFailure;
 
   const ShowNoteState({

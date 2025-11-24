@@ -16,6 +16,7 @@ import '../../notes/form/note_form_helpers.dart';
 part 'reminder_form_event.dart';
 part 'reminder_form_state.dart';
 
+/// Bloc to manage the state of the reminder form
 class ReminderFormBloc extends Bloc<ReminderFormEvent, ReminderFormState> {
   ReminderFormBloc() : super(ReminderFormState(
       newReminderFormElements: ReminderFormElements(
@@ -35,6 +36,7 @@ class ReminderFormBloc extends Bloc<ReminderFormEvent, ReminderFormState> {
 
   final ReminderRepository alarmRepository = serviceLocator<ReminderRepository>();
 
+  /// Initializes the reminder form state based on whether it's a new reminder or editing an existing one.
   void _initializeReminderForm(InitializeReminderFormEvent event, Emitter<ReminderFormState> emit) async {
     try {
       if (event.reminderId == null) {
@@ -76,7 +78,9 @@ class ReminderFormBloc extends Bloc<ReminderFormEvent, ReminderFormState> {
     }
   }
 
+  /// Handles selection of offset number and updates the state accordingly.
   void _selectOffsetNumber(SelectOffsetNumberEvent event, Emitter<ReminderFormState> emit) {
+    // Parse the offset number and validate
     final parsedNumber = int.tryParse(event.offsetNumber) ?? 0;
     final number = PositiveValueValidator.dirty(parsedNumber);
     Formz.validate([number]);
@@ -90,6 +94,7 @@ class ReminderFormBloc extends Bloc<ReminderFormEvent, ReminderFormState> {
     ));
   }
 
+  /// Handles selection of offset type and updates the state accordingly.
   void _selectOffsetType(SelectOffsetTypeEvent event, Emitter<ReminderFormState> emit) {
     ReminderFormElements currentElements = state.newReminderFormElements.copyWith(
         selectedOffsetType: event.offsetType
@@ -97,6 +102,7 @@ class ReminderFormBloc extends Bloc<ReminderFormEvent, ReminderFormState> {
     emit(state.copyWith(newReminderFormElements: currentElements));
   }
 
+  /// Toggles the notification setting and updates the state accordingly.
   void _toggleIsNotification(ToggleIsNotificationEvent event, Emitter<ReminderFormState> emit) {
     ReminderFormElements currentElements = state.newReminderFormElements.copyWith(
         isNotification: event.isNotification
@@ -104,6 +110,7 @@ class ReminderFormBloc extends Bloc<ReminderFormEvent, ReminderFormState> {
     emit(state.copyWith(newReminderFormElements: currentElements));
   }
 
+  /// Handles submission of the reminder form by dispatching the save event to [SaveNoteBloc].
   void _onSubmitReminderForm(OnSubmitReminderFormEvent event, Emitter<ReminderFormState> emit) async {
     SaveNoteBloc dataBloc = serviceLocator<SaveNoteBloc>();
     // Create ReminderEntity from form elements

@@ -11,15 +11,18 @@ import '../../utils/helpers/reminder_helpers.dart';
 
 part 'reminder_state.dart';
 
+/// Cubit to manage device's reminders based on schedules
 class ReminderCubit extends Cubit<ReminderState> {
   ReminderCubit() : super(ReminderInitial());
 
   final ScheduleRepository scheduleRepository = serviceLocator<ScheduleRepository>();
   final ReminderRepository reminderRepository = serviceLocator<ReminderRepository>();
 
+  /// Check provided schedules and set reminders accordingly
   Future<void> checkAndSetFromSchedules(List<ScheduleEntity> schedules) async {
     if(schedules.isNotEmpty){
       List<String> remindersIds = [];
+      // Collecting all reminder IDs from schedules
       for(ScheduleEntity scheduleEntity in schedules){
         scheduleEntity.reminders = await reminderRepository.getAllRemindersByScheduleId(scheduleEntity.id);
         if(scheduleEntity.reminders != null && scheduleEntity.reminders!.isNotEmpty){

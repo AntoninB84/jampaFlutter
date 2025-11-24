@@ -9,6 +9,8 @@ import '../../data/models/category.dart';
 part 'categories_event.dart';
 part 'categories_state.dart';
 
+/// Bloc to manage categories list state and events
+/// Handles watching categories, watching categories with use count, and deleting categories
 class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
   CategoriesBloc() : super(const CategoriesState()) {
     on<WatchCategories>(_watchCategories);
@@ -18,6 +20,8 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
   final CategoriesRepository categoriesRepository =
         serviceLocator<CategoriesRepository>();
 
+  /// Watches all categories and updates the state accordingly
+  /// Handles errors by updating the state to reflect an error status
   void _watchCategories(WatchCategories event, Emitter<CategoriesState> emit) async {
     await emit.onEach(
         categoriesRepository.watchAllCategories(),
@@ -36,6 +40,8 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
     );
   }
 
+  /// Watches categories along with their usage count and updates the state accordingly
+  /// Handles errors by updating the state to reflect an error status
   void _watchCategoriesWithCount(WatchCategoriesWithCount event, Emitter<CategoriesState> emit) async {
     await emit.onEach(
         categoriesRepository.watchCategoriesWithUseCount(),
@@ -54,10 +60,13 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
     );
   }
 
+  /// Deletes a category based on the provided event
+  /// Updates the state to reflect any deletion errors
   void _deleteCategory(DeleteCategory event, Emitter<CategoriesState> emit) async {
     emit(state.copyWith(deletionError: false));
     try {
       String categoryId = event.selectedCategoryId;
+      // Perform deletion
       await categoriesRepository.deleteCategory(categoryId);
     } catch (error) {
       emit(state.copyWith(deletionError: true));

@@ -7,6 +7,7 @@ import 'package:permission_handler/permission_handler.dart';
 part 'permissions_event.dart';
 part 'permissions_state.dart';
 
+/// Bloc to manage permissions for notifications and scheduling exact alarms.
 class PermissionsBloc extends Bloc<PermissionsEvent, PermissionsState> {
   PermissionsBloc() : super(
       PermissionsState(
@@ -22,11 +23,14 @@ class PermissionsBloc extends Bloc<PermissionsEvent, PermissionsState> {
   }
 
 
+  /// Checks the current status of both notification and alarm permissions
+  /// and requests them if not granted.
   Future<void> _onCheckPermissions(CheckPermissions event, Emitter<PermissionsState> emit) async {
     add(CheckScheduleExactAlarmPermission());
     add(CheckNotificationsPermission());
   }
 
+  /// Checks and requests notification permission if not granted.
   Future<void> _onCheckNotificationsPermission(CheckNotificationsPermission event, Emitter<PermissionsState> emit) async {
     final status = await Permission.notification.status;
     if(status.isDenied){
@@ -39,6 +43,7 @@ class PermissionsBloc extends Bloc<PermissionsEvent, PermissionsState> {
     }
   }
 
+  /// Checks and requests schedule exact alarm permission if not granted.
   Future<void> _onCheckScheduleExactAlarmPermission(CheckScheduleExactAlarmPermission event, Emitter<PermissionsState> emit) async {
     final status = await Permission.scheduleExactAlarm.status;
     if (status.isDenied) {

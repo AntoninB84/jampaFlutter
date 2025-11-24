@@ -25,15 +25,30 @@ class CategoriesState extends Equatable {
   }) : categoriesWithCount = categoriesWithCount ?? const [],
        categories = categories ?? const [];
 
+  /// Current status of the categories list
   final CategoriesListStatus listStatus;
+
+  /// List of categories along with their usage count
   final List<CategoryWithCount> categoriesWithCount;
+
+  /// List of all categories
   final List<CategoryEntity> categories;
+
+  /// Indicates if there was an error during deletion
   final bool deletionError;
+
+  /// Indicates if the deletion was successful
   final bool deletionSuccess;
 
 
   @override
-  List<Object?> get props => [listStatus, categoriesWithCount, categories, deletionError, deletionSuccess];
+  List<Object?> get props => [
+    listStatus,
+    categoriesWithCount,
+    categories,
+    deletionError,
+    deletionSuccess
+  ];
 
   CategoriesState copyWith({
     List<CategoryWithCount>? categoriesWithCount,

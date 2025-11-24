@@ -36,6 +36,7 @@ class AppDatabase extends _$AppDatabase {
 
   static AppDatabase instance() => AppDatabase();
 
+  /// Current schema version of the database.
   @override
   int get schemaVersion => 1;
 
@@ -75,6 +76,9 @@ class AppDatabase extends _$AppDatabase {
     );
   }
 
+  /// Opens a connection to the database.
+  ///
+  /// Uses a local file named 'jampa_flutter.db'.
   static QueryExecutor _openConnection() {
     return driftDatabase(
       name: 'jampa_flutter.db',

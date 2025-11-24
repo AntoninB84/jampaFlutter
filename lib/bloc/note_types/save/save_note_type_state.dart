@@ -11,16 +11,37 @@ class SaveNoteTypeState extends Equatable {
     this.isSuccess = false,
   });
 
+  /// The note type being created or edited.
   final NoteTypeEntity? noteType;
+
+  /// The name validator for the note type's name.
   final NameValidator name;
+
+  /// Whether the name is valid.
   final bool isValidName;
+
+  /// Whether a note type with the same name already exists.
   final bool existsAlready;
+
+  /// Whether the save operation is in progress.
   final bool isLoading;
+
+  /// Whether there was an error during the save operation.
   final bool isError;
+
+  /// Whether the save operation was successful.
   final bool isSuccess;
 
   @override
-  List<Object?> get props => [noteType, name, isValidName, existsAlready, isLoading, isError, isSuccess];
+  List<Object?> get props => [
+    noteType,
+    name,
+    isValidName,
+    existsAlready,
+    isLoading,
+    isError,
+    isSuccess
+  ];
 
   SaveNoteTypeState copyWith({
     NoteTypeEntity? noteType,

@@ -9,6 +9,7 @@ import 'package:jampa_flutter/utils/constants/styles/styles.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 
+/// A multi-selector widget for selecting note categories.
 class NoteCategoriesMultiSelector extends StatefulWidget{
   const NoteCategoriesMultiSelector({
     super.key,
@@ -16,7 +17,10 @@ class NoteCategoriesMultiSelector extends StatefulWidget{
     required this.onCategorySelected,
   });
 
+  /// The list of currently selected categories.
   final List<CategoryEntity> selectedCategories;
+
+  /// Callback function when categories are selected or changed.
   final Function(List<CategoryEntity>) onCategorySelected;
 
   @override

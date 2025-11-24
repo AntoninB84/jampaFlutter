@@ -5,6 +5,7 @@ import 'package:jampa_flutter/data/models/note_type.dart';
 import 'package:jampa_flutter/data/models/user.dart';
 import 'package:jampa_flutter/utils/enums/note_status_enum.dart';
 
+/// Drift table definition for notes
 @UseRowClass(NoteEntity)
 class NoteTable extends Table {
   TextColumn get id => text()();
@@ -21,17 +22,41 @@ class NoteTable extends Table {
   Set<Column<Object>> get primaryKey => {id};
 }
 
+/// Entity class representing a note
 class NoteEntity {
+
+  /// Unique identifier for the note (UUID)
   String id;
+
+  /// Title of the note
   String title;
+
+  /// Content of the note (optional).
+  /// JSON content currently used with Quill editor
   String? content;
+
+  /// Flag indicating if the note is marked as important (not in use atm)
   bool isImportant;
+
+  /// Status of the note (e.g., to do, done)
   NoteStatusEnum status;
+
+  /// Timestamp when the note was created
   DateTime createdAt;
+
+  /// Timestamp when the note was last updated
   DateTime updatedAt;
+
+  /// Identifier for the type of the note (optional UUID)
   String? noteTypeId;
+
+  /// The type of the note (optional)
   NoteTypeEntity? noteType;
+
+  /// Identifier for the user who owns the note (UUID). Not yet in use
   String? userId;
+
+  /// List of categories associated with the note (optional)
   List<CategoryEntity>? categories;
 
   NoteEntity({
@@ -48,6 +73,7 @@ class NoteEntity {
     this.categories
   });
 
+  /// Converts the NoteEntity instance to a NoteTableCompanion for database operations
   NoteTableCompanion toCompanion() {
     return NoteTableCompanion(
       id: Value(id),

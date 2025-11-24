@@ -8,7 +8,12 @@ import 'package:jampa_flutter/utils/service_locator.dart';
 
 import '../../utils/enums/note_status_enum.dart';
 
+/// Data Access Object (DAO) for [ScheduleEntity]
 class ScheduleDao {
+
+  /// Saves a single schedule to the database.
+  /// If a schedule with the same ID already exists, it will be updated.
+  /// Returns the saved [ScheduleEntity].
   static Future<ScheduleEntity> saveSingleSchedule(ScheduleEntity schedule) async {
     AppDatabase db = serviceLocator<AppDatabase>();
     // Insert or update the schedule
@@ -18,51 +23,67 @@ class ScheduleDao {
     );
   }
 
+  /// Saves a list of schedules to the database individually.
+  /// If a schedule with the same ID already exists, it will be updated.
   static Future<void> saveListOfSchedules(List<ScheduleEntity> schedules) async {
     await Future.forEach(schedules, (scheduleEntity) async {
       await saveSingleSchedule(scheduleEntity);
     });
   }
 
+  /// Watches a single schedule by its ID.
+  /// Returns a [Stream] that emits the [ScheduleEntity] whenever it changes.
   static Stream<ScheduleEntity?> watchScheduleById(String id)  {
     AppDatabase db = serviceLocator<AppDatabase>();
     return (db.select(db.scheduleTable)..where((tbl) => tbl.id.equals(id)))
         .watchSingleOrNull();
   }
 
+  /// Retrieves a single schedule by its ID.
+  /// Returns the [ScheduleEntity] if found, otherwise returns null.
   static Future<ScheduleEntity?> getScheduleById(String id) async {
     AppDatabase db = serviceLocator<AppDatabase>();
     return await (db.select(db.scheduleTable)..where((tbl) => tbl.id.equals(id)))
         .getSingleOrNull();
   }
 
+  /// Watches all schedules associated with a specific note ID.
+  /// Returns a [Stream] that emits a list of [ScheduleEntity]s whenever they change.
   static Stream<List<ScheduleEntity>> watchAllSchedulesByNoteId(String noteId)  {
     AppDatabase db = serviceLocator<AppDatabase>();
     return (db.select(db.scheduleTable)..where((tbl) => tbl.noteId.equals(noteId)))
         .watch();
   }
 
+  /// Retrieves all schedules associated with a specific note ID.
   static Future<List<ScheduleEntity>> getAllSchedulesByNoteId(String noteId) async {
     AppDatabase db = serviceLocator<AppDatabase>();
     return await (db.select(db.scheduleTable)..where((tbl) => tbl.noteId.equals(noteId)))
         .get();
   }
 
+  /// Watches all schedules in the database.
   static Stream<List<ScheduleEntity>> watchAllSchedules()  {
     AppDatabase db = serviceLocator<AppDatabase>();
     return db.select(db.scheduleTable).watch();
   }
 
+  /// Retrieves all schedules in the database.
   static Future<List<ScheduleEntity>> getAllSchedules() async {
     AppDatabase db = serviceLocator<AppDatabase>();
     return await db.select(db.scheduleTable).get();
   }
 
+  /// Deletes a schedule by its ID.
   static Future<void> deleteScheduleById(String id) async {
     AppDatabase db = serviceLocator<AppDatabase>();
     await (db.delete(db.scheduleTable)..where((tbl) => tbl.id.equals(id))).go();
   }
 
+  /// Retrieves all schedules that have reminders associated with notes that are not done,
+  /// excluding those with specified reminder IDs.
+  ///
+  /// [remindersIdsToExclude] is a list of reminder IDs to exclude from the results.
   static Future<List<ScheduleEntity>> getAllSchedulesHavingRemindersForToBeDoneNotes({
     required List<String?> remindersIdsToExclude,
     bool useNewInstanceOfDb = true,

@@ -10,6 +10,7 @@ import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 import '../../../bloc/categories/save/save_category_cubit.dart';
 import '../../../utils/constants/styles/sizes.dart';
+import '../../widgets/buttons/buttons.dart';
 
 class SaveCategoryLayout extends StatelessWidget {
   const SaveCategoryLayout({super.key});
@@ -18,6 +19,7 @@ class SaveCategoryLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<SaveCategoryCubit, SaveCategoryState>(
       listener: (context, state) {
+        // Show feedback based on the saving state
         if (state.isError) {
           SnackBarX.showError(context, context.strings.generic_error_message);
         } else if (state.isSuccess) {
@@ -33,6 +35,14 @@ class SaveCategoryLayout extends StatelessWidget {
       },
       builder: (context, state) {
         return JampaScaffoldedAppBarWidget(
+          actions: [
+            Buttons.saveButtonIcon(
+              context: context,
+              onPressed: state.isValidName && !state.existsAlready && !state.isLoading
+                  ? () => context.read<SaveCategoryCubit>().onSubmit()
+                  : null,
+            )
+          ],
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -45,34 +55,8 @@ class SaveCategoryLayout extends StatelessWidget {
               const SizedBox(height: kGap16),
               CategoryNameTextField(),
               const SizedBox(height: kGap16),
-              Row(children: [SubmitCategoryButton()]),
             ],
           ),
-        );
-      },
-    );
-  }
-}
-
-class SubmitCategoryButton extends StatelessWidget {
-  const SubmitCategoryButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<SaveCategoryCubit, SaveCategoryState>(
-      builder: (context, state) {
-        return ElevatedButton(
-          onPressed:
-              state.isValidName && !state.existsAlready && !state.isLoading
-              ? () => context.read<SaveCategoryCubit>().onSubmit()
-              : null,
-          child: state.isLoading
-              ? const CupertinoActivityIndicator()
-              : Text(
-                  state.category != null
-                      ? context.strings.edit
-                      : context.strings.create,
-                ),
         );
       },
     );

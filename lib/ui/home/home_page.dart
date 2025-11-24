@@ -12,6 +12,12 @@ import '../../repository/note_types_repository.dart';
 import '../../repository/notes_list_view_repository.dart';
 import '../../repository/reminder_repository.dart';
 
+/// The HomePage widget that sets up repositories and blocs for the app.
+///
+/// It handles the main navigation shell and provides necessary dependencies
+/// to its child widgets.
+///
+/// Also initiates permission checks on load.
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.navigationShell});
 
@@ -47,6 +53,8 @@ class _HomePageState extends State<HomePage> {
       ],
       child: MultiBlocProvider(
         providers: [
+          // Provide the PermissionsBloc and trigger a permission check on load
+          // for notifications and alarms scheduling.
           BlocProvider<PermissionsBloc>.value(
             value: serviceLocator<PermissionsBloc>()
               ..add(CheckPermissions()),

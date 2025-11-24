@@ -5,6 +5,7 @@ class ShowNoteEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+/// Event to get a note by its ID
 final class GetNoteById extends ShowNoteEvent {
   final String? noteId;
 
@@ -14,6 +15,7 @@ final class GetNoteById extends ShowNoteEvent {
   List<Object?> get props => [noteId];
 }
 
+/// Event to watch schedules and alarms associated with a note ID
 final class WatchSchedulesAndAlarmsByNoteId extends ShowNoteEvent {
   final String? noteId;
 
@@ -23,11 +25,13 @@ final class WatchSchedulesAndAlarmsByNoteId extends ShowNoteEvent {
   List<Object?> get props => [noteId];
 }
 
+/// Event to handle changes in note content
 final class OnChangeNoteContent extends ShowNoteEvent {
   @override
   List<Object?> get props => [];
 }
 
+/// Event to delete a note by its ID
 final class DeleteNoteById extends ShowNoteEvent {
   final String? noteId;
 

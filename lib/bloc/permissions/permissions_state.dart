@@ -2,7 +2,11 @@
 part of 'permissions_bloc.dart';
 
 class PermissionsState extends Equatable {
+
+  /// Indicates whether notification permissions have been granted.
   final bool notificationsGranted;
+
+  /// Indicates whether schedule exact alarm permissions have been granted.
   final bool scheduleExactAlarmGranted;
 
   const PermissionsState({

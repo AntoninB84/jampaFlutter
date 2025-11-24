@@ -5,4 +5,5 @@ class NotesListViewEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+/// Event to watch notes updates and reflect changes in the list view.
 final class WatchNotes extends NotesListViewEvent {}

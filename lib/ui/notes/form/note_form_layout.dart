@@ -24,12 +24,16 @@ class NoteFormLayout extends StatelessWidget {
     return BlocListener<SaveNoteBloc, SaveNoteState>(
       listener: (context, dataState) {
         if(!dataState.isSavingInProgress){
+          // Do not show anything while saving is in progress
+          // This is to prevent the reset of the State before handling the saving
+          // of Schedules and Reminders associated to the Note in the SaveNoteBloc
           if (dataState.noteSavingStatus.isFailure) {
             SnackBarX.showError(context, context.strings.generic_error_message);
           } else if (dataState.noteSavingStatus.isSuccessful) {
             SnackBarX.showSuccess(context, context.strings.save_note_success_feedback);
             // Back to the previous screen after success
             context.pop();
+            // Clean the SaveNoteBloc state
             context.read<SaveNoteBloc>().add(CleanStateEvent());
           }
         }
@@ -43,7 +47,9 @@ class NoteFormLayout extends StatelessWidget {
               leading: Buttons.backButtonIcon(
                   context: context,
                   onPressed: (){
+                    // Back to the previous screen
                     context.pop();
+                    // Clean the SaveNoteBloc state
                     context.read<SaveNoteBloc>().add(CleanStateEvent());
                   }
               ),
@@ -65,6 +71,7 @@ class NoteFormLayout extends StatelessWidget {
                         : context.strings.create_note_title,
                   ),
                   const SizedBox(height: kGap16),
+                  // Title Text Field
                   NoteTitleTextField(
                     value: state.title.value,
                     validator: state.title,
@@ -72,23 +79,27 @@ class NoteFormLayout extends StatelessWidget {
                         .add(TitleChangedEvent(title: value)),
                   ),
                   const SizedBox(height: kGap16),
+                  // Quill Editor for Note Content
                   NoteContentTextField(
                     quillController: state.quillController,
                     editorMaxHeight: MediaQuery.sizeOf(context).height * 0.3,
                   ),
                   const SizedBox(height: kGap16),
+                  // Note Type Dropdown Selector
                   NoteTypeSelector(
                     value: state.selectedNoteType,
                     onChanged: (value) => context.read<NoteFormBloc>()
                         .add(SelectedNoteTypeChangedEvent(noteType: value)),
                   ),
                   const SizedBox(height: kGap16),
+                  // Note Categories Multi Selector
                   NoteCategoriesMultiSelector(
                     selectedCategories: state.selectedCategories,
                     onCategorySelected: (values) => context.read<NoteFormBloc>()
                         .add(SelectedCategoriesChangedEvent(categories: values)),
                   ),
                   const SizedBox(height: kGap8),
+                  // Single Dates and Recurring Schedules Tab View
                   SchedulesTabView(
                     noteId: state.noteId,
                     isEditing: state.isEditing,

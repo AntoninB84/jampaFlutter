@@ -19,6 +19,7 @@ class NoteTypesLayout extends StatelessWidget {
     return BlocConsumer<NoteTypesBloc, NoteTypesState>(
         bloc: context.read<NoteTypesBloc>(),
         listener: (context, state) {
+          // Show feedback based on the deletion state
           if (state.deletionError) {
             SnackBarX.showError(context, context.strings.delete_note_type_error_message);
           } else if (state.deletionSuccess) {
@@ -30,16 +31,15 @@ class NoteTypesLayout extends StatelessWidget {
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Header with title and add button
                 Headers.listHeader(
                   context: context,
                   title: context.strings.note_types,
                   onAddPressed: (){
                     context.pushNamed("CreateNoteType");
                   },
-                  onBackPressed: (){
-                    context.pop();
-                  },
                 ),
+                // Note types list
                 Expanded(
                   child: NoteTypesListWidget()
                 ),

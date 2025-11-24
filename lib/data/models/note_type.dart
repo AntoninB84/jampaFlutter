@@ -3,8 +3,11 @@ import 'package:drift/drift.dart';
 
 import '../database.dart';
 
+/// A class that combines NoteTypeEntity with the count of notes associated with it.
 class NoteTypeWithCount {
+  /// The note type entity.
   final NoteTypeEntity noteType;
+  /// The count of notes associated with this note type.
   final int noteCount;
 
   NoteTypeWithCount({
@@ -13,6 +16,7 @@ class NoteTypeWithCount {
   });
 }
 
+/// The Drift table definition for note types.
 @UseRowClass(NoteTypeEntity)
 class NoteTypeTable extends Table {
   TextColumn get id => text()();
@@ -24,10 +28,19 @@ class NoteTypeTable extends Table {
   Set<Column<Object>> get primaryKey => {id};
 }
 
+/// The entity class representing a note type.
 class NoteTypeEntity {
+
+  /// The unique identifier for the note type (UUID).
   String id;
+
+  /// The name of the note type.
   String name;
+
+  /// The timestamp when the note type was created.
   DateTime createdAt;
+
+  /// The timestamp when the note type was last updated.
   DateTime updatedAt;
 
   NoteTypeEntity({
@@ -67,6 +80,7 @@ class NoteTypeEntity {
         other.updatedAt == updatedAt;
   }
 
+  /// Converts this entity to a NoteTypeTableCompanion for database operations.
   NoteTypeTableCompanion toCompanion() {
     return NoteTypeTableCompanion(
       id: Value(id),

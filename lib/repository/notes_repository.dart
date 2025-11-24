@@ -6,10 +6,12 @@ import 'package:jampa_flutter/utils/service_locator.dart';
 import '../data/dao/note_category_dao.dart';
 import '../data/models/note_category.dart';
 
+/// Repository for managing notes and their related operations.
 class NotesRepository {
   const NotesRepository();
 
-
+  /// Saves a single note and manages its category relationships.
+  /// Returns the saved [NoteEntity].
   Future<NoteEntity> saveNote(NoteEntity note) async {
     return await NoteDao.saveSingleNote(note).then((insertedNote) async {
       // Re-assign categories to the inserted note
@@ -28,25 +30,30 @@ class NotesRepository {
       }
       return insertedNote;
     });
-    
   }
 
+  /// Saves a list of notes to the database.
   Future<void> saveNotes(List<NoteEntity> notes) async {
     await NoteDao.saveListOfNotes(notes);
   }
 
+  /// Updates the content of a note with the given [id] and [content].
   Future<void> updateNoteContent(String id, String content) async {
     await NoteDao.updateNoteContent(id, content);
   }
 
+  /// Deletes a note by its [id] and also removes associated schedules.
   Future<void> deleteNoteById(String id) async {
     await serviceLocator<ScheduleRepository>().deleteSchedulesByNoteId(id);
     await NoteDao.deleteNoteById(id);
   }
 
+  /// Watches a note by its [id] and returns a stream of [NoteEntity].
   Stream<NoteEntity?> watchNoteById(String id)  {
     return NoteDao.watchNoteById(id);
   }
+
+  /// Retrieves a note by its [id].
   Future<NoteEntity?> getNoteById(String id) async {
     return await NoteDao.getNoteById(id);
   }

@@ -5,6 +5,7 @@ import 'package:jampa_flutter/bloc/notes/form/note_form_helpers.dart';
 import '../../utils/enums/reminder_offset_type_enum.dart';
 import '../database.dart';
 
+/// Definition of the Reminder table in the database
 @UseRowClass(ReminderEntity)
 class ReminderTable extends Table {
   TextColumn get id => text()();
@@ -19,13 +20,28 @@ class ReminderTable extends Table {
   Set<Column<Object>> get primaryKey => {id};
 }
 
+/// Reminder Entity Class
 class ReminderEntity {
+
+  /// Unique identifier for the reminder (UUID)
   final String id;
+
+  /// Identifier for the parent schedule
   final String scheduleId;
+
+  /// Offset value for the reminder
   final int offsetValue;
+
+  /// Type of offset (e.g., minutes, hours, days)
   final ReminderOffsetType offsetType;
-  final bool isNotification; // true if the alarm should be silent
+
+  /// Indicates if the reminder is a notification or alarm
+  final bool isNotification;
+
+  /// Timestamp when the reminder was created
   final DateTime createdAt;
+
+  /// Timestamp when the reminder was last updated
   final DateTime updatedAt;
 
   ReminderEntity({
@@ -38,6 +54,7 @@ class ReminderEntity {
     required this.updatedAt,
   });
 
+  /// Converts the entity to a Drift companion for database operations
   ReminderTableCompanion toCompanion() {
     return ReminderTableCompanion(
       id: Value(id),
@@ -98,6 +115,7 @@ class ReminderEntity {
     return jsonArray.map((json) => ReminderEntity.fromJson(json)).toList();
   }
 
+  /// Converts the entity to [ReminderFormElements] for form handling
   ReminderFormElements toReminderFormElements() {
     return ReminderFormElements(
       scheduleId: scheduleId,
@@ -109,6 +127,7 @@ class ReminderEntity {
     );
   }
 
+  /// Creates a [ReminderEntity] from [ReminderFormElements] for data saving
   static ReminderEntity fromReminderFormElements(ReminderFormElements elements) {
     return ReminderEntity(
       id: elements.reminderId,

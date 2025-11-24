@@ -25,15 +25,30 @@ class NoteTypesState extends Equatable {
   }) : noteTypes = noteTypes ?? const [],
        noteTypesWithCount = noteTypesWithCount ?? const [];
 
+  /// The current status of the note types list.
   final NoteTypesListStatus listStatus;
+
+  /// The list of note types.
   final List<NoteTypeEntity> noteTypes;
+
+  /// The list of note types along with their associated note counts.
   final List<NoteTypeWithCount> noteTypesWithCount;
+
+  /// Indicates if there was an error during deletion of a note type.
   final bool deletionError;
+
+  /// Indicates if the deletion of a note type was successful.
   final bool deletionSuccess;
 
 
   @override
-  List<Object?> get props => [listStatus, noteTypes, noteTypesWithCount, deletionError, deletionSuccess];
+  List<Object?> get props => [
+    listStatus,
+    noteTypes,
+    noteTypesWithCount,
+    deletionError,
+    deletionSuccess
+  ];
 
   NoteTypesState copyWith({
     List<NoteTypeEntity>? noteTypes,

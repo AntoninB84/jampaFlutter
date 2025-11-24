@@ -10,6 +10,7 @@ import 'package:jampa_flutter/utils/constants/styles/sizes.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
+/// A widget that displays a list of all categories with their usage counts.
 class CategoriesListWidget extends StatefulWidget {
   const CategoriesListWidget({super.key});
 
@@ -28,10 +29,12 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget> {
             case CategoriesListStatus.initial:
             case CategoriesListStatus.loading:
             case CategoriesListStatus.success:
+              // Use fake skeleton data while loading
               List<CategoryWithCount> categoriesWithCount = state.listStatus.isLoading
                   ? List.filled(5, fakeSkeletonCategoryWithCount)
                   : state.categoriesWithCount;
 
+              // Show no results found if the list is empty
               if(categoriesWithCount.isEmpty){
                 return Center(child: Text(context.strings.no_results_found));
               }
@@ -42,6 +45,7 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget> {
                   controller: scrollController,
                   itemCount: categoriesWithCount.length,
                   itemBuilder: (context, index) {
+                    // Retrieve category and its usage count based on index
                     final category = categoriesWithCount[index].category;
                     final usageCount = categoriesWithCount[index].noteCount;
 
@@ -58,6 +62,7 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget> {
                             )
                           ),
                           onTap: () {
+                            // Navigate to edit category page with category ID as parameter
                             context.pushNamed("EditCategory", extra: {'id': category.id.toString()});
                           },
                           trailing: Row(
@@ -73,10 +78,15 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget> {
                                         confirmButtonText: context.strings.delete,
                                         cancelButtonText: context.strings.cancel,
                                         onConfirm: (){
-                                          context.read<CategoriesBloc>().add(DeleteCategory(category.id!));
+                                          // Dispatch delete category event to CategoriesBloc
+                                          context.read<CategoriesBloc>().add(DeleteCategory(category.id));
+                                          // Close the dialog
                                           dialogContext.pop();
                                         },
-                                        onCancel: (){dialogContext.pop();}
+                                        onCancel: (){
+                                          // Close the dialog
+                                          dialogContext.pop();
+                                        }
                                     );
                                   });
                                 }

@@ -10,12 +10,16 @@ import 'package:uuid/uuid.dart';
 
 part 'save_note_type_state.dart';
 
+/// Cubit to manage the state of saving a note type
+/// Handles fetching, validating, and saving note types
 class SaveNoteTypeCubit extends Cubit<SaveNoteTypeState> {
   SaveNoteTypeCubit() : super(const SaveNoteTypeState());
 
   final NoteTypesRepository noteTypesRepository =
         serviceLocator<NoteTypesRepository>();
 
+  /// Fetches a note type by ID for updating
+  /// If the note type is found, updates the state with its details
   void fetchNoteTypeForUpdate(String? noteTypeId) {
     if(noteTypeId != null){
       try {
@@ -42,6 +46,7 @@ class SaveNoteTypeCubit extends Cubit<SaveNoteTypeState> {
     }
   }
 
+  /// Handles changes to the name input field
   void onNameChanged(String value) {
     final name = NameValidator.dirty(value);
     emit(
@@ -55,7 +60,9 @@ class SaveNoteTypeCubit extends Cubit<SaveNoteTypeState> {
     );
   }
 
+  /// Submits the form to save the note type
   void onSubmit() {
+    // Validate the name field
     final name = NameValidator.dirty(state.name.value);
     emit(
       state.copyWith(
@@ -64,6 +71,7 @@ class SaveNoteTypeCubit extends Cubit<SaveNoteTypeState> {
       )
     );
 
+    // Proceed only if the name is valid
     if (state.isValidName) {
       // If the name is valid, start loading
       emit(

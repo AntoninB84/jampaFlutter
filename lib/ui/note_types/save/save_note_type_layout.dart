@@ -10,6 +10,7 @@ import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 import '../../../bloc/note_types/save/save_note_type_cubit.dart';
 import '../../../utils/constants/styles/sizes.dart';
+import '../../widgets/buttons/buttons.dart';
 
 class SaveNoteTypeLayout extends StatelessWidget {
   const SaveNoteTypeLayout({super.key});
@@ -33,6 +34,14 @@ class SaveNoteTypeLayout extends StatelessWidget {
       },
       builder: (context, state) {
         return JampaScaffoldedAppBarWidget(
+          actions: [
+            Buttons.saveButtonIcon(
+              context: context,
+              onPressed: state.isValidName && !state.existsAlready && !state.isLoading
+                  ? () => context.read<SaveNoteTypeCubit>().onSubmit()
+                  : null,
+            )
+          ],
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -45,34 +54,8 @@ class SaveNoteTypeLayout extends StatelessWidget {
               const SizedBox(height: kGap16),
               NoteTypeNameTextField(),
               const SizedBox(height: kGap16),
-              Row(children: [SubmitNoteTypeButton()]),
             ],
           ),
-        );
-      },
-    );
-  }
-}
-
-class SubmitNoteTypeButton extends StatelessWidget {
-  const SubmitNoteTypeButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<SaveNoteTypeCubit, SaveNoteTypeState>(
-      builder: (context, state) {
-        return ElevatedButton(
-          onPressed:
-              state.isValidName && !state.existsAlready && !state.isLoading
-              ? () => context.read<SaveNoteTypeCubit>().onSubmit()
-              : null,
-          child: state.isLoading
-              ? const CupertinoActivityIndicator()
-              : Text(
-                  state.noteType != null
-                      ? context.strings.edit
-                      : context.strings.create,
-                ),
         );
       },
     );
