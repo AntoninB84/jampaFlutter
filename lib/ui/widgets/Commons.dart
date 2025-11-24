@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 
 import '../../utils/constants/styles/sizes.dart';
 
+/// A collection of common UI components and styles used across the app.
 abstract class Commons {
+
+  /// A container widget for secondary lists with specific styling, such as
+  /// maximum height, border, and padding.
   static Widget secondaryListsContainer({
     required BuildContext context,
     required Widget child

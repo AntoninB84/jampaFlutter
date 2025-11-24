@@ -4,6 +4,7 @@ import 'package:jampa_flutter/utils/constants/styles/sizes.dart';
 import 'package:jampa_flutter/utils/constants/styles/styles.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
+/// A Quill rich text editor for note content input.
 class NoteContentTextField extends StatefulWidget {
   const NoteContentTextField({super.key,
     required this.quillController,

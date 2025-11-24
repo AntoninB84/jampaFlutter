@@ -4,9 +4,21 @@ import 'package:go_router/go_router.dart';
 import '../home/widgets/settings_menu.dart';
 import 'buttons/buttons.dart';
 
+/// A Scaffolded AppBar widget with a logo in the center.
+///
+/// If no leading or actions widgets are provided, it defaults to
+/// a back button on the left, and a settings menu on the right.
+///
+/// The body of the Scaffold can be customized by passing a widget to the [body] parameter.
 class JampaScaffoldedAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
+
+  /// The leading widget to display on the left side of the AppBar.
   final Widget? leading;
+
+  /// The actions widgets to display on the right side of the AppBar.
   final List<Widget>? actions;
+
+  /// The body of the Scaffold.
   final Widget? body;
 
   const JampaScaffoldedAppBarWidget({

@@ -21,6 +21,7 @@ class ReminderFormLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<SaveNoteBloc, SaveNoteState>(
       listener: (context, state) {
+        // Listen for the save status changes to show feedback
         if (state.remindersSavingStatus.isFailure) {
           SnackBarX.showError(context, context.strings.generic_error_message);
         } else if (state.remindersSavingStatus.isSuccessful) {
@@ -40,7 +41,7 @@ class ReminderFormLayout extends StatelessWidget {
                   context: context,
                   onPressed: state.canSubmitForm
                       ? () => context.read<ReminderFormBloc>().add(
-                      OnSubmitReminderFormEvent())
+                          OnSubmitReminderFormEvent())
                       : null,
                 )
               ],
@@ -52,6 +53,8 @@ class ReminderFormLayout extends StatelessWidget {
                       title: context.strings.reminder_title,
                     ),
                     const SizedBox(height: kGap16),
+
+                    // Offset Type Selector
                     ReminderOffsetTypeSelector(
                         selectedValue: state.newReminderFormElements.selectedOffsetType,
                         onChanged: (offsetType) => context.read<ReminderFormBloc>()
@@ -59,6 +62,8 @@ class ReminderFormLayout extends StatelessWidget {
                         )
                     ),
                     const SizedBox(height: kGap16),
+
+                    // Offset Number Text Field
                     ReminderOffsetTextField(
                       value: state.offsetNumberValidator.value.toString(),
                       validator: state.offsetNumberValidator,
@@ -66,6 +71,8 @@ class ReminderFormLayout extends StatelessWidget {
                           .add(SelectOffsetNumberEvent(offsetNumber: value)),
                     ),
                     const SizedBox(height: kGap16),
+
+                    // Is Notification Checkbox
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [

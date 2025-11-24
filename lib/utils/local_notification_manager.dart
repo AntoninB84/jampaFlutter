@@ -5,6 +5,27 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+/// Types of notifications
+enum NotificationType {
+  reminder,
+}
+
+/// Data structure for notification details
+class NotificationData {
+  final NotificationType notificationType;
+  final String? objectId;
+  final String? objectType;
+  final DateTime? scheduledDate;
+
+  NotificationData({
+    required this.notificationType,
+    this.objectId,
+    this.objectType,
+    this.scheduledDate,
+  });
+}
+
+/// Manages local notifications for the app
 class LocalNotificationManager {
 
   //region Singleton
@@ -24,23 +45,28 @@ class LocalNotificationManager {
     importance: Importance.max,
   );
 
+  /// Initializes the local notification manager
   Future<void> initialize() async {
-   await initializeLocalNotifications();
-   await initializeTimeZone();
+    // Initialize local notifications with platform specific settings
+    await initializeLocalNotifications();
+    // Initialize timezone for precise scheduling
+    await initializeTimeZone();
 
-   await flutterLocalNotificationsPlugin
+    // Create notification channel for Android
+    await flutterLocalNotificationsPlugin
        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
        ?.createNotificationChannel(androidChannel);
-   await flutterLocalNotificationsPlugin.cancelAll();
-
+    // await flutterLocalNotificationsPlugin.cancelAll();
   }
 
+  /// Initializes timezone data and sets the local timezone for precise scheduling
   Future<void> initializeTimeZone() async {
     tz.initializeTimeZones();
     final currentTimeZone = await FlutterTimezone.getLocalTimezone();
     tz.setLocalLocation(tz.getLocation(currentTimeZone.identifier));
   }
 
+  /// Initializes local notifications with platform specific settings
   Future<void> initializeLocalNotifications() async {
     // Notification logo for android
     const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings("ic_notification");
@@ -63,17 +89,19 @@ class LocalNotificationManager {
     );
   }
 
+  /// Handles notification taps when the app is in the background or terminated
   @pragma('vm:entry-point')
   static Future<void> messageBackgroundHandler(NotificationResponse notificationResponse) async {
     print("Handling a background message: ${notificationResponse.payload}");
-    // Handle the notification tap when the app is in the background or terminated
+    //TODO  Handle the notification tap when the app is in the background or terminated
   }
 
+  /// Handles notification taps when the app is in the foreground
   Future<void> _manageForegroundFromLocalNotification(NotificationResponse? response) async {
     var payload = response?.payload;
     if (payload?.isNotEmpty == true) {
       try {
-       // Handle the notification tap when the app is in the foreground
+       // TODO Handle the notification tap when the app is in the foreground
       } catch (error) {
         // Handle any errors that occur during notification handling
       }
@@ -81,6 +109,7 @@ class LocalNotificationManager {
   }
 
   // region DisplayNotification
+  /// Displays an immediate notification with the given title, body, and data
   Future<bool> showNotification(String? title, String? body, NotificationData notificationData) async {
     String groupKey = "group_${notificationData.notificationType}";
 
@@ -122,6 +151,7 @@ class LocalNotificationManager {
     return true;
   }
 
+  /// Schedules a notification for a future date and time
   Future<void> scheduleNotification(String? title, String? body, NotificationData notificationData) async {
     String groupKey = "group_${notificationData.notificationType}";
 
@@ -155,27 +185,10 @@ class LocalNotificationManager {
     }
   }
 
+  /// Removes a scheduled or displayed notification by its ID
   Future<void> removeNotification(int notificationId) async {
     await flutterLocalNotificationsPlugin.cancel(notificationId);
   }
 
 // endregion
-}
-
-class NotificationData {
-  final NotificationType notificationType;
-  final String? objectId;
-  final String? objectType;
-  final DateTime? scheduledDate;
-
-  NotificationData({
-    required this.notificationType,
-    this.objectId,
-    this.objectType,
-    this.scheduledDate,
-  });
-}
-
-enum NotificationType {
-  reminder,
 }

@@ -4,6 +4,7 @@ import 'package:jampa_flutter/data/models/note_type.dart';
 
 import '../../../data/database.dart';
 
+/// Fake skeleton data used as placeholders while real data is loading for note list view.
 NoteListViewData get fakeSkeletonNoteListViewData => NoteListViewData(
   noteId: "0",
   noteTitle: 'Loading...',
@@ -16,6 +17,7 @@ NoteListViewData get fakeSkeletonNoteListViewData => NoteListViewData(
   noteUpdatedAt: DateTime.now(),
 );
 
+/// Fake skeleton data used as placeholders while real data is loading for category with count.
 CategoryWithCount get fakeSkeletonCategoryWithCount => CategoryWithCount(
   category: CategoryEntity(
     id: "0",
@@ -26,6 +28,7 @@ CategoryWithCount get fakeSkeletonCategoryWithCount => CategoryWithCount(
   noteCount: 0,
 );
 
+/// Fake skeleton data used as placeholders while real data is loading for note type with count.
 NoteTypeWithCount get fakeSkeletonNoteTypeWithCount => NoteTypeWithCount(
   noteType: NoteTypeEntity(
     id: "0",

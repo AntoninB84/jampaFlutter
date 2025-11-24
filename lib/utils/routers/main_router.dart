@@ -16,7 +16,8 @@ import 'package:jampa_flutter/utils/service_locator.dart';
 import '../../ui/notes/form/note_form_page.dart';
 import '../../ui/schedule/recurrent_date_form/recurrent_date_form_page.dart';
 
-
+/// Define application routes as constants
+/// This helps in avoiding typos and makes route management easier
 class AppRoutes {
   static const String notes = '/notes';
   static const String noteDetails = '/details';
@@ -35,15 +36,21 @@ class AppRoutes {
 
 final _routerKey = GlobalKey<NavigatorState>();
 
+/// Main application router using GoRouter with stateful shell routes
+/// This setup allows for complex navigation patterns, including nested routes
+/// and stateful navigation shells.
 final GoRouter mainRouter = GoRouter(
   navigatorKey: _routerKey,
   initialLocation: AppRoutes.notes,
   routes: <RouteBase>[
+    // Define a stateful shell route with an indexed stack
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
         // Check and reset settings menu state on each navigation
         serviceLocator<SettingsMenuCubit>().reset(state.fullPath);
 
+        // Return the home page with the navigation shell
+        //TODO this might no more be useful as I removed the bottom navigation bar and replaced the single state AppBar to a Widget
         return HomePage(navigationShell: navigationShell,);
       },
       branches: [

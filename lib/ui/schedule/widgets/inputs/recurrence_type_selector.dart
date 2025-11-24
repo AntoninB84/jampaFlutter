@@ -6,6 +6,8 @@ import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 import '../../../../utils/constants/styles/sizes.dart';
 
+/// A dropdown selector for choosing a recurrence type.
+/// (e.g. every n days, every n years, on the nth day of the month, on Monday, etc.)
 class RecurrenceTypeSelector extends StatelessWidget {
   const RecurrenceTypeSelector({super.key, this.value, required this.onChanged});
 

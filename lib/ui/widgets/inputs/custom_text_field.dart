@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+/// A customizable text field widget with optional error display.
+/// [CustomTextField] allows you to specify a controller, onChanged callback,
+/// error widget, hint text, and keyboard type.
 class CustomTextField extends StatelessWidget {
   const CustomTextField({
     super.key,

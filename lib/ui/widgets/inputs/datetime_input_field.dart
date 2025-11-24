@@ -6,6 +6,7 @@ import 'package:jampa_flutter/utils/extensions/datetime_extension.dart';
 
 import '../../../utils/constants/styles/sizes.dart';
 
+/// A custom input field widget for selecting date and time.
 class DatetimeInputField extends StatefulWidget {
   const DatetimeInputField({
     super.key,

@@ -4,6 +4,7 @@ import 'package:jampa_flutter/ui/widgets/inputs/custom_text_field.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:jampa_flutter/utils/forms/name_validator.dart';
 
+// A text field for the note title with validation and error display.
 class NoteTitleTextField extends StatefulWidget {
   const NoteTitleTextField({super.key,
     this.value,

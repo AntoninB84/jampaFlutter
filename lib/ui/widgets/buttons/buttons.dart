@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:jampa_flutter/utils/constants/styles/sizes.dart';
 
+/// A collection of commonly used button widgets.
+///
+/// This abstract class provides static methods to create various types of
+/// icon buttons such as delete, edit, back, add, and save buttons. Each method
+/// allows customization of the button's behavior and density through parameters.
 abstract class Buttons {
 
   static Widget deleteButtonIcon({

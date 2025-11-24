@@ -37,6 +37,7 @@ class SingleDateFormLayout extends StatelessWidget {
             leading: Buttons.backButtonIcon(
                 context: context,
                 onPressed: () {
+                  // Navigate back
                   context.pop();
                 }
             ),
@@ -57,6 +58,8 @@ class SingleDateFormLayout extends StatelessWidget {
                     title: context.strings.create_single_schedule_title,
                   ),
                   const SizedBox(height: kGap16),
+
+                  // Start DateTime Input
                   DatetimeInputField(
                     label: context.strings.create_schedule_start_date_field_title,
                     initialDateTime: state.newSingleDateFormElements
@@ -68,6 +71,8 @@ class SingleDateFormLayout extends StatelessWidget {
                     },
                   ),
                   const SizedBox(height: kGap16),
+
+                  // End DateTime Input
                   DatetimeInputField(
                     label: context.strings.create_schedule_end_date_field_title,
                     initialDateTime: state.newSingleDateFormElements
@@ -81,8 +86,9 @@ class SingleDateFormLayout extends StatelessWidget {
                     },
                   ),
                   const SizedBox(height: kGap16),
+
+                  // Reminder List Widget for the single date
                   SaveReminderList(
-                    noteId: state.newSingleDateFormElements.noteId,
                     scheduleId: state.newSingleDateFormElements.scheduleId,
                     isEditing: state.isEditing,
                   ),

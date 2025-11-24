@@ -8,6 +8,12 @@ import 'package:uuid/uuid.dart';
 
 import '../../../data/models/note.dart';
 
+/// This class contains initial data for categories, note types, notes, schedules, and reminders.
+///
+/// It generates unique IDs for each entity using the `uuid` package and provides
+/// predefined lists of entities with sample data.
+///
+/// ONLY FOR TESTING AND DEMONSTRATION PURPOSES.
 class InitialData {
   static final _uuid = Uuid();
 

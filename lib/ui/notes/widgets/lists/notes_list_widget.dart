@@ -9,6 +9,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../utils/constants/data/fake_skeleton_data.dart';
 
+/// Widget displaying a list of notes with loading skeletons and error handling.
 class NotesListWidget extends StatefulWidget {
   const NotesListWidget({super.key});
 
@@ -27,9 +28,11 @@ class _NotesListWidgetState extends State<NotesListWidget> {
             case NotesListStatus.initial:
             case NotesListStatus.loading:
             case NotesListStatus.success:
+              // Show loading skeletons if loading, else show actual notes
               List<NoteListViewData> notes = state.listStatus.isLoading ?
                 List.filled(3, fakeSkeletonNoteListViewData) : state.notes;
 
+              // Show message if no notes found
               if(notes.isEmpty){
                 return Center(child: Text(context.strings.no_results_found));
               }
@@ -78,6 +81,7 @@ class _NotesListWidgetState extends State<NotesListWidget> {
                             ),
                           ),
                           onTap: (){
+                            // Navigate to note details page upon tapping a note
                             context.pushNamed(
                                 'NoteDetails',
                                 extra: {'id': note.noteId.toString()}
@@ -96,7 +100,9 @@ class _NotesListWidgetState extends State<NotesListWidget> {
     );
   }
 
+  /// Widget to display schedules and alarms count information for a note.
   Widget schedulesAndAlarmsLine(NoteListViewData note){
+    // Only show if there are schedules or recurring schedules
     if(note.schedulesCount > 0 || note.recurringSchedulesCount > 0){
       return Flexible(
         child: Padding(
@@ -106,6 +112,7 @@ class _NotesListWidgetState extends State<NotesListWidget> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
+              // Show SINGLE DATE schedules count if greater than 0
               if(note.schedulesCount > 0)
                 Row(
                   children: [
@@ -121,6 +128,7 @@ class _NotesListWidgetState extends State<NotesListWidget> {
                     ),
                   ],
                 ),
+              // Show RECURRING schedules count if greater than 0
               if(note.recurringSchedulesCount > 0)
                 Padding(
                   padding: const EdgeInsets.only(
@@ -141,6 +149,7 @@ class _NotesListWidgetState extends State<NotesListWidget> {
                     ],
                   ),
                 ),
+              // Show reminders count if greater than 0
               if(note.remindersCount > 0)
                 Padding(
                   padding: const EdgeInsets.only(

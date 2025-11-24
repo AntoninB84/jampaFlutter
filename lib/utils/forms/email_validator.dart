@@ -10,6 +10,7 @@ extension EmailValidationErrorX on EmailValidationError {
   bool get isInvalidFormat => this == EmailValidationError.invalidFormat;
 }
 
+/// A FormzInput class for validating email addresses.
 class EmailValidator extends FormzInput<String, EmailValidationError> {
   const EmailValidator.pure() : super.pure('');
   const EmailValidator.dirty([String value = '']) : super.dirty(value);

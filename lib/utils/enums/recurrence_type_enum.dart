@@ -1,19 +1,23 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:jampa_flutter/data/models/schedule.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
+/// Enum representing different types of recurrence for [ScheduleEntity]
 enum RecurrenceType {
   intervalDays,
   intervalYears,
   dayBasedWeekly,
   dayBasedMonthly;
 
+  /// Creates a [RecurrenceType] from a string value.
   static RecurrenceType? fromString(String value) {
     return RecurrenceType.values.firstWhereOrNull(
             (e) => e.name == value
     );
   }
 
+  /// Returns a localized display name for the recurrence type.
   String displayName(BuildContext context, {String? value}) {
     switch (this) {
       case RecurrenceType.intervalDays:

@@ -11,6 +11,7 @@ import 'package:multi_dropdown/multi_dropdown.dart';
 
 import '../../../../utils/constants/styles/styles.dart';
 
+/// A multi-selector widget for selecting weekdays for recurrence settings.
 class RecurrenceWeekdaysMultiSelector extends StatefulWidget{
   const RecurrenceWeekdaysMultiSelector({
     super.key,

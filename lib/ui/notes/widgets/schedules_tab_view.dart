@@ -7,6 +7,7 @@ import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 import '../../../bloc/notes/save/save_note_bloc.dart';
 
+/// A tab view for displaying single date and recurrent schedules associated with a note.
 class SchedulesTabView extends StatefulWidget {
   const SchedulesTabView({
     super.key,
@@ -15,6 +16,9 @@ class SchedulesTabView extends StatefulWidget {
   });
 
   final String noteId;
+
+  /// Made for passing information whether the note is being edited or created
+  /// to child widgets and adjust their behavior accordingly.
   final bool isEditing;
 
   @override

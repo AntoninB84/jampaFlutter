@@ -6,6 +6,10 @@ import 'package:jampa_flutter/utils/extensions/schedule_extension.dart';
 
 import '../../../../utils/constants/styles/sizes.dart';
 
+/// A widget that displays a list of schedules associated with a note.
+/// Also displays associated reminders for each schedule.
+///
+/// A separator is shown between past and upcoming schedules.
 class NoteSchedulesList extends StatefulWidget {
   final List<ScheduleWithNextOccurrence> schedules;
 
@@ -74,6 +78,7 @@ class _NoteSchedulesListState extends State<NoteSchedulesList> {
     );
   }
 
+  /// Builds a sublist widget displaying reminders for a given schedule item.
   Widget reminderSubListWidget(ScheduleWithNextOccurrence item) {
     return ListView.builder(
         shrinkWrap: true,
@@ -108,6 +113,8 @@ class _NoteSchedulesListState extends State<NoteSchedulesList> {
     );
   }
 
+  /// Builds a timeline separator widget to indicate the transition
+  /// between past and upcoming schedules.
   Widget listTimelineSeparator() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: kGap8),
@@ -137,6 +144,7 @@ class _NoteSchedulesListState extends State<NoteSchedulesList> {
     );
   }
 
+  /// Builds a widget displaying the next/last occurrence date
   Widget? nextOrLastOccurrenceWidget(ScheduleWithNextOccurrence item) {
     if(item.schedule.isRecurring
         && item.nextOccurrence != null)

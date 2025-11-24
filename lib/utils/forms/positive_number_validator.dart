@@ -8,6 +8,7 @@ extension PositiveNumberValidationErrorX on PositiveNumberValidationError {
   bool get isInvalidValue => this == PositiveNumberValidationError.invalidValue;
 }
 
+/// A FormzInput class for validating positive numbers (greater than or equal to 0).
 class PositiveValueValidator extends FormzInput<int?, PositiveNumberValidationError> {
   const PositiveValueValidator.pure() : super.pure(1);
   const PositiveValueValidator.dirty([super.value = 1]) : super.dirty();

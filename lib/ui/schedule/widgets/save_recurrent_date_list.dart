@@ -13,6 +13,10 @@ import '../../../utils/constants/styles/sizes.dart';
 import '../../../utils/enums/weekdays_enum.dart';
 import '../../widgets/confirmation_dialog.dart';
 
+/// A widget that displays a list of recurrent dates for a note,
+/// allowing users to add, edit, or delete them.
+///
+/// Is used only inside the NoteForm screen.
 class SaveRecurrentDateList extends StatefulWidget {
   const SaveRecurrentDateList({
     super.key,
@@ -21,8 +25,14 @@ class SaveRecurrentDateList extends StatefulWidget {
     this.isEditing = false,
   });
 
+  /// The ID of the note associated with the recurrent dates.
   final String noteId;
+
+  /// The list of recurrent date entities to display.
   final List<ScheduleEntity> listElements;
+
+  /// Indicates whether the note is being edited.
+  /// Used to customize deletion confirmation messages.
   final bool isEditing;
 
   @override
@@ -36,6 +46,7 @@ class _SaveRecurrentDateListState extends State<SaveRecurrentDateList> {
       children: [
         ElevatedButton(
             onPressed: (){
+              // Navigate to the RecurrentDateForm to add a new recurrent date.
               context.pushNamed('RecurrentDateForm', extra: {
                 'noteId': widget.noteId,
               });
@@ -48,8 +59,10 @@ class _SaveRecurrentDateListState extends State<SaveRecurrentDateList> {
             itemCount: widget.listElements.length,
             itemBuilder: (context, index) {
               final recurrence = widget.listElements[index];
-              String displayText = 'null';
 
+              // Determine the display text based on the recurrence type.
+              // (e.g., "Every 3 days", "Every Monday", etc.)
+              String displayText = 'null';
               switch(recurrence.recurrenceType){
                 case null:throw UnimplementedError();
                 case RecurrenceType.intervalDays:
@@ -80,6 +93,7 @@ class _SaveRecurrentDateListState extends State<SaveRecurrentDateList> {
                     dense: true,
                     title: Text(displayText),
                     onTap: (){
+                      // Navigate to the RecurrentDateForm to edit the selected recurrent date.
                       context.pushNamed('RecurrentDateForm', extra: {
                         'scheduleId': recurrence.id,
                         'noteId': recurrence.noteId,
@@ -101,12 +115,17 @@ class _SaveRecurrentDateListState extends State<SaveRecurrentDateList> {
                                   confirmButtonText: context.strings.delete,
                                   cancelButtonText: context.strings.cancel,
                                   onConfirm: (){
+                                    // Dispatch an event to remove or delete the recurrent date.
                                     context.read<SaveNoteBloc>()
                                       .add(RemoveOrDeleteRecurrentDateEvent(
                                         recurrence.id));
+                                    // Close the dialog.
                                     dialogContext.pop();
                                   },
-                                  onCancel: (){dialogContext.pop();}
+                                  onCancel: (){
+                                    // Close the dialog without taking any action.
+                                    dialogContext.pop();
+                                  }
                               );
                             });
                           },

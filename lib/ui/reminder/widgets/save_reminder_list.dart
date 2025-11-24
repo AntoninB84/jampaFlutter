@@ -10,16 +10,21 @@ import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 import '../../../utils/constants/styles/sizes.dart';
 
+/// A widget that displays a list of reminders associated with a specific schedule.
+/// It allows users to add, edit, and delete reminders
+/// inside of the single or recurring schedule form.
 class SaveReminderList extends StatefulWidget {
   const SaveReminderList({
     super.key,
-    required this.noteId,
     required this.scheduleId,
     this.isEditing = false,
   });
 
-  final String noteId;
+  /// The ID of the schedule to which the reminders are associated.
   final String scheduleId;
+
+  /// A flag indicating whether the reminders are being edited.
+  /// This is used to customize the delete confirmation message.
   final bool isEditing;
 
   @override
@@ -31,12 +36,14 @@ class _SaveReminderListState extends State<SaveReminderList> {
   Widget build(BuildContext context) {
     return BlocConsumer<SaveNoteBloc, SaveNoteState>(
       listener: (context, state) {
-        // TODO: implement listener
+        // Do nothing for now
       },
       buildWhen: (previous, current) {
         return previous.reminders != current.reminders;
       },
       builder: (context, state) {
+        // Filter reminders associated with the given scheduleId from
+        // the [SaveNoteBloc] state.
         List<ReminderEntity> listElements = state.reminders
             .where((reminder) => reminder.scheduleId == widget.scheduleId)
             .toList();
@@ -70,6 +77,9 @@ class _SaveReminderListState extends State<SaveReminderList> {
                       itemBuilder: (context, index) {
 
                         final reminder = listElements[index];
+
+                        // Generate the display text for the reminder
+                        // e.g., "10 minutes before"
                         final String displayText = context.strings
                             .reminder_display_text(
                           reminder.offsetValue,
@@ -86,6 +96,7 @@ class _SaveReminderListState extends State<SaveReminderList> {
                               dense: true,
                               title: Text(displayText),
                               onTap: (){
+                                // Navigate to the ReminderForm for editing
                                 context.pushNamed("ReminderForm", extra: {
                                   'scheduleId': reminder.scheduleId,
                                   'reminderId': reminder.id,
@@ -106,10 +117,15 @@ class _SaveReminderListState extends State<SaveReminderList> {
                                             ),
                                             confirmButtonText: context.strings.delete,
                                             cancelButtonText: context.strings.cancel,
-                                            onCancel: () {dialogContext.pop();},
+                                            onCancel: () {
+                                              // Close the dialog
+                                              dialogContext.pop();
+                                            },
                                             onConfirm: () {
+                                              // Delete or remove the reminder
                                               context.read<SaveNoteBloc>()
                                                   .add(RemoveOrDeleteReminderEvent(reminder.id));
+                                              // Close the dialog
                                               dialogContext.pop();
                                             }
                                         ),

@@ -10,6 +10,8 @@ extension NameValidationErrorX on NameValidationError {
   bool get isInvalidLength => this == NameValidationError.invalidLength;
 }
 
+/// A FormzInput class for validating names.
+/// The name must be between 3 and 120 characters long.
 class NameValidator extends FormzInput<String, NameValidationError> {
   const NameValidator.pure() : super.pure('');
   const NameValidator.dirty([String value = '']) : super.dirty(value);

@@ -16,6 +16,8 @@ import '../repository/reminder_repository.dart';
 
 final GetIt serviceLocator = GetIt.instance;
 
+/// Registers all the global services and repositories used in the app
+/// with the service locator for dependency injection.
 void setupServiceLocator() {
   serviceLocator.registerLazySingleton<AppDatabase>(() => AppDatabase.instance());
   serviceLocator.registerLazySingleton<AuthRepository>(() => AuthRepository());

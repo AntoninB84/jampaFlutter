@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
+/// Enum representing the days of the week
+/// Useful for scheduling recurring events based on dayBasedWeekly recurrence
 enum WeekdaysEnum {
   monday(1),
   tuesday(2),
@@ -14,14 +16,17 @@ enum WeekdaysEnum {
 
   final int asInt;
 
+  /// Get the enum value from an integer representation of the day
   static WeekdaysEnum fromInt(int day) {
     return WeekdaysEnum.values.firstWhere((element) => element.asInt == day);
   }
 
+  /// Get the localized display name of the weekday
   String displayName(BuildContext context) {
     return weekdayIntToString(context, asInt);
   }
 
+  /// Convert a list of weekday integers to a localized string representation
   static String weekdaysString (BuildContext context, List<int> weekDays) {
     if(weekDays.isEmpty) return '';
     if(weekDays.length == 1) {
@@ -39,6 +44,7 @@ enum WeekdaysEnum {
     return '';
   }
 
+  /// Convert a single weekday integer to its localized string representation
   static String weekdayIntToString (BuildContext context, int weekDay) {
     switch(weekDay) {
       case 1: return context.strings.monday;

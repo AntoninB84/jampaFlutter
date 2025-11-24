@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:jampa_flutter/ui/widgets/buttons/buttons.dart';
 
+/// A class containing static methods for creating header widgets.
 class Headers {
 
+  /// Creates a list header with a title and an add button.
   static Widget listHeader({
     required BuildContext context,
     required String title,
@@ -25,6 +27,7 @@ class Headers {
     );
   }
 
+  /// Creates a basic header with just a title.
   static Widget basicHeader({
     required BuildContext context,
     required String title

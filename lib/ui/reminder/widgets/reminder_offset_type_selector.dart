@@ -5,6 +5,7 @@ import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import '../../../utils/constants/styles/sizes.dart';
 import '../../../utils/enums/reminder_offset_type_enum.dart';
 
+/// A dropdown selector for choosing the reminder offset type (days, hours, minutes).
 class ReminderOffsetTypeSelector extends StatelessWidget {
   const ReminderOffsetTypeSelector({super.key,
     required this.selectedValue,
@@ -14,6 +15,7 @@ class ReminderOffsetTypeSelector extends StatelessWidget {
   final ReminderOffsetType selectedValue;
   final Function(ReminderOffsetType?) onChanged;
 
+  /// Returns the localized label for the given [reminderOffsetType].
   String getReminderOffsetTypeLabel(ReminderOffsetType reminderOffsetType, BuildContext context) {
     switch (reminderOffsetType) {
       case ReminderOffsetType.days:

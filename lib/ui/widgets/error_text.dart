@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// A widget that displays error text in a styled manner.
 class ErrorText extends StatelessWidget {
   const ErrorText({super.key, required this.errorText});
 

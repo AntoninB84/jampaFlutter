@@ -9,6 +9,10 @@ import '../utils/helpers/reminder_helpers.dart';
 import '../utils/helpers/utils.dart';
 import '../utils/local_notification_manager.dart';
 
+
+/// Sets up the periodic reminder worker using Workmanager
+/// This worker runs every 6 hours to check for due reminders
+/// and schedule notifications or alarms accordingly.
 void setupReminderWorker() async {
   if(!(await Workmanager().isScheduledByUniqueName("reminder_task"))){
     await Workmanager().initialize(
@@ -26,15 +30,23 @@ void setupReminderWorker() async {
   }
 }
 
+/// Entry point for the reminder worker.
+/// This function is called by Workmanager when the worker is executed.
+/// It initializes necessary components and calls the periodic reminder task.
 @pragma('vm:entry-point')
 void reminderWorkerCallbackDispatcher() async {
   Workmanager().executeTask((task, inputData) async {
+    // Ensure Flutter bindings are initialized in the isolate
+    // before using any Flutter plugins or services.
     WidgetsFlutterBinding.ensureInitialized();
+    // Keeping track of execution for debugging purposes
     await Utils.logMessage("Reminder worker executing task: $task");
     switch (task) {
       case "reminder_scheduler":
+        // Initialize local notifications and alarm plugins
         await LocalNotificationManager().initialize();
         await Alarm.init();
+        // Execute the periodic reminder task
         await periodicReminderTask();
         break;
       default:
@@ -46,9 +58,10 @@ void reminderWorkerCallbackDispatcher() async {
   });
 }
 
-Future<void> periodicReminderTask({
-  bool useNewInstanceOfDb = true,
-}) async {
+/// The core logic for the periodic reminder task.
+/// It fetches schedules with due reminders, calculates reminder dates,
+/// and sets up notifications or alarms accordingly.
+Future<void> periodicReminderTask() async {
 
   // Fetching pending notifications and alarms to avoid duplicates
   List<NotificationPayload> pendingNotificationPayload = await NotificationHelpers.fetchPendingPayloads();
@@ -56,9 +69,11 @@ Future<void> periodicReminderTask({
   // Fetch schedules having reminders for to-be-done notes, excluding those already scheduled
   List<ScheduleEntity> result = await ScheduleDao.getAllSchedulesHavingRemindersForToBeDoneNotes(
     remindersIdsToExclude: pendingNotificationPayload.map((e) => e.objectId).toList(),
-    useNewInstanceOfDb: useNewInstanceOfDb
+    useNewInstanceOfDb: true
   );
   await Utils.logMessage("Fetched stuff from isolate : ${result.length} schedules found");
+
+  // Calculate reminder dates from schedules
   List<ReminderToSetup> remindersToSetup = await ReminderHelpers.calculateReminderDateFromSchedule(result);
   await Utils.logMessage("Reminders to setup from isolate : ${remindersToSetup.length} reminders found");
 

@@ -8,6 +8,7 @@ extension MonthDayValidationErrorX on MonthDayValidationError {
   bool get isInvalidValue => this == MonthDayValidationError.invalidValue;
 }
 
+/// A FormzInput class for validating month days (1-31).
 class MonthDayValidator extends FormzInput<int?, MonthDayValidationError> {
   const MonthDayValidator.pure() : super.pure(1);
   const MonthDayValidator.dirty([super.value = 1]) : super.dirty();

@@ -12,6 +12,10 @@ import '../../../data/models/schedule.dart';
 import '../../../utils/constants/styles/sizes.dart';
 import '../../widgets/confirmation_dialog.dart';
 
+/// A widget that displays a list of single date schedule elements
+/// and allows adding, editing, and deleting them.
+///
+/// Is only used inside the NoteForm screen.
 class SaveSingleDateList extends StatefulWidget {
   const SaveSingleDateList({
     super.key,
@@ -20,8 +24,14 @@ class SaveSingleDateList extends StatefulWidget {
     this.isEditing = false,
   });
 
+  /// The ID of the note to which the schedule elements belong.
   final String noteId;
+
+  /// The list of single date schedule elements to display.
   final List<ScheduleEntity> listElements;
+
+  /// Indicates whether the note is being edited.
+  /// Used in deletion confirmation dialogs.
   final bool isEditing;
 
   @override
@@ -35,6 +45,7 @@ class _SaveSingleDateListState extends State<SaveSingleDateList> {
       children: [
         ElevatedButton(
             onPressed: (){
+              // Navigate to the SingleDateForm to add a new single date schedule element.
               context.pushNamed('SingleDateForm', extra: {
                 'noteId': widget.noteId,
               });
@@ -47,6 +58,8 @@ class _SaveSingleDateListState extends State<SaveSingleDateList> {
             itemCount: widget.listElements.length,
             itemBuilder: (context, index) {
               final date = widget.listElements[index];
+
+              // Format the display text for the schedule element.
               final String displayText = date.startDateTime != null
                   ? date.startDateTime!.toFullFormat(context)
                   : 'null';
@@ -60,6 +73,7 @@ class _SaveSingleDateListState extends State<SaveSingleDateList> {
                     dense: true,
                     title: Text(displayText),
                     onTap: (){
+                      // Navigate to the SingleDateForm to edit the selected single date schedule element.
                       context.pushNamed('SingleDateForm', extra: {
                         'scheduleId': date.id,
                         'noteId': date.noteId,
@@ -81,12 +95,17 @@ class _SaveSingleDateListState extends State<SaveSingleDateList> {
                                   confirmButtonText: context.strings.delete,
                                   cancelButtonText: context.strings.cancel,
                                   onConfirm: (){
+                                    // Dispatch an event to remove or delete the selected single date schedule element.
                                     context.read<SaveNoteBloc>()
                                       .add(RemoveOrDeleteSingleDateEvent(
                                         date.id));
+                                    // Close the dialog.
                                     dialogContext.pop();
                                   },
-                                  onCancel: (){dialogContext.pop();}
+                                  onCancel: (){
+                                    // Close the dialog without making any changes.
+                                    dialogContext.pop();
+                                  }
                               );
                             });
                           },

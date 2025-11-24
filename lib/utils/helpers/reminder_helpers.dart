@@ -9,9 +9,17 @@ import '../enums/reminder_offset_type_enum.dart';
 import '../local_notification_manager.dart';
 import 'notification_helpers.dart';
 
+/// Helper class to hold reminder setup information
+/// Used when calculating and setting up reminders
 class ReminderToSetup {
+
+  /// The schedule associated with the reminder
   final ScheduleEntity schedule;
+
+  /// The reminder to be set up
   final ReminderEntity reminder;
+
+  /// The calculated date and time for the reminder
   final DateTime reminderDateTime;
 
   ReminderToSetup({
@@ -21,15 +29,23 @@ class ReminderToSetup {
   });
 }
 
+/// Helper class for managing reminders
 abstract class ReminderHelpers {
 
   //region Reminder Date Calculations
+  /// Calculate reminder dates for a list of schedules.
+  /// Only reminders that fall within the next 2 days are considered
   static Future<List<ReminderToSetup>> calculateReminderDateFromSchedule(List<ScheduleEntity> schedules) async {
     DateTime now = DateTime.now();
     DateTime upperLimit = now.add(Duration(days: 2)); //Consider reminders only within the next 2 days
     List<ReminderToSetup> remindersDates = [];
+
+
     for(final schedule in schedules) {
+      // Skip if no reminders
       if(schedule.reminders == null || schedule.reminders!.isEmpty) continue;
+
+      // For each reminder, calculate the reminder date based on the schedule's recurrence type
       for(final reminder in schedule.reminders!) {
         DateTime reminderDate;
         switch(schedule.recurrenceType) {
@@ -49,6 +65,8 @@ abstract class ReminderHelpers {
             reminderDate = await calculateReminderDateFromSingleDate(schedule, reminder);
             break;
         }
+
+        // Only add if the reminder date is within the next 2 days
         if(reminderDate.isAfter(now) && reminderDate.isBefore(upperLimit)) {
           remindersDates.add(ReminderToSetup(
             schedule: schedule,
@@ -61,28 +79,35 @@ abstract class ReminderHelpers {
     return remindersDates;
   }
 
+  /// Calculate reminder date for single date schedules
   static Future<DateTime> calculateReminderDateFromSingleDate(ScheduleEntity schedule, ReminderEntity reminder) async {
     final DateTime startDate = schedule.startDateTime ?? schedule.createdAt;
     return startDate.subtract(getOffsetDuration(reminder));
   }
 
+  /// Calculate reminder date for recurring schedules with interval in days
   static Future<DateTime> calculateReminderDateFromRecurringDateIntervalDays(ScheduleEntity schedule, ReminderEntity reminder) async {
     final DateTime startDate = schedule.startDateTime ?? schedule.createdAt;
     //Find the next occurrence based on the interval in days
     DateTime nextOccurrence = startDate;
     final int interval = schedule.recurrenceInterval ?? 1;
+    // Loop until we find the next occurrence that is after the current date
     while(nextOccurrence.isBefore(DateTime.now())){
       nextOccurrence = nextOccurrence.add(Duration(days: interval));
     }
+    // Subtract the reminder offset to get the reminder date
     return nextOccurrence.subtract(getOffsetDuration(reminder));
   }
 
+  /// Calculate reminder date for recurring schedules with interval in years
   static Future<DateTime> calculateReminderDateFromRecurringDateIntervalYears(ScheduleEntity schedule, ReminderEntity reminder) async {
+    final DateTime now = DateTime.now();
     final DateTime startDate = schedule.startDateTime ?? schedule.createdAt;
     //Find the next occurrence based on the interval in years
     DateTime nextOccurrence = startDate;
     final int interval = schedule.recurrenceInterval ?? 1;
-    while(nextOccurrence.isBefore(DateTime.now())){
+    // Loop until we find the next occurrence that is after the current date
+    while(nextOccurrence.isBefore(now)){
       nextOccurrence = DateTime(
           nextOccurrence.year + interval,
           nextOccurrence.month,
@@ -92,15 +117,19 @@ abstract class ReminderHelpers {
           nextOccurrence.second
       );
     }
+    // Subtract the reminder offset to get the reminder date
     return nextOccurrence.subtract(getOffsetDuration(reminder));
   }
 
+  /// Calculate reminder date for recurring schedules based on day of the month
   static Future<DateTime> calculateReminderDateFromRecurringDateDayBasedMonths(ScheduleEntity schedule, ReminderEntity reminder) async {
+    final DateTime now = DateTime.now();
     final DateTime startDate = schedule.startDateTime ?? schedule.createdAt;
     //Find the next occurrence based on the day of the month
     DateTime nextOccurrence = startDate;
     final int dayOfMonth = schedule.recurrenceDay ?? startDate.day;
-    while(nextOccurrence.isBefore(DateTime.now())) {
+    // Loop until we find the next occurrence that is after the current date
+    while(nextOccurrence.isBefore(now)) {
       nextOccurrence = DateTime(
           nextOccurrence.year,
           nextOccurrence.month + 1,
@@ -121,23 +150,29 @@ abstract class ReminderHelpers {
         );
       }
     }
+    // Subtract the reminder offset to get the reminder date
     return nextOccurrence.subtract(getOffsetDuration(reminder));
   }
 
+  /// Calculate reminder date for recurring schedules based on day of the week
   static Future<DateTime> calculateReminderDateFromRecurringDateDayBasedWeeks(ScheduleEntity schedule, ReminderEntity reminder) async {
+    final DateTime now = DateTime.now();
     final DateTime startDate = schedule.startDateTime ?? schedule.createdAt;
     //Find the next occurrence based on the day of the week
     DateTime nextOccurrence = startDate;
     final int dayOfWeek = schedule.recurrenceDay ?? startDate.weekday; //1 = Monday, 7 = Sunday
-    while(nextOccurrence.isBefore(DateTime.now())) {
+    // Loop until we find the next occurrence that is after the current date
+    while(nextOccurrence.isBefore(now)) {
       nextOccurrence = nextOccurrence.add(Duration(days: 1));
       if (nextOccurrence.weekday == dayOfWeek) {
         break;
       }
     }
+    // Subtract the reminder offset to get the reminder date
     return nextOccurrence.subtract(getOffsetDuration(reminder));
   }
 
+  /// Get the offset duration from a reminder
   static Duration getOffsetDuration(ReminderEntity reminder) {
     switch(reminder.offsetType){
       case ReminderOffsetType.minutes:
@@ -150,9 +185,10 @@ abstract class ReminderHelpers {
   }
   //endregion
 
+  /// Set a reminder based on the provided ReminderToSetup information
   static Future<void> setReminder(ReminderToSetup reminderToSetup) async {
     if(reminderToSetup.reminder.isNotification){
-      // Schedule silent notification
+      // Schedule a notification
       await Utils.logMessage("Scheduling notification for reminder at ${reminderToSetup.reminderDateTime} for note id ${reminderToSetup.schedule.noteId}");
       await LocalNotificationManager().scheduleNotification(
           reminderToSetup.schedule.note?.title,
@@ -165,7 +201,7 @@ abstract class ReminderHelpers {
           )
       );
     }else{
-      // Schedule actual alarm
+      // Schedule an alarm
       await Utils.logMessage("Scheduling alarm at ${reminderToSetup.reminderDateTime} for note id ${reminderToSetup.schedule.noteId}");
       final alarmSettings = AlarmSettings(
         id: reminderToSetup.hashCode,
@@ -191,12 +227,15 @@ abstract class ReminderHelpers {
     }
   }
 
+  /// Cancel a reminder based on the provided NotificationPayload information
   static Future<void> cancelReminder(NotificationPayload notificationPayload) async {
     await Utils.logMessage("Cancelling reminder for id ${notificationPayload.objectId}");
     if(notificationPayload.alarmId != null){
+      // Stop the alarm
       await Alarm.stop(notificationPayload.alarmId!);
     }
     if(notificationPayload.notificationId != null){
+      // Remove the notification
       await LocalNotificationManager().removeNotification(notificationPayload.notificationId!);
     }
   }

@@ -45,8 +45,8 @@ class RecurrentDateFormLayout extends StatelessWidget {
               leading: Buttons.backButtonIcon(
                   context: context,
                   onPressed: (){
+                    // Navigate back
                     context.pop();
-                    //TODO clean recurrent date from SaveNoteBloc ?
                   }
               ),
               actions: [
@@ -66,6 +66,8 @@ class RecurrentDateFormLayout extends StatelessWidget {
                     title: context.strings.create_recurrent_schedule_title,
                   ),
                   const SizedBox(height: kGap16),
+
+                  // Recurrence type selector, always visible
                   RecurrenceTypeSelector(
                       value: state.newRecurrentDateFormElements.selectedRecurrenceType,
                       onChanged: (value) => context.read<RecurrentDateFormBloc>().add(
@@ -73,21 +75,24 @@ class RecurrentDateFormLayout extends StatelessWidget {
                       )
                   ),
                   const SizedBox(height: kGap16),
+
+                  // Conditional input based on selected recurrence type
                   Builder(
                       builder: (context){
                         if(state.newRecurrentDateFormElements.selectedRecurrenceType.isIntervalDays) {
-                          // Show interval input for days
+                          // Show interval input for days interval
                           return RecurrenceIntervalTextField(
                               value: state.newRecurrentDateFormElements
                                   .selectedRecurrenceDaysInterval?.toString() ?? '',
-                              // isValid: ,
                               validator: state.intervalDaysValidator,
                               onChanged: (value){
+                                // Update days interval in bloc
                                 context.read<RecurrentDateFormBloc>().add(
                                     ChangeRecurrenceDayIntervalEvent(interval: value)
                                 );
                               },
                               hintText: context.strings.create_recurrent_date_interval_field_hint,
+                              // TODO improve error handling
                               errorWidget: state.intervalDaysValidator.isNotValid ? ErrorText(
                                   errorText: (){
                                     if (state.intervalDaysValidator.displayError?.isInvalidValue ?? false) {
@@ -98,17 +103,19 @@ class RecurrentDateFormLayout extends StatelessWidget {
                               ) : null
                           );
                         }else if(state.newRecurrentDateFormElements.selectedRecurrenceType.isIntervalYears) {
-                          // Show interval input for years
+                          // Show interval input for years interval
                           return RecurrenceIntervalTextField(
                               value: state.newRecurrentDateFormElements
                                   .selectedRecurrenceYearsInterval?.toString() ?? '',
                               validator: state.intervalYearsValidator,
                               onChanged: (value){
+                                // Update years interval in bloc
                                 context.read<RecurrentDateFormBloc>().add(
                                     ChangeRecurrenceYearIntervalEvent(interval: value)
                                 );
                               },
                               hintText: context.strings.create_recurrent_date_interval_field_hint,
+                              // TODO improve error handling
                               errorWidget: state.intervalYearsValidator.isNotValid ? ErrorText(
                                   errorText: (){
                                     if (state.intervalYearsValidator.displayError?.isInvalidValue ?? false) {
@@ -119,17 +126,19 @@ class RecurrentDateFormLayout extends StatelessWidget {
                               ) : null
                           );
                         }else if(state.newRecurrentDateFormElements.selectedRecurrenceType.isDayBasedMonthly) {
-                          // Show month day input
+                          // Show month day input (e.g., 15th of every month)
                           return RecurrenceIntervalTextField(
                               value: state.newRecurrentDateFormElements
                                   .selectedRecurrenceMonthDate?.toString() ?? '',
                               validator: state.monthDateValidator,
                               onChanged: (value){
+                                // Update month date in bloc
                                 context.read<RecurrentDateFormBloc>().add(
                                     ChangeRecurrenceMonthDateEvent(day: value)
                                 );
                               },
                               hintText: context.strings.create_recurrent_date_month_day_field_hint,
+                              //TODO improve error handling
                               errorWidget: state.monthDateValidator.isNotValid ? ErrorText(
                                   errorText: (){
                                     if (state.monthDateValidator.displayError?.isInvalidValue ?? false) {
@@ -140,13 +149,15 @@ class RecurrentDateFormLayout extends StatelessWidget {
                               ) : null
                           );
                         }else if(state.newRecurrentDateFormElements.selectedRecurrenceType.isDayBasedWeekly) {
-                          // Show weekday multi selector
+                          // Show weekday multi selector (e.g., every Monday and Wednesday)
                           return RecurrenceWeekdaysMultiSelector(
                               selectedWeekdays: state.newRecurrentDateFormElements.selectedRecurrenceWeekdays ?? [],
                               onWeekdaySelected: (values) => context.read<RecurrentDateFormBloc>().add(
                                   ChangeRecurrenceWeekDaysEvent(weekDays: values)
                               ),
                               validator: (values){
+                                // Validate that at least one weekday is selected
+                                //TODO create a proper validator class for this ?
                                 if(values == null || values.isEmpty){
                                   return context.strings.create_recurrent_date_no_weekday_selected;
                                 }
@@ -159,6 +170,8 @@ class RecurrentDateFormLayout extends StatelessWidget {
                       }
                   ),
                   const SizedBox(height: kGap16),
+
+                  // DateTime input fields
                   DatetimeInputField(
                     label: context.strings.create_schedule_start_date_field_title,
                     initialDateTime: state.newRecurrentDateFormElements.selectedStartDateTime,
@@ -169,6 +182,8 @@ class RecurrentDateFormLayout extends StatelessWidget {
                     },
                   ),
                   const SizedBox(height: kGap16),
+
+                  // End date input field
                   DatetimeInputField(
                     label: context.strings.create_schedule_end_date_field_title,
                     initialDateTime: state.newRecurrentDateFormElements.selectedEndDateTime,
@@ -180,6 +195,8 @@ class RecurrentDateFormLayout extends StatelessWidget {
                     },
                   ),
                   const SizedBox(height: kGap16),
+
+                  // Recurrence end date input field
                   DatetimeInputField(
                     label: context.strings.create_recurrent_date_recurrence_end_field_title,
                     initialDateTime: state.newRecurrentDateFormElements.selectedRecurrenceEndDate,
@@ -191,8 +208,9 @@ class RecurrentDateFormLayout extends StatelessWidget {
                     },
                   ),
                   const SizedBox(height: kGap16),
+
+                  // Reminder list for the recurrent date
                   SaveReminderList(
-                    noteId: state.newRecurrentDateFormElements.noteId,
                     scheduleId: state.newRecurrentDateFormElements.scheduleId,
                     isEditing: state.isEditing,
                   ),

@@ -18,6 +18,9 @@ extension PasswordValidationErrorX on PasswordValidationError {
   bool get hasNoSpecialCharacter => this == PasswordValidationError.noSpecialCharacter;
 }
 
+/// A FormzInput class for validating passwords.
+/// The password must be at least 8 characters long and include
+/// uppercase letters, lowercase letters, numbers, and special characters.
 class PasswordValidator extends FormzInput<String, PasswordValidationError> {
   const PasswordValidator.pure() : super.pure('');
   const PasswordValidator.dirty([String value = '']) : super.dirty(value);

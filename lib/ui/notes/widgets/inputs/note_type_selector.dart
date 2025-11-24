@@ -8,6 +8,7 @@ import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/constants/styles/sizes.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
+// A dropdown selector for choosing a note type.
 class NoteTypeSelector extends StatelessWidget {
   const NoteTypeSelector({super.key, this.value, required this.onChanged});
 
