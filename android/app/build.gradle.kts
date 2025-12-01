@@ -39,6 +39,23 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+
+    // Allows to combine multiple product flavors. "Default" used as only one dimension is defined.
+    flavorDimensions += "default"
+    productFlavors {
+        create("development") {
+            dimension = "default"
+            manifestPlaceholders["appName"] = "Jampa Dev"
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-dev"
+        }
+        create("production") {
+            dimension = "default"
+            manifestPlaceholders["appName"] = "Jampa"
+            applicationIdSuffix = ""
+            versionNameSuffix = ""
+        }
+    }
 }
 
 dependencies {

@@ -7,6 +7,7 @@ import 'package:jampa_flutter/repository/auth_repository.dart';
 import 'package:jampa_flutter/repository/user_repository.dart';
 import 'package:jampa_flutter/utils/constants/l10n/app_localizations.dart';
 import 'package:jampa_flutter/utils/constants/styles/themes.dart';
+import 'package:jampa_flutter/utils/helpers/flavors.dart';
 import 'package:jampa_flutter/utils/local_notification_manager.dart';
 import 'package:jampa_flutter/utils/routers/main_router.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
@@ -14,9 +15,15 @@ import 'package:jampa_flutter/workers/reminder_worker.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Initialize flavor
+  FlavorConfig.initialize(flavor: String.fromEnvironment("FLAVOR_TYPE"));
+  // Initialize GetIt service locator
   setupServiceLocator();
+  // Initialize local notifications
   await LocalNotificationManager().initialize();
+  // Initialize reminder worker
   setupReminderWorker();
+  // Initialize alarm package
   await Alarm.init();
 
   runApp(const MyApp());
