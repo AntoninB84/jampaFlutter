@@ -31,6 +31,17 @@ final class OnChangeNoteContent extends ShowNoteEvent {
   List<Object?> get props => [];
 }
 
+// Event to change status of the note
+final class ChangeNoteStatus extends ShowNoteEvent {
+  final String? noteId;
+  final NoteStatusEnum newStatus;
+
+  ChangeNoteStatus({this.noteId, required this.newStatus});
+
+  @override
+  List<Object?> get props => [noteId, newStatus];
+}
+
 /// Event to delete a note by its ID
 final class DeleteNoteById extends ShowNoteEvent {
   final String? noteId;

@@ -1,14 +1,5 @@
 part of 'show_note_bloc.dart';
 
-enum NoteStatus { initial, loading, success, failure }
-
-extension NoteStatusX on NoteStatus {
-  bool get isInitial => this == NoteStatus.initial;
-  bool get isLoading => this == NoteStatus.loading;
-  bool get isSuccess => this == NoteStatus.success;
-  bool get isFailure => this == NoteStatus.failure;
-}
-
 class ShowNoteState extends Equatable {
 
   /// The note being displayed.
@@ -21,25 +12,25 @@ class ShowNoteState extends Equatable {
   final List<ScheduleWithNextOccurrence> schedulesAndReminders;
 
   /// The current status of note operations.
-  final NoteStatus status;
+  final UIStatusEnum status;
 
   /// The current status of schedules loading operations.
-  final NoteStatus schedulesLoadingStatus;
+  final UIStatusEnum schedulesLoadingStatus;
 
-  /// Indicates if the note deletion was successful.
-  final bool deletionSuccess;
+  /// The current status of note deletion.
+  final UIStatusEnum noteDeletionStatus;
 
-  /// Indicates if the note deletion failed.
-  final bool deletionFailure;
+  /// The current status of note status change.
+  final UIStatusEnum noteStatusChangeStatus;
 
   const ShowNoteState({
     this.note,
     required this.quillController,
     this.schedulesAndReminders = const [],
-    this.status = NoteStatus.initial,
-    this.schedulesLoadingStatus = NoteStatus.initial,
-    this.deletionSuccess = false,
-    this.deletionFailure = false,
+    this.status = UIStatusEnum.initial,
+    this.schedulesLoadingStatus = UIStatusEnum.initial,
+    this.noteDeletionStatus = UIStatusEnum.initial,
+    this.noteStatusChangeStatus = UIStatusEnum.initial,
   });
 
   @override
@@ -49,18 +40,18 @@ class ShowNoteState extends Equatable {
     schedulesAndReminders,
     status,
     schedulesLoadingStatus,
-    deletionSuccess,
-    deletionFailure
+    noteDeletionStatus,
+    noteStatusChangeStatus
   ];
 
   ShowNoteState copyWith({
     NoteEntity? note,
     QuillController? quillController,
     List<ScheduleWithNextOccurrence>? schedulesAndReminders,
-    NoteStatus? status,
-    NoteStatus? schedulesLoadingStatus,
-    bool? deletionSuccess,
-    bool? deletionFailure,
+    UIStatusEnum? status,
+    UIStatusEnum? schedulesLoadingStatus,
+    UIStatusEnum? noteDeletionStatus,
+    UIStatusEnum? noteStatusChangeStatus,
   }) {
     return ShowNoteState(
       note: note ?? this.note,
@@ -68,8 +59,8 @@ class ShowNoteState extends Equatable {
       schedulesAndReminders: schedulesAndReminders ?? this.schedulesAndReminders,
       status: status ?? this.status,
       schedulesLoadingStatus: schedulesLoadingStatus ?? this.schedulesLoadingStatus,
-      deletionSuccess: deletionSuccess ?? this.deletionSuccess,
-      deletionFailure: deletionFailure ?? this.deletionFailure,
+      noteDeletionStatus: noteDeletionStatus ?? this.noteDeletionStatus,
+      noteStatusChangeStatus: noteStatusChangeStatus ?? this.noteStatusChangeStatus,
     );
   }
 

@@ -1,6 +1,7 @@
 
 import 'package:jampa_flutter/data/models/category.dart';
 import 'package:jampa_flutter/data/models/note_type.dart';
+import 'package:jampa_flutter/utils/enums/note_status_enum.dart';
 
 import '../../../data/database.dart';
 
@@ -15,6 +16,7 @@ NoteListViewData get fakeSkeletonNoteListViewData => NoteListViewData(
   remindersCount: 0,
   noteCreatedAt: DateTime.now(),
   noteUpdatedAt: DateTime.now(),
+  noteStatus: NoteStatusEnum.todo,
 );
 
 /// Fake skeleton data used as placeholders while real data is loading for category with count.

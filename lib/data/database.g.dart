@@ -2053,6 +2053,7 @@ class NoteListViewData extends DataClass {
   final DateTime noteCreatedAt;
   final DateTime noteUpdatedAt;
   final String? noteTypeId;
+  final NoteStatusEnum noteStatus;
   final String? noteTypeName;
   final String? categoriesIds;
   final String? categoriesNames;
@@ -2065,6 +2066,7 @@ class NoteListViewData extends DataClass {
     required this.noteCreatedAt,
     required this.noteUpdatedAt,
     this.noteTypeId,
+    required this.noteStatus,
     this.noteTypeName,
     this.categoriesIds,
     this.categoriesNames,
@@ -2083,6 +2085,9 @@ class NoteListViewData extends DataClass {
       noteCreatedAt: serializer.fromJson<DateTime>(json['note_created_at']),
       noteUpdatedAt: serializer.fromJson<DateTime>(json['note_updated_at']),
       noteTypeId: serializer.fromJson<String?>(json['note_type_id']),
+      noteStatus: $NoteTableTable.$converterstatus.fromJson(
+        serializer.fromJson<String>(json['note_status']),
+      ),
       noteTypeName: serializer.fromJson<String?>(json['note_type_name']),
       categoriesIds: serializer.fromJson<String?>(json['categories_ids']),
       categoriesNames: serializer.fromJson<String?>(json['categories_names']),
@@ -2102,6 +2107,9 @@ class NoteListViewData extends DataClass {
       'note_created_at': serializer.toJson<DateTime>(noteCreatedAt),
       'note_updated_at': serializer.toJson<DateTime>(noteUpdatedAt),
       'note_type_id': serializer.toJson<String?>(noteTypeId),
+      'note_status': serializer.toJson<String>(
+        $NoteTableTable.$converterstatus.toJson(noteStatus),
+      ),
       'note_type_name': serializer.toJson<String?>(noteTypeName),
       'categories_ids': serializer.toJson<String?>(categoriesIds),
       'categories_names': serializer.toJson<String?>(categoriesNames),
@@ -2119,6 +2127,7 @@ class NoteListViewData extends DataClass {
     DateTime? noteCreatedAt,
     DateTime? noteUpdatedAt,
     Value<String?> noteTypeId = const Value.absent(),
+    NoteStatusEnum? noteStatus,
     Value<String?> noteTypeName = const Value.absent(),
     Value<String?> categoriesIds = const Value.absent(),
     Value<String?> categoriesNames = const Value.absent(),
@@ -2131,6 +2140,7 @@ class NoteListViewData extends DataClass {
     noteCreatedAt: noteCreatedAt ?? this.noteCreatedAt,
     noteUpdatedAt: noteUpdatedAt ?? this.noteUpdatedAt,
     noteTypeId: noteTypeId.present ? noteTypeId.value : this.noteTypeId,
+    noteStatus: noteStatus ?? this.noteStatus,
     noteTypeName: noteTypeName.present ? noteTypeName.value : this.noteTypeName,
     categoriesIds: categoriesIds.present
         ? categoriesIds.value
@@ -2151,6 +2161,7 @@ class NoteListViewData extends DataClass {
           ..write('noteCreatedAt: $noteCreatedAt, ')
           ..write('noteUpdatedAt: $noteUpdatedAt, ')
           ..write('noteTypeId: $noteTypeId, ')
+          ..write('noteStatus: $noteStatus, ')
           ..write('noteTypeName: $noteTypeName, ')
           ..write('categoriesIds: $categoriesIds, ')
           ..write('categoriesNames: $categoriesNames, ')
@@ -2168,6 +2179,7 @@ class NoteListViewData extends DataClass {
     noteCreatedAt,
     noteUpdatedAt,
     noteTypeId,
+    noteStatus,
     noteTypeName,
     categoriesIds,
     categoriesNames,
@@ -2184,6 +2196,7 @@ class NoteListViewData extends DataClass {
           other.noteCreatedAt == this.noteCreatedAt &&
           other.noteUpdatedAt == this.noteUpdatedAt &&
           other.noteTypeId == this.noteTypeId &&
+          other.noteStatus == this.noteStatus &&
           other.noteTypeName == this.noteTypeName &&
           other.categoriesIds == this.categoriesIds &&
           other.categoriesNames == this.categoriesNames &&
@@ -2205,6 +2218,7 @@ class NoteListView extends ViewInfo<NoteListView, NoteListViewData>
     noteCreatedAt,
     noteUpdatedAt,
     noteTypeId,
+    noteStatus,
     noteTypeName,
     categoriesIds,
     categoriesNames,
@@ -2219,7 +2233,7 @@ class NoteListView extends ViewInfo<NoteListView, NoteListViewData>
   @override
   Map<SqlDialect, String> get createViewStatements => {
     SqlDialect.sqlite:
-        'CREATE VIEW note_list_view AS SELECT n.id AS note_id, n.title AS note_title, n.created_at AS note_created_at, n.updated_at AS note_updated_at, n.note_type_id AS note_type_id, nt.name AS note_type_name, GROUP_CONCAT(DISTINCT c.id) AS categories_ids, GROUP_CONCAT(DISTINCT c.name) AS categories_names, COUNT(DISTINCT r.id) AS reminders_count, COUNT(DISTINCT s.id) AS schedules_count, COUNT(DISTINCT sr.id) AS recurring_schedules_count FROM note_table AS n LEFT JOIN note_type_table AS nt ON nt.id = n.note_type_id LEFT JOIN note_category_table AS nc ON nc.note_id = n.id LEFT JOIN category_table AS c ON c.id = nc.category_id LEFT JOIN schedule_table AS s ON s.note_id = n.id AND s.recurrence_type IS NULL LEFT JOIN schedule_table AS sr ON sr.note_id = n.id AND sr.recurrence_type IS NOT NULL LEFT JOIN reminder_table AS r ON r.schedule_id = s.id OR r.schedule_id = sr.id WHERE n.id IS NOT NULL GROUP BY n.id, n.title, n.created_at, n.note_type_id, nt.name',
+        'CREATE VIEW note_list_view AS SELECT n.id AS note_id, n.title AS note_title, n.created_at AS note_created_at, n.updated_at AS note_updated_at, n.note_type_id AS note_type_id, n.status AS note_status, nt.name AS note_type_name, GROUP_CONCAT(DISTINCT c.id) AS categories_ids, GROUP_CONCAT(DISTINCT c.name) AS categories_names, COUNT(DISTINCT r.id) AS reminders_count, COUNT(DISTINCT s.id) AS schedules_count, COUNT(DISTINCT sr.id) AS recurring_schedules_count FROM note_table AS n LEFT JOIN note_type_table AS nt ON nt.id = n.note_type_id LEFT JOIN note_category_table AS nc ON nc.note_id = n.id LEFT JOIN category_table AS c ON c.id = nc.category_id LEFT JOIN schedule_table AS s ON s.note_id = n.id AND s.recurrence_type IS NULL LEFT JOIN schedule_table AS sr ON sr.note_id = n.id AND sr.recurrence_type IS NOT NULL LEFT JOIN reminder_table AS r ON r.schedule_id = s.id OR r.schedule_id = sr.id WHERE n.id IS NOT NULL GROUP BY n.id, n.title, n.created_at, n.note_type_id, nt.name',
   };
   @override
   NoteListView get asDslTable => this;
@@ -2246,6 +2260,12 @@ class NoteListView extends ViewInfo<NoteListView, NoteListViewData>
       noteTypeId: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}note_type_id'],
+      ),
+      noteStatus: $NoteTableTable.$converterstatus.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}note_status'],
+        )!,
       ),
       noteTypeName: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
@@ -2306,6 +2326,13 @@ class NoteListView extends ViewInfo<NoteListView, NoteListViewData>
     true,
     type: DriftSqlType.string,
   );
+  late final GeneratedColumnWithTypeConverter<NoteStatusEnum, String>
+  noteStatus = GeneratedColumn<String>(
+    'note_status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+  ).withConverter<NoteStatusEnum>($NoteTableTable.$converterstatus);
   late final GeneratedColumn<String> noteTypeName = GeneratedColumn<String>(
     'note_type_name',
     aliasedName,

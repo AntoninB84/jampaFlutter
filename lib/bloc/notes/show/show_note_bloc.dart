@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:jampa_flutter/data/objects/schedule_with_next_occurrence.dart';
 import 'package:jampa_flutter/repository/notes_repository.dart';
+import 'package:jampa_flutter/utils/enums/note_status_enum.dart';
+import 'package:jampa_flutter/utils/enums/ui_status.dart';
 import 'package:jampa_flutter/utils/helpers/utils.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
@@ -26,6 +28,7 @@ class ShowNoteBloc extends Bloc<ShowNoteEvent, ShowNoteState> {
       _onNoteContentChanged,
       transformer: Utils.debounceTransformer(const Duration(seconds: 2))
     );
+    on<ChangeNoteStatus>(_changeNoteStatus);
     on<DeleteNoteById>(_deleteNoteById);
   }
 
@@ -35,8 +38,8 @@ class ShowNoteBloc extends Bloc<ShowNoteEvent, ShowNoteState> {
   /// Fetches a note by its ID and updates the state accordingly
   void _getNoteById(GetNoteById event, Emitter<ShowNoteState> emit) async {
     emit(state.copyWith(
-      status: NoteStatus.loading,
-      schedulesLoadingStatus: NoteStatus.loading,
+      status: .loading,
+      schedulesLoadingStatus: .loading,
     ));
 
     try {
@@ -53,25 +56,25 @@ class ShowNoteBloc extends Bloc<ShowNoteEvent, ShowNoteState> {
           state.quillController.changes.listen((event) => add(OnChangeNoteContent()));
 
           emit(state.copyWith(
-            status: NoteStatus.success,
+            status: .success,
             note: note,
           ));
         } else {
-          if(!state.deletionSuccess){
-            emit(state.copyWith(status: NoteStatus.failure));
+          if(!state.noteDeletionStatus.isSuccess){
+            emit(state.copyWith(status: .failure));
           }
         }
       } else {
-        emit(state.copyWith(status: NoteStatus.failure));
+        emit(state.copyWith(status: .failure));
       }
     } catch (e) {
-      emit(state.copyWith(status: NoteStatus.failure));
+      emit(state.copyWith(status: .failure));
     }
   }
 
   /// Watches schedules and alarms associated with a specific note ID
   void _watchSchedulesAndAlarmsByNoteId(WatchSchedulesAndAlarmsByNoteId event, Emitter<ShowNoteState> emit) async {
-    emit(state.copyWith(schedulesLoadingStatus: NoteStatus.loading));
+    emit(state.copyWith(schedulesLoadingStatus: .loading));
 
     try {
       if(event.noteId != null) {
@@ -80,19 +83,19 @@ class ShowNoteBloc extends Bloc<ShowNoteEvent, ShowNoteState> {
           onData: (schedulesWithNextOccurrences){
             emit(state.copyWith(
               schedulesAndReminders: schedulesWithNextOccurrences,
-              schedulesLoadingStatus: NoteStatus.success,
+              schedulesLoadingStatus: .success,
             ));
           },
           onError: (error, stackTrace){
             debugPrint("Error watching schedules and alarms by note id: $error");
-            emit(state.copyWith(schedulesLoadingStatus: NoteStatus.failure));
+            emit(state.copyWith(schedulesLoadingStatus: .failure));
           }
         );
       } else {
-        emit(state.copyWith(schedulesLoadingStatus: NoteStatus.failure));
+        emit(state.copyWith(schedulesLoadingStatus: .failure));
       }
     } catch (e) {
-      emit(state.copyWith(schedulesLoadingStatus: NoteStatus.failure));
+      emit(state.copyWith(schedulesLoadingStatus: .failure));
     }
   }
 
@@ -110,23 +113,47 @@ class ShowNoteBloc extends Bloc<ShowNoteEvent, ShowNoteState> {
     }
   }
 
+
+  /// Changes the note status
+  void _changeNoteStatus(ChangeNoteStatus event, Emitter<ShowNoteState> emit) async {
+    NoteEntity? note = state.note ?? await notesRepository.getNoteById(event.noteId ?? '');
+
+    if(note != null){
+      note = note.copyWith(status: event.newStatus);
+      await notesRepository.saveNote(note)
+      .then((_){
+        emit(state.copyWith(
+          noteStatusChangeStatus: .success,
+          note: note,
+        ));
+      })
+      .catchError((error){
+        emit(state.copyWith(noteStatusChangeStatus: .failure));
+        debugPrint("Error updating note status: $error");
+      });
+    } else {
+      emit(state.copyWith(noteStatusChangeStatus: .failure));
+      debugPrint("Note not found for status update");
+    }
+  }
+
   /// Deletes a note by its ID and updates the state accordingly
   void _deleteNoteById(DeleteNoteById event, Emitter<ShowNoteState> emit) async {
-    emit(state.copyWith(status: NoteStatus.loading, deletionSuccess: false, deletionFailure: false));
+    emit(state.copyWith(status: .loading, noteDeletionStatus: .initial));
     try {
       if(event.noteId != null) {
         await notesRepository.deleteNoteById(event.noteId!)
         .then((_){
-          emit(state.copyWith(deletionSuccess: true));
+          emit(state.copyWith(noteDeletionStatus: .success));
         }).catchError((error){
           debugPrint("Error deleting note by id: $error");
-          emit(state.copyWith(deletionFailure: true));
+          emit(state.copyWith(noteDeletionStatus: .failure));
         });
       } else {
-        emit(state.copyWith(deletionFailure: true));
+        emit(state.copyWith(noteDeletionStatus: .failure));
       }
     } catch (e) {
-      emit(state.copyWith(deletionFailure: true));
+      emit(state.copyWith(noteDeletionStatus: .failure));
     }
   }
 }

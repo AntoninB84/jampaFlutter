@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/bloc/notes/list_view/notes_list_view_bloc.dart';
+import 'package:jampa_flutter/bloc/notes/show/show_note_bloc.dart';
 import 'package:jampa_flutter/data/database.dart';
 import 'package:jampa_flutter/utils/constants/styles/sizes.dart';
+import 'package:jampa_flutter/utils/enums/ui_status.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../utils/constants/data/fake_skeleton_data.dart';
+import '../../../widgets/snackbar.dart';
 
 /// Widget displaying a list of notes with loading skeletons and error handling.
 class NotesListWidget extends StatefulWidget {
@@ -22,81 +25,146 @@ class _NotesListWidgetState extends State<NotesListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NotesListViewBloc, NotesListViewState>(
-        builder: (context, state) {
-          switch(state.listStatus){
-            case NotesListStatus.initial:
-            case NotesListStatus.loading:
-            case NotesListStatus.success:
-              // Show loading skeletons if loading, else show actual notes
-              List<NoteListViewData> notes = state.listStatus.isLoading ?
-                List.filled(3, fakeSkeletonNoteListViewData) : state.notes;
-
-              // Show message if no notes found
-              if(notes.isEmpty){
-                return Center(child: Text(context.strings.no_results_found));
-              }
-
-              return Skeletonizer(
-                enabled: state.listStatus.isLoading,
-                child: ListView.builder(
-                  controller: scrollController,
-                  itemCount: notes.length,
-                  itemBuilder: (context, index) {
-                    final note = notes[index];
-
-                    return Material(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: kGap4,
-                        ),
-                        child: ListTile(
-                          dense: true,
-                          title: Text(
-                            note.noteTitle,
-                            style: TextStyle(
-                              fontSize: kBodyLSize,
-                              color: Theme.of(context).colorScheme.primary
-                            ),
-                          ),
-                          trailing: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  note.noteTypeName ?? '',
-                                  style: TextStyle(
-                                    fontSize: kBodyMSize,
-                                  ),
-                                ),
-                              ),
-                              schedulesAndAlarmsLine(note)
-                            ],
-                          ),
-                          subtitle: Text(
-                            note.categoriesNames ?? "",
-                            style: TextStyle(
-                              fontSize: kBodySSize
-                            ),
-                          ),
-                          onTap: (){
-                            // Navigate to note details page upon tapping a note
-                            context.pushNamed(
-                                'NoteDetails',
-                                extra: {'id': note.noteId.toString()}
-                            );
-                          },
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              );
-            case NotesListStatus.error:
-              return const Center(child: Text("Error loading notes"));
+    return BlocConsumer<ShowNoteBloc, ShowNoteState>(
+      listener: (context, showNoteState) {
+        if(showNoteState.status.isFailure) {
+          // Handle generic failure such as loading note failure
+          SnackBarX.showError(context, context.strings.generic_error_message);
+        }else{
+          // Handle deletion feedback
+          if(showNoteState.noteDeletionStatus.isSuccess) {
+            SnackBarX.showSuccess(context, context.strings.delete_note_success_feedback);
+          } else if(showNoteState.noteDeletionStatus.isFailure) {
+            SnackBarX.showError(context, context.strings.delete_note_error_message);
           }
         }
+      },
+      builder: (context, showNoteState){
+        return BlocBuilder<NotesListViewBloc, NotesListViewState>(
+            builder: (context, state) {
+              switch(state.listStatus){
+                case NotesListStatus.initial:
+                case NotesListStatus.loading:
+                case NotesListStatus.success:
+                // Show loading skeletons if loading, else show actual notes
+                  List<NoteListViewData> notes = state.listStatus.isLoading ?
+                  List.filled(3, fakeSkeletonNoteListViewData) : state.notes;
+
+                  // Show message if no notes found
+                  if(notes.isEmpty){
+                    return Center(child: Text(context.strings.no_results_found));
+                  }
+
+                  return Skeletonizer(
+                    enabled: state.listStatus.isLoading,
+                    child: ListView.builder(
+                      controller: scrollController,
+                      itemCount: notes.length,
+                      itemBuilder: (context, index) {
+                        final note = notes[index];
+
+                        return Material(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: kGap4,
+                            ),
+                            child: dismissibleWidget(
+                              context: context,
+                              note: note,
+                              child: ListTile(
+                                dense: true,
+                                title: Text(
+                                  note.noteTitle,
+                                  style: TextStyle(
+                                      fontSize: kBodyLSize,
+                                      color: Theme.of(context).colorScheme.primary
+                                  ),
+                                ),
+                                trailing: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        note.noteTypeName ?? '',
+                                        style: TextStyle(
+                                          fontSize: kBodyMSize,
+                                        ),
+                                      ),
+                                    ),
+                                    schedulesAndAlarmsLine(note)
+                                  ],
+                                ),
+                                subtitle: Text(
+                                  note.categoriesNames ?? "",
+                                  style: TextStyle(
+                                      fontSize: kBodySSize
+                                  ),
+                                ),
+                                onTap: (){
+                                  // Navigate to note details page upon tapping a note
+                                  context.pushNamed(
+                                      'NoteDetails',
+                                      extra: {'id': note.noteId.toString()}
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                case NotesListStatus.error:
+                  return const Center(child: Text("Error loading notes"));
+              }
+            }
+        );
+      },
+    );
+  }
+
+  ///
+  Widget dismissibleWidget({
+    required BuildContext context,
+    required NoteListViewData note,
+    required Widget child,
+  }){
+    return Dismissible(
+        background: Container(
+          color: Theme.of(context).colorScheme.errorContainer,
+          alignment: Alignment.centerLeft,
+          padding: const EdgeInsets.only(
+              left: kGap16
+          ),
+          child: Icon(
+            Icons.delete,
+            color: Theme.of(context).colorScheme.onErrorContainer,
+          ),
+        ),
+        secondaryBackground: Container(
+          color: Theme.of(context).colorScheme.primary,
+          alignment: Alignment.centerRight,
+          padding: const EdgeInsets.only(
+              right: kGap16
+          ),
+          child: Icon(
+            Icons.check_rounded,
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+        ),
+        onDismissed: (direction) {
+          if(direction == DismissDirection.endToStart){
+            // Mark note as completed
+            context.read<ShowNoteBloc>().add(
+                ChangeNoteStatus(noteId: note.noteId, newStatus: .done));
+          }else if (direction == DismissDirection.startToEnd){
+            // Trigger note deletion in the bloc
+            context.read<ShowNoteBloc>().add(DeleteNoteById(note.noteId));
+          }
+        },
+        key: UniqueKey(),
+        child: child
     );
   }
 

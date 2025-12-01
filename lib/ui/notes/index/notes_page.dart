@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jampa_flutter/bloc/notes/list_view/notes_list_view_bloc.dart';
+import 'package:jampa_flutter/bloc/notes/show/show_note_bloc.dart';
 import 'package:jampa_flutter/ui/notes/index/notes_layout.dart';
 
 class NotesPage extends StatelessWidget {
@@ -9,8 +10,16 @@ class NotesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<NotesListViewBloc>(
-      create: (context) => NotesListViewBloc()..add(WatchNotes()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<NotesListViewBloc>(
+          create: (context) => NotesListViewBloc()..add(WatchNotes()),
+        ),
+        // Provided for handling status and delete actions of individual notes
+        BlocProvider<ShowNoteBloc>(
+          create: (context) => ShowNoteBloc(),
+        ),
+      ],
       child: const NotesLayout(),
     );
   }

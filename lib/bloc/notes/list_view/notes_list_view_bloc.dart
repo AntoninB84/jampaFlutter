@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jampa_flutter/repository/notes_list_view_repository.dart';
 import 'package:jampa_flutter/data/database.dart';
+import 'package:jampa_flutter/utils/enums/note_status_enum.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
 part 'notes_list_view_event.dart';
@@ -22,7 +23,11 @@ class NotesListViewBloc extends Bloc<NotesListViewEvent, NotesListViewState> {
   void _watchNotesList(WatchNotes event, Emitter<NotesListViewState> emit) async {
     emit(state.copyWith(listStatus: NotesListStatus.loading));
     await emit.onEach(
-        notesListViewRepository.watchNotesWithFilters(null, null),
+        notesListViewRepository.watchNotesWithFilters(
+          noteTypeId: null,
+          categoryIds: null,
+          statuses: [NoteStatusEnum.todo]
+        ),
         onData: (data) {
           emit(
               state.copyWith(
@@ -37,5 +42,4 @@ class NotesListViewBloc extends Bloc<NotesListViewEvent, NotesListViewState> {
         }
     );
   }
-
 }

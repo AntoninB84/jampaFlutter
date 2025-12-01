@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/ui/notes/widgets/lists/note_schedules_list.dart';
 import 'package:jampa_flutter/ui/widgets/buttons/buttons.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
+import 'package:jampa_flutter/utils/enums/ui_status.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 import '../../../bloc/notes/show/show_note_bloc.dart';
@@ -27,10 +28,10 @@ class ShowNoteLayout extends StatelessWidget {
           context.pop();
         }else{
           // Handle deletion feedback
-          if(state.deletionSuccess) {
+          if(state.noteDeletionStatus.isSuccess) {
             SnackBarX.showSuccess(context, context.strings.delete_note_success_feedback);
             context.pop();
-          } else if(state.deletionFailure) {
+          } else if(state.noteDeletionStatus.isFailure) {
             SnackBarX.showError(context, context.strings.delete_note_error_message);
           }
         }
