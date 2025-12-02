@@ -103,16 +103,16 @@ class RecurrentDateFormState extends Equatable {
   }
 
   bool get isRecurrenceValueValid {
-    if(newRecurrentDateFormElements.selectedRecurrenceType == RecurrenceType.intervalDays) {
+    if(newRecurrentDateFormElements.selectedRecurrenceType == .intervalDays) {
       return intervalDaysValidator.isValid;
     }
-    if(newRecurrentDateFormElements.selectedRecurrenceType == RecurrenceType.intervalYears) {
+    if(newRecurrentDateFormElements.selectedRecurrenceType == .intervalYears) {
       return intervalYearsValidator.isValid;
     }
-    if(newRecurrentDateFormElements.selectedRecurrenceType == RecurrenceType.dayBasedMonthly) {
+    if(newRecurrentDateFormElements.selectedRecurrenceType == .dayBasedMonthly) {
       return monthDateValidator.isValid;
     }
-    if(newRecurrentDateFormElements.selectedRecurrenceType == RecurrenceType.dayBasedWeekly) {
+    if(newRecurrentDateFormElements.selectedRecurrenceType == .dayBasedWeekly) {
       if(newRecurrentDateFormElements.selectedRecurrenceWeekdays == null
           || newRecurrentDateFormElements.selectedRecurrenceWeekdays!.isEmpty) {
         return false;

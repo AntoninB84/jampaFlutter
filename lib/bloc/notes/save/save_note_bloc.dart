@@ -10,6 +10,7 @@ import 'package:jampa_flutter/utils/service_locator.dart';
 
 import '../../../repository/reminder_repository.dart';
 import '../../../repository/schedule_repository.dart';
+import '../../../utils/enums/ui_status.dart';
 
 part 'save_note_event.dart';
 part 'save_note_state.dart';
@@ -96,23 +97,23 @@ class SaveNoteBloc extends Bloc<SaveNoteEvent, SaveNoteState> {
   /// Handles the persistent saving of the note and its related data
   void _onSaveNoteEvent(SaveNoteEventSubmit event, Emitter<SaveNoteState> emit) async {
     if(state.note == null) return;
-    emit(state.copyWith(noteSavingStatus: SavingStatus.saving));
+    emit(state.copyWith(noteSavingStatus: .loading));
 
     // Save the note entity itself
     await notesRepository.saveNote(state.note!);
 
     // Save all single date schedules
-    emit(state.copyWith(singleDateSavingStatus: SavingStatus.saving));
+    emit(state.copyWith(singleDateSavingStatus: .loading));
     await _onSaveAllSingleDates();
-    emit(state.copyWith(singleDateSavingStatus: SavingStatus.saved));
+    emit(state.copyWith(singleDateSavingStatus: .success));
 
     // Save all recurrent date schedules
-    emit(state.copyWith(recurrentSavingStatus: SavingStatus.saving));
+    emit(state.copyWith(recurrentSavingStatus: .loading));
     await _onSaveAllRecurrentDates();
-    emit(state.copyWith(recurrentSavingStatus: SavingStatus.saved));
+    emit(state.copyWith(recurrentSavingStatus: .success));
 
     // Clear the note from state after saving
-    emit(state.copyWith(noteSavingStatus: SavingStatus.saved));
+    emit(state.copyWith(noteSavingStatus: .success));
   }
   //endregion
 
@@ -132,15 +133,15 @@ class SaveNoteBloc extends Bloc<SaveNoteEvent, SaveNoteState> {
 
   ///Calls [_saveSingleDateSchedule] to save the single date schedule
   Future<void> _onSaveSingleDate(SaveSingleDateEvent event, Emitter<SaveNoteState> emit) async {
-    emit(state.copyWith(singleDateSavingStatus: SavingStatus.saving));
+    emit(state.copyWith(singleDateSavingStatus: .loading));
     List<ScheduleEntity>? result = await _saveSingleDateSchedule(event.singleDateSchedule);
     if(result != null){
       emit(state.copyWith(
           singleDateSchedules: result,
-          singleDateSavingStatus: SavingStatus.added
+          singleDateSavingStatus: .success
       ));
     }else{
-      emit(state.copyWith(singleDateSavingStatus: SavingStatus.saved));
+      emit(state.copyWith(singleDateSavingStatus: .success));
     }
   }
 
@@ -208,11 +209,11 @@ class SaveNoteBloc extends Bloc<SaveNoteEvent, SaveNoteState> {
 
   /// Calls [_saveRecurrentDateSchedule] to save the recurrent date schedule
   Future<void> _onSaveRecurrentDate(SaveRecurrentDateEvent event, Emitter<SaveNoteState> emit) async {
-    emit(state.copyWith(recurrentSavingStatus: SavingStatus.saving));
+    emit(state.copyWith(recurrentSavingStatus: .loading));
     List<ScheduleEntity>? result = await _saveRecurrentDateSchedule(event.recurrentDateSchedule);
     emit(state.copyWith(
         recurrentSchedules: result,
-        recurrentSavingStatus: SavingStatus.added
+        recurrentSavingStatus: .success
     ));
   }
 
@@ -280,11 +281,11 @@ class SaveNoteBloc extends Bloc<SaveNoteEvent, SaveNoteState> {
 
   /// Calls [_saveReminder] to save the reminder
   Future<void> _onSaveReminder(SaveReminderEvent event, Emitter<SaveNoteState> emit) async {
-    emit(state.copyWith(remindersSavingStatus: SavingStatus.saving));
+    emit(state.copyWith(remindersSavingStatus: .loading));
     List<ReminderEntity>? result = await _saveReminder(event.reminder);
     emit(state.copyWith(
         reminders: result,
-        remindersSavingStatus: SavingStatus.saved
+        remindersSavingStatus: .success
     ));
   }
 

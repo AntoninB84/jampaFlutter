@@ -105,12 +105,12 @@ class ReminderEntity {
       : id = json['id'] as String,
         scheduleId = json['scheduleId'] as String,
         offsetValue = json['offsetValue'] as int? ?? 0,
-        offsetType = ReminderOffsetType.values.firstWhere(
+        offsetType = .values.firstWhere(
             (e) => e.name == (json['offsetType'] as String?),
             orElse: () => ReminderOffsetType.minutes),
         isNotification = json['isNotification'] as bool? ?? true,
-        createdAt = DateTime.parse(json['createdAt'] as String),
-        updatedAt = DateTime.parse(json['updatedAt'] as String);
+        createdAt = .parse(json['createdAt'] as String),
+        updatedAt = .parse(json['updatedAt'] as String);
 
   static List<ReminderEntity> fromJsonArray(List jsonArray) {
     return jsonArray.map((json) => ReminderEntity.fromJson(json)).toList();

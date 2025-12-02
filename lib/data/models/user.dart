@@ -70,8 +70,8 @@ class UserEntity extends Equatable {
         username = json['username'] as String,
         email = json['email'] as String,
         passwordHash = json['passwordHash'] as String,
-        createdAt = DateTime.parse(json['createdAt'] as String),
-        updatedAt = DateTime.parse(json['updatedAt'] as String);
+        createdAt = .parse(json['createdAt'] as String),
+        updatedAt = .parse(json['updatedAt'] as String);
 
   static Future<List<UserEntity>> fromJsonArray(List jsonArray) async {
     return jsonArray.map((json) => UserEntity.fromJson(json)).toList();

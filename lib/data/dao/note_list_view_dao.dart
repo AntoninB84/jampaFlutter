@@ -44,7 +44,7 @@ class NoteListViewDao {
 
     // Order by note updated at in descending order
     query.orderBy([
-      (tbl) => OrderingTerm(expression: tbl.noteUpdatedAt, mode: OrderingMode.desc)
+      (tbl) => OrderingTerm(expression: tbl.noteUpdatedAt, mode: .desc)
     ]);
 
     return query.watch();

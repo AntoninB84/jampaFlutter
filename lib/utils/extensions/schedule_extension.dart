@@ -27,16 +27,16 @@ extension ScheduleExtension on ScheduleEntity {
     }
     switch(recurrenceType){
       case null:throw UnimplementedError();
-      case RecurrenceType.intervalDays:
-      case RecurrenceType.intervalYears:
+      case .intervalDays:
+      case .intervalYears:
         displayText = recurrenceType!.displayName(context,
           value: recurrenceInterval.toString(),
         );break;
-      case RecurrenceType.dayBasedWeekly:
+      case .dayBasedWeekly:
         displayText = recurrenceType!.displayName(context,
           value: WeekdaysEnum.weekdaysString(context, recurrenceDayAsList),
         ); break;
-      case RecurrenceType.dayBasedMonthly:
+      case .dayBasedMonthly:
         displayText = recurrenceType!.displayName(context,
           value: recurrenceDay.toString(),
         ); break;
@@ -66,11 +66,11 @@ extension ScheduleExtension on ScheduleEntity {
   bool get recurrencyTypeNeedsIntervalValue {
     if(!isRecurring) return false;
     switch(recurrenceType){
-      case RecurrenceType.intervalDays:
-      case RecurrenceType.intervalYears:
+      case .intervalDays:
+      case .intervalYears:
         return true;
-      case RecurrenceType.dayBasedMonthly:
-      case RecurrenceType.dayBasedWeekly:
+      case .dayBasedMonthly:
+      case .dayBasedWeekly:
         return false;
       default:
         return false;
@@ -81,7 +81,7 @@ extension ScheduleExtension on ScheduleEntity {
   DateTime? nextOrLastOccurrence() {
     if(startDateTime == null) return null;
 
-    DateTime now = DateTime.now();
+    DateTime now = .now();
 
     if(!isRecurring) {
       // Single date schedule, return startDateTime
@@ -117,19 +117,19 @@ extension ScheduleExtension on ScheduleEntity {
         lastCalculatedDate = currentlyAnalysedDate;
 
         switch(recurrenceType){
-          case RecurrenceType.intervalDays: {
+          case .intervalDays: {
             // Move forward by the recurrence interval in days
             currentlyAnalysedDate = currentlyAnalysedDate.add(
                 Duration(days: recurrenceInterval!)
             );
           }
-          case RecurrenceType.intervalYears: {
+          case .intervalYears: {
             // Move forward by the recurrence interval in years
             currentlyAnalysedDate = currentlyAnalysedDate.copyWith(
                 year: currentlyAnalysedDate.year + recurrenceInterval!
             );
           }
-          case RecurrenceType.dayBasedMonthly: {
+          case .dayBasedMonthly: {
             // Move to the next month with the same day
             // If the day exceeds the number of days in the month, it will automatically adjust
             // If the month exceeds 12, it will automatically adjust the year
@@ -138,7 +138,7 @@ extension ScheduleExtension on ScheduleEntity {
                 month: currentlyAnalysedDate.month + 1
             );
           }
-          case RecurrenceType.dayBasedWeekly: {
+          case .dayBasedWeekly: {
             // The days of the schedule are based on recurrenceDay (1 = Monday, 7 = Sunday)
             // RecurrenceDay is a int containing all the days of the week the schedule occurs on
             // For example, if the schedule occurs on Monday, Wednesday and Friday, recurrenceDay = 135

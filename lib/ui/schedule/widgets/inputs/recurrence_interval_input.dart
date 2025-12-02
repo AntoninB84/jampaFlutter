@@ -67,7 +67,7 @@ class _RecurrenceIntervalTextFieldState extends State<RecurrenceIntervalTextFiel
     return CustomTextField(
       controller: _textEditingController,
       onChanged: widget.onChanged,
-      keyboardType: TextInputType.number,
+      keyboardType: .number,
       hintText: widget.hintText,
       errorWidget: widget.errorWidget
     );

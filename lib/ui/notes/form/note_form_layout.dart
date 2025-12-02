@@ -6,6 +6,7 @@ import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 import '../../../bloc/notes/form/note_form_bloc.dart';
 import '../../../utils/constants/styles/sizes.dart';
+import '../../../utils/enums/ui_status.dart';
 import '../../widgets/buttons/buttons.dart';
 import '../../widgets/headers.dart';
 import '../../widgets/jampa_scaffolded_app_bar_widget.dart';
@@ -29,7 +30,7 @@ class NoteFormLayout extends StatelessWidget {
           // of Schedules and Reminders associated to the Note in the SaveNoteBloc
           if (dataState.noteSavingStatus.isFailure) {
             SnackBarX.showError(context, context.strings.generic_error_message);
-          } else if (dataState.noteSavingStatus.isSuccessful) {
+          } else if (dataState.noteSavingStatus.isSuccess) {
             SnackBarX.showSuccess(context, context.strings.save_note_success_feedback);
             // Back to the previous screen after success
             context.pop();

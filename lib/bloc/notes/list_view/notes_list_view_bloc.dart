@@ -6,6 +6,8 @@ import 'package:jampa_flutter/data/database.dart';
 import 'package:jampa_flutter/utils/enums/note_status_enum.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
+import '../../../utils/enums/ui_status.dart';
+
 part 'notes_list_view_event.dart';
 part 'notes_list_view_state.dart';
 
@@ -21,7 +23,7 @@ class NotesListViewBloc extends Bloc<NotesListViewEvent, NotesListViewState> {
 
   /// Watches the notes list and updates the state accordingly.
   void _watchNotesList(WatchNotes event, Emitter<NotesListViewState> emit) async {
-    emit(state.copyWith(listStatus: NotesListStatus.loading));
+    emit(state.copyWith(listStatus: .loading));
     await emit.onEach(
         notesListViewRepository.watchNotesWithFilters(
           noteTypeId: null,
@@ -31,14 +33,14 @@ class NotesListViewBloc extends Bloc<NotesListViewEvent, NotesListViewState> {
         onData: (data) {
           emit(
               state.copyWith(
-                  listStatus: NotesListStatus.success,
+                  listStatus: .success,
                   notes: data
               )
           );
         },
         onError: (error, stackTrace) {
           debugPrint("Error listening to notes: $error");
-          emit(state.copyWith(listStatus: NotesListStatus.error));
+          emit(state.copyWith(listStatus: .failure));
         }
     );
   }

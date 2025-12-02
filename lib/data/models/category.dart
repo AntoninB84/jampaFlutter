@@ -90,8 +90,8 @@ class CategoryEntity extends Equatable {
   CategoryEntity.fromJson(Map<String, dynamic> json)
       : id = json['id'] as String,
         name = json['name'] as String,
-        createdAt = DateTime.parse(json['createdAt'] as String),
-        updatedAt = DateTime.parse(json['updatedAt'] as String);
+        createdAt = .parse(json['createdAt'] as String),
+        updatedAt = .parse(json['updatedAt'] as String);
 
   static List<CategoryEntity> fromJsonArray(List jsonArray) {
     return jsonArray.map((json) => CategoryEntity.fromJson(json)).toList();

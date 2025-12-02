@@ -10,12 +10,12 @@ enum PasswordValidationError {
 }
 
 extension PasswordValidationErrorX on PasswordValidationError {
-  bool get isEmpty => this == PasswordValidationError.empty;
-  bool get isTooShort => this == PasswordValidationError.tooShort;
-  bool get hasNoUppercase => this == PasswordValidationError.noUppercase;
-  bool get hasNoLowercase => this == PasswordValidationError.noLowercase;
-  bool get hasNoNumber => this == PasswordValidationError.noNumber;
-  bool get hasNoSpecialCharacter => this == PasswordValidationError.noSpecialCharacter;
+  bool get isEmpty => this == .empty;
+  bool get isTooShort => this == .tooShort;
+  bool get hasNoUppercase => this == .noUppercase;
+  bool get hasNoLowercase => this == .noLowercase;
+  bool get hasNoNumber => this == .noNumber;
+  bool get hasNoSpecialCharacter => this == .noSpecialCharacter;
 }
 
 /// A FormzInput class for validating passwords.
@@ -23,22 +23,22 @@ extension PasswordValidationErrorX on PasswordValidationError {
 /// uppercase letters, lowercase letters, numbers, and special characters.
 class PasswordValidator extends FormzInput<String, PasswordValidationError> {
   const PasswordValidator.pure() : super.pure('');
-  const PasswordValidator.dirty([String value = '']) : super.dirty(value);
+  const PasswordValidator.dirty([super.value = '']) : super.dirty();
 
   @override
   PasswordValidationError? validator(String value) {
     if (value.isEmpty) {
-      return PasswordValidationError.empty;
+      return .empty;
     } else if (value.length < 8) {
-      return PasswordValidationError.tooShort;
+      return .tooShort;
     } else if (!RegExp(r'[A-Z]').hasMatch(value)) {
-      return PasswordValidationError.noUppercase;
+      return .noUppercase;
     } else if (!RegExp(r'[a-z]').hasMatch(value)) {
-      return PasswordValidationError.noLowercase;
+      return .noLowercase;
     } else if (!RegExp(r'\d').hasMatch(value)) {
-      return PasswordValidationError.noNumber;
+      return .noNumber;
     } else if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
-      return PasswordValidationError.noSpecialCharacter;
+      return .noSpecialCharacter;
     }
     return null; // No error
   }

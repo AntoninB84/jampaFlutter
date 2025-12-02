@@ -80,7 +80,7 @@ class _SaveSingleDateListState extends State<SaveSingleDateList> {
                       });
                     },
                     trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
+                      mainAxisSize: .min,
                       children: [
                         Buttons.deleteButtonIcon(
                           context: context,

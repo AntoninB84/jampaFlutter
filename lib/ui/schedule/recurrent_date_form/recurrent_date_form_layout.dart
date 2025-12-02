@@ -18,6 +18,7 @@ import '../../../bloc/notes/save/save_note_bloc.dart';
 import '../../../bloc/schedule/recurrent_date_form/recurrent_date_form_bloc.dart';
 import '../../../utils/constants/styles/sizes.dart';
 import '../../../utils/enums/recurrence_type_enum.dart';
+import '../../../utils/enums/ui_status.dart';
 import '../../reminder/widgets/save_reminder_list.dart';
 import '../../widgets/error_text.dart';
 
@@ -30,7 +31,7 @@ class RecurrentDateFormLayout extends StatelessWidget {
       listener: (context, state) {
         if (state.recurrentSavingStatus.isFailure) {
           SnackBarX.showError(context, context.strings.generic_error_message);
-        } else if (state.recurrentSavingStatus.isSuccessful) {
+        } else if (state.recurrentSavingStatus.isSuccess) {
           SnackBarX.showSuccess(context, context.strings.save_recurrent_date_success_feedback);
           // Back to the previous screen after success
           context.pop();

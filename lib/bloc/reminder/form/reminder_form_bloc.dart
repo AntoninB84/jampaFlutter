@@ -46,7 +46,7 @@ class ReminderFormBloc extends Bloc<ReminderFormEvent, ReminderFormState> {
                 scheduleId: event.scheduleId,
                 reminderId: Uuid().v4(),
                 selectedOffsetNumber: 10,
-                selectedOffsetType: ReminderOffsetType.minutes,
+                selectedOffsetType: .minutes,
                 isNotification: true
             ),
         ));

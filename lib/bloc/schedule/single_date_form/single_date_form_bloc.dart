@@ -19,8 +19,8 @@ class SingleDateFormBloc extends Bloc<SingleDateFormEvent, SingleDateFormState> 
     newSingleDateFormElements: SingleDateFormElements(
       noteId: 'noteId',
       scheduleId: 'scheduleId',
-      selectedStartDateTime: DateTime.now(),
-      selectedEndDateTime: DateTime.now().add(const Duration(hours: 1)),
+      selectedStartDateTime: .now(),
+      selectedEndDateTime: .now().add(const Duration(hours: 1)),
     ),
   )) {
     on<InitializeSingleDateFormEvent>(_initializeSingleDateForm);
@@ -41,8 +41,8 @@ class SingleDateFormBloc extends Bloc<SingleDateFormEvent, SingleDateFormState> 
             newSingleDateFormElements: SingleDateFormElements(
               noteId: event.noteId,
               scheduleId: Uuid().v4(),
-              selectedStartDateTime: DateTime.now(),
-              selectedEndDateTime: DateTime.now().add(const Duration(hours: 1)),
+              selectedStartDateTime: .now(),
+              selectedEndDateTime: .now().add(const Duration(hours: 1)),
             )
         ));
         return;

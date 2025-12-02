@@ -18,11 +18,11 @@ class ReminderOffsetTypeSelector extends StatelessWidget {
   /// Returns the localized label for the given [reminderOffsetType].
   String getReminderOffsetTypeLabel(ReminderOffsetType reminderOffsetType, BuildContext context) {
     switch (reminderOffsetType) {
-      case ReminderOffsetType.days:
+      case .days:
         return context.strings.reminder_offset_type_days;
-      case ReminderOffsetType.hours:
+      case .hours:
         return context.strings.reminder_offset_type_hours;
-      case ReminderOffsetType.minutes:
+      case .minutes:
         return context.strings.reminder_offset_type_minutes;
     }
   }

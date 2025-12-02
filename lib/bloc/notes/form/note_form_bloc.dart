@@ -7,6 +7,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:formz/formz.dart';
 import 'package:jampa_flutter/data/models/note.dart';
 import 'package:jampa_flutter/repository/notes_repository.dart';
+import 'package:jampa_flutter/utils/enums/ui_status.dart';
 import 'package:jampa_flutter/utils/forms/name_validator.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 import 'package:uuid/uuid.dart';
@@ -45,7 +46,7 @@ class NoteFormBloc extends Bloc<NoteFormEvent, NoteFormState> {
       if (note == null) {
         // If note not found, emit failure state as
         // this method is not called if not in editing mode
-        emit(state.copyWith(status: NoteFormStatus.failure));
+        emit(state.copyWith(status: .failure));
         return;
       }
 
@@ -60,10 +61,10 @@ class NoteFormBloc extends Bloc<NoteFormEvent, NoteFormState> {
         selectedNoteType: note.noteType,
         selectedCategories: note.categories,
         isImportantChecked: note.isImportant,
-        status: NoteFormStatus.initial,
+        status: .initial,
       ));
     } catch (e) {
-      emit(state.copyWith(status: NoteFormStatus.failure));
+      emit(state.copyWith(status: .failure));
       debugPrint('Error initializing note form: $e');
     }
   }
@@ -77,7 +78,7 @@ class NoteFormBloc extends Bloc<NoteFormEvent, NoteFormState> {
         state.copyWith(
           title: title,
           // Reset error state on title change
-          status: NoteFormStatus.initial
+          status: .initial
         )
     );
   }
@@ -113,7 +114,7 @@ class NoteFormBloc extends Bloc<NoteFormEvent, NoteFormState> {
   /// The note data is passed to the [SaveNoteBloc] for persistence or in-memory storage.
   Future<void> _onSaveNoteForm(SaveNoteFormEvent event, Emitter<NoteFormState> emit) async {
     // TODO implement loading indicator in UI
-    emit(state.copyWith(status: NoteFormStatus.loading));
+    emit(state.copyWith(status: .loading));
     // Access SaveNoteBloc to handle saving
     SaveNoteBloc dataBloc = serviceLocator<SaveNoteBloc>();
     // Get existing note if editing
@@ -152,6 +153,6 @@ class NoteFormBloc extends Bloc<NoteFormEvent, NoteFormState> {
     dataBloc.add(SetNoteEntityEvent(note));
     // Trigger save operation
     dataBloc.add(SaveNoteEventSubmit());
-    emit(state.copyWith(status: NoteFormStatus.success, noteId: note.id));
+    emit(state.copyWith(status: .success, noteId: note.id));
   }
 }

@@ -58,7 +58,7 @@ class _NoteSchedulesListState extends State<NoteSchedulesList> {
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: kGap4),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: .min,
               children: [
                 Material(
                   child: ListTile(

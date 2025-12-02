@@ -65,20 +65,20 @@ class _SaveRecurrentDateListState extends State<SaveRecurrentDateList> {
               String displayText = 'null';
               switch(recurrence.recurrenceType){
                 case null:throw UnimplementedError();
-                case RecurrenceType.intervalDays:
+                case .intervalDays:
                   displayText = recurrence.recurrenceType!.displayName(context,
                     value: recurrence.recurrenceInterval.toString(),
                   );break;
-                case RecurrenceType.intervalYears:
+                case .intervalYears:
                   displayText = recurrence.recurrenceType!.displayName(context,
                     value: recurrence.recurrenceInterval.toString(),
                   ); break;
-                case RecurrenceType.dayBasedWeekly:
+                case .dayBasedWeekly:
                   displayText = recurrence.recurrenceType!.displayName(context,
                     value: WeekdaysEnum.weekdaysString(context,
                         recurrence.recurrenceDayAsList),
                   ); break;
-                case RecurrenceType.dayBasedMonthly:
+                case .dayBasedMonthly:
                   displayText = recurrence.recurrenceType!.displayName(context,
                     value: recurrence.recurrenceDay.toString(),
                   ); break;

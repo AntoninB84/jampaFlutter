@@ -8,9 +8,9 @@ class FlavorConfig {
 
   static String get title {
     switch (appFlavor) {
-      case Flavor.development:
+      case .development:
         return 'Jampa Dev';
-      case Flavor.production:
+      case .production:
         return 'Jampa';
     }
   }
@@ -27,13 +27,13 @@ class FlavorConfig {
   static void initialize({required String flavor}) {
     switch (flavor) {
       case 'development':
-        appFlavor = Flavor.development;
+        appFlavor = .development;
         break;
       case 'production':
-        appFlavor = Flavor.production;
+        appFlavor = .production;
         break;
       default:
-        appFlavor = Flavor.development;
+        appFlavor = .development;
     }
   }
 }

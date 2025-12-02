@@ -45,7 +45,7 @@ class ReminderCubit extends Cubit<ReminderState> {
       // Check and set alarm notifications if needed
       List<ReminderToSetup> remindersToSetup = await ReminderHelpers.calculateReminderDateFromSchedule(schedules);
       if(remindersToSetup.isNotEmpty){
-        if(remindersToSetup.first.reminderDateTime.isBetween(DateTime.now(), DateTime.now().add(Duration(hours: 12)))){
+        if(remindersToSetup.first.reminderDateTime.isBetween(.now(), .now().add(Duration(hours: 12)))){
           await ReminderHelpers.setReminder(remindersToSetup[0]);
         }
       }

@@ -34,7 +34,7 @@ class _RecurrenceWeekdaysMultiSelectorState extends State<RecurrenceWeekdaysMult
     return MultiDropdown(
       key: UniqueKey(),
       enabled: true,
-      autovalidateMode: AutovalidateMode.always,
+      autovalidateMode: .always,
       onSelectionChange: widget.onWeekdaySelected,
       items: WeekdaysEnum.values.map((weekday) {
         return DropdownItem<WeekdaysEnum>(

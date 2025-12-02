@@ -1,19 +1,5 @@
 part of 'note_form_bloc.dart';
 
-enum NoteFormStatus {
-  initial,
-  loading,
-  success,
-  failure,
-}
-
-extension NoteFormStatusX on NoteFormStatus {
-  bool get isInitial => this == NoteFormStatus.initial;
-  bool get isLoading => this == NoteFormStatus.loading;
-  bool get isSuccess => this == NoteFormStatus.success;
-  bool get isFailure => this == NoteFormStatus.failure;
-}
-
 class NoteFormState extends Equatable {
 
   /// Indicates whether the form is in editing mode (editing an existing note) or creating a new note.
@@ -38,7 +24,7 @@ class NoteFormState extends Equatable {
   final bool isImportantChecked;
 
   /// The current status of the note form.
-  final NoteFormStatus status;
+  final UIStatusEnum status;
 
   const NoteFormState({
     this.isEditing = false,
@@ -48,7 +34,7 @@ class NoteFormState extends Equatable {
     this.selectedNoteType,
     this.selectedCategories = const [],
     this.isImportantChecked = false,
-    this.status = NoteFormStatus.initial,
+    this.status = .initial,
   });
 
   @override
@@ -71,7 +57,7 @@ class NoteFormState extends Equatable {
     NoteTypeEntity? selectedNoteType,
     List<CategoryEntity>? selectedCategories,
     bool? isImportantChecked,
-    NoteFormStatus? status,
+    UIStatusEnum? status,
   }) {
     return NoteFormState(
       isEditing: isEditing ?? this.isEditing,

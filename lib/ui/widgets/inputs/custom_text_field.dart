@@ -10,7 +10,7 @@ class CustomTextField extends StatelessWidget {
     required this.onChanged,
     this.errorWidget,
     required this.hintText,
-    this.keyboardType = TextInputType.text,
+    this.keyboardType = .text,
   });
 
   final TextEditingController? controller;

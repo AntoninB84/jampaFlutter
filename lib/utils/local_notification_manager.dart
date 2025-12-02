@@ -29,7 +29,7 @@ class NotificationData {
 class LocalNotificationManager {
 
   //region Singleton
-  static final LocalNotificationManager _instance = LocalNotificationManager._internal();
+  static final LocalNotificationManager _instance = ._internal();
 
   factory LocalNotificationManager() {
     return _instance;
@@ -42,7 +42,7 @@ class LocalNotificationManager {
   final AndroidNotificationChannel androidChannel = const AndroidNotificationChannel(
     'Jampa_flutter', // id
     'Jampa', // title
-    importance: Importance.max,
+    importance: .max,
   );
 
   /// Initializes the local notification manager
@@ -123,7 +123,7 @@ class LocalNotificationManager {
             android: AndroidNotificationDetails(
               androidChannel.id,
               androidChannel.name,
-              priority: Priority.high,
+              priority: .high,
               groupKey: groupKey,
               styleInformation: const BigTextStyleInformation(''),
             ),
@@ -158,7 +158,7 @@ class LocalNotificationManager {
     if(notificationData.scheduledDate == null){
       return;
     }
-    final tz.TZDateTime scheduledTime = tz.TZDateTime.from(notificationData.scheduledDate!, tz.local);
+    final tz.TZDateTime scheduledTime = .from(notificationData.scheduledDate!, tz.local);
 
     // android
     if (Platform.isAndroid) {
@@ -171,13 +171,13 @@ class LocalNotificationManager {
             android: AndroidNotificationDetails(
               androidChannel.id,
               androidChannel.name,
-              importance: Importance.high,
-              priority: Priority.max,
+              importance: .high,
+              priority: .max,
               groupKey: groupKey,
               styleInformation: const BigTextStyleInformation(''),
             ),
           ),
-          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+          androidScheduleMode: .exactAllowWhileIdle,
           payload: "?notificationType=${notificationData.notificationType.name}"
               "?objectId=${notificationData.objectId}"
               "?objectType=${notificationData.objectType}",

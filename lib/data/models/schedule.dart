@@ -92,13 +92,13 @@ class ScheduleEntity {
       id: Value(id),
       noteId: Value(noteId),
       startDateTime: Value(startDateTime!),
-      endDateTime: endDateTime == null ? Value.absent() : Value(endDateTime!),
+      endDateTime: endDateTime == null ? .absent() : Value(endDateTime!),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
-      recurrenceType: recurrenceType == null ? Value.absent() : Value(recurrenceType!),
-      recurrenceInterval: recurrenceInterval == null ? Value.absent() : Value(recurrenceInterval!),
-      recurrenceDay: recurrenceDay == null ? Value.absent() : Value(recurrenceDay!),
-      recurrenceEndDate: recurrenceEndDate == null ? Value.absent() : Value(recurrenceEndDate!),
+      recurrenceType: recurrenceType == null ? .absent() : Value(recurrenceType!),
+      recurrenceInterval: recurrenceInterval == null ? .absent() : Value(recurrenceInterval!),
+      recurrenceDay: recurrenceDay == null ? .absent() : Value(recurrenceDay!),
+      recurrenceEndDate: recurrenceEndDate == null ? .absent() : Value(recurrenceEndDate!),
     );
   }
 
@@ -154,15 +154,15 @@ class ScheduleEntity {
       : id = json['id'] as String,
         noteId = json['noteId'] as String,
         note = NoteEntity.fromJson(json['note']),
-        startDateTime = json['startDateTime'] != null ? DateTime.parse(json['startDateTime'] as String) : null,
-        endDateTime = json['endDateTime'] != null ? DateTime.parse(json['endDateTime'] as String) : null,
-        createdAt = DateTime.parse(json['createdAt'] as String),
-        updatedAt = DateTime.parse(json['updatedAt'] as String),
-        recurrenceType = RecurrenceType.values.firstWhereOrNull(
+        startDateTime = json['startDateTime'] != null ? .parse(json['startDateTime'] as String) : null,
+        endDateTime = json['endDateTime'] != null ? .parse(json['endDateTime'] as String) : null,
+        createdAt = .parse(json['createdAt'] as String),
+        updatedAt = .parse(json['updatedAt'] as String),
+        recurrenceType = .values.firstWhereOrNull(
                 (e) => e.name == (json['recurrencyType'] as String?)),
         recurrenceInterval = json['recurrenceInterval'] as int?,
         recurrenceDay = json['recurrenceDay'] as int?,
-        recurrenceEndDate = json['recurrenceEndDate'] != null ? DateTime.parse(json['recurrenceEndDate'] as String) : null,
+        recurrenceEndDate = json['recurrenceEndDate'] != null ? .parse(json['recurrenceEndDate'] as String) : null,
         reminders = ReminderEntity.fromJsonArray(json['reminders'])
   ;
 
@@ -185,8 +185,8 @@ class ScheduleEntity {
       noteId: elements.noteId,
       startDateTime: elements.selectedStartDateTime,
       endDateTime: elements.selectedEndDateTime,
-      createdAt: elements.createdAt ?? DateTime.now(),
-      updatedAt: DateTime.now(),
+      createdAt: elements.createdAt ?? .now(),
+      updatedAt: .now(),
     );
   }
 
@@ -209,7 +209,7 @@ class ScheduleEntity {
           if(daysString.isNotEmpty){
             // Split the integer into its individual digits and convert to a list of integers
             recurrenceWeekDays = daysString.split("").map(
-                    (e) => WeekdaysEnum.fromInt(int.parse(e))
+                    (e) => WeekdaysEnum.fromInt(.parse(e))
             ).toList();
           }
         }
@@ -249,28 +249,28 @@ class ScheduleEntity {
     int? recurrenceDay;
 
     switch(elements.selectedRecurrenceType){
-      case RecurrenceType.intervalDays: {
-        recurrenceType = RecurrenceType.intervalDays;
+      case .intervalDays: {
+        recurrenceType = .intervalDays;
         recurrenceInterval = elements.selectedRecurrenceDaysInterval;
         break;
       }
-      case RecurrenceType.dayBasedWeekly: {
-        recurrenceType = RecurrenceType.dayBasedWeekly;
+      case .dayBasedWeekly: {
+        recurrenceType = .dayBasedWeekly;
         if(elements.selectedRecurrenceWeekdays?.isNotEmpty ?? false){
           // Join the list of integers into a single integer (e.g., [1,3,5] -> 135)
-          recurrenceDay = int.parse(elements.selectedRecurrenceWeekdays!
+          recurrenceDay = .parse(elements.selectedRecurrenceWeekdays!
               .map((weekday){ return weekday.asInt;}).toList().join()
           );
         }
         break;
       }
-      case RecurrenceType.dayBasedMonthly: {
-        recurrenceType = RecurrenceType.dayBasedMonthly;
+      case .dayBasedMonthly: {
+        recurrenceType = .dayBasedMonthly;
         recurrenceDay = elements.selectedRecurrenceMonthDate;
         break;
       }
-      case RecurrenceType.intervalYears: {
-        recurrenceType = RecurrenceType.intervalYears;
+      case .intervalYears: {
+        recurrenceType = .intervalYears;
         recurrenceInterval = elements.selectedRecurrenceYearsInterval;
         break;
       }
@@ -282,8 +282,8 @@ class ScheduleEntity {
       noteId: elements.noteId,
       startDateTime: elements.selectedStartDateTime,
       endDateTime: elements.selectedEndDateTime,
-      createdAt: elements.createdAt ?? DateTime.now(),
-      updatedAt: DateTime.now(),
+      createdAt: elements.createdAt ?? .now(),
+      updatedAt: .now(),
       recurrenceType: recurrenceType,
       recurrenceInterval: recurrenceInterval,
       recurrenceDay: recurrenceDay,

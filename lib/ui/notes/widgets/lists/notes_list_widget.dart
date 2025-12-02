@@ -115,7 +115,7 @@ class _NotesListWidgetState extends State<NotesListWidget> {
                       },
                     ),
                   );
-                case .error:
+                case .failure:
                   return const Center(child: Text("Error loading notes"));
               }
             }

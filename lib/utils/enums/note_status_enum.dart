@@ -4,9 +4,9 @@ enum NoteStatusEnum {
   done;
   
   static NoteStatusEnum fromString(String status) {
-    return NoteStatusEnum.values.firstWhere(
+    return .values.firstWhere(
       (e) => e.name == status,
-      orElse: () => NoteStatusEnum.todo,
+      orElse: () => .todo,
     );
   }
 }

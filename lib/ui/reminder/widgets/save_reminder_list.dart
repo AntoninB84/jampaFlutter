@@ -51,7 +51,7 @@ class _SaveReminderListState extends State<SaveReminderList> {
         return Column(
           children: [
             Align(
-              alignment: Alignment.topLeft,
+              alignment: .topLeft,
               child: Text(
                 context.strings.create_date_reminder_count,
                 style: Theme.of(context).textTheme.titleMedium,
@@ -103,7 +103,7 @@ class _SaveReminderListState extends State<SaveReminderList> {
                                 });
                               },
                               trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
+                                mainAxisSize: .min,
                                 children: [
                                   Buttons.deleteButtonIcon(
                                     context: context,

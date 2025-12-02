@@ -36,7 +36,7 @@ abstract class ReminderHelpers {
   /// Calculate reminder dates for a list of schedules.
   /// Only reminders that fall within the next 2 days are considered
   static Future<List<ReminderToSetup>> calculateReminderDateFromSchedule(List<ScheduleEntity> schedules) async {
-    DateTime now = DateTime.now();
+    DateTime now = .now();
     DateTime upperLimit = now.add(Duration(days: 2)); //Consider reminders only within the next 2 days
     List<ReminderToSetup> remindersDates = [];
 
@@ -49,16 +49,16 @@ abstract class ReminderHelpers {
       for(final reminder in schedule.reminders!) {
         DateTime reminderDate;
         switch(schedule.recurrenceType) {
-          case RecurrenceType.intervalDays:
+          case .intervalDays:
             reminderDate = await calculateReminderDateFromRecurringDateIntervalDays(schedule, reminder);
             break;
-          case RecurrenceType.intervalYears:
+          case .intervalYears:
             reminderDate = await calculateReminderDateFromRecurringDateIntervalYears(schedule, reminder);
             break;
-          case RecurrenceType.dayBasedMonthly:
+          case .dayBasedMonthly:
             reminderDate = await calculateReminderDateFromRecurringDateDayBasedMonths(schedule, reminder);
             break;
-          case RecurrenceType.dayBasedWeekly:
+          case .dayBasedWeekly:
             reminderDate = await calculateReminderDateFromRecurringDateDayBasedWeeks(schedule, reminder);
             break;
           default:
@@ -92,7 +92,7 @@ abstract class ReminderHelpers {
     DateTime nextOccurrence = startDate;
     final int interval = schedule.recurrenceInterval ?? 1;
     // Loop until we find the next occurrence that is after the current date
-    while(nextOccurrence.isBefore(DateTime.now())){
+    while(nextOccurrence.isBefore(.now())){
       nextOccurrence = nextOccurrence.add(Duration(days: interval));
     }
     // Subtract the reminder offset to get the reminder date
@@ -101,7 +101,7 @@ abstract class ReminderHelpers {
 
   /// Calculate reminder date for recurring schedules with interval in years
   static Future<DateTime> calculateReminderDateFromRecurringDateIntervalYears(ScheduleEntity schedule, ReminderEntity reminder) async {
-    final DateTime now = DateTime.now();
+    final DateTime now = .now();
     final DateTime startDate = schedule.startDateTime ?? schedule.createdAt;
     //Find the next occurrence based on the interval in years
     DateTime nextOccurrence = startDate;
@@ -123,7 +123,7 @@ abstract class ReminderHelpers {
 
   /// Calculate reminder date for recurring schedules based on day of the month
   static Future<DateTime> calculateReminderDateFromRecurringDateDayBasedMonths(ScheduleEntity schedule, ReminderEntity reminder) async {
-    final DateTime now = DateTime.now();
+    final DateTime now = .now();
     final DateTime startDate = schedule.startDateTime ?? schedule.createdAt;
     //Find the next occurrence based on the day of the month
     DateTime nextOccurrence = startDate;
@@ -156,7 +156,7 @@ abstract class ReminderHelpers {
 
   /// Calculate reminder date for recurring schedules based on day of the week
   static Future<DateTime> calculateReminderDateFromRecurringDateDayBasedWeeks(ScheduleEntity schedule, ReminderEntity reminder) async {
-    final DateTime now = DateTime.now();
+    final DateTime now = .now();
     final DateTime startDate = schedule.startDateTime ?? schedule.createdAt;
     //Find the next occurrence based on the day of the week
     DateTime nextOccurrence = startDate;
@@ -175,11 +175,11 @@ abstract class ReminderHelpers {
   /// Get the offset duration from a reminder
   static Duration getOffsetDuration(ReminderEntity reminder) {
     switch(reminder.offsetType){
-      case ReminderOffsetType.minutes:
+      case .minutes:
         return Duration(minutes: reminder.offsetValue);
-      case ReminderOffsetType.hours:
+      case .hours:
         return Duration(hours: reminder.offsetValue);
-      case ReminderOffsetType.days:
+      case .days:
         return Duration(days: reminder.offsetValue);
     }
   }
@@ -210,7 +210,7 @@ abstract class ReminderHelpers {
         loopAudio: true,
         vibrate: true,
         androidFullScreenIntent: true,
-        volumeSettings: VolumeSettings.fade(
+        volumeSettings: .fade(
           volume: 0.8,
           fadeDuration: Duration(seconds: 5),
           volumeEnforced: true,

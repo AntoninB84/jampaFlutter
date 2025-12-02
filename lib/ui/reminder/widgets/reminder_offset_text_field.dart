@@ -51,7 +51,7 @@ class _ReminderOffsetTextFieldState extends State<ReminderOffsetTextField> {
     return CustomTextField(
       controller: _textEditingController,
       onChanged: widget.onChanged,
-      keyboardType: TextInputType.number,
+      keyboardType: .number,
       hintText: context.strings.reminder_offset_value_field_hint,
       errorWidget: (!widget.validator.isPure && widget.validator.isNotValid) ? ErrorText(
           errorText: (){

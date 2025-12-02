@@ -1,28 +1,17 @@
 part of 'save_note_bloc.dart';
 
-enum SavingStatus { initial, saving, added, saved, failure }
-
-extension SavingStatusX on SavingStatus {
-  bool get isInitial => this == SavingStatus.initial;
-  bool get isSaving => this == SavingStatus.saving;
-  bool get isAdded => this == SavingStatus.added;
-  bool get isSaved => this == SavingStatus.saved;
-  bool get isSuccessful => this == SavingStatus.added || this == SavingStatus.saved;
-  bool get isFailure => this == SavingStatus.failure;
-}
-
 class SaveNoteState extends Equatable {
   const SaveNoteState(
   {
     this.hasFetchedData = false,
     this.note,
-    this.noteSavingStatus = SavingStatus.initial,
+    this.noteSavingStatus = .initial,
     this.singleDateSchedules = const [],
-    this.singleDateSavingStatus = SavingStatus.initial,
+    this.singleDateSavingStatus = .initial,
     this.recurrentSchedules = const [],
-    this.recurrentSavingStatus = SavingStatus.initial,
+    this.recurrentSavingStatus = .initial,
     this.reminders = const [],
-    this.remindersSavingStatus = SavingStatus.initial,
+    this.remindersSavingStatus = .initial,
   });
 
   /// Prevent calls to fetch data multiple times
@@ -31,22 +20,22 @@ class SaveNoteState extends Equatable {
   /// The note being created or edited, if any
   final NoteEntity? note;
   /// The status of the saving operation for the note entity only
-  final SavingStatus noteSavingStatus;
+  final UIStatusEnum noteSavingStatus;
 
   /// Single date schedules associated with the note
   final List<ScheduleEntity> singleDateSchedules;
   /// The status of the saving operation for single date schedules
-  final SavingStatus singleDateSavingStatus;
+  final UIStatusEnum singleDateSavingStatus;
 
   /// Recurrent schedules associated with the note
   final List<ScheduleEntity> recurrentSchedules;
   /// The status of the saving operation for recurrent schedules
-  final SavingStatus recurrentSavingStatus;
+  final UIStatusEnum recurrentSavingStatus;
 
   /// Reminders associated with the note
   final List<ReminderEntity> reminders;
   /// The status of the saving operation for reminders
-  final SavingStatus remindersSavingStatus;
+  final UIStatusEnum remindersSavingStatus;
 
   @override
   List<Object?> get props => [
@@ -64,13 +53,13 @@ class SaveNoteState extends Equatable {
   SaveNoteState copyWith({
     bool? hasFetchedData,
     NoteEntity? note,
-    SavingStatus? noteSavingStatus,
+    UIStatusEnum? noteSavingStatus,
     List<ScheduleEntity>? singleDateSchedules,
-    SavingStatus? singleDateSavingStatus,
+    UIStatusEnum? singleDateSavingStatus,
     List<ScheduleEntity>? recurrentSchedules,
-    SavingStatus? recurrentSavingStatus,
+    UIStatusEnum? recurrentSavingStatus,
     List<ReminderEntity>? reminders,
-    SavingStatus? remindersSavingStatus,
+    UIStatusEnum? remindersSavingStatus,
   }) {
     return SaveNoteState(
       hasFetchedData: hasFetchedData ?? this.hasFetchedData,
@@ -86,9 +75,9 @@ class SaveNoteState extends Equatable {
   }
 
   bool get isSavingInProgress {
-    return noteSavingStatus.isSaving ||
-        singleDateSavingStatus.isSaving ||
-        recurrentSavingStatus.isSaving ||
-        remindersSavingStatus.isSaving;
+    return noteSavingStatus.isLoading ||
+        singleDateSavingStatus.isLoading ||
+        recurrentSavingStatus.isLoading ||
+        remindersSavingStatus.isLoading;
   }
 }

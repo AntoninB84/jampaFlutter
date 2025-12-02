@@ -5,7 +5,7 @@ enum MonthDayValidationError {
 }
 
 extension MonthDayValidationErrorX on MonthDayValidationError {
-  bool get isInvalidValue => this == MonthDayValidationError.invalidValue;
+  bool get isInvalidValue => this == .invalidValue;
 }
 
 /// A FormzInput class for validating month days (1-31).
@@ -16,7 +16,7 @@ class MonthDayValidator extends FormzInput<int?, MonthDayValidationError> {
   @override
   MonthDayValidationError? validator(int? value) {
     if (value == null || value <= 0 || value > 31) {
-      return MonthDayValidationError.invalidValue;
+      return .invalidValue;
     }
     return null;
   }

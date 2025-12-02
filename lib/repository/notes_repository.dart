@@ -23,7 +23,7 @@ class NotesRepository {
         List<NoteCategoryEntity> noteCategories = insertedNote.categories!.map((category) {
           return NoteCategoryEntity(
             noteId: insertedNote.id,
-            categoryId: category.id!,
+            categoryId: category.id,
           );
         }).toList();
         await NoteCategoryDao.saveMultipleNoteCategories(noteCategories);

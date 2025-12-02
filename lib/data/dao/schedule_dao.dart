@@ -88,7 +88,7 @@ class ScheduleDao {
     required List<String?> remindersIdsToExclude,
     bool useNewInstanceOfDb = true,
   }) async {
-    AppDatabase db = useNewInstanceOfDb ? AppDatabase.instance() : serviceLocator<AppDatabase>();
+    AppDatabase db = useNewInstanceOfDb ? .instance() : serviceLocator<AppDatabase>();
     final query = db.select(db.scheduleTable).join([
       innerJoin(
         db.noteTable,
@@ -99,7 +99,7 @@ class ScheduleDao {
         db.reminderTable.scheduleId.equalsExp(db.scheduleTable.id),
       ),
     ])
-      ..where(db.scheduleTable.recurrenceEndDate.isNull() | db.scheduleTable.recurrenceEndDate.isBiggerThanValue(DateTime.now()))
+      ..where(db.scheduleTable.recurrenceEndDate.isNull() | db.scheduleTable.recurrenceEndDate.isBiggerThanValue(.now()))
       ..where(db.reminderTable.id.isNotNull())
       ..where(db.noteTable.id.isNotIn(remindersIdsToExclude.map((e) => e ?? "").toList()))
       ..where(db.noteTable.status.isNotIn([NoteStatusEnum.done.name]));

@@ -64,7 +64,7 @@ class NoteEntity {
     required this.title,
     required this.content,
     this.isImportant = false,
-    this.status = NoteStatusEnum.todo,
+    this.status = .todo,
     required this.createdAt,
     required this.updatedAt,
     this.userId,
@@ -78,12 +78,12 @@ class NoteEntity {
     return NoteTableCompanion(
       id: Value(id),
       title: Value(title),
-      content: content == null ? Value.absent() : Value(content!),
+      content: content == null ? .absent() : Value(content!),
       isImportant: Value(isImportant),
       status: Value(status),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
-      noteTypeId: noteTypeId == null ? Value.absent() : Value(noteTypeId!),
+      noteTypeId: noteTypeId == null ? .absent() : Value(noteTypeId!),
       userId: Value(userId),
     );
   }
@@ -137,7 +137,7 @@ class NoteEntity {
       title = json['title'] as String,
       content = json['content'] as String?,
       isImportant = json['isImportant'] as bool? ?? false,
-      status = NoteStatusEnum.values.firstWhere(
+      status = .values.firstWhere(
               (e) => e.name == (json['status'] as String?),
           orElse: () => NoteStatusEnum.todo),
       createdAt = DateTime.parse(json['createdAt'] as String),

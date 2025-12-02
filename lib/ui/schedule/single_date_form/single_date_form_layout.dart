@@ -6,6 +6,7 @@ import 'package:jampa_flutter/utils/constants/styles/sizes.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 import '../../../bloc/notes/save/save_note_bloc.dart';
+import '../../../utils/enums/ui_status.dart';
 import '../../reminder/widgets/save_reminder_list.dart';
 import '../../widgets/buttons/buttons.dart';
 import '../../widgets/headers.dart';
@@ -22,7 +23,7 @@ class SingleDateFormLayout extends StatelessWidget {
       listener: (context, state) {
         if (state.singleDateSavingStatus.isFailure) {
           SnackBarX.showError(context, context.strings.generic_error_message);
-        } else if (state.singleDateSavingStatus.isSuccessful) {
+        } else if (state.singleDateSavingStatus.isSuccess) {
           SnackBarX.showSuccess(context, context.strings.save_single_date_success_feedback);
           // Back to the previous screen after success
           context.pop();

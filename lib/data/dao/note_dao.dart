@@ -34,7 +34,7 @@ class NoteDao {
     await (db.update(db.noteTable)..where((note) => note.id.equals(id)))
         .write(NoteTableCompanion(
       content: Value(content),
-      updatedAt: Value(DateTime.now()),
+      updatedAt: Value(.now()),
     ));
   }
 

@@ -18,7 +18,7 @@ enum WeekdaysEnum {
 
   /// Get the enum value from an integer representation of the day
   static WeekdaysEnum fromInt(int day) {
-    return WeekdaysEnum.values.firstWhere((element) => element.asInt == day);
+    return .values.firstWhere((element) => element.asInt == day);
   }
 
   /// Get the localized display name of the weekday

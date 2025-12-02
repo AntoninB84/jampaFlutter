@@ -7,6 +7,7 @@ import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 import '../../../bloc/notes/save/save_note_bloc.dart';
 import '../../../utils/constants/styles/sizes.dart';
+import '../../../utils/enums/ui_status.dart';
 import '../../widgets/buttons/buttons.dart';
 import '../../widgets/headers.dart';
 import '../../widgets/jampa_scaffolded_app_bar_widget.dart';
@@ -24,7 +25,7 @@ class ReminderFormLayout extends StatelessWidget {
         // Listen for the save status changes to show feedback
         if (state.remindersSavingStatus.isFailure) {
           SnackBarX.showError(context, context.strings.generic_error_message);
-        } else if (state.remindersSavingStatus.isSuccessful) {
+        } else if (state.remindersSavingStatus.isSuccess) {
           SnackBarX.showSuccess(context, context.strings.save_reminder_success_feedback);
           // Back to the previous screen after success
           context.pop();
@@ -74,7 +75,7 @@ class ReminderFormLayout extends StatelessWidget {
 
                     // Is Notification Checkbox
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: .start,
                       children: [
                         Checkbox(
                             value: state.newReminderFormElements.isNotification,

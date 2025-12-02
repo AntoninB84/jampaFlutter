@@ -5,7 +5,7 @@ enum PositiveNumberValidationError {
 }
 
 extension PositiveNumberValidationErrorX on PositiveNumberValidationError {
-  bool get isInvalidValue => this == PositiveNumberValidationError.invalidValue;
+  bool get isInvalidValue => this == .invalidValue;
 }
 
 /// A FormzInput class for validating positive numbers (greater than or equal to 0).
@@ -16,7 +16,7 @@ class PositiveValueValidator extends FormzInput<int?, PositiveNumberValidationEr
   @override
   PositiveNumberValidationError? validator(int? value) {
     if (value == null || value < 0) {
-      return PositiveNumberValidationError.invalidValue;
+      return .invalidValue;
     }
     return null;
   }
