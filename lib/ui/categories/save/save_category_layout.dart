@@ -10,6 +10,7 @@ import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 import '../../../bloc/categories/save/save_category_cubit.dart';
 import '../../../utils/constants/styles/sizes.dart';
+import '../../../utils/enums/ui_status.dart';
 import '../../widgets/buttons/buttons.dart';
 
 class SaveCategoryLayout extends StatelessWidget {
@@ -20,9 +21,9 @@ class SaveCategoryLayout extends StatelessWidget {
     return BlocConsumer<SaveCategoryCubit, SaveCategoryState>(
       listener: (context, state) {
         // Show feedback based on the saving state
-        if (state.isError) {
+        if (state.saveCategoryStatus.isFailure) {
           SnackBarX.showError(context, context.strings.generic_error_message);
-        } else if (state.isSuccess) {
+        } else if (state.saveCategoryStatus.isSuccess) {
           SnackBarX.showSuccess(
             context,
             state.category != null
@@ -38,13 +39,13 @@ class SaveCategoryLayout extends StatelessWidget {
           actions: [
             Buttons.saveButtonIcon(
               context: context,
-              onPressed: state.isValidName && !state.existsAlready && !state.isLoading
+              onPressed: state.isValidName && !state.existsAlready && !state.saveCategoryStatus.isLoading
                   ? () => context.read<SaveCategoryCubit>().onSubmit()
                   : null,
             )
           ],
           body: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: .start,
             children: [
               Headers.basicHeader(
                 context: context,

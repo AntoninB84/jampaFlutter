@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:jampa_flutter/data/models/category.dart';
+import 'package:jampa_flutter/utils/enums/ui_status.dart';
 import 'package:jampa_flutter/utils/forms/name_validator.dart';
 import 'package:jampa_flutter/repository/categories_repository.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
@@ -33,14 +34,14 @@ class SaveCategoryCubit extends Cubit<SaveCategoryState> {
                 isValidName: Formz.validate([NameValidator.dirty(category.name)]),
               ));
             } else {
-              emit(state.copyWith(isError: true));
+              emit(state.copyWith(saveCategoryStatus: .failure));
             }
           }).catchError((error) {
-            emit(state.copyWith(isError: true));
+            emit(state.copyWith(saveCategoryStatus: .failure));
             debugPrint('Error fetching category for update: $error');
           });
       } catch (e) {
-        emit(state.copyWith(isError: true));
+        emit(state.copyWith(saveCategoryStatus: .failure));
         debugPrint('Error initializing fetchCategoryForUpdate: $e');
       }
     }
@@ -54,8 +55,7 @@ class SaveCategoryCubit extends Cubit<SaveCategoryState> {
           name: name,
           isValidName: Formz.validate([name]),
           existsAlready: false, // Reset existence check on name change
-          isError: false, // Reset error state on name change
-          isSuccess: false, // Reset success state on name change
+          saveCategoryStatus: .initial
         )
     );
   }
@@ -75,16 +75,14 @@ class SaveCategoryCubit extends Cubit<SaveCategoryState> {
       // If the name is valid, start loading
       emit(
           state.copyWith(
-              isLoading: true,
-              isError: false,
-              isSuccess: false
+            saveCategoryStatus: .loading,
           )
       );
       // Check if the category already exists
       categoriesRepository.getCategoryByName(name.value).then((category) {
         if (category != null) {
           // If the category already exists, emit a state indicating it
-          emit(state.copyWith(existsAlready: true, isLoading: false));
+          emit(state.copyWith(existsAlready: true, saveCategoryStatus: .initial));
         } else {
           late CategoryEntity category;
           if(state.category != null){
@@ -109,18 +107,18 @@ class SaveCategoryCubit extends Cubit<SaveCategoryState> {
               .saveCategory(category)
               .then((_) {
                 // If the category is saved successfully, emit a success state
-                emit(state.copyWith(isSuccess: true, isLoading: false));
+                emit(state.copyWith(saveCategoryStatus: .success));
               })
               .catchError((error){
                 // If an error occurs while saving, emit a state indicating an error
-                emit(state.copyWith(isError: true, isLoading: false));
+                emit(state.copyWith(saveCategoryStatus: .failure));
                 debugPrint('Error saving category: $error');
               });
 
         }
       }).catchError((error){
         // If an error occurs, emit a state indicating an error
-        emit(state.copyWith(isError: true, isLoading: false));
+        emit(state.copyWith(saveCategoryStatus: .failure));
         debugPrint('Error checking category existence: $error');
       });
     }

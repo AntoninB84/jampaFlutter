@@ -43,9 +43,9 @@ class _NotesListWidgetState extends State<NotesListWidget> {
         return BlocBuilder<NotesListViewBloc, NotesListViewState>(
             builder: (context, state) {
               switch(state.listStatus){
-                case NotesListStatus.initial:
-                case NotesListStatus.loading:
-                case NotesListStatus.success:
+                case .initial:
+                case .loading:
+                case .success:
                 // Show loading skeletons if loading, else show actual notes
                   List<NoteListViewData> notes = state.listStatus.isLoading ?
                   List.filled(3, fakeSkeletonNoteListViewData) : state.notes;
@@ -81,8 +81,8 @@ class _NotesListWidgetState extends State<NotesListWidget> {
                                   ),
                                 ),
                                 trailing: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisAlignment: .center,
+                                  crossAxisAlignment: .end,
                                   children: [
                                     Flexible(
                                       child: Text(
@@ -115,7 +115,7 @@ class _NotesListWidgetState extends State<NotesListWidget> {
                       },
                     ),
                   );
-                case NotesListStatus.error:
+                case .error:
                   return const Center(child: Text("Error loading notes"));
               }
             }
@@ -133,7 +133,7 @@ class _NotesListWidgetState extends State<NotesListWidget> {
     return Dismissible(
         background: Container(
           color: Theme.of(context).colorScheme.errorContainer,
-          alignment: Alignment.centerLeft,
+          alignment: .centerLeft,
           padding: const EdgeInsets.only(
               left: kGap16
           ),
@@ -144,7 +144,7 @@ class _NotesListWidgetState extends State<NotesListWidget> {
         ),
         secondaryBackground: Container(
           color: Theme.of(context).colorScheme.primary,
-          alignment: Alignment.centerRight,
+          alignment: .centerRight,
           padding: const EdgeInsets.only(
               right: kGap16
           ),
@@ -154,11 +154,11 @@ class _NotesListWidgetState extends State<NotesListWidget> {
           ),
         ),
         onDismissed: (direction) {
-          if(direction == DismissDirection.endToStart){
+          if(direction == .endToStart){
             // Mark note as completed
             context.read<ShowNoteBloc>().add(
                 ChangeNoteStatus(noteId: note.noteId, newStatus: .done));
-          }else if (direction == DismissDirection.startToEnd){
+          }else if (direction == .startToEnd){
             // Trigger note deletion in the bloc
             context.read<ShowNoteBloc>().add(DeleteNoteById(note.noteId));
           }
@@ -178,7 +178,7 @@ class _NotesListWidgetState extends State<NotesListWidget> {
               top: kGap4
           ),
           child: Row(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: .min,
             children: [
               // Show SINGLE DATE schedules count if greater than 0
               if(note.schedulesCount > 0)

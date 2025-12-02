@@ -7,6 +7,7 @@ import 'package:jampa_flutter/bloc/categories/categories_bloc.dart';
 import 'package:jampa_flutter/ui/categories/widgets/categories_list_widget.dart';
 import 'package:jampa_flutter/ui/widgets/jampa_scaffolded_app_bar_widget.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
+import 'package:jampa_flutter/utils/enums/ui_status.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 import '../../widgets/headers.dart';
@@ -21,9 +22,9 @@ class CategoriesLayout extends StatelessWidget {
         bloc: context.read<CategoriesBloc>(),
         listener: (context, state) {
           // Show feedback snackbars based on deletion outcome
-          if (state.deletionError) {
+          if (state.categoryDeletionStatus.isFailure) {
             SnackBarX.showError(context, context.strings.delete_category_error_message);
-          } else if (state.deletionSuccess) {
+          } else if (state.categoryDeletionStatus.isSuccess) {
             SnackBarX.showSuccess(context, context.strings.delete_category_success_feedback);
           }
         },

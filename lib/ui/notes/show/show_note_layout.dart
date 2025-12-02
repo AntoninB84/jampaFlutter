@@ -74,7 +74,7 @@ class ShowNoteLayout extends StatelessWidget {
           ],
           body: SingleChildScrollView(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: .start,
               children: [
                 // Note title
                 Text(state.note?.title ?? 'No Title', style: Theme.of(context).textTheme.headlineMedium),

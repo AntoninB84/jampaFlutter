@@ -6,6 +6,7 @@ import 'package:jampa_flutter/bloc/categories/categories_bloc.dart';
 import 'package:jampa_flutter/data/models/category.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/constants/styles/styles.dart';
+import 'package:jampa_flutter/utils/enums/ui_status.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 
@@ -34,7 +35,7 @@ class _NoteCategoriesMultiSelectorState extends State<NoteCategoriesMultiSelecto
         create: (context) => CategoriesBloc()..add(WatchCategories()),
         child: BlocConsumer<CategoriesBloc, CategoriesState>(
             listener: (context, state) {
-              if (state.listStatus.isError) {
+              if (state.listStatus.isFailure) {
                 SnackBarX.showError(context, context.strings.generic_error_message);
               }
             },

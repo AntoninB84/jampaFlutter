@@ -10,6 +10,8 @@ import 'package:jampa_flutter/utils/constants/styles/sizes.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
+import '../../../utils/enums/ui_status.dart';
+
 /// A widget that displays a list of all categories with their usage counts.
 class CategoriesListWidget extends StatefulWidget {
   const CategoriesListWidget({super.key});
@@ -26,9 +28,9 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget> {
     return BlocBuilder<CategoriesBloc, CategoriesState>(
         builder: (context, state) {
           switch(state.listStatus){
-            case CategoriesListStatus.initial:
-            case CategoriesListStatus.loading:
-            case CategoriesListStatus.success:
+            case .initial:
+            case .loading:
+            case .success:
               // Use fake skeleton data while loading
               List<CategoryWithCount> categoriesWithCount = state.listStatus.isLoading
                   ? List.filled(5, fakeSkeletonCategoryWithCount)
@@ -99,7 +101,7 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget> {
                   },
                 ),
               );
-            case CategoriesListStatus.error:
+            case .failure:
               return const Center(child: Text("Error loading categories"));
           }
         }

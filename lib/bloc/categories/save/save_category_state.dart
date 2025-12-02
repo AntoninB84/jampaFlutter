@@ -6,9 +6,7 @@ class SaveCategoryState extends Equatable {
     this.name = const NameValidator.pure(),
     this.isValidName = true,
     this.existsAlready = false,
-    this.isLoading = false,
-    this.isError = false,
-    this.isSuccess = false,
+    this.saveCategoryStatus = .initial,
   });
 
   /// The category being edited or created
@@ -22,11 +20,7 @@ class SaveCategoryState extends Equatable {
   /// Indicates if a category with the same name already exists
   final bool existsAlready;
   /// Indicates if a save operation is in progress or if data is being loaded
-  final bool isLoading;
-  /// Indicates if there was an error during the save operation
-  final bool isError;
-  /// Indicates if the save operation was successful
-  final bool isSuccess;
+  final UIStatusEnum saveCategoryStatus;
 
   @override
   List<Object?> get props => [
@@ -34,9 +28,7 @@ class SaveCategoryState extends Equatable {
     name,
     isValidName,
     existsAlready,
-    isLoading,
-    isError,
-    isSuccess
+    saveCategoryStatus
   ];
 
   SaveCategoryState copyWith({
@@ -44,18 +36,14 @@ class SaveCategoryState extends Equatable {
     NameValidator? name,
     bool? isValidName,
     bool? existsAlready,
-    bool? isLoading,
-    bool? isError,
-    bool? isSuccess,
+    UIStatusEnum? saveCategoryStatus,
   }) {
     return SaveCategoryState(
       category: category ?? this.category,
       name: name ?? this.name,
       isValidName: isValidName ?? this.isValidName,
       existsAlready: existsAlready ?? this.existsAlready,
-      isLoading: isLoading ?? this.isLoading,
-      isError: isError ?? this.isError,
-      isSuccess: isSuccess ?? this.isSuccess,
+      saveCategoryStatus: saveCategoryStatus ?? this.saveCategoryStatus,
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jampa_flutter/repository/categories_repository.dart';
+import 'package:jampa_flutter/utils/enums/ui_status.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
 import '../../data/models/category.dart';
@@ -28,14 +29,14 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
         onData: (data) {
           emit(
             state.copyWith(
-              listStatus: CategoriesListStatus.success,
+              listStatus: .success,
               categories: data
             )
           );
         },
       onError: (error, stackTrace) {
         debugPrint("Error listening to categories: $error");
-        emit(state.copyWith(listStatus: CategoriesListStatus.error));
+        emit(state.copyWith(listStatus: .failure));
       }
     );
   }
@@ -48,14 +49,14 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
         onData: (data) {
           emit(
               state.copyWith(
-                  listStatus: CategoriesListStatus.success,
+                  listStatus: .success,
                   categoriesWithCount: data
               )
           );
         },
         onError: (error, stackTrace) {
           debugPrint("Error listening to categories with count: $error");
-          emit(state.copyWith(listStatus: CategoriesListStatus.error));
+          emit(state.copyWith(listStatus: .failure));
         }
     );
   }
@@ -63,13 +64,14 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
   /// Deletes a category based on the provided event
   /// Updates the state to reflect any deletion errors
   void _deleteCategory(DeleteCategory event, Emitter<CategoriesState> emit) async {
-    emit(state.copyWith(deletionError: false));
+    emit(state.copyWith(categoryDeletionStatus: .initial));
     try {
       String categoryId = event.selectedCategoryId;
       // Perform deletion
       await categoriesRepository.deleteCategory(categoryId);
+      emit(state.copyWith(categoryDeletionStatus: .success));
     } catch (error) {
-      emit(state.copyWith(deletionError: true));
+      emit(state.copyWith(categoryDeletionStatus: .failure));
       debugPrint("Error deleting category: $error");
     }
   }
