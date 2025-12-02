@@ -7,6 +7,7 @@ import 'package:jampa_flutter/bloc/note_types/note_types_bloc.dart';
 import 'package:jampa_flutter/ui/note_types/widgets/note_types_list_widget.dart';
 import 'package:jampa_flutter/ui/widgets/jampa_scaffolded_app_bar_widget.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
+import 'package:jampa_flutter/utils/enums/ui_status.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 import '../../widgets/headers.dart';
@@ -20,16 +21,16 @@ class NoteTypesLayout extends StatelessWidget {
         bloc: context.read<NoteTypesBloc>(),
         listener: (context, state) {
           // Show feedback based on the deletion state
-          if (state.deletionError) {
+          if (state.noteTypeDeletionStatus.isFailure) {
             SnackBarX.showError(context, context.strings.delete_note_type_error_message);
-          } else if (state.deletionSuccess) {
+          } else if (state.noteTypeDeletionStatus.isSuccess) {
             SnackBarX.showSuccess(context, context.strings.delete_note_type_success_feedback);
           }
         },
         builder: (context, asyncSnapshot) {
           return JampaScaffoldedAppBarWidget(
             body: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: .start,
               children: [
                 // Header with title and add button
                 Headers.listHeader(

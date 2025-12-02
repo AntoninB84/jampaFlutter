@@ -16,12 +16,12 @@ enum SettingsMenuEntry {
   /// Returns the go-route name associated with the menu entry.
   String get routeName {
     switch (this) {
-      case SettingsMenuEntry.categories:
+      case .categories:
         return 'Categories';
-      case SettingsMenuEntry.noteTypes:
+      case .noteTypes:
         return 'NoteTypes';
-      case SettingsMenuEntry.none:
-        return SettingsMenuEntry.none.path;
+      case .none:
+        return path;
     }
   }
 
@@ -29,12 +29,12 @@ enum SettingsMenuEntry {
   /// based on the current context for internationalization.
   String displayName(BuildContext context) {
     switch (this) {
-      case SettingsMenuEntry.categories:
+      case .categories:
         return context.strings.categories;
-      case SettingsMenuEntry.noteTypes:
+      case .noteTypes:
         return context.strings.note_types;
-      case SettingsMenuEntry.none:
-        return SettingsMenuEntry.none.path;
+      case .none:
+        return path;
     }
   }
 }
@@ -65,7 +65,7 @@ class SettingsMenuState extends Equatable {
 
 class SettingsMenuCubit extends Cubit<SettingsMenuState> {
   SettingsMenuCubit() : super(
-    SettingsMenuState(selectedEntry: SettingsMenuEntry.none,)
+    SettingsMenuState(selectedEntry: .none,)
   );
 
   /// Selects a specific entry in the settings menu.
@@ -78,7 +78,7 @@ class SettingsMenuCubit extends Cubit<SettingsMenuState> {
   /// Resets the selected entry if the current path does not match any known entries.
   void reset(String? currentPath){
     // If there's no current path or the selected entry is 'none', do nothing.
-    if(currentPath == null ||  state.selectedEntry == SettingsMenuEntry.none) return;
+    if(currentPath == null ||  state.selectedEntry == .none) return;
 
     bool needsReset = true;
 
@@ -99,7 +99,7 @@ class SettingsMenuCubit extends Cubit<SettingsMenuState> {
     // If no matching entry was found, reset the selected entry to 'none'.
     if(needsReset) {
       emit(state.copyWith(
-        selectedEntry: SettingsMenuEntry.none,
+        selectedEntry: .none,
       ));
     }
   }

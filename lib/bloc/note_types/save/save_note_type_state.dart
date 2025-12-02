@@ -6,9 +6,7 @@ class SaveNoteTypeState extends Equatable {
     this.name = const NameValidator.pure(),
     this.isValidName = true,
     this.existsAlready = false,
-    this.isLoading = false,
-    this.isError = false,
-    this.isSuccess = false,
+    this.saveNoteTypeStatus = .initial
   });
 
   /// The note type being created or edited.
@@ -23,14 +21,8 @@ class SaveNoteTypeState extends Equatable {
   /// Whether a note type with the same name already exists.
   final bool existsAlready;
 
-  /// Whether the save operation is in progress.
-  final bool isLoading;
-
-  /// Whether there was an error during the save operation.
-  final bool isError;
-
-  /// Whether the save operation was successful.
-  final bool isSuccess;
+  /// The state of the operations
+  final UIStatusEnum saveNoteTypeStatus;
 
   @override
   List<Object?> get props => [
@@ -38,9 +30,7 @@ class SaveNoteTypeState extends Equatable {
     name,
     isValidName,
     existsAlready,
-    isLoading,
-    isError,
-    isSuccess
+    saveNoteTypeStatus
   ];
 
   SaveNoteTypeState copyWith({
@@ -48,18 +38,14 @@ class SaveNoteTypeState extends Equatable {
     NameValidator? name,
     bool? isValidName,
     bool? existsAlready,
-    bool? isLoading,
-    bool? isError,
-    bool? isSuccess,
+    UIStatusEnum? saveNoteTypeStatus,
   }) {
     return SaveNoteTypeState(
       noteType: noteType ?? this.noteType,
       name: name ?? this.name,
       isValidName: isValidName ?? this.isValidName,
       existsAlready: existsAlready ?? this.existsAlready,
-      isLoading: isLoading ?? this.isLoading,
-      isError: isError ?? this.isError,
-      isSuccess: isSuccess ?? this.isSuccess,
+      saveNoteTypeStatus: saveNoteTypeStatus ?? this.saveNoteTypeStatus,
     );
   }
 }

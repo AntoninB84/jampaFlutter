@@ -1,32 +1,17 @@
 part of 'note_types_bloc.dart';
 
-enum NoteTypesListStatus {
-  initial,
-  success,
-  error,
-  loading,
-}
-
-extension NoteTypesListStatusX on NoteTypesListStatus {
-  bool get isInitial => this == NoteTypesListStatus.initial;
-  bool get isSuccess => this == NoteTypesListStatus.success;
-  bool get isError => this == NoteTypesListStatus.error;
-  bool get isLoading => this == NoteTypesListStatus.loading;
-}
-
 class NoteTypesState extends Equatable {
 
   const NoteTypesState({
-    this.listStatus = NoteTypesListStatus.initial,
+    this.listStatus = .initial,
     List<NoteTypeEntity>? noteTypes,
     List<NoteTypeWithCount>? noteTypesWithCount,
-    this.deletionError = false,
-    this.deletionSuccess = false,
+    this.noteTypeDeletionStatus = .initial,
   }) : noteTypes = noteTypes ?? const [],
        noteTypesWithCount = noteTypesWithCount ?? const [];
 
   /// The current status of the note types list.
-  final NoteTypesListStatus listStatus;
+  final UIStatusEnum listStatus;
 
   /// The list of note types.
   final List<NoteTypeEntity> noteTypes;
@@ -34,11 +19,8 @@ class NoteTypesState extends Equatable {
   /// The list of note types along with their associated note counts.
   final List<NoteTypeWithCount> noteTypesWithCount;
 
-  /// Indicates if there was an error during deletion of a note type.
-  final bool deletionError;
-
-  /// Indicates if the deletion of a note type was successful.
-  final bool deletionSuccess;
+  /// The status of the operations.
+  final UIStatusEnum noteTypeDeletionStatus;
 
 
   @override
@@ -46,23 +28,20 @@ class NoteTypesState extends Equatable {
     listStatus,
     noteTypes,
     noteTypesWithCount,
-    deletionError,
-    deletionSuccess
+    noteTypeDeletionStatus,
   ];
 
   NoteTypesState copyWith({
     List<NoteTypeEntity>? noteTypes,
     List<NoteTypeWithCount>? noteTypesWithCount,
-    NoteTypesListStatus? listStatus,
-    bool? deletionError,
-    bool? deletionSuccess,
+    UIStatusEnum? listStatus,
+    UIStatusEnum? noteTypeDeletionStatus,
   }) {
     return NoteTypesState(
       noteTypes: noteTypes ?? this.noteTypes,
       noteTypesWithCount: noteTypesWithCount ?? this.noteTypesWithCount,
       listStatus: listStatus ?? this.listStatus,
-      deletionError: deletionError ?? this.deletionError,
-      deletionSuccess: deletionSuccess ?? this.deletionSuccess,
+      noteTypeDeletionStatus: noteTypeDeletionStatus ?? this.noteTypeDeletionStatus,
     );
   }
 }

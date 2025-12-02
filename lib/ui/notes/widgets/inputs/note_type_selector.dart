@@ -6,6 +6,7 @@ import 'package:jampa_flutter/bloc/note_types/note_types_bloc.dart';
 import 'package:jampa_flutter/data/models/note_type.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/constants/styles/sizes.dart';
+import 'package:jampa_flutter/utils/enums/ui_status.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 // A dropdown selector for choosing a note type.
@@ -21,7 +22,7 @@ class NoteTypeSelector extends StatelessWidget {
       create: (context) => NoteTypesBloc()..add(WatchNoteTypes()),
       child: BlocConsumer<NoteTypesBloc, NoteTypesState>(
           listener: (context, state) {
-            if (state.listStatus.isError) {
+            if (state.listStatus.isFailure) {
               SnackBarX.showError(context, context.strings.generic_error_message);
             }
           },

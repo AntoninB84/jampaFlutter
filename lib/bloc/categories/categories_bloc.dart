@@ -64,7 +64,7 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
   /// Deletes a category based on the provided event
   /// Updates the state to reflect any deletion errors
   void _deleteCategory(DeleteCategory event, Emitter<CategoriesState> emit) async {
-    emit(state.copyWith(categoryDeletionStatus: .initial));
+    emit(state.copyWith(categoryDeletionStatus: .loading));
     try {
       String categoryId = event.selectedCategoryId;
       // Perform deletion

@@ -10,6 +10,8 @@ import 'package:jampa_flutter/utils/constants/styles/sizes.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
+import '../../../utils/enums/ui_status.dart';
+
 /// A widget that displays a list of note types with their usage counts.
 class NoteTypesListWidget extends StatefulWidget {
   const NoteTypesListWidget({super.key});
@@ -26,9 +28,9 @@ class _NoteTypesListWidgetState extends State<NoteTypesListWidget> {
     return BlocBuilder<NoteTypesBloc, NoteTypesState>(
         builder: (context, state) {
           switch(state.listStatus){
-            case NoteTypesListStatus.initial:
-            case NoteTypesListStatus.loading:
-            case NoteTypesListStatus.success:
+            case .initial:
+            case .loading:
+            case .success:
               // Display skeletons if loading
               List<NoteTypeWithCount> noteTypesWithCount = state.listStatus.isLoading
                   ? List.filled(3, fakeSkeletonNoteTypeWithCount)
@@ -65,7 +67,7 @@ class _NoteTypesListWidgetState extends State<NoteTypesListWidget> {
                             context.pushNamed("EditNoteType", extra: {'id': noteType.id.toString()});
                           },
                           trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
+                            mainAxisSize: .min,
                             children: [
                               Buttons.deleteButtonIcon(
                                 context: context,
@@ -98,7 +100,7 @@ class _NoteTypesListWidgetState extends State<NoteTypesListWidget> {
                   },
                 ),
               );
-            case NoteTypesListStatus.error:
+            case .failure:
               return const Center(child: Text("Error loading noteTypes"));
           }
         }
