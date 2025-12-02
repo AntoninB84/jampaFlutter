@@ -133,7 +133,7 @@ class NoteFormBloc extends Bloc<NoteFormEvent, NoteFormState> {
         noteType: state.selectedNoteType,
         categories: state.selectedCategories,
         isImportant: state.isImportantChecked,
-        updatedAt: DateTime.now(),
+        updatedAt: .now(),
       );
     } else {
       // Create new note
@@ -145,8 +145,8 @@ class NoteFormBloc extends Bloc<NoteFormEvent, NoteFormState> {
         noteType: state.selectedNoteType,
         categories: state.selectedCategories,
         isImportant: state.isImportantChecked,
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
+        createdAt: .now(),
+        updatedAt: .now(),
       );
     }
     // Pass note to SaveNoteBloc for saving

@@ -24,15 +24,15 @@ class InitialData {
 
 
   static List<CategoryEntity> categories = [
-    CategoryEntity(id: categoryIds[0], name: "Sport", createdAt: DateTime.now(), updatedAt: DateTime.now()),
-    CategoryEntity(id: categoryIds[1], name: "Musique", createdAt: DateTime.now(), updatedAt: DateTime.now()),
-    CategoryEntity(id: categoryIds[2], name: "Projet", createdAt: DateTime.now(), updatedAt: DateTime.now()),
-    CategoryEntity(id: categoryIds[3], name: "Travail", createdAt: DateTime.now(), updatedAt: DateTime.now()),
+    CategoryEntity(id: categoryIds[0], name: "Sport", createdAt: .now(), updatedAt: .now()),
+    CategoryEntity(id: categoryIds[1], name: "Musique", createdAt: .now(), updatedAt: .now()),
+    CategoryEntity(id: categoryIds[2], name: "Projet", createdAt: .now(), updatedAt: .now()),
+    CategoryEntity(id: categoryIds[3], name: "Travail", createdAt: .now(), updatedAt: .now()),
   ];
   static List<NoteTypeEntity> noteTypes = [
-    NoteTypeEntity(id: noteTypeIds[0], name: "Idée", createdAt: DateTime.now(), updatedAt: DateTime.now()),
-    NoteTypeEntity(id: noteTypeIds[1], name: "Reminder", createdAt: DateTime.now(), updatedAt: DateTime.now()),
-    NoteTypeEntity(id: noteTypeIds[2], name: "Event", createdAt: DateTime.now(), updatedAt: DateTime.now()),
+    NoteTypeEntity(id: noteTypeIds[0], name: "Idée", createdAt: .now(), updatedAt: .now()),
+    NoteTypeEntity(id: noteTypeIds[1], name: "Reminder", createdAt: .now(), updatedAt: .now()),
+    NoteTypeEntity(id: noteTypeIds[2], name: "Event", createdAt: .now(), updatedAt: .now()),
   ];
 
   static List<NoteEntity> notes = [
@@ -40,29 +40,29 @@ class InitialData {
       id: noteIds[0],
       title: "Note #1",
       content: null,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
+      createdAt: .now(),
+      updatedAt: .now(),
     ),
     NoteEntity(
       id: noteIds[1],
       title: "Note #2",
       content: null,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
+      createdAt: .now(),
+      updatedAt: .now(),
     ),
     NoteEntity(
       id: noteIds[2],
       title: "Note #3",
       content: null,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
+      createdAt: .now(),
+      updatedAt: .now(),
     ),
     NoteEntity(
       id: noteIds[3],
       title: "Note #4",
       content: null,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
+      createdAt: .now(),
+      updatedAt: .now(),
     ),
   ];
 
@@ -71,37 +71,37 @@ class InitialData {
     ScheduleEntity(
       noteId: noteIds[0],
       id: schedulesIds[0],
-      startDateTime: DateTime.now().add(const Duration(days: 1)),
-      endDateTime: DateTime.now().add(const Duration(days: 1, hours: 1)),
-      recurrenceEndDate: DateTime.now().add(const Duration(days: 10)),
-      recurrenceType: RecurrenceType.intervalDays,
+      startDateTime: .now().add(const Duration(days: 1)),
+      endDateTime: .now().add(const Duration(days: 1, hours: 1)),
+      recurrenceEndDate: .now().add(const Duration(days: 10)),
+      recurrenceType: .intervalDays,
       recurrenceInterval: 1,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now()
+      createdAt: .now(),
+      updatedAt: .now()
     ),
     // First note, every 18th of the month, no end date
     ScheduleEntity(
         noteId: noteIds[0],
         id: schedulesIds[1],
-        startDateTime: DateTime.now().add(const Duration(days: 3)),
-        endDateTime: DateTime.now().add(const Duration(days: 3, hours: 1)),
+        startDateTime: .now().add(const Duration(days: 3)),
+        endDateTime: .now().add(const Duration(days: 3, hours: 1)),
         recurrenceEndDate: null,
-        recurrenceType: RecurrenceType.dayBasedMonthly,
+        recurrenceType: .dayBasedMonthly,
         recurrenceDay: 18,
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now()
+        createdAt: .now(),
+        updatedAt: .now()
     ),
     // Second note, single date, 5 days from now
     ScheduleEntity(
         noteId: noteIds[1],
         id: schedulesIds[2],
-        startDateTime: DateTime.now().add(const Duration(days: 2)),
-        endDateTime: DateTime.now().add(const Duration(days: 2, hours: 1)),
+        startDateTime: .now().add(const Duration(days: 2)),
+        endDateTime: .now().add(const Duration(days: 2, hours: 1)),
         recurrenceEndDate: null,
         recurrenceType: null,
         recurrenceInterval: null,
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now()
+        createdAt: .now(),
+        updatedAt: .now()
     ),
   ];
 
@@ -109,42 +109,42 @@ class InitialData {
     ReminderEntity(
         id: _uuid.v4(),
         scheduleId: schedulesIds[0],
-        offsetType: ReminderOffsetType.hours,
+        offsetType: .hours,
         offsetValue: 2,
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now()
+        createdAt: .now(),
+        updatedAt: .now()
     ),
     ReminderEntity(
         id: _uuid.v4(),
         scheduleId: schedulesIds[0],
-        offsetType: ReminderOffsetType.hours,
+        offsetType: .hours,
         offsetValue: 1,
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now()
+        createdAt: .now(),
+        updatedAt: .now()
     ),
     ReminderEntity(
         id: _uuid.v4(),
         scheduleId: schedulesIds[0],
-        offsetType: ReminderOffsetType.minutes,
+        offsetType: .minutes,
         offsetValue: 30,
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now()
+        createdAt: .now(),
+        updatedAt: .now()
     ),
     ReminderEntity(
         id: _uuid.v4(),
         scheduleId: schedulesIds[1],
-        offsetType: ReminderOffsetType.days,
+        offsetType: .days,
         offsetValue: 2,
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now()
+        createdAt: .now(),
+        updatedAt: .now()
     ),
     ReminderEntity(
         id: _uuid.v4(),
         scheduleId: schedulesIds[2],
-        offsetType: ReminderOffsetType.days,
+        offsetType: .days,
         offsetValue: 1,
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now()
+        createdAt: .now(),
+        updatedAt: .now()
     ),
   ];
 }

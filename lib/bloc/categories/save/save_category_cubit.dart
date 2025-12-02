@@ -90,15 +90,15 @@ class SaveCategoryCubit extends Cubit<SaveCategoryState> {
             category = state.category!.copyWith(
               name: state.name.value,
               createdAt: state.category!.createdAt,
-              updatedAt: DateTime.now()
+              updatedAt: .now()
             );
           }else{
             // If creating a new category, create a new entity
             category = CategoryEntity(
                 id: Uuid().v4(),
                 name: state.name.value,
-                createdAt: DateTime.now(),
-                updatedAt: DateTime.now()
+                createdAt: .now(),
+                updatedAt: .now()
             );
           }
 

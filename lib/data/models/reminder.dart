@@ -136,8 +136,8 @@ class ReminderEntity {
       offsetValue: elements.selectedOffsetNumber,
       offsetType: elements.selectedOffsetType ?? ReminderOffsetType.minutes,
       isNotification: elements.isNotification,
-      createdAt: elements.createdAt ?? DateTime.now(),
-      updatedAt: DateTime.now(),
+      createdAt: elements.createdAt ?? .now(),
+      updatedAt: .now(),
     );
   }
 }

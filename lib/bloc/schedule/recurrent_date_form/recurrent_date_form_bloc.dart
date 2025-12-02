@@ -24,8 +24,8 @@ class RecurrentDateFormBloc extends Bloc<RecurrentDateFormEvent, RecurrentDateFo
       newRecurrentDateFormElements: RecurrenceFormElements(
         noteId: 'noteId',
         scheduleId: 'scheduleId',
-        selectedStartDateTime: DateTime.now(),
-        selectedEndDateTime: DateTime.now().add(const Duration(hours: 1)),
+        selectedStartDateTime: .now(),
+        selectedEndDateTime: .now().add(const Duration(hours: 1)),
       ),
   )) {
     on<InitializeRecurrentDateFormEvent>(_initializeRecurrentDateForm);
@@ -54,8 +54,8 @@ class RecurrentDateFormBloc extends Bloc<RecurrentDateFormEvent, RecurrentDateFo
           newRecurrentDateFormElements: RecurrenceFormElements(
             noteId: event.noteId,
             scheduleId: Uuid().v4(),
-            selectedStartDateTime: DateTime.now(),
-            selectedEndDateTime: DateTime.now().add(const Duration(hours: 1)),
+            selectedStartDateTime: .now(),
+            selectedEndDateTime: .now().add(const Duration(hours: 1)),
           )
         ));
         return;

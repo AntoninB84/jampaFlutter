@@ -90,14 +90,14 @@ class SaveNoteTypeCubit extends Cubit<SaveNoteTypeState> {
             noteType = state.noteType!.copyWith(
               name: state.name.value,
               createdAt: state.noteType!.createdAt,
-              updatedAt: DateTime.now()
+              updatedAt: .now()
             );
           }else{
             noteType = NoteTypeEntity(
                 id: Uuid().v4(),
                 name: state.name.value,
-                createdAt: DateTime.now(),
-                updatedAt: DateTime.now()
+                createdAt: .now(),
+                updatedAt: .now()
             );
           }
 

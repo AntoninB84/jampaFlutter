@@ -14,9 +14,9 @@ NoteListViewData get fakeSkeletonNoteListViewData => NoteListViewData(
   schedulesCount: 0,
   recurringSchedulesCount: 0,
   remindersCount: 0,
-  noteCreatedAt: DateTime.now(),
-  noteUpdatedAt: DateTime.now(),
-  noteStatus: NoteStatusEnum.todo,
+  noteCreatedAt: .now(),
+  noteUpdatedAt: .now(),
+  noteStatus: .todo,
 );
 
 /// Fake skeleton data used as placeholders while real data is loading for category with count.
@@ -24,8 +24,8 @@ CategoryWithCount get fakeSkeletonCategoryWithCount => CategoryWithCount(
   category: CategoryEntity(
     id: "0",
     name: 'Loading...',
-    createdAt: DateTime.now(),
-    updatedAt: DateTime.now(),
+    createdAt: .now(),
+    updatedAt: .now(),
   ),
   noteCount: 0,
 );
@@ -35,8 +35,8 @@ NoteTypeWithCount get fakeSkeletonNoteTypeWithCount => NoteTypeWithCount(
   noteType: NoteTypeEntity(
     id: "0",
     name: 'Loading...',
-    createdAt: DateTime.now(),
-    updatedAt: DateTime.now(),
+    createdAt: .now(),
+    updatedAt: .now(),
   ),
   noteCount: 0,
 );

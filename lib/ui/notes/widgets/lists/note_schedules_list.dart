@@ -31,7 +31,7 @@ class _NoteSchedulesListState extends State<NoteSchedulesList> {
       );
     }
 
-    DateTime now = DateTime.now();
+    DateTime now = .now();
 
     return Container(
       constraints: BoxConstraints(
@@ -150,7 +150,7 @@ class _NoteSchedulesListState extends State<NoteSchedulesList> {
         && item.nextOccurrence != null)
     {
       String nextOrLastOccurrenceDate = item.nextOccurrence!.toFullFormat(context);
-      String displayText = item.nextOccurrence!.isBefore(DateTime.now())
+      String displayText = item.nextOccurrence!.isBefore(.now())
           ? context.strings.show_note_previous_occurrence(nextOrLastOccurrenceDate)
           : context.strings.show_note_next_occurrence(nextOrLastOccurrenceDate);
 

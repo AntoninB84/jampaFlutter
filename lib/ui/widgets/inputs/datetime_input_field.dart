@@ -47,14 +47,14 @@ class _DatetimeInputFieldState extends State<DatetimeInputField> {
   Future<void> _selectDateTime(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: selectedDateTime ?? DateTime.now(),
+      initialDate: selectedDateTime ?? .now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
     );
     if (pickedDate != null) {
       final TimeOfDay? pickedTime = await showTimePicker(
         context: context,
-        initialTime: TimeOfDay.fromDateTime(selectedDateTime ?? DateTime.now()),
+        initialTime: TimeOfDay.fromDateTime(selectedDateTime ?? .now()),
       );
       if (pickedTime != null) {
         final DateTime combined = DateTime(
