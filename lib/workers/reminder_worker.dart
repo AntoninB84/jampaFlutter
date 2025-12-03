@@ -1,7 +1,7 @@
 import 'package:alarm/alarm.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:jampa_flutter/data/dao/schedule_dao.dart';
-import 'package:jampa_flutter/data/models/schedule.dart';
+import 'package:jampa_flutter/data/models/schedule/schedule.dart';
 import 'package:jampa_flutter/utils/helpers/notification_helpers.dart';
 import 'package:workmanager/workmanager.dart';
 

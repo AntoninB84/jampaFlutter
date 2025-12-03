@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
-import '../../data/models/user.dart';
+import '../../data/models/user/user.dart';
 import '../../repository/auth_repository.dart';
 import '../../repository/user_repository.dart';
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/bloc/note_types/note_types_bloc.dart';
-import 'package:jampa_flutter/data/models/note_type.dart';
+import 'package:jampa_flutter/data/models/note_type/note_type.dart';
 import 'package:jampa_flutter/ui/widgets/buttons/buttons.dart';
 import 'package:jampa_flutter/ui/widgets/confirmation_dialog.dart';
 import 'package:jampa_flutter/utils/constants/data/fake_skeleton_data.dart';
@@ -10,6 +10,7 @@ import 'package:jampa_flutter/utils/constants/styles/sizes.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
+import '../../../data/objects/note_type_with_count.dart';
 import '../../../utils/enums/ui_status.dart';
 
 /// A widget that displays a list of note types with their usage counts.

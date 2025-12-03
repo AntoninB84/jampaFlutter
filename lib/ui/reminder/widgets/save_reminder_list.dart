@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/bloc/notes/save/save_note_bloc.dart';
-import 'package:jampa_flutter/data/models/reminder.dart';
+import 'package:jampa_flutter/data/models/reminder/reminder.dart';
 import 'package:jampa_flutter/ui/widgets/Commons.dart';
 import 'package:jampa_flutter/ui/widgets/buttons/buttons.dart';
 import 'package:jampa_flutter/ui/widgets/confirmation_dialog.dart';

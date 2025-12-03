@@ -1,9 +1,9 @@
-import 'package:jampa_flutter/data/models/note_category.dart';
-import 'package:jampa_flutter/data/models/note_type.dart';
-import 'package:jampa_flutter/data/models/category.dart';
-import 'package:jampa_flutter/data/models/note.dart';
-import 'package:jampa_flutter/data/models/schedule.dart';
-import 'package:jampa_flutter/data/models/reminder.dart';
+import 'package:jampa_flutter/data/models/note_category/note_category.dart';
+import 'package:jampa_flutter/data/models/note_type/note_type.dart';
+import 'package:jampa_flutter/data/models/category/category.dart';
+import 'package:jampa_flutter/data/models/note/note.dart';
+import 'package:jampa_flutter/data/models/schedule/schedule.dart';
+import 'package:jampa_flutter/data/models/reminder/reminder.dart';
 
 CREATE VIEW note_list_view AS
 SELECT

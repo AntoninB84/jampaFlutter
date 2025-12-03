@@ -11,7 +11,7 @@ import 'package:jampa_flutter/utils/enums/ui_status.dart';
 import 'package:jampa_flutter/utils/helpers/utils.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
-import '../../../data/models/note.dart';
+import '../../../data/models/note/note.dart';
 import '../../../repository/schedule_repository.dart';
 
 part 'show_note_event.dart';

@@ -1,9 +1,9 @@
 
 import 'package:drift/drift.dart';
 import 'package:jampa_flutter/data/database.dart';
-import 'package:jampa_flutter/data/models/note.dart';
-import 'package:jampa_flutter/data/models/reminder.dart';
-import 'package:jampa_flutter/data/models/schedule.dart';
+import 'package:jampa_flutter/data/models/note/note.dart';
+import 'package:jampa_flutter/data/models/reminder/reminder.dart';
+import 'package:jampa_flutter/data/models/schedule/schedule.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
 import '../../utils/enums/note_status_enum.dart';
@@ -116,13 +116,16 @@ class ScheduleDao {
       if(existingScheduleIndex != -1){
         // If it exists, add the alarm to the existing schedule's alarms list
         if(schedules[existingScheduleIndex].reminders == null){
-          schedules[existingScheduleIndex].reminders = [];
+          schedules[existingScheduleIndex] = schedules[existingScheduleIndex]
+              .copyWith(reminders: []);
         }
         schedules[existingScheduleIndex].reminders!.add(alarmEntity);
       }else {
         // If it doesn't exist, create a new schedule with the alarm
-        scheduleEntity.reminders = [alarmEntity];
-        scheduleEntity.note = noteEntity;
+        scheduleEntity = scheduleEntity.copyWith(
+          reminders: [alarmEntity],
+          note: noteEntity,
+        );
         schedules.add(scheduleEntity);
       }
 
@@ -157,14 +160,15 @@ class ScheduleDao {
           // If it exists, add the alarm to the existing schedule's alarms list
           if(alarmEntity != null){
             if(schedules[existingScheduleIndex].reminders == null){
-              schedules[existingScheduleIndex].reminders = [];
+              schedules[existingScheduleIndex] = schedules[existingScheduleIndex]
+                  .copyWith(reminders: []);
             }
             schedules[existingScheduleIndex].reminders!.add(alarmEntity);
           }
         }else {
           // If it doesn't exist, create a new schedule with the alarm
           if(alarmEntity != null){
-            scheduleEntity.reminders = [alarmEntity];
+            scheduleEntity = scheduleEntity.copyWith(reminders: [alarmEntity]);
           }
           schedules.add(scheduleEntity);
         }

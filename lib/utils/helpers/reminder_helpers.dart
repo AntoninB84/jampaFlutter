@@ -1,6 +1,6 @@
 import 'package:alarm/alarm.dart';
-import 'package:jampa_flutter/data/models/reminder.dart';
-import 'package:jampa_flutter/data/models/schedule.dart';
+import 'package:jampa_flutter/data/models/reminder/reminder.dart';
+import 'package:jampa_flutter/data/models/schedule/schedule.dart';
 import 'package:jampa_flutter/utils/enums/object_type_enum.dart';
 import 'package:jampa_flutter/utils/enums/recurrence_type_enum.dart';
 import 'package:jampa_flutter/utils/helpers/utils.dart';

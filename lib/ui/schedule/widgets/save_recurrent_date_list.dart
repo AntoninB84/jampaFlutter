@@ -8,7 +8,7 @@ import 'package:jampa_flutter/utils/enums/recurrence_type_enum.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:jampa_flutter/utils/extensions/schedule_extension.dart';
 
-import '../../../data/models/schedule.dart';
+import '../../../data/models/schedule/schedule.dart';
 import '../../../utils/constants/styles/sizes.dart';
 import '../../../utils/enums/weekdays_enum.dart';
 import '../../widgets/confirmation_dialog.dart';

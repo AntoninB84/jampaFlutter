@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:jampa_flutter/bloc/reminder/reminder_cubit.dart';
-import 'package:jampa_flutter/data/models/note.dart';
-import 'package:jampa_flutter/data/models/reminder.dart';
-import 'package:jampa_flutter/data/models/schedule.dart';
+import 'package:jampa_flutter/data/models/note/note.dart';
+import 'package:jampa_flutter/data/models/reminder/reminder.dart';
+import 'package:jampa_flutter/data/models/schedule/schedule.dart';
 import 'package:jampa_flutter/repository/notes_repository.dart';
 import 'package:jampa_flutter/utils/extensions/schedule_extension.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';

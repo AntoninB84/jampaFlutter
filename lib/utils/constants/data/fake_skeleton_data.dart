@@ -1,9 +1,11 @@
 
-import 'package:jampa_flutter/data/models/category.dart';
-import 'package:jampa_flutter/data/models/note_type.dart';
+import 'package:jampa_flutter/data/models/category/category.dart';
+import 'package:jampa_flutter/data/models/note_type/note_type.dart';
 import 'package:jampa_flutter/utils/enums/note_status_enum.dart';
 
 import '../../../data/database.dart';
+import '../../../data/objects/category_with_count.dart';
+import '../../../data/objects/note_type_with_count.dart';
 
 /// Fake skeleton data used as placeholders while real data is loading for note list view.
 NoteListViewData get fakeSkeletonNoteListViewData => NoteListViewData(

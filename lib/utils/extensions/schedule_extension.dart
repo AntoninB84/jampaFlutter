@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:jampa_flutter/data/models/schedule.dart';
+import 'package:jampa_flutter/data/models/schedule/schedule.dart';
 import 'package:jampa_flutter/utils/extensions/datetime_extension.dart';
 
 import '../enums/recurrence_type_enum.dart';

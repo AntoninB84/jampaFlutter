@@ -3,7 +3,8 @@ import 'package:drift/drift.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
 import '../database.dart';
-import '../models/note_type.dart';
+import '../models/note_type/note_type.dart';
+import '../objects/note_type_with_count.dart';
 
 /// Data Access Object (DAO) for [NoteTypeEntity]
 class NoteTypeDao {

@@ -1,10 +1,10 @@
 import 'package:jampa_flutter/data/dao/note_dao.dart';
-import 'package:jampa_flutter/data/models/note.dart';
+import 'package:jampa_flutter/data/models/note/note.dart';
 import 'package:jampa_flutter/repository/schedule_repository.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
 import '../data/dao/note_category_dao.dart';
-import '../data/models/note_category.dart';
+import '../data/models/note_category/note_category.dart';
 
 /// Repository for managing notes and their related operations.
 class NotesRepository {
@@ -15,7 +15,7 @@ class NotesRepository {
   Future<NoteEntity> saveNote(NoteEntity note) async {
     return await NoteDao.saveSingleNote(note).then((insertedNote) async {
       // Re-assign categories to the inserted note
-      insertedNote.categories = note.categories;
+      insertedNote = insertedNote.copyWith(categories: note.categories);
       // Clean existing relationships for the note
       await NoteCategoryDao.cleanRelationshipsByNoteId(insertedNote.id);
       // Then, re-establish relationships

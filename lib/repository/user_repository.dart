@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:jampa_flutter/data/dao/user_dao.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../data/models/user.dart';
+import '../data/models/user/user.dart';
 
 /// Repository class for managing user data and session.
 class UserRepository {

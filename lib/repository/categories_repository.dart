@@ -1,6 +1,8 @@
 
 import 'package:jampa_flutter/data/dao/category_dao.dart';
-import 'package:jampa_flutter/data/models/category.dart';
+import 'package:jampa_flutter/data/models/category/category.dart';
+
+import '../data/objects/category_with_count.dart';
 
 /// Repository for managing [CategoryEntity] data.
 class CategoriesRepository {

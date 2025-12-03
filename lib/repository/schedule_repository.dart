@@ -1,7 +1,7 @@
 
 import 'package:collection/collection.dart';
 import 'package:jampa_flutter/bloc/notes/form/note_form_helpers.dart';
-import 'package:jampa_flutter/data/models/schedule.dart';
+import 'package:jampa_flutter/data/models/schedule/schedule.dart';
 import 'package:jampa_flutter/data/objects/schedule_with_next_occurrence.dart';
 import 'package:jampa_flutter/utils/extensions/schedule_extension.dart';
 

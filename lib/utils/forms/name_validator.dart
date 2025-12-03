@@ -1,4 +1,5 @@
 import 'package:formz/formz.dart';
+import 'package:jampa_flutter/utils/constants/constants.dart';
 
 enum NameValidationError {
   empty,
@@ -11,7 +12,7 @@ extension NameValidationErrorX on NameValidationError {
 }
 
 /// A FormzInput class for validating names.
-/// The name must be between 3 and 120 characters long.
+/// The name must be between [kEntityNameMinLength] and [kEntityNameMaxLength] characters long.
 class NameValidator extends FormzInput<String, NameValidationError> {
   const NameValidator.pure() : super.pure('');
   const NameValidator.dirty([super.value = '']) : super.dirty();
@@ -20,7 +21,7 @@ class NameValidator extends FormzInput<String, NameValidationError> {
   NameValidationError? validator(String? value) {
     if (value == null || value.isEmpty) {
       return .empty;
-    } else if (value.length < 3 || value.length > 120) {
+    } else if (value.length < kEntityNameMinLength || value.length > kEntityNameMaxLength) {
       return .invalidLength;
     }
     return null;

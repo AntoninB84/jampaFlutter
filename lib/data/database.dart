@@ -1,18 +1,18 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:flutter/foundation.dart' hide Category;
-import 'package:jampa_flutter/data/models/category.dart' ;
-import 'package:jampa_flutter/data/models/note.dart';
-import 'package:jampa_flutter/data/models/note_type.dart';
+import 'package:jampa_flutter/data/models/category/category.dart' ;
+import 'package:jampa_flutter/data/models/note/note.dart';
+import 'package:jampa_flutter/data/models/note_type/note_type.dart';
 import 'package:jampa_flutter/utils/constants/data/initial_data.dart';
 
 import '../utils/enums/note_status_enum.dart';
 import '../utils/enums/recurrence_type_enum.dart';
 import '../utils/enums/reminder_offset_type_enum.dart';
-import 'models/note_category.dart';
-import 'models/reminder.dart';
-import 'models/schedule.dart';
-import 'models/user.dart';
+import 'models/note_category/note_category.dart';
+import 'models/reminder/reminder.dart';
+import 'models/schedule/schedule.dart';
+import 'models/user/user.dart';
 
 part 'database.g.dart';
 

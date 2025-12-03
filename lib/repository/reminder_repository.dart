@@ -1,4 +1,4 @@
-import 'package:jampa_flutter/data/models/reminder.dart';
+import 'package:jampa_flutter/data/models/reminder/reminder.dart';
 
 import '../bloc/notes/form/note_form_helpers.dart';
 import '../data/dao/reminder_dao.dart';

@@ -1,9 +1,9 @@
 import 'package:drift/drift.dart';
-import 'package:jampa_flutter/data/models/note.dart';
+import 'package:jampa_flutter/data/models/note/note.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
 import '../database.dart';
-import '../models/category.dart';
+import '../models/category/category.dart';
 
 /// Data Access Object (DAO) for [NoteEntity]
 class NoteDao {

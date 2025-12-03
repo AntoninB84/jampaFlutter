@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:formz/formz.dart';
 import 'package:jampa_flutter/bloc/notes/save/save_note_bloc.dart';
-import 'package:jampa_flutter/data/models/reminder.dart';
+import 'package:jampa_flutter/data/models/reminder/reminder.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../repository/reminder_repository.dart';

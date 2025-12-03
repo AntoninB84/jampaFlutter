@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:jampa_flutter/data/models/schedule.dart';
+import 'package:jampa_flutter/data/models/schedule/schedule.dart';
 import 'package:jampa_flutter/repository/reminder_repository.dart';
 import 'package:jampa_flutter/repository/schedule_repository.dart';
 import 'package:jampa_flutter/utils/extensions/datetime_extension.dart';
@@ -24,7 +24,9 @@ class ReminderCubit extends Cubit<ReminderState> {
       List<String> remindersIds = [];
       // Collecting all reminder IDs from schedules
       for(ScheduleEntity scheduleEntity in schedules){
-        scheduleEntity.reminders = await reminderRepository.getAllRemindersByScheduleId(scheduleEntity.id);
+        scheduleEntity = scheduleEntity.copyWith(
+          reminders: await reminderRepository.getAllRemindersByScheduleId(scheduleEntity.id)
+        );
         if(scheduleEntity.reminders != null && scheduleEntity.reminders!.isNotEmpty){
           for(final reminder in scheduleEntity.reminders!){
             remindersIds.add(reminder.id);

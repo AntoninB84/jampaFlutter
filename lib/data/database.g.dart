@@ -747,13 +747,13 @@ class $NoteTableTable extends NoteTable
         DriftSqlType.dateTime,
         data['${effectivePrefix}updated_at'],
       )!,
-      userId: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}user_id'],
-      ),
       noteTypeId: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}note_type_id'],
+      ),
+      userId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}user_id'],
       ),
     );
   }

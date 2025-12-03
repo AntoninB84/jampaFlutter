@@ -1,4 +1,4 @@
-import 'package:jampa_flutter/data/models/schedule.dart';
+import 'package:jampa_flutter/data/models/schedule/schedule.dart';
 
 /// Combines a [ScheduleEntity] with its next occurrence date.
 class ScheduleWithNextOccurrence {

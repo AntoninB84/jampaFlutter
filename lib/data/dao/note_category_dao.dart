@@ -1,5 +1,5 @@
 
-import 'package:jampa_flutter/data/models/note_category.dart';
+import 'package:jampa_flutter/data/models/note_category/note_category.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
 import '../database.dart';

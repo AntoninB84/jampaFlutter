@@ -1,6 +1,8 @@
 
 import 'package:jampa_flutter/data/dao/note_type_dao.dart';
-import 'package:jampa_flutter/data/models/note_type.dart';
+import 'package:jampa_flutter/data/models/note_type/note_type.dart';
+
+import '../data/objects/note_type_with_count.dart';
 
 /// Repository for managing note types.
 class NoteTypesRepository {

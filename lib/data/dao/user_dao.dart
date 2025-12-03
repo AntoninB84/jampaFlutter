@@ -2,7 +2,7 @@
 import 'package:jampa_flutter/utils/service_locator.dart';
 
 import '../database.dart';
-import '../models/user.dart';
+import '../models/user/user.dart';
 
 /// Data Access Object (DAO) for [UserEntity]
 class UserDao {

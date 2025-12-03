@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jampa_flutter/bloc/note_types/note_types_bloc.dart';
-import 'package:jampa_flutter/data/models/note_type.dart';
+import 'package:jampa_flutter/data/models/note_type/note_type.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/constants/styles/sizes.dart';
 import 'package:jampa_flutter/utils/enums/ui_status.dart';

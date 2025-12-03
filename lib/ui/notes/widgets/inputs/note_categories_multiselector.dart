@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jampa_flutter/bloc/categories/categories_bloc.dart';
-import 'package:jampa_flutter/data/models/category.dart';
+import 'package:jampa_flutter/data/models/category/category.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/constants/styles/styles.dart';
 import 'package:jampa_flutter/utils/enums/ui_status.dart';

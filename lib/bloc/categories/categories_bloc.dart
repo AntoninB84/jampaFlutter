@@ -5,7 +5,8 @@ import 'package:jampa_flutter/repository/categories_repository.dart';
 import 'package:jampa_flutter/utils/enums/ui_status.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
-import '../../data/models/category.dart';
+import '../../data/models/category/category.dart';
+import '../../data/objects/category_with_count.dart';
 
 part 'categories_event.dart';
 part 'categories_state.dart';

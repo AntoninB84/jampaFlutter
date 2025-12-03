@@ -5,15 +5,15 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:formz/formz.dart';
-import 'package:jampa_flutter/data/models/note.dart';
+import 'package:jampa_flutter/data/models/note/note.dart';
 import 'package:jampa_flutter/repository/notes_repository.dart';
 import 'package:jampa_flutter/utils/enums/ui_status.dart';
 import 'package:jampa_flutter/utils/forms/name_validator.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../data/models/category.dart';
-import '../../../data/models/note_type.dart';
+import '../../../data/models/category/category.dart';
+import '../../../data/models/note_type/note_type.dart';
 import '../../../utils/helpers/utils.dart';
 import '../save/save_note_bloc.dart';
 

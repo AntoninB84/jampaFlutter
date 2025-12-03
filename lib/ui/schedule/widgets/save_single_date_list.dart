@@ -8,7 +8,7 @@ import 'package:jampa_flutter/ui/widgets/buttons/buttons.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:jampa_flutter/utils/extensions/datetime_extension.dart';
 
-import '../../../data/models/schedule.dart';
+import '../../../data/models/schedule/schedule.dart';
 import '../../../utils/constants/styles/sizes.dart';
 import '../../widgets/confirmation_dialog.dart';
 

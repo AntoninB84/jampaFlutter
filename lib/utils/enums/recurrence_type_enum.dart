@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:jampa_flutter/data/models/schedule.dart';
+import 'package:jampa_flutter/data/models/schedule/schedule.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 
 /// Enum representing different types of recurrence for [ScheduleEntity]

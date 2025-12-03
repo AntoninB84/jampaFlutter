@@ -1,12 +1,12 @@
-import 'package:jampa_flutter/data/models/category.dart';
-import 'package:jampa_flutter/data/models/note_type.dart';
-import 'package:jampa_flutter/data/models/reminder.dart';
-import 'package:jampa_flutter/data/models/schedule.dart';
+import 'package:jampa_flutter/data/models/category/category.dart';
+import 'package:jampa_flutter/data/models/note_type/note_type.dart';
+import 'package:jampa_flutter/data/models/reminder/reminder.dart';
+import 'package:jampa_flutter/data/models/schedule/schedule.dart';
 import 'package:jampa_flutter/utils/enums/recurrence_type_enum.dart';
 import 'package:jampa_flutter/utils/enums/reminder_offset_type_enum.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../data/models/note.dart';
+import '../../../data/models/note/note.dart';
 
 /// This class contains initial data for categories, note types, notes, schedules, and reminders.
 ///
