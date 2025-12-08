@@ -258,21 +258,6 @@ class $UserTableTable extends UserTable
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _passwordHashMeta = const VerificationMeta(
-    'passwordHash',
-  );
-  @override
-  late final GeneratedColumn<String> passwordHash = GeneratedColumn<String>(
-    'password_hash',
-    aliasedName,
-    false,
-    additionalChecks: GeneratedColumn.checkTextLength(
-      minTextLength: 1,
-      maxTextLength: 255,
-    ),
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
   static const VerificationMeta _createdAtMeta = const VerificationMeta(
     'createdAt',
   );
@@ -302,7 +287,6 @@ class $UserTableTable extends UserTable
     id,
     username,
     email,
-    passwordHash,
     createdAt,
     updatedAt,
   ];
@@ -339,17 +323,6 @@ class $UserTableTable extends UserTable
     } else if (isInserting) {
       context.missing(_emailMeta);
     }
-    if (data.containsKey('password_hash')) {
-      context.handle(
-        _passwordHashMeta,
-        passwordHash.isAcceptableOrUnknown(
-          data['password_hash']!,
-          _passwordHashMeta,
-        ),
-      );
-    } else if (isInserting) {
-      context.missing(_passwordHashMeta);
-    }
     if (data.containsKey('created_at')) {
       context.handle(
         _createdAtMeta,
@@ -383,10 +356,6 @@ class $UserTableTable extends UserTable
         DriftSqlType.string,
         data['${effectivePrefix}email'],
       )!,
-      passwordHash: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}password_hash'],
-      )!,
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
@@ -408,7 +377,6 @@ class UserTableCompanion extends UpdateCompanion<UserEntity> {
   final Value<String> id;
   final Value<String> username;
   final Value<String> email;
-  final Value<String> passwordHash;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
   final Value<int> rowid;
@@ -416,7 +384,6 @@ class UserTableCompanion extends UpdateCompanion<UserEntity> {
     this.id = const Value.absent(),
     this.username = const Value.absent(),
     this.email = const Value.absent(),
-    this.passwordHash = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -425,19 +392,16 @@ class UserTableCompanion extends UpdateCompanion<UserEntity> {
     required String id,
     required String username,
     required String email,
-    required String passwordHash,
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        username = Value(username),
-       email = Value(email),
-       passwordHash = Value(passwordHash);
+       email = Value(email);
   static Insertable<UserEntity> custom({
     Expression<String>? id,
     Expression<String>? username,
     Expression<String>? email,
-    Expression<String>? passwordHash,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
     Expression<int>? rowid,
@@ -446,7 +410,6 @@ class UserTableCompanion extends UpdateCompanion<UserEntity> {
       if (id != null) 'id': id,
       if (username != null) 'username': username,
       if (email != null) 'email': email,
-      if (passwordHash != null) 'password_hash': passwordHash,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
       if (rowid != null) 'rowid': rowid,
@@ -457,7 +420,6 @@ class UserTableCompanion extends UpdateCompanion<UserEntity> {
     Value<String>? id,
     Value<String>? username,
     Value<String>? email,
-    Value<String>? passwordHash,
     Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
     Value<int>? rowid,
@@ -466,7 +428,6 @@ class UserTableCompanion extends UpdateCompanion<UserEntity> {
       id: id ?? this.id,
       username: username ?? this.username,
       email: email ?? this.email,
-      passwordHash: passwordHash ?? this.passwordHash,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       rowid: rowid ?? this.rowid,
@@ -484,9 +445,6 @@ class UserTableCompanion extends UpdateCompanion<UserEntity> {
     }
     if (email.present) {
       map['email'] = Variable<String>(email.value);
-    }
-    if (passwordHash.present) {
-      map['password_hash'] = Variable<String>(passwordHash.value);
     }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
@@ -506,7 +464,6 @@ class UserTableCompanion extends UpdateCompanion<UserEntity> {
           ..write('id: $id, ')
           ..write('username: $username, ')
           ..write('email: $email, ')
-          ..write('passwordHash: $passwordHash, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('rowid: $rowid')
@@ -2727,7 +2684,6 @@ typedef $$UserTableTableCreateCompanionBuilder =
       required String id,
       required String username,
       required String email,
-      required String passwordHash,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
       Value<int> rowid,
@@ -2737,7 +2693,6 @@ typedef $$UserTableTableUpdateCompanionBuilder =
       Value<String> id,
       Value<String> username,
       Value<String> email,
-      Value<String> passwordHash,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
       Value<int> rowid,
@@ -2787,11 +2742,6 @@ class $$UserTableTableFilterComposer
 
   ColumnFilters<String> get email => $composableBuilder(
     column: $table.email,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get passwordHash => $composableBuilder(
-    column: $table.passwordHash,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2855,11 +2805,6 @@ class $$UserTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get passwordHash => $composableBuilder(
-    column: $table.passwordHash,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
     column: $table.createdAt,
     builder: (column) => ColumnOrderings(column),
@@ -2888,11 +2833,6 @@ class $$UserTableTableAnnotationComposer
 
   GeneratedColumn<String> get email =>
       $composableBuilder(column: $table.email, builder: (column) => column);
-
-  GeneratedColumn<String> get passwordHash => $composableBuilder(
-    column: $table.passwordHash,
-    builder: (column) => column,
-  );
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -2957,7 +2897,6 @@ class $$UserTableTableTableManager
                 Value<String> id = const Value.absent(),
                 Value<String> username = const Value.absent(),
                 Value<String> email = const Value.absent(),
-                Value<String> passwordHash = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
@@ -2965,7 +2904,6 @@ class $$UserTableTableTableManager
                 id: id,
                 username: username,
                 email: email,
-                passwordHash: passwordHash,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
                 rowid: rowid,
@@ -2975,7 +2913,6 @@ class $$UserTableTableTableManager
                 required String id,
                 required String username,
                 required String email,
-                required String passwordHash,
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
@@ -2983,7 +2920,6 @@ class $$UserTableTableTableManager
                 id: id,
                 username: username,
                 email: email,
-                passwordHash: passwordHash,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
                 rowid: rowid,

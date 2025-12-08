@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
+import '../../data/models/auth/auth_response.dart';
 import '../../data/models/user/user.dart';
 import '../../repository/auth_repository.dart';
 import '../../repository/user_repository.dart';
@@ -15,14 +16,14 @@ part 'auth_state.dart';
 /// It listens to the AuthRepository for changes in authentication status
 /// and updates the AuthState accordingly.
 ///
-/// It also handles logout events by calling the appropriate methods
-/// in the AuthRepository and UserRepository.
-///
-/// For the moment, this Bloc is not used in the application.
+/// It handles registration, login, logout, and token refresh events.
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(const AuthState.unknown()) {
-    on<AuthSubscriptionRequested>(_onSubscriptionRequested);
+    on<AuthVerificationRequested>(_onSubscriptionRequested);
+    on<AuthLoginRequested>(_onLoginRequested);
+    on<AuthRegisterRequested>(_onRegisterRequested);
     on<AuthLogoutPressed>(_onLogoutPressed);
+    on<AuthTokenRefreshRequested>(_onTokenRefreshRequested);
   }
 
   final AuthRepository _authRepository = serviceLocator<AuthRepository>();
@@ -30,9 +31,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   /// Subscribes to the authentication status stream from the AuthRepository.
   Future<void> _onSubscriptionRequested(
-      AuthSubscriptionRequested event,
-      Emitter<AuthState> emit,
-      ) {
+    AuthVerificationRequested event,
+    Emitter<AuthState> emit,
+  ) {
     return emit.onEach(
       _authRepository.status,
       onData: (status) async {
@@ -54,12 +55,73 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
   }
 
+  /// Handles the login request event
+  Future<void> _onLoginRequested(
+    AuthLoginRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(const AuthState.loading());
+    try {
+      final userData = await _authRepository.logIn(
+        email: event.email,
+        password: event.password,
+      );
+
+      // Save user to database
+      await _saveUserFromAuthData(userData);
+
+      // State will be updated by the status stream subscription
+    } catch (e) {
+      emit(AuthState.error(e.toString()));
+      emit(const AuthState.unauthenticated());
+    }
+  }
+
+  /// Handles the registration request event
+  Future<void> _onRegisterRequested(
+    AuthRegisterRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(const AuthState.loading());
+    try {
+      final userData = await _authRepository.register(
+        username: event.username,
+        email: event.email,
+        password: event.password,
+      );
+
+      // Save user to database
+      await _saveUserFromAuthData(userData);
+
+      // State will be updated by the status stream subscription
+    } catch (e) {
+      emit(AuthState.error(e.toString()));
+      emit(const AuthState.unauthenticated());
+    }
+  }
+
   /// Handles the logout event by calling the logOut method
   /// in the AuthRepository and disconnecting the current user
   /// in the UserRepository.
-  void _onLogoutPressed(AuthLogoutPressed event, Emitter<AuthState> emit) {
-    _authRepository.logOut();
-    _userRepository.disconnectCurrentUser();
+  Future<void> _onLogoutPressed(
+    AuthLogoutPressed event,
+    Emitter<AuthState> emit,
+  ) async {
+    await _authRepository.logOut();
+    await _userRepository.disconnectCurrentUser();
+  }
+
+  /// Handles the token refresh request event
+  Future<void> _onTokenRefreshRequested(
+    AuthTokenRefreshRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    try {
+      await _authRepository.refreshToken();
+    } catch (e) {
+      // If refresh fails, user will be logged out by the repository
+      addError(e);
+    }
   }
 
   /// Tries to get the current user from the UserRepository.
@@ -71,5 +133,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } catch (_) {
       return null;
     }
+  }
+
+  /// Saves user data from authentication response to the database
+  Future<void> _saveUserFromAuthData(UserData userData) async {
+    final user = UserEntity(
+      id: userData.id,
+      username: userData.username,
+      email: userData.email,
+      createdAt: userData.createdAt,
+      updatedAt: userData.updatedAt,
+    );
+    await _userRepository.saveCurrentUser(user);
   }
 }

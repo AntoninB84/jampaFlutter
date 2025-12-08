@@ -1,32 +1,42 @@
 import 'dart:async';
 
 import 'package:jampa_flutter/data/dao/user_dao.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:jampa_flutter/utils/storage/secure_storage_service.dart';
 
 import '../data/models/user/user.dart';
 
 /// Repository class for managing user data and session.
 class UserRepository {
+  final SecureStorageService _secureStorage;
   UserEntity? _userEntity;
 
-  /// Saves the current user and persists the user ID in shared preferences.
+  UserRepository({SecureStorageService? secureStorage})
+      : _secureStorage = secureStorage ?? SecureStorageService();
+
+  /// Gets the current user from cache or database
   Future<UserEntity?> getCurrentUser() async {
     if (_userEntity != null) return _userEntity;
 
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? currentUserId = prefs.getString('CURRENT_USER_ID');
+    final String? currentUserId = await _secureStorage.getUserId();
 
-    if(currentUserId != null){
+    if (currentUserId != null) {
       // Fetch user from the database using the stored user ID.
-      return await UserDao.getUserById(currentUserId);
+      _userEntity = await UserDao.getUserById(currentUserId);
+      return _userEntity;
     }
     return null;
   }
 
-  /// Disconnects the current user by removing the user ID from shared preferences.
+  /// Saves the current user to the database and cache
+  Future<void> saveCurrentUser(UserEntity user) async {
+    await UserDao.saveSingleUser(user);
+    await _secureStorage.saveUserId(user.id);
+    _userEntity = user;
+  }
+
+  /// Disconnects the current user by removing the user ID from secure storage.
   Future<void> disconnectCurrentUser() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('CURRENT_USER_ID');
     _userEntity = null;
+    // Note: User ID will be cleared by AuthRepository's clearAuthData
   }
 }

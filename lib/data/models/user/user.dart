@@ -14,7 +14,6 @@ class UserTable extends drift.Table {
   drift.TextColumn get id => text()();
   drift.TextColumn get username => text().withLength(min: 1, max: 50)();
   drift.TextColumn get email => text().withLength(min: 1, max: 100)();
-  drift.TextColumn get passwordHash => text().withLength(min: 1, max: 255)();
   drift.DateTimeColumn get createdAt => dateTime().withDefault(drift.currentDateAndTime)();
   drift.DateTimeColumn get updatedAt => dateTime().withDefault(drift.currentDateAndTime)();
 
@@ -38,10 +37,6 @@ abstract class UserEntity with _$UserEntity {
     /// Email address of the user.
     required String email,
 
-    // @todo suitable for backend, should be in secure storage
-    /// Hashed password of the user.
-    required String passwordHash,
-
     /// Timestamp when the user was created.
     required DateTime createdAt,
 
@@ -56,7 +51,6 @@ abstract class UserEntity with _$UserEntity {
       id: drift.Value(id),
       username: drift.Value(username),
       email: drift.Value(email),
-      passwordHash: drift.Value(passwordHash),
       createdAt: drift.Value(createdAt),
       updatedAt: drift.Value(updatedAt),
     );

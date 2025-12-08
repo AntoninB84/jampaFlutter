@@ -3,6 +3,7 @@ import 'package:jampa_flutter/bloc/home/settings_menu/settings_menu_cubit.dart';
 import 'package:jampa_flutter/bloc/notes/save/save_note_bloc.dart';
 import 'package:jampa_flutter/bloc/permissions/permissions_bloc.dart';
 import 'package:jampa_flutter/bloc/reminder/reminder_cubit.dart';
+import 'package:jampa_flutter/data/api/auth_api_client.dart';
 import 'package:jampa_flutter/data/database.dart';
 import 'package:jampa_flutter/repository/auth_repository.dart';
 import 'package:jampa_flutter/repository/categories_repository.dart';
@@ -11,6 +12,7 @@ import 'package:jampa_flutter/repository/notes_list_view_repository.dart';
 import 'package:jampa_flutter/repository/notes_repository.dart';
 import 'package:jampa_flutter/repository/schedule_repository.dart';
 import 'package:jampa_flutter/repository/user_repository.dart';
+import 'package:jampa_flutter/utils/storage/secure_storage_service.dart';
 
 import '../repository/reminder_repository.dart';
 
@@ -19,15 +21,31 @@ final GetIt serviceLocator = GetIt.instance;
 /// Registers all the global services and repositories used in the app
 /// with the service locator for dependency injection.
 void setupServiceLocator() {
+  // Core services
   serviceLocator.registerLazySingleton<AppDatabase>(() => AppDatabase.instance());
-  serviceLocator.registerLazySingleton<AuthRepository>(() => AuthRepository());
+  serviceLocator.registerLazySingleton<SecureStorageService>(() => SecureStorageService());
+
+  // API clients
+  serviceLocator.registerLazySingleton<AuthApiClient>(() => AuthApiClient(
+    baseUrl: "http://192.168.0.43:3000/api"
+  ));
+
+  // Repositories
+  serviceLocator.registerLazySingleton<AuthRepository>(() => AuthRepository(
+    apiClient: serviceLocator<AuthApiClient>(),
+    secureStorage: serviceLocator<SecureStorageService>(),
+  ));
+  serviceLocator.registerLazySingleton<UserRepository>(() => UserRepository(
+    secureStorage: serviceLocator<SecureStorageService>(),
+  ));
   serviceLocator.registerLazySingleton<ReminderRepository>(() => ReminderRepository());
   serviceLocator.registerLazySingleton<CategoriesRepository>(() => CategoriesRepository());
   serviceLocator.registerLazySingleton<NotesRepository>(() => NotesRepository());
   serviceLocator.registerLazySingleton<NoteTypesRepository>(() => NoteTypesRepository());
   serviceLocator.registerLazySingleton<NotesListViewRepository>(() => NotesListViewRepository());
   serviceLocator.registerLazySingleton<ScheduleRepository>(() => ScheduleRepository());
-  serviceLocator.registerLazySingleton<UserRepository>(() => UserRepository());
+
+  // Blocs and Cubits
   serviceLocator.registerLazySingleton<PermissionsBloc>(() => PermissionsBloc());
   serviceLocator.registerLazySingleton<SettingsMenuCubit>(() => SettingsMenuCubit());
   serviceLocator.registerLazySingleton<ReminderCubit>(() => ReminderCubit());
