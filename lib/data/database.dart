@@ -82,7 +82,10 @@ class AppDatabase extends _$AppDatabase {
   static QueryExecutor _openConnection() {
     return driftDatabase(
       name: 'jampa_flutter.db',
-      native: const DriftNativeOptions(),
+      native: const DriftNativeOptions(
+        // Run database operations in isolate to prevent UI blocking
+        shareAcrossIsolates: true,
+      ),
     );
   }
 }

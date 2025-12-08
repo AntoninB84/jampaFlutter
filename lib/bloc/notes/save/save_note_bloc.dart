@@ -47,6 +47,8 @@ class SaveNoteBloc extends Bloc<SaveNoteEvent, SaveNoteState> {
   /// Fetches the note by ID and updates the state with the note and its schedules and reminders
   Future<void> _onFetchNote(FetchNoteEvent event, Emitter<SaveNoteState> emit) async {
     if(event.noteId != null && !state.hasFetchedData){
+      emit(state.copyWith(hasFetchedData: true)); // Mark as fetching to prevent duplicate calls
+
       NoteEntity? fetchedNote = await notesRepository.getNoteById(event.noteId!);
       emit(state.copyWith(note: fetchedNote));
 
@@ -61,25 +63,22 @@ class SaveNoteBloc extends Bloc<SaveNoteEvent, SaveNoteState> {
         singleDateSchedules.removeWhere((schedule) => schedule.isRecurring);
 
         emit(state.copyWith(
-          hasFetchedData: true,
           note: fetchedNote,
           singleDateSchedules: singleDateSchedules,
           recurrentSchedules: recurrentDateSchedules,
         ));
 
-        // Fetch associated reminders for both single date and recurrent schedules
+        // Fetch associated reminders for both single date and recurrent schedules in parallel
         List<ReminderEntity> reminderEntities = [];
-        if(singleDateSchedules.isNotEmpty){
-          for(final schedule in singleDateSchedules){
-            List<ReminderEntity> reminders = await reminderRepository.getAllRemindersByScheduleId(schedule.id);
-            reminderEntities.addAll(reminders);
-          }
-        }
-        if(recurrentDateSchedules.isNotEmpty){
-          for(final schedule in recurrentDateSchedules){
-            List<ReminderEntity> reminders = await reminderRepository.getAllRemindersByScheduleId(schedule.id);
-            reminderEntities.addAll(reminders);
-          }
+        final allSchedules = [...singleDateSchedules, ...recurrentDateSchedules];
+
+        if(allSchedules.isNotEmpty){
+          // Fetch all reminders in parallel instead of sequentially
+          final remindersFutures = allSchedules.map(
+            (schedule) => reminderRepository.getAllRemindersByScheduleId(schedule.id)
+          );
+          final remindersLists = await Future.wait(remindersFutures);
+          reminderEntities = remindersLists.expand((list) => list).toList();
         }
 
         if(reminderEntities.isNotEmpty){

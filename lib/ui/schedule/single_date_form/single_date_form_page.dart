@@ -7,7 +7,7 @@ import '../../../bloc/schedule/single_date_form/single_date_form_bloc.dart';
 import '../../../utils/service_locator.dart';
 import 'single_date_form_layout.dart';
 
-class SingleDateFormPage extends StatelessWidget {
+class SingleDateFormPage extends StatefulWidget {
   const SingleDateFormPage({
     super.key,
     this.scheduleId,
@@ -18,20 +18,42 @@ class SingleDateFormPage extends StatelessWidget {
   final String? scheduleId;
 
   @override
+  State<SingleDateFormPage> createState() => _SingleDateFormPageState();
+}
+
+class _SingleDateFormPageState extends State<SingleDateFormPage> {
+  late final SaveNoteBloc _saveNoteBloc;
+  late final SingleDateFormBloc _singleDateFormBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _saveNoteBloc = serviceLocator<SaveNoteBloc>();
+    _singleDateFormBloc = SingleDateFormBloc();
+
+    // Defer initialization to after first frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _singleDateFormBloc.add(
+        InitializeSingleDateFormEvent(
+          noteId: widget.noteId,
+          scheduleId: widget.scheduleId,
+        )
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _singleDateFormBloc.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<SaveNoteBloc>.value(
-          value: serviceLocator<SaveNoteBloc>(),
-        ),
-        BlocProvider<SingleDateFormBloc>(
-            create: (context) => SingleDateFormBloc()..add(
-                InitializeSingleDateFormEvent(
-                  noteId: noteId,
-                  scheduleId: scheduleId,
-                )
-            )
-        )
+        BlocProvider<SaveNoteBloc>.value(value: _saveNoteBloc),
+        BlocProvider<SingleDateFormBloc>.value(value: _singleDateFormBloc),
       ],
       child: SingleDateFormLayout(),
     );

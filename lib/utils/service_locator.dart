@@ -31,5 +31,5 @@ void setupServiceLocator() {
   serviceLocator.registerLazySingleton<PermissionsBloc>(() => PermissionsBloc());
   serviceLocator.registerLazySingleton<SettingsMenuCubit>(() => SettingsMenuCubit());
   serviceLocator.registerLazySingleton<ReminderCubit>(() => ReminderCubit());
-  serviceLocator.registerLazySingleton(() => SaveNoteBloc());
+  serviceLocator.registerFactory(() => SaveNoteBloc());
 }

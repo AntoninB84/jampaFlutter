@@ -36,120 +36,108 @@ class AppRoutes {
 
 final _routerKey = GlobalKey<NavigatorState>();
 
-/// Main application router using GoRouter with stateful shell routes
-/// This setup allows for complex navigation patterns, including nested routes
-/// and stateful navigation shells.
+/// Main application router using GoRouter
+/// Simplified routing structure with nested routes for linear navigation flows
 final GoRouter mainRouter = GoRouter(
   navigatorKey: _routerKey,
   initialLocation: AppRoutes.notes,
   routes: <RouteBase>[
-    // Define a stateful shell route with an indexed stack
-    StatefulShellRoute.indexedStack(
-      builder: (context, state, navigationShell) {
-        // Check and reset settings menu state on each navigation
-        serviceLocator<SettingsMenuCubit>().reset(state.fullPath);
+    ShellRoute(
+      builder: (context, state, child) {
+        // Defer settings menu reset to avoid blocking navigation
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          serviceLocator<SettingsMenuCubit>().reset(state.fullPath);
+        });
 
-        // Return the home page with the navigation shell
-        //TODO this might no more be useful as I removed the bottom navigation bar and replaced the single state AppBar to a Widget
-        return HomePage(navigationShell: navigationShell,);
+        // Wrap child routes with HomePage to provide repositories and blocs
+        return HomePage(child: child);
       },
-      branches: [
-        StatefulShellBranch(
+      routes: [
+        GoRoute(
+          name: "NotesIndex",
+          path: AppRoutes.notes,
+          builder: (context, state) => const NotesPage(),
           routes: [
             GoRoute(
-              name: "NotesIndex",
-              path: AppRoutes.notes,
-              builder: (context, state) => const NotesPage(),
+              name: "NoteForm",
+              path: AppRoutes.noteForm,
+              builder: (context, state) => NoteFormPage(
+                noteId: (state.extra as Map?)?['noteId'] as String?
+              ),
               routes: [
                 GoRoute(
-                  name: "NoteForm",
-                  path: AppRoutes.noteForm,
-                  builder: (context, state) => NoteFormPage(
-                    noteId: (state.extra as Map?)?['noteId'] as String?
+                  name: "RecurrentDateForm",
+                  path: AppRoutes.recurrentDateForm,
+                  builder: (context, state) => RecurrentDateFormPage(
+                    noteId: (state.extra as Map?)?['noteId'] as String,
+                    scheduleId: (state.extra as Map?)?['scheduleId'] as String?,
                   ),
-                  routes: [
-                    GoRoute(
-                      name: "RecurrentDateForm",
-                      path: AppRoutes.recurrentDateForm,
-                      builder: (context, state) => RecurrentDateFormPage(
-                        noteId: (state.extra as Map?)?['noteId'] as String,
-                        scheduleId: (state.extra as Map?)?['scheduleId'] as String?,
-                      ),
-                    ),
-                    GoRoute(
-                      name: "SingleDateForm",
-                      path: AppRoutes.singleDateForm,
-                      builder: (context, state) => SingleDateFormPage(
-                        noteId: (state.extra as Map?)?['noteId'] as String,
-                        scheduleId: (state.extra as Map?)?['scheduleId'] as String?,
-                      ),
-                    ),
-                    GoRoute(
-                      name: "ReminderForm",
-                      path: AppRoutes.reminderForm,
-                      builder: (context, state) => ReminderFormPage(
-                        scheduleId: (state.extra as Map?)?['scheduleId'] as String,
-                        reminderId: (state.extra as Map?)?['reminderId'] as String?,
-                      )
-                    )
-                  ]
                 ),
                 GoRoute(
-                  name: "NoteDetails",
-                  path: AppRoutes.noteDetails,
-                  builder: (context, state) => ShowNotePage(
-                      noteId: (state.extra as Map?)?['id']
+                  name: "SingleDateForm",
+                  path: AppRoutes.singleDateForm,
+                  builder: (context, state) => SingleDateFormPage(
+                    noteId: (state.extra as Map?)?['noteId'] as String,
+                    scheduleId: (state.extra as Map?)?['scheduleId'] as String?,
                   ),
-                  routes: [
-                  ]
+                ),
+                GoRoute(
+                  name: "ReminderForm",
+                  path: AppRoutes.reminderForm,
+                  builder: (context, state) => ReminderFormPage(
+                    scheduleId: (state.extra as Map?)?['scheduleId'] as String,
+                    reminderId: (state.extra as Map?)?['reminderId'] as String?,
+                  )
                 )
               ]
             ),
             GoRoute(
-                name: "Categories",
-                path: AppRoutes.categories,
-                builder: (context, state) => const CategoriesPage(),
-                routes: [
-                  GoRoute(
-                    name: "CreateCategory",
-                    path: AppRoutes.createCategory,
-                    builder: (context, state) => const SaveCategoryPage(),
-                  ),
-                  GoRoute(
-                      name: "EditCategory",
-                      path: AppRoutes.editCategory,
-                      builder: (context, state) => SaveCategoryPage(
-                        categoryId: (state.extra as Map?)?['id'],
-                      )
-                  )
-                ]
-            ),
-            GoRoute(
-                name: "NoteTypes",
-                path: AppRoutes.noteTypes,
-                builder: (context, state) => const NoteTypesPage(),
-                routes: [
-                  GoRoute(
-                    name: "CreateNoteType",
-                    path: AppRoutes.createNoteType,
-                    builder: (context, state) => const SaveNoteTypePage(),
-                  ),
-                  GoRoute(
-                      name: "EditNoteType",
-                      path: AppRoutes.editNoteType,
-                      builder: (context, state) => SaveNoteTypePage(
-                        noteTypeId: (state.extra as Map?)?['id'],
-                      )
-                  )
-                ]
+              name: "NoteDetails",
+              path: AppRoutes.noteDetails,
+              builder: (context, state) => ShowNotePage(
+                  noteId: (state.extra as Map?)?['id']
+              ),
             )
           ]
         ),
-        // StatefulShellBranch(
-        //   routes: [
-        //     //TODO : Calendar branch
-        //   ]
-        // ),
+        GoRoute(
+            name: "Categories",
+            path: AppRoutes.categories,
+            builder: (context, state) => const CategoriesPage(),
+            routes: [
+              GoRoute(
+                name: "CreateCategory",
+                path: AppRoutes.createCategory,
+                builder: (context, state) => const SaveCategoryPage(),
+              ),
+              GoRoute(
+                  name: "EditCategory",
+                  path: AppRoutes.editCategory,
+                  builder: (context, state) => SaveCategoryPage(
+                    categoryId: (state.extra as Map?)?['id'],
+                  )
+              )
+            ]
+        ),
+        GoRoute(
+            name: "NoteTypes",
+            path: AppRoutes.noteTypes,
+            builder: (context, state) => const NoteTypesPage(),
+            routes: [
+              GoRoute(
+                name: "CreateNoteType",
+                path: AppRoutes.createNoteType,
+                builder: (context, state) => const SaveNoteTypePage(),
+              ),
+              GoRoute(
+                  name: "EditNoteType",
+                  path: AppRoutes.editNoteType,
+                  builder: (context, state) => SaveNoteTypePage(
+                    noteTypeId: (state.extra as Map?)?['id'],
+                  )
+              )
+            ]
+        )
       ]
     ),
   ],

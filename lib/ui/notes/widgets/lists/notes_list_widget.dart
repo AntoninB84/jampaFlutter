@@ -60,6 +60,8 @@ class _NotesListWidgetState extends State<NotesListWidget> {
                     child: ListView.builder(
                       controller: scrollController,
                       itemCount: notes.length,
+                      // Add cache extent to pre-render items and improve scrolling
+                      cacheExtent: 500,
                       itemBuilder: (context, index) {
                         final note = notes[index];
 
