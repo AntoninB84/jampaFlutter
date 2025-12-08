@@ -24,7 +24,7 @@ abstract class NoteCategoryEntity with _$NoteCategoryEntity {
 
   @Assert('noteId.isNotEmpty', 'Note ID cannot be empty')
   @Assert('categoryId.isNotEmpty', 'Category ID cannot be empty')
-  const factory NoteCategoryEntity({
+  factory NoteCategoryEntity({
     /// The ID of the note
     required String noteId,
     /// The ID of the category

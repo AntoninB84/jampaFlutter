@@ -30,7 +30,7 @@ abstract class CategoryEntity with _$CategoryEntity {
   @Assert('id.isNotEmpty', 'Category id cannot be empty')
   @Assert('name.length >= $kEntityNameMinLength', 'Category name must be at least $kEntityNameMinLength character long')
   @Assert('name.length <= $kEntityNameMaxLength', 'Category name cannot exceed $kEntityNameMaxLength characters')
-  const factory CategoryEntity({
+  factory CategoryEntity({
     /// Unique identifier for the category (UUID)
     required String id,
 

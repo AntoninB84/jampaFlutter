@@ -29,7 +29,7 @@ abstract class NoteTypeEntity with _$NoteTypeEntity {
   @Assert('id.isNotEmpty', 'Note type id cannot be empty')
   @Assert('name.length >= $kEntityNameMinLength', 'Note type name must be at least $kEntityNameMinLength character long')
   @Assert('name.length <= $kEntityNameMaxLength', 'Note type name cannot exceed $kEntityNameMaxLength characters')
-  const factory NoteTypeEntity({
+  factory NoteTypeEntity({
     /// The unique identifier for the note type (UUID).
     required String id,
 

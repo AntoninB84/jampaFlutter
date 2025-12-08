@@ -227,7 +227,7 @@ return $default(_that.id,_that.username,_that.email,_that.passwordHash,_that.cre
 @JsonSerializable()
 
 class _UserEntity extends UserEntity with DiagnosticableTreeMixin {
-  const _UserEntity({required this.id, required this.username, required this.email, required this.passwordHash, required this.createdAt, required this.updatedAt}): assert(id.isNotEmpty, 'User id cannot be empty'),super._();
+   _UserEntity({required this.id, required this.username, required this.email, required this.passwordHash, required this.createdAt, required this.updatedAt}): assert(id.isNotEmpty, 'User id cannot be empty'),super._();
   factory _UserEntity.fromJson(Map<String, dynamic> json) => _$UserEntityFromJson(json);
 
 /// Unique identifier for the user (UUID).

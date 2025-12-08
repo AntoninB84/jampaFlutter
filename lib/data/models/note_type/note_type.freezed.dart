@@ -222,7 +222,7 @@ return $default(_that.id,_that.name,_that.createdAt,_that.updatedAt);case _:
 @JsonSerializable()
 
 class _NoteTypeEntity extends NoteTypeEntity with DiagnosticableTreeMixin {
-  const _NoteTypeEntity({required this.id, required this.name, required this.createdAt, required this.updatedAt}): assert(id.isNotEmpty, 'Note type id cannot be empty'),assert(name.length >= 3, 'Note type name must be at least 3 character long'),assert(name.length <= 120, 'Note type name cannot exceed 120 characters'),super._();
+   _NoteTypeEntity({required this.id, required this.name, required this.createdAt, required this.updatedAt}): assert(id.isNotEmpty, 'Note type id cannot be empty'),assert(name.length >= 3, 'Note type name must be at least 3 character long'),assert(name.length <= 120, 'Note type name cannot exceed 120 characters'),super._();
   factory _NoteTypeEntity.fromJson(Map<String, dynamic> json) => _$NoteTypeEntityFromJson(json);
 
 /// The unique identifier for the note type (UUID).

@@ -222,7 +222,7 @@ return $default(_that.id,_that.name,_that.createdAt,_that.updatedAt);case _:
 @JsonSerializable()
 
 class _CategoryEntity extends CategoryEntity with DiagnosticableTreeMixin {
-  const _CategoryEntity({required this.id, required this.name, required this.createdAt, required this.updatedAt}): assert(id.isNotEmpty, 'Category id cannot be empty'),assert(name.length >= 3, 'Category name must be at least 3 character long'),assert(name.length <= 120, 'Category name cannot exceed 120 characters'),super._();
+   _CategoryEntity({required this.id, required this.name, required this.createdAt, required this.updatedAt}): assert(id.isNotEmpty, 'Category id cannot be empty'),assert(name.length >= 3, 'Category name must be at least 3 character long'),assert(name.length <= 120, 'Category name cannot exceed 120 characters'),super._();
   factory _CategoryEntity.fromJson(Map<String, dynamic> json) => _$CategoryEntityFromJson(json);
 
 /// Unique identifier for the category (UUID)

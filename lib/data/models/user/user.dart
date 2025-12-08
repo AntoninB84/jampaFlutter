@@ -28,7 +28,7 @@ abstract class UserEntity with _$UserEntity {
   const UserEntity._();
 
   @Assert('id.isNotEmpty', 'User id cannot be empty')
-  const factory UserEntity({
+  factory UserEntity({
     /// Unique identifier for the user (UUID).
     required String id,
 

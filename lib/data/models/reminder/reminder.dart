@@ -34,7 +34,7 @@ abstract class ReminderEntity with _$ReminderEntity {
   @Assert('id.isNotEmpty', 'Reminder id cannot be empty')
   @Assert('scheduleId.isNotEmpty', 'Schedule id cannot be empty')
   @Assert('scheduleId != null', 'Schedule id must not be null')
-  const factory ReminderEntity({
+  factory ReminderEntity({
     /// Unique identifier for the reminder (UUID)
     required String id,
 

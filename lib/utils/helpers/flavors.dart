@@ -3,6 +3,11 @@ enum Flavor {
   production;
 }
 
+extension FlavorExtension on Flavor {
+  bool get isDevelopment => this == .development;
+  bool get isProduction => this == .production;
+}
+
 class FlavorConfig {
   static late Flavor appFlavor;
 

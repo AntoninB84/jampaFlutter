@@ -228,7 +228,7 @@ return $default(_that.id,_that.scheduleId,_that.offsetValue,_that.offsetType,_th
 @JsonSerializable()
 
 class _ReminderEntity extends ReminderEntity with DiagnosticableTreeMixin {
-  const _ReminderEntity({required this.id, required this.scheduleId, required this.offsetValue, required this.offsetType, this.isNotification = true, required this.createdAt, required this.updatedAt}): assert(id.isNotEmpty, 'Reminder id cannot be empty'),assert(scheduleId.isNotEmpty, 'Schedule id cannot be empty'),assert(scheduleId != null, 'Schedule id must not be null'),super._();
+   _ReminderEntity({required this.id, required this.scheduleId, required this.offsetValue, required this.offsetType, this.isNotification = true, required this.createdAt, required this.updatedAt}): assert(id.isNotEmpty, 'Reminder id cannot be empty'),assert(scheduleId.isNotEmpty, 'Schedule id cannot be empty'),assert(scheduleId != null, 'Schedule id must not be null'),super._();
   factory _ReminderEntity.fromJson(Map<String, dynamic> json) => _$ReminderEntityFromJson(json);
 
 /// Unique identifier for the reminder (UUID)

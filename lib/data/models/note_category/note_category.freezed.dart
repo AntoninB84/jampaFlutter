@@ -218,7 +218,7 @@ return $default(_that.noteId,_that.categoryId);case _:
 @JsonSerializable()
 
 class _NoteCategoryEntity extends NoteCategoryEntity with DiagnosticableTreeMixin {
-  const _NoteCategoryEntity({required this.noteId, required this.categoryId}): assert(noteId.isNotEmpty, 'Note ID cannot be empty'),assert(categoryId.isNotEmpty, 'Category ID cannot be empty'),super._();
+   _NoteCategoryEntity({required this.noteId, required this.categoryId}): assert(noteId.isNotEmpty, 'Note ID cannot be empty'),assert(categoryId.isNotEmpty, 'Category ID cannot be empty'),super._();
   factory _NoteCategoryEntity.fromJson(Map<String, dynamic> json) => _$NoteCategoryEntityFromJson(json);
 
 /// The ID of the note

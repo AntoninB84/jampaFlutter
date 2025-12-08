@@ -256,7 +256,7 @@ return $default(_that.id,_that.noteId,_that.note,_that.startDateTime,_that.endDa
 @JsonSerializable()
 
 class _ScheduleEntity extends ScheduleEntity with DiagnosticableTreeMixin {
-  const _ScheduleEntity({required this.id, required this.noteId, @JsonKey(includeFromJson: false, includeToJson: false) this.note, required this.startDateTime, this.endDateTime, required this.createdAt, required this.updatedAt, this.recurrenceType, this.recurrenceInterval, this.recurrenceDay, this.recurrenceEndDate, @JsonKey(includeFromJson: false, includeToJson: false) this.reminders}): assert(id.isNotEmpty, 'Schedule id cannot be empty'),assert(noteId.isNotEmpty, 'Note id cannot be empty'),super._();
+   _ScheduleEntity({required this.id, required this.noteId, @JsonKey(includeFromJson: false, includeToJson: false) this.note, required this.startDateTime, this.endDateTime, required this.createdAt, required this.updatedAt, this.recurrenceType, this.recurrenceInterval, this.recurrenceDay, this.recurrenceEndDate, @JsonKey(includeFromJson: false, includeToJson: false) this.reminders}): assert(id.isNotEmpty, 'Schedule id cannot be empty'),assert(noteId.isNotEmpty, 'Note id cannot be empty'),super._();
   factory _ScheduleEntity.fromJson(Map<String, dynamic> json) => _$ScheduleEntityFromJson(json);
 
 /// Unique identifier for the schedule (UUID)

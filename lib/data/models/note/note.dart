@@ -36,7 +36,7 @@ abstract class NoteEntity with _$NoteEntity {
   @Assert('id.isNotEmpty', 'Note id cannot be empty')
   @Assert('title.length >= $kEntityNameMinLength', 'Note title must be at least $kEntityNameMinLength character long')
   @Assert('title.length <= $kEntityNameMaxLength', 'Note title cannot exceed $kEntityNameMaxLength characters')
-  const factory NoteEntity({
+  factory NoteEntity({
     /// Unique identifier for the note (UUID)
     required String id,
 

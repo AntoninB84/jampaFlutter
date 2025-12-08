@@ -39,7 +39,7 @@ abstract class ScheduleEntity with _$ScheduleEntity {
 
   @Assert('id.isNotEmpty', 'Schedule id cannot be empty')
   @Assert('noteId.isNotEmpty', 'Note id cannot be empty')
-  const factory ScheduleEntity({
+  factory ScheduleEntity({
     /// Unique identifier for the schedule (UUID)
     required String id,
 

@@ -22,7 +22,9 @@ Future main() async {
   // Initialize local notifications
   await LocalNotificationManager().initialize();
   // Initialize reminder worker
-  setupReminderWorker();
+  if(FlavorConfig.appFlavor.isProduction){
+    setupReminderWorker();
+  }
   // Initialize alarm package
   await Alarm.init();
 
