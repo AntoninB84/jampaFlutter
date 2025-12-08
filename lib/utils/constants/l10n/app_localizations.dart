@@ -244,6 +244,156 @@ abstract class AppLocalizations {
   /// **'Aucun résultat trouvé'**
   String get no_results_found;
 
+  /// No description provided for @login_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Se connecter'**
+  String get login_title;
+
+  /// No description provided for @login_email_field_hint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrez votre adresse e-mail'**
+  String get login_email_field_hint;
+
+  /// No description provided for @login_password_field_hint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrez votre mot de passe'**
+  String get login_password_field_hint;
+
+  /// No description provided for @login_invalid_credentials_error.
+  ///
+  /// In fr, this message translates to:
+  /// **'Identifiants invalides'**
+  String get login_invalid_credentials_error;
+
+  /// No description provided for @login_email_empty_error.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'e-mail ne peut pas être vide'**
+  String get login_email_empty_error;
+
+  /// No description provided for @login_email_invalid_format_error.
+  ///
+  /// In fr, this message translates to:
+  /// **'Format d\'e-mail invalide'**
+  String get login_email_invalid_format_error;
+
+  /// No description provided for @login_success_feedback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Connecté avec succès'**
+  String get login_success_feedback;
+
+  /// No description provided for @login_no_account_prompt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous n\'avez pas de compte? Inscrivez-vous'**
+  String get login_no_account_prompt;
+
+  /// No description provided for @password_empty_error.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le mot de passe ne peut pas être vide'**
+  String get password_empty_error;
+
+  /// No description provided for @password_too_short_error.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le mot de passe doit comporter au moins 8 caractères'**
+  String get password_too_short_error;
+
+  /// No description provided for @password_no_uppercase_error.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le mot de passe doit contenir au moins une lettre majuscule'**
+  String get password_no_uppercase_error;
+
+  /// No description provided for @password_no_lowercase_error.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le mot de passe doit contenir au moins une lettre minuscule'**
+  String get password_no_lowercase_error;
+
+  /// No description provided for @password_no_number_error.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le mot de passe doit contenir au moins un chiffre'**
+  String get password_no_number_error;
+
+  /// No description provided for @password_no_special_char_error.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le mot de passe doit contenir au moins un caractère spécial'**
+  String get password_no_special_char_error;
+
+  /// No description provided for @passwords_do_not_match_error.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les mots de passe ne correspondent pas'**
+  String get passwords_do_not_match_error;
+
+  /// No description provided for @signup_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'S\'inscrire'**
+  String get signup_title;
+
+  /// No description provided for @signup_username_field_hint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrez votre nom d\'utilisateur'**
+  String get signup_username_field_hint;
+
+  /// No description provided for @signup_email_field_hint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrez votre adresse e-mail'**
+  String get signup_email_field_hint;
+
+  /// No description provided for @signup_password_field_hint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrez votre mot de passe'**
+  String get signup_password_field_hint;
+
+  /// No description provided for @signup_confirm_password_field_hint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Confirmez votre mot de passe'**
+  String get signup_confirm_password_field_hint;
+
+  /// No description provided for @signup_success_feedback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inscription réussie.'**
+  String get signup_success_feedback;
+
+  /// No description provided for @signup_username_invalid_length_error.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le nom d\'utilisateur doit comporter entre 3 et 120 caractères'**
+  String get signup_username_invalid_length_error;
+
+  /// No description provided for @logout_confirmation_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Se déconnecter'**
+  String get logout_confirmation_title;
+
+  /// No description provided for @logout_confirmation_message.
+  ///
+  /// In fr, this message translates to:
+  /// **'Êtes-vous sûr de vouloir vous déconnecter?'**
+  String get logout_confirmation_message;
+
+  /// No description provided for @logout_success_feedback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déconnecté avec succès'**
+  String get logout_success_feedback;
+
   /// No description provided for @create_category_title.
   ///
   /// In fr, this message translates to:

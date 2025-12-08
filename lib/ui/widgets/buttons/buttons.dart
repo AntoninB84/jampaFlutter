@@ -8,6 +8,23 @@ import 'package:jampa_flutter/utils/constants/styles/sizes.dart';
 /// allows customization of the button's behavior and density through parameters.
 abstract class Buttons {
 
+  static Widget defaultButton({
+    required Function()? onPressed,
+    required String text,
+    bool enabled = true,
+    bool isLoading = false,
+  }) {
+    return ElevatedButton(
+      onPressed: enabled ? onPressed : null,
+      child: isLoading
+          ? const SizedBox(
+        height: 20,
+        width: 20,
+        child: CircularProgressIndicator(strokeWidth: 2),
+      ) :  Text(text),
+    );
+  }
+
   static Widget deleteButtonIcon({
     required BuildContext context,
     required Function()? onPressed,

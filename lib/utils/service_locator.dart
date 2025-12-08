@@ -26,9 +26,7 @@ void setupServiceLocator() {
   serviceLocator.registerLazySingleton<SecureStorageService>(() => SecureStorageService());
 
   // API clients
-  serviceLocator.registerLazySingleton<AuthApiClient>(() => AuthApiClient(
-    baseUrl: "http://192.168.0.43:3000/api"
-  ));
+  serviceLocator.registerLazySingleton<AuthApiClient>(() => AuthApiClient());
 
   // Repositories
   serviceLocator.registerLazySingleton<AuthRepository>(() => AuthRepository(

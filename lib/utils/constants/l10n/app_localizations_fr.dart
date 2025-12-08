@@ -84,6 +84,91 @@ class AppLocalizationsFr extends AppLocalizations {
   String get no_results_found => 'Aucun résultat trouvé';
 
   @override
+  String get login_title => 'Se connecter';
+
+  @override
+  String get login_email_field_hint => 'Entrez votre adresse e-mail';
+
+  @override
+  String get login_password_field_hint => 'Entrez votre mot de passe';
+
+  @override
+  String get login_invalid_credentials_error => 'Identifiants invalides';
+
+  @override
+  String get login_email_empty_error => 'L\'e-mail ne peut pas être vide';
+
+  @override
+  String get login_email_invalid_format_error => 'Format d\'e-mail invalide';
+
+  @override
+  String get login_success_feedback => 'Connecté avec succès';
+
+  @override
+  String get login_no_account_prompt =>
+      'Vous n\'avez pas de compte? Inscrivez-vous';
+
+  @override
+  String get password_empty_error => 'Le mot de passe ne peut pas être vide';
+
+  @override
+  String get password_too_short_error =>
+      'Le mot de passe doit comporter au moins 8 caractères';
+
+  @override
+  String get password_no_uppercase_error =>
+      'Le mot de passe doit contenir au moins une lettre majuscule';
+
+  @override
+  String get password_no_lowercase_error =>
+      'Le mot de passe doit contenir au moins une lettre minuscule';
+
+  @override
+  String get password_no_number_error =>
+      'Le mot de passe doit contenir au moins un chiffre';
+
+  @override
+  String get password_no_special_char_error =>
+      'Le mot de passe doit contenir au moins un caractère spécial';
+
+  @override
+  String get passwords_do_not_match_error =>
+      'Les mots de passe ne correspondent pas';
+
+  @override
+  String get signup_title => 'S\'inscrire';
+
+  @override
+  String get signup_username_field_hint => 'Entrez votre nom d\'utilisateur';
+
+  @override
+  String get signup_email_field_hint => 'Entrez votre adresse e-mail';
+
+  @override
+  String get signup_password_field_hint => 'Entrez votre mot de passe';
+
+  @override
+  String get signup_confirm_password_field_hint =>
+      'Confirmez votre mot de passe';
+
+  @override
+  String get signup_success_feedback => 'Inscription réussie.';
+
+  @override
+  String get signup_username_invalid_length_error =>
+      'Le nom d\'utilisateur doit comporter entre 3 et 120 caractères';
+
+  @override
+  String get logout_confirmation_title => 'Se déconnecter';
+
+  @override
+  String get logout_confirmation_message =>
+      'Êtes-vous sûr de vouloir vous déconnecter?';
+
+  @override
+  String get logout_success_feedback => 'Déconnecté avec succès';
+
+  @override
   String get create_category_title => 'Créer une catégorie';
 
   @override

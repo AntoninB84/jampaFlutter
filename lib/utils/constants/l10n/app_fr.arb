@@ -24,6 +24,38 @@
     "passed": "Passées",
     "datetime_hint": "Choisir une date et une heure",
     "no_results_found": "Aucun résultat trouvé",
+
+    "@login": {},
+    "login_title": "Se connecter",
+    "login_email_field_hint": "Entrez votre adresse e-mail",
+    "login_password_field_hint": "Entrez votre mot de passe",
+    "login_invalid_credentials_error": "Identifiants invalides",
+    "login_email_empty_error": "L'e-mail ne peut pas être vide",
+    "login_email_invalid_format_error": "Format d'e-mail invalide",
+    "login_success_feedback": "Connecté avec succès",
+    "login_no_account_prompt": "Vous n'avez pas de compte? Inscrivez-vous",
+    "password_empty_error": "Le mot de passe ne peut pas être vide",
+    "password_too_short_error": "Le mot de passe doit comporter au moins 8 caractères",
+    "password_no_uppercase_error": "Le mot de passe doit contenir au moins une lettre majuscule",
+    "password_no_lowercase_error": "Le mot de passe doit contenir au moins une lettre minuscule",
+    "password_no_number_error": "Le mot de passe doit contenir au moins un chiffre",
+    "password_no_special_char_error": "Le mot de passe doit contenir au moins un caractère spécial",
+    "passwords_do_not_match_error": "Les mots de passe ne correspondent pas",
+
+    "@signup": {},
+    "signup_title": "S'inscrire",
+    "signup_username_field_hint": "Entrez votre nom d'utilisateur",
+    "signup_email_field_hint": "Entrez votre adresse e-mail",
+    "signup_password_field_hint": "Entrez votre mot de passe",
+    "signup_confirm_password_field_hint": "Confirmez votre mot de passe",
+    "signup_success_feedback": "Inscription réussie.",
+    "signup_username_invalid_length_error": "Le nom d'utilisateur doit comporter entre 3 et 120 caractères",
+
+    "@logout": {},
+    "logout_confirmation_title": "Se déconnecter",
+    "logout_confirmation_message": "Êtes-vous sûr de vouloir vous déconnecter?",
+    "logout_success_feedback": "Déconnecté avec succès",
+
     "@create_category": {},
     "create_category_title": "Créer une catégorie",
     "create_category_name_field_title": "Nom de la catégorie",
@@ -31,14 +63,17 @@
     "create_category_name_exists_already": "Cette catégorie existe déjà",
     "create_category_name_invalid_length": "Le nom de la catégorie doit comporter entre 3 et 120 caractères",
     "create_category_success_feedback": "Catégorie créée avec succès",
+
     "@edit_category": {},
     "edit_category_title": "Modifier la catégorie",
     "edit_category_success_feedback": "Catégorie modifiée avec succès",
+
     "@delete_category": {},
     "delete_category_confirmation_title": "Supprimer la catégorie",
     "delete_category_confirmation_message": "Êtes-vous sûr de vouloir supprimer la catégorie: {categoryName}?",
     "delete_category_error_message": "Une erreur s'est produite lors de la suppression de la catégorie",
     "delete_category_success_feedback": "Catégorie supprimée avec succès",
+
     "@create_note_type": {},
     "create_note_type_title": "Créer un type de note",
     "create_note_type_name_field_title": "Nom du type de note",
@@ -46,14 +81,17 @@
     "create_note_type_name_exists_already": "Ce type de note existe déjà",
     "create_note_type_name_invalid_length": "Le nom du type de note doit comporter entre 3 et 120 caractères",
     "create_note_type_success_feedback": "Type de note créé",
+
     "@edit_note_type": {},
     "edit_note_type_title": "Modifier le type de note",
     "edit_note_type_success_feedback": "Type de note modifié",
+
     "@delete_note_type": {},
     "delete_note_type_confirmation_title": "Supprimer le type de note",
     "delete_note_type_confirmation_message": "Êtes-vous sûr de vouloir supprimer le type de note: {noteTypeName}?",
     "delete_note_type_error_message": "Une erreur s'est produite lors de la suppression du type de note",
     "delete_note_type_success_feedback": "Type de note supprimé",
+
     "@create_note": {},
     "create_note_title": "Créer une note",
     "create_note_title_field_title": "Titre de la note",
@@ -69,6 +107,7 @@
     "create_note_add_single_date_button": "Ajouter une date",
     "create_note_add_recurrent_date_button": "Ajouter une récurrence",
     "save_note_success_feedback": "Note enregistrée",
+
     "@create_schedule": {},
     "create_single_schedule_title": "Ajouter une date",
     "create_recurrent_schedule_title": "Ajouter une récurrence",
@@ -105,6 +144,7 @@
     "create_recurrent_date_no_weekday_selected": "Veuillez sélectionner au moins un jour de la semaine",
     "create_recurrent_date_recurrence_end_field_title": "Fin de la récurrence (optionnelle)",
     "create_recurrent_date_recurrence_end_error": "La date de fin de la récurrence doit être postérieure à la date de début",
+
     "@edit_note": {},
     "edit_note_title": "Modifier la note",
     "@delete_note": {},
@@ -112,7 +152,9 @@
     "delete_note_confirmation_message": "Êtes-vous sûr de vouloir supprimer la note: {noteTitle}?",
     "delete_note_error_message": "Une erreur s'est produite lors de la suppression de la note",
     "delete_note_success_feedback": "Note supprimée",
+
     "@note_details": {},
+
     "@reminder": {},
     "reminder_title": "Rappel",
     "reminder_set_button": "Définir le rappel",
