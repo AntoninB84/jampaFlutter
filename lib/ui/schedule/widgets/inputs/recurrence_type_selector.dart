@@ -18,7 +18,7 @@ class RecurrenceTypeSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return DropdownButtonFormField<RecurrenceType>(
       decoration: InputDecoration(
-        labelText: context.strings.create_recurrent_date_field_title,
+        labelText: context.strings.create_recurrent_date_type_field_title,
         border: OutlineInputBorder(
             borderRadius: kRadius8
         ),
