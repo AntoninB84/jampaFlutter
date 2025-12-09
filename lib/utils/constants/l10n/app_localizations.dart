@@ -999,6 +999,84 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Aucune date programmée'**
   String get show_note_no_schedules;
+
+  /// No description provided for @sync_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Synchronisation'**
+  String get sync_title;
+
+  /// No description provided for @sync_button_tooltip.
+  ///
+  /// In fr, this message translates to:
+  /// **'Synchroniser'**
+  String get sync_button_tooltip;
+
+  /// No description provided for @sync_success_message.
+  ///
+  /// In fr, this message translates to:
+  /// **'Synchronisation réussie'**
+  String get sync_success_message;
+
+  /// No description provided for @sync_failed_message.
+  ///
+  /// In fr, this message translates to:
+  /// **'Échec de la synchronisation'**
+  String get sync_failed_message;
+
+  /// No description provided for @sync_no_network_message.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune connexion réseau disponible'**
+  String get sync_no_network_message;
+
+  /// No description provided for @sync_in_progress.
+  ///
+  /// In fr, this message translates to:
+  /// **'Synchronisation en cours...'**
+  String get sync_in_progress;
+
+  /// No description provided for @sync_last_synced.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernière synchronisation : {date}'**
+  String sync_last_synced(Object date);
+
+  /// No description provided for @sync_never_synced.
+  ///
+  /// In fr, this message translates to:
+  /// **'Synchronisez vos données avec le serveur'**
+  String get sync_never_synced;
+
+  /// No description provided for @sync_just_now.
+  ///
+  /// In fr, this message translates to:
+  /// **'À l\'instant'**
+  String get sync_just_now;
+
+  /// No description provided for @sync_minutes_ago.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} minutes il y a'**
+  String sync_minutes_ago(Object count);
+
+  /// No description provided for @sync_hours_ago.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} heures il y a'**
+  String sync_hours_ago(Object count);
+
+  /// No description provided for @sync_settings_title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Synchroniser les données'**
+  String get sync_settings_title;
+
+  /// No description provided for @sync_settings_subtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Synchronisez vos données avec le serveur'**
+  String get sync_settings_subtitle;
 }
 
 class _AppLocalizationsDelegate

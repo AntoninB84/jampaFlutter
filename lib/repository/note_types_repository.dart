@@ -1,6 +1,8 @@
 
 import 'package:jampa_flutter/data/dao/note_type_dao.dart';
 import 'package:jampa_flutter/data/models/note_type/note_type.dart';
+import 'package:jampa_flutter/utils/storage/sync_storage_service.dart';
+import 'package:jampa_flutter/utils/service_locator.dart';
 
 import '../data/objects/note_type_with_count.dart';
 
@@ -41,5 +43,13 @@ class NoteTypesRepository {
   /// Deletes a note type by its ID.
   Future<void> deleteNoteType(String id) async {
     await NoteTypeDao.deleteNoteTypeById(id);
+    // Track deletion for sync
+    try {
+      final syncStorage = serviceLocator<SyncStorageService>();
+      await syncStorage.addPendingDeletion('note_type', id);
+    } catch (e) {
+      // If sync storage is not available, continue without tracking
+      print('Failed to track deletion for sync: $e');
+    }
   }
 }

@@ -1,6 +1,8 @@
 
 import 'package:jampa_flutter/data/dao/category_dao.dart';
 import 'package:jampa_flutter/data/models/category/category.dart';
+import 'package:jampa_flutter/utils/storage/sync_storage_service.dart';
+import 'package:jampa_flutter/utils/service_locator.dart';
 
 import '../data/objects/category_with_count.dart';
 
@@ -46,5 +48,13 @@ class CategoriesRepository {
   /// Deletes a category by its ID.
   Future<void> deleteCategory(String id) async {
     await CategoryDao.deleteCategoryById(id);
+    // Track deletion for sync
+    try {
+      final syncStorage = serviceLocator<SyncStorageService>();
+      await syncStorage.addPendingDeletion('category', id);
+    } catch (e) {
+      // If sync storage is not available, continue without tracking
+      print('Failed to track deletion for sync: $e');
+    }
   }
 }

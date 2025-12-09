@@ -4,6 +4,7 @@ import 'package:jampa_flutter/bloc/notes/form/note_form_helpers.dart';
 import 'package:jampa_flutter/data/models/schedule/schedule.dart';
 import 'package:jampa_flutter/data/objects/schedule_with_next_occurrence.dart';
 import 'package:jampa_flutter/utils/extensions/schedule_extension.dart';
+import 'package:jampa_flutter/utils/storage/sync_storage_service.dart';
 
 import '../data/dao/schedule_dao.dart';
 import '../utils/service_locator.dart';
@@ -118,6 +119,14 @@ class ScheduleRepository {
   Future<void> deleteScheduleById(String id) async {
     await serviceLocator<ReminderRepository>().deleteRemindersByScheduleId(id);
     await ScheduleDao.deleteScheduleById(id);
+    // Track deletion for sync
+    try {
+      final syncStorage = serviceLocator<SyncStorageService>();
+      await syncStorage.addPendingDeletion('schedule', id);
+    } catch (e) {
+      // If sync storage is not available, continue without tracking
+      print('Failed to track deletion for sync: $e');
+    }
   }
 
   /// Deletes all schedules associated with a specific note ID, along with their associated reminders.

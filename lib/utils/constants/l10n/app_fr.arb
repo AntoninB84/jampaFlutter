@@ -177,5 +177,20 @@
     "show_note_schedules_and_reminders" : "Dates et rappels",
     "show_note_next_occurrence" : "Prochaine date : {date}",
     "show_note_previous_occurrence" : "Dernière date : {date}",
-    "show_note_no_schedules": "Aucune date programmée"
+    "show_note_no_schedules": "Aucune date programmée",
+
+    "@sync": {},
+    "sync_title": "Synchronisation",
+    "sync_button_tooltip": "Synchroniser",
+    "sync_success_message": "Synchronisation réussie",
+    "sync_failed_message": "Échec de la synchronisation",
+    "sync_no_network_message": "Aucune connexion réseau disponible",
+    "sync_in_progress": "Synchronisation en cours...",
+    "sync_last_synced": "Dernière synchronisation : {date}",
+    "sync_never_synced": "Synchronisez vos données avec le serveur",
+    "sync_just_now": "À l'instant",
+    "sync_minutes_ago": "{count} minutes il y a",
+    "sync_hours_ago": "{count} heures il y a",
+    "sync_settings_title": "Synchroniser les données",
+    "sync_settings_subtitle": "Synchronisez vos données avec le serveur"
 }

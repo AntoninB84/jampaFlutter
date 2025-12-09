@@ -548,4 +548,50 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get show_note_no_schedules => 'Aucune date programmée';
+
+  @override
+  String get sync_title => 'Synchronisation';
+
+  @override
+  String get sync_button_tooltip => 'Synchroniser';
+
+  @override
+  String get sync_success_message => 'Synchronisation réussie';
+
+  @override
+  String get sync_failed_message => 'Échec de la synchronisation';
+
+  @override
+  String get sync_no_network_message => 'Aucune connexion réseau disponible';
+
+  @override
+  String get sync_in_progress => 'Synchronisation en cours...';
+
+  @override
+  String sync_last_synced(Object date) {
+    return 'Dernière synchronisation : $date';
+  }
+
+  @override
+  String get sync_never_synced => 'Synchronisez vos données avec le serveur';
+
+  @override
+  String get sync_just_now => 'À l\'instant';
+
+  @override
+  String sync_minutes_ago(Object count) {
+    return '$count minutes il y a';
+  }
+
+  @override
+  String sync_hours_ago(Object count) {
+    return '$count heures il y a';
+  }
+
+  @override
+  String get sync_settings_title => 'Synchroniser les données';
+
+  @override
+  String get sync_settings_subtitle =>
+      'Synchronisez vos données avec le serveur';
 }
