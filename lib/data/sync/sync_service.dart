@@ -2,6 +2,7 @@ import 'package:jampa_flutter/data/api/sync_api_client.dart';
 import 'package:jampa_flutter/data/database.dart';
 import 'package:jampa_flutter/data/models/category/category.dart';
 import 'package:jampa_flutter/data/models/note/note.dart';
+import 'package:jampa_flutter/data/models/note_category/note_category.dart';
 import 'package:jampa_flutter/data/models/note_type/note_type.dart';
 import 'package:jampa_flutter/data/models/reminder/reminder.dart';
 import 'package:jampa_flutter/data/models/schedule/schedule.dart';
@@ -40,12 +41,13 @@ class SyncService {
       // Process sync response and update local database
       await _processSyncResponse(response);
 
-      // Update last sync date
-      await _storageService.saveLastSyncDate(response.serverTimestamp);
+      // Update last sync date - use server timestamp if available, otherwise use current time
+      final syncTimestamp = response.lastSyncDate ?? DateTime.now();
+      await _storageService.saveLastSyncDate(syncTimestamp);
 
       // Clear processed deletions
-      if (response.processedDeletions.isNotEmpty) {
-        await _storageService.removePendingDeletions(response.processedDeletions);
+      if (response.deletions.isNotEmpty) {
+        await _storageService.removePendingDeletions(response.deletions);
       }
 
       return true;
@@ -69,11 +71,13 @@ class SyncService {
         .toList();
 
     // Get local changes since lastSyncDate
+    // Get local changes since lastSyncDate
     final categories = await _getChangedCategories(lastSyncDate);
     final noteTypes = await _getChangedNoteTypes(lastSyncDate);
     final notes = await _getChangedNotes(lastSyncDate);
     final schedules = await _getChangedSchedules(lastSyncDate);
     final reminders = await _getChangedReminders(lastSyncDate);
+    final noteCategories = await _getChangedNoteCategories(lastSyncDate);
 
     return SyncRequest(
       lastSyncDate: lastSyncDate,
@@ -82,6 +86,7 @@ class SyncService {
       notes: notes.map((e) => e.toJson()).toList(),
       schedules: schedules.map((e) => e.toJson()).toList(),
       reminders: reminders.map((e) => e.toJson()).toList(),
+      noteCategories: noteCategories.map((e) => e.toJson()).toList(),
       deletions: deletionsList,
     );
   }
@@ -139,6 +144,19 @@ class SyncService {
     }
 
     return await (_database.select(_database.reminderTable)
+          ..where((tbl) => tbl.updatedAt.isBiggerThanValue(lastSyncDate)))
+        .get();
+  }
+
+  /// Get note categories changed since lastSyncDate
+  Future<List<NoteCategoryEntity>> _getChangedNoteCategories(DateTime? lastSyncDate) async {
+    if (lastSyncDate == null) {
+      // First sync - get all note categories
+      return await (_database.select(_database.noteCategoryTable).get());
+    }
+
+    // Get note categories updated after lastSyncDate
+    return await (_database.select(_database.noteCategoryTable)
           ..where((tbl) => tbl.updatedAt.isBiggerThanValue(lastSyncDate)))
         .get();
   }
@@ -218,6 +236,24 @@ class SyncService {
         final reminder = ReminderEntity.fromJson(reminderJson);
         await _database.into(_database.reminderTable).insertOnConflictUpdate(
           reminder.toCompanion(),
+        );
+      }
+    }
+
+    // Process note categories (junction table)
+    for (final noteCategoryJson in response.noteCategories) {
+      final deletedAt = noteCategoryJson['deletedAt'];
+      if (deletedAt != null) {
+        // Delete the relationship
+        final noteId = noteCategoryJson['noteId'] as String;
+        final categoryId = noteCategoryJson['categoryId'] as String;
+        await (_database.delete(_database.noteCategoryTable)
+          ..where((tbl) => tbl.noteId.equals(noteId) & tbl.categoryId.equals(categoryId))).go();
+      } else {
+        // Insert or update the relationship
+        final noteCategory = NoteCategoryEntity.fromJson(noteCategoryJson);
+        await _database.into(_database.noteCategoryTable).insertOnConflictUpdate(
+          noteCategory.toCompanion(),
         );
       }
     }

@@ -16,14 +16,15 @@ T _$identity<T>(T value) => value;
 mixin _$SyncResponse {
 
 /// Current server timestamp to be used as next lastSyncDate
- DateTime get serverTimestamp;/// Categories from the server (created or updated since lastSyncDate)
+/// If null, uses current client time
+ DateTime? get lastSyncDate;/// Categories from the server (created or updated since lastSyncDate)
  List<Map<String, dynamic>> get categories;/// Note types from the server
  List<Map<String, dynamic>> get noteTypes;/// Notes from the server
  List<Map<String, dynamic>> get notes;/// Schedules from the server
  List<Map<String, dynamic>> get schedules;/// Reminders from the server
  List<Map<String, dynamic>> get reminders;/// Note-Category relationships from the server
  List<Map<String, dynamic>> get noteCategories;/// IDs of successfully processed deletions on the server
- List<String> get processedDeletions;/// Optional message from the server
+ List<String> get deletions;/// Optional message from the server
  String? get message;
 /// Create a copy of SyncResponse
 /// with the given fields replaced by the non-null parameter values.
@@ -37,16 +38,16 @@ $SyncResponseCopyWith<SyncResponse> get copyWith => _$SyncResponseCopyWithImpl<S
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SyncResponse&&(identical(other.serverTimestamp, serverTimestamp) || other.serverTimestamp == serverTimestamp)&&const DeepCollectionEquality().equals(other.categories, categories)&&const DeepCollectionEquality().equals(other.noteTypes, noteTypes)&&const DeepCollectionEquality().equals(other.notes, notes)&&const DeepCollectionEquality().equals(other.schedules, schedules)&&const DeepCollectionEquality().equals(other.reminders, reminders)&&const DeepCollectionEquality().equals(other.noteCategories, noteCategories)&&const DeepCollectionEquality().equals(other.processedDeletions, processedDeletions)&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SyncResponse&&(identical(other.lastSyncDate, lastSyncDate) || other.lastSyncDate == lastSyncDate)&&const DeepCollectionEquality().equals(other.categories, categories)&&const DeepCollectionEquality().equals(other.noteTypes, noteTypes)&&const DeepCollectionEquality().equals(other.notes, notes)&&const DeepCollectionEquality().equals(other.schedules, schedules)&&const DeepCollectionEquality().equals(other.reminders, reminders)&&const DeepCollectionEquality().equals(other.noteCategories, noteCategories)&&const DeepCollectionEquality().equals(other.deletions, deletions)&&(identical(other.message, message) || other.message == message));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,serverTimestamp,const DeepCollectionEquality().hash(categories),const DeepCollectionEquality().hash(noteTypes),const DeepCollectionEquality().hash(notes),const DeepCollectionEquality().hash(schedules),const DeepCollectionEquality().hash(reminders),const DeepCollectionEquality().hash(noteCategories),const DeepCollectionEquality().hash(processedDeletions),message);
+int get hashCode => Object.hash(runtimeType,lastSyncDate,const DeepCollectionEquality().hash(categories),const DeepCollectionEquality().hash(noteTypes),const DeepCollectionEquality().hash(notes),const DeepCollectionEquality().hash(schedules),const DeepCollectionEquality().hash(reminders),const DeepCollectionEquality().hash(noteCategories),const DeepCollectionEquality().hash(deletions),message);
 
 @override
 String toString() {
-  return 'SyncResponse(serverTimestamp: $serverTimestamp, categories: $categories, noteTypes: $noteTypes, notes: $notes, schedules: $schedules, reminders: $reminders, noteCategories: $noteCategories, processedDeletions: $processedDeletions, message: $message)';
+  return 'SyncResponse(lastSyncDate: $lastSyncDate, categories: $categories, noteTypes: $noteTypes, notes: $notes, schedules: $schedules, reminders: $reminders, noteCategories: $noteCategories, deletions: $deletions, message: $message)';
 }
 
 
@@ -57,7 +58,7 @@ abstract mixin class $SyncResponseCopyWith<$Res>  {
   factory $SyncResponseCopyWith(SyncResponse value, $Res Function(SyncResponse) _then) = _$SyncResponseCopyWithImpl;
 @useResult
 $Res call({
- DateTime serverTimestamp, List<Map<String, dynamic>> categories, List<Map<String, dynamic>> noteTypes, List<Map<String, dynamic>> notes, List<Map<String, dynamic>> schedules, List<Map<String, dynamic>> reminders, List<Map<String, dynamic>> noteCategories, List<String> processedDeletions, String? message
+ DateTime? lastSyncDate, List<Map<String, dynamic>> categories, List<Map<String, dynamic>> noteTypes, List<Map<String, dynamic>> notes, List<Map<String, dynamic>> schedules, List<Map<String, dynamic>> reminders, List<Map<String, dynamic>> noteCategories, List<String> deletions, String? message
 });
 
 
@@ -74,16 +75,16 @@ class _$SyncResponseCopyWithImpl<$Res>
 
 /// Create a copy of SyncResponse
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? serverTimestamp = null,Object? categories = null,Object? noteTypes = null,Object? notes = null,Object? schedules = null,Object? reminders = null,Object? noteCategories = null,Object? processedDeletions = null,Object? message = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? lastSyncDate = freezed,Object? categories = null,Object? noteTypes = null,Object? notes = null,Object? schedules = null,Object? reminders = null,Object? noteCategories = null,Object? deletions = null,Object? message = freezed,}) {
   return _then(_self.copyWith(
-serverTimestamp: null == serverTimestamp ? _self.serverTimestamp : serverTimestamp // ignore: cast_nullable_to_non_nullable
-as DateTime,categories: null == categories ? _self.categories : categories // ignore: cast_nullable_to_non_nullable
+lastSyncDate: freezed == lastSyncDate ? _self.lastSyncDate : lastSyncDate // ignore: cast_nullable_to_non_nullable
+as DateTime?,categories: null == categories ? _self.categories : categories // ignore: cast_nullable_to_non_nullable
 as List<Map<String, dynamic>>,noteTypes: null == noteTypes ? _self.noteTypes : noteTypes // ignore: cast_nullable_to_non_nullable
 as List<Map<String, dynamic>>,notes: null == notes ? _self.notes : notes // ignore: cast_nullable_to_non_nullable
 as List<Map<String, dynamic>>,schedules: null == schedules ? _self.schedules : schedules // ignore: cast_nullable_to_non_nullable
 as List<Map<String, dynamic>>,reminders: null == reminders ? _self.reminders : reminders // ignore: cast_nullable_to_non_nullable
 as List<Map<String, dynamic>>,noteCategories: null == noteCategories ? _self.noteCategories : noteCategories // ignore: cast_nullable_to_non_nullable
-as List<Map<String, dynamic>>,processedDeletions: null == processedDeletions ? _self.processedDeletions : processedDeletions // ignore: cast_nullable_to_non_nullable
+as List<Map<String, dynamic>>,deletions: null == deletions ? _self.deletions : deletions // ignore: cast_nullable_to_non_nullable
 as List<String>,message: freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
@@ -170,10 +171,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( DateTime serverTimestamp,  List<Map<String, dynamic>> categories,  List<Map<String, dynamic>> noteTypes,  List<Map<String, dynamic>> notes,  List<Map<String, dynamic>> schedules,  List<Map<String, dynamic>> reminders,  List<Map<String, dynamic>> noteCategories,  List<String> processedDeletions,  String? message)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( DateTime? lastSyncDate,  List<Map<String, dynamic>> categories,  List<Map<String, dynamic>> noteTypes,  List<Map<String, dynamic>> notes,  List<Map<String, dynamic>> schedules,  List<Map<String, dynamic>> reminders,  List<Map<String, dynamic>> noteCategories,  List<String> deletions,  String? message)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SyncResponse() when $default != null:
-return $default(_that.serverTimestamp,_that.categories,_that.noteTypes,_that.notes,_that.schedules,_that.reminders,_that.noteCategories,_that.processedDeletions,_that.message);case _:
+return $default(_that.lastSyncDate,_that.categories,_that.noteTypes,_that.notes,_that.schedules,_that.reminders,_that.noteCategories,_that.deletions,_that.message);case _:
   return orElse();
 
 }
@@ -191,10 +192,10 @@ return $default(_that.serverTimestamp,_that.categories,_that.noteTypes,_that.not
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( DateTime serverTimestamp,  List<Map<String, dynamic>> categories,  List<Map<String, dynamic>> noteTypes,  List<Map<String, dynamic>> notes,  List<Map<String, dynamic>> schedules,  List<Map<String, dynamic>> reminders,  List<Map<String, dynamic>> noteCategories,  List<String> processedDeletions,  String? message)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( DateTime? lastSyncDate,  List<Map<String, dynamic>> categories,  List<Map<String, dynamic>> noteTypes,  List<Map<String, dynamic>> notes,  List<Map<String, dynamic>> schedules,  List<Map<String, dynamic>> reminders,  List<Map<String, dynamic>> noteCategories,  List<String> deletions,  String? message)  $default,) {final _that = this;
 switch (_that) {
 case _SyncResponse():
-return $default(_that.serverTimestamp,_that.categories,_that.noteTypes,_that.notes,_that.schedules,_that.reminders,_that.noteCategories,_that.processedDeletions,_that.message);case _:
+return $default(_that.lastSyncDate,_that.categories,_that.noteTypes,_that.notes,_that.schedules,_that.reminders,_that.noteCategories,_that.deletions,_that.message);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -211,10 +212,10 @@ return $default(_that.serverTimestamp,_that.categories,_that.noteTypes,_that.not
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( DateTime serverTimestamp,  List<Map<String, dynamic>> categories,  List<Map<String, dynamic>> noteTypes,  List<Map<String, dynamic>> notes,  List<Map<String, dynamic>> schedules,  List<Map<String, dynamic>> reminders,  List<Map<String, dynamic>> noteCategories,  List<String> processedDeletions,  String? message)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( DateTime? lastSyncDate,  List<Map<String, dynamic>> categories,  List<Map<String, dynamic>> noteTypes,  List<Map<String, dynamic>> notes,  List<Map<String, dynamic>> schedules,  List<Map<String, dynamic>> reminders,  List<Map<String, dynamic>> noteCategories,  List<String> deletions,  String? message)?  $default,) {final _that = this;
 switch (_that) {
 case _SyncResponse() when $default != null:
-return $default(_that.serverTimestamp,_that.categories,_that.noteTypes,_that.notes,_that.schedules,_that.reminders,_that.noteCategories,_that.processedDeletions,_that.message);case _:
+return $default(_that.lastSyncDate,_that.categories,_that.noteTypes,_that.notes,_that.schedules,_that.reminders,_that.noteCategories,_that.deletions,_that.message);case _:
   return null;
 
 }
@@ -226,11 +227,12 @@ return $default(_that.serverTimestamp,_that.categories,_that.noteTypes,_that.not
 @JsonSerializable()
 
 class _SyncResponse implements SyncResponse {
-  const _SyncResponse({required this.serverTimestamp, final  List<Map<String, dynamic>> categories = const [], final  List<Map<String, dynamic>> noteTypes = const [], final  List<Map<String, dynamic>> notes = const [], final  List<Map<String, dynamic>> schedules = const [], final  List<Map<String, dynamic>> reminders = const [], final  List<Map<String, dynamic>> noteCategories = const [], final  List<String> processedDeletions = const [], this.message}): _categories = categories,_noteTypes = noteTypes,_notes = notes,_schedules = schedules,_reminders = reminders,_noteCategories = noteCategories,_processedDeletions = processedDeletions;
+  const _SyncResponse({this.lastSyncDate, final  List<Map<String, dynamic>> categories = const [], final  List<Map<String, dynamic>> noteTypes = const [], final  List<Map<String, dynamic>> notes = const [], final  List<Map<String, dynamic>> schedules = const [], final  List<Map<String, dynamic>> reminders = const [], final  List<Map<String, dynamic>> noteCategories = const [], final  List<String> deletions = const [], this.message}): _categories = categories,_noteTypes = noteTypes,_notes = notes,_schedules = schedules,_reminders = reminders,_noteCategories = noteCategories,_deletions = deletions;
   factory _SyncResponse.fromJson(Map<String, dynamic> json) => _$SyncResponseFromJson(json);
 
 /// Current server timestamp to be used as next lastSyncDate
-@override final  DateTime serverTimestamp;
+/// If null, uses current client time
+@override final  DateTime? lastSyncDate;
 /// Categories from the server (created or updated since lastSyncDate)
  final  List<Map<String, dynamic>> _categories;
 /// Categories from the server (created or updated since lastSyncDate)
@@ -286,12 +288,12 @@ class _SyncResponse implements SyncResponse {
 }
 
 /// IDs of successfully processed deletions on the server
- final  List<String> _processedDeletions;
+ final  List<String> _deletions;
 /// IDs of successfully processed deletions on the server
-@override@JsonKey() List<String> get processedDeletions {
-  if (_processedDeletions is EqualUnmodifiableListView) return _processedDeletions;
+@override@JsonKey() List<String> get deletions {
+  if (_deletions is EqualUnmodifiableListView) return _deletions;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_processedDeletions);
+  return EqualUnmodifiableListView(_deletions);
 }
 
 /// Optional message from the server
@@ -310,16 +312,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SyncResponse&&(identical(other.serverTimestamp, serverTimestamp) || other.serverTimestamp == serverTimestamp)&&const DeepCollectionEquality().equals(other._categories, _categories)&&const DeepCollectionEquality().equals(other._noteTypes, _noteTypes)&&const DeepCollectionEquality().equals(other._notes, _notes)&&const DeepCollectionEquality().equals(other._schedules, _schedules)&&const DeepCollectionEquality().equals(other._reminders, _reminders)&&const DeepCollectionEquality().equals(other._noteCategories, _noteCategories)&&const DeepCollectionEquality().equals(other._processedDeletions, _processedDeletions)&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SyncResponse&&(identical(other.lastSyncDate, lastSyncDate) || other.lastSyncDate == lastSyncDate)&&const DeepCollectionEquality().equals(other._categories, _categories)&&const DeepCollectionEquality().equals(other._noteTypes, _noteTypes)&&const DeepCollectionEquality().equals(other._notes, _notes)&&const DeepCollectionEquality().equals(other._schedules, _schedules)&&const DeepCollectionEquality().equals(other._reminders, _reminders)&&const DeepCollectionEquality().equals(other._noteCategories, _noteCategories)&&const DeepCollectionEquality().equals(other._deletions, _deletions)&&(identical(other.message, message) || other.message == message));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,serverTimestamp,const DeepCollectionEquality().hash(_categories),const DeepCollectionEquality().hash(_noteTypes),const DeepCollectionEquality().hash(_notes),const DeepCollectionEquality().hash(_schedules),const DeepCollectionEquality().hash(_reminders),const DeepCollectionEquality().hash(_noteCategories),const DeepCollectionEquality().hash(_processedDeletions),message);
+int get hashCode => Object.hash(runtimeType,lastSyncDate,const DeepCollectionEquality().hash(_categories),const DeepCollectionEquality().hash(_noteTypes),const DeepCollectionEquality().hash(_notes),const DeepCollectionEquality().hash(_schedules),const DeepCollectionEquality().hash(_reminders),const DeepCollectionEquality().hash(_noteCategories),const DeepCollectionEquality().hash(_deletions),message);
 
 @override
 String toString() {
-  return 'SyncResponse(serverTimestamp: $serverTimestamp, categories: $categories, noteTypes: $noteTypes, notes: $notes, schedules: $schedules, reminders: $reminders, noteCategories: $noteCategories, processedDeletions: $processedDeletions, message: $message)';
+  return 'SyncResponse(lastSyncDate: $lastSyncDate, categories: $categories, noteTypes: $noteTypes, notes: $notes, schedules: $schedules, reminders: $reminders, noteCategories: $noteCategories, deletions: $deletions, message: $message)';
 }
 
 
@@ -330,7 +332,7 @@ abstract mixin class _$SyncResponseCopyWith<$Res> implements $SyncResponseCopyWi
   factory _$SyncResponseCopyWith(_SyncResponse value, $Res Function(_SyncResponse) _then) = __$SyncResponseCopyWithImpl;
 @override @useResult
 $Res call({
- DateTime serverTimestamp, List<Map<String, dynamic>> categories, List<Map<String, dynamic>> noteTypes, List<Map<String, dynamic>> notes, List<Map<String, dynamic>> schedules, List<Map<String, dynamic>> reminders, List<Map<String, dynamic>> noteCategories, List<String> processedDeletions, String? message
+ DateTime? lastSyncDate, List<Map<String, dynamic>> categories, List<Map<String, dynamic>> noteTypes, List<Map<String, dynamic>> notes, List<Map<String, dynamic>> schedules, List<Map<String, dynamic>> reminders, List<Map<String, dynamic>> noteCategories, List<String> deletions, String? message
 });
 
 
@@ -347,16 +349,16 @@ class __$SyncResponseCopyWithImpl<$Res>
 
 /// Create a copy of SyncResponse
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? serverTimestamp = null,Object? categories = null,Object? noteTypes = null,Object? notes = null,Object? schedules = null,Object? reminders = null,Object? noteCategories = null,Object? processedDeletions = null,Object? message = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? lastSyncDate = freezed,Object? categories = null,Object? noteTypes = null,Object? notes = null,Object? schedules = null,Object? reminders = null,Object? noteCategories = null,Object? deletions = null,Object? message = freezed,}) {
   return _then(_SyncResponse(
-serverTimestamp: null == serverTimestamp ? _self.serverTimestamp : serverTimestamp // ignore: cast_nullable_to_non_nullable
-as DateTime,categories: null == categories ? _self._categories : categories // ignore: cast_nullable_to_non_nullable
+lastSyncDate: freezed == lastSyncDate ? _self.lastSyncDate : lastSyncDate // ignore: cast_nullable_to_non_nullable
+as DateTime?,categories: null == categories ? _self._categories : categories // ignore: cast_nullable_to_non_nullable
 as List<Map<String, dynamic>>,noteTypes: null == noteTypes ? _self._noteTypes : noteTypes // ignore: cast_nullable_to_non_nullable
 as List<Map<String, dynamic>>,notes: null == notes ? _self._notes : notes // ignore: cast_nullable_to_non_nullable
 as List<Map<String, dynamic>>,schedules: null == schedules ? _self._schedules : schedules // ignore: cast_nullable_to_non_nullable
 as List<Map<String, dynamic>>,reminders: null == reminders ? _self._reminders : reminders // ignore: cast_nullable_to_non_nullable
 as List<Map<String, dynamic>>,noteCategories: null == noteCategories ? _self._noteCategories : noteCategories // ignore: cast_nullable_to_non_nullable
-as List<Map<String, dynamic>>,processedDeletions: null == processedDeletions ? _self._processedDeletions : processedDeletions // ignore: cast_nullable_to_non_nullable
+as List<Map<String, dynamic>>,deletions: null == deletions ? _self._deletions : deletions // ignore: cast_nullable_to_non_nullable
 as List<String>,message: freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String?,
   ));

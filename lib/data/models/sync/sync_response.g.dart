@@ -8,7 +8,9 @@ part of 'sync_response.dart';
 
 _SyncResponse _$SyncResponseFromJson(Map<String, dynamic> json) =>
     _SyncResponse(
-      serverTimestamp: DateTime.parse(json['serverTimestamp'] as String),
+      lastSyncDate: json['lastSyncDate'] == null
+          ? null
+          : DateTime.parse(json['lastSyncDate'] as String),
       categories:
           (json['categories'] as List<dynamic>?)
               ?.map((e) => e as Map<String, dynamic>)
@@ -39,8 +41,8 @@ _SyncResponse _$SyncResponseFromJson(Map<String, dynamic> json) =>
               ?.map((e) => e as Map<String, dynamic>)
               .toList() ??
           const [],
-      processedDeletions:
-          (json['processedDeletions'] as List<dynamic>?)
+      deletions:
+          (json['deletions'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           const [],
@@ -49,13 +51,13 @@ _SyncResponse _$SyncResponseFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$SyncResponseToJson(_SyncResponse instance) =>
     <String, dynamic>{
-      'serverTimestamp': instance.serverTimestamp.toIso8601String(),
+      'lastSyncDate': instance.lastSyncDate?.toIso8601String(),
       'categories': instance.categories,
       'noteTypes': instance.noteTypes,
       'notes': instance.notes,
       'schedules': instance.schedules,
       'reminders': instance.reminders,
       'noteCategories': instance.noteCategories,
-      'processedDeletions': instance.processedDeletions,
+      'deletions': instance.deletions,
       'message': instance.message,
     };

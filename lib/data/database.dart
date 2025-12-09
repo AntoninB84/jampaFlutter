@@ -71,7 +71,7 @@ class AppDatabase extends _$AppDatabase {
       beforeOpen: (details) async {
         if (kDebugMode) {
           print(details);
-        };
+        }
       },
     );
   }
@@ -87,5 +87,20 @@ class AppDatabase extends _$AppDatabase {
         shareAcrossIsolates: true,
       ),
     );
+  }
+
+  /// Clears all data from the database (useful for logout)
+  /// This deletes all records from all tables but preserves the schema
+  Future<void> clearAllData() async {
+    await transaction(() async {
+      // Delete all data from tables in reverse order to respect foreign keys
+      await delete(reminderTable).go();
+      await delete(scheduleTable).go();
+      await delete(noteCategoryTable).go();
+      await delete(noteTable).go();
+      await delete(noteTypeTable).go();
+      await delete(categoryTable).go();
+      await delete(userTable).go();
+    });
   }
 }

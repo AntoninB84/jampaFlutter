@@ -17,7 +17,9 @@ mixin _$NoteCategoryEntity implements DiagnosticableTreeMixin {
 
 /// The ID of the note
  String get noteId;/// The ID of the category
- String get categoryId;
+ String get categoryId;/// Timestamp when the relationship was created
+ DateTime get createdAt;/// Timestamp when the relationship was last updated
+ DateTime get updatedAt;
 /// Create a copy of NoteCategoryEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -31,21 +33,21 @@ $NoteCategoryEntityCopyWith<NoteCategoryEntity> get copyWith => _$NoteCategoryEn
 void debugFillProperties(DiagnosticPropertiesBuilder properties) {
   properties
     ..add(DiagnosticsProperty('type', 'NoteCategoryEntity'))
-    ..add(DiagnosticsProperty('noteId', noteId))..add(DiagnosticsProperty('categoryId', categoryId));
+    ..add(DiagnosticsProperty('noteId', noteId))..add(DiagnosticsProperty('categoryId', categoryId))..add(DiagnosticsProperty('createdAt', createdAt))..add(DiagnosticsProperty('updatedAt', updatedAt));
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is NoteCategoryEntity&&(identical(other.noteId, noteId) || other.noteId == noteId)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is NoteCategoryEntity&&(identical(other.noteId, noteId) || other.noteId == noteId)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,noteId,categoryId);
+int get hashCode => Object.hash(runtimeType,noteId,categoryId,createdAt,updatedAt);
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'NoteCategoryEntity(noteId: $noteId, categoryId: $categoryId)';
+  return 'NoteCategoryEntity(noteId: $noteId, categoryId: $categoryId, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
 
@@ -56,7 +58,7 @@ abstract mixin class $NoteCategoryEntityCopyWith<$Res>  {
   factory $NoteCategoryEntityCopyWith(NoteCategoryEntity value, $Res Function(NoteCategoryEntity) _then) = _$NoteCategoryEntityCopyWithImpl;
 @useResult
 $Res call({
- String noteId, String categoryId
+ String noteId, String categoryId, DateTime createdAt, DateTime updatedAt
 });
 
 
@@ -73,11 +75,13 @@ class _$NoteCategoryEntityCopyWithImpl<$Res>
 
 /// Create a copy of NoteCategoryEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? noteId = null,Object? categoryId = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? noteId = null,Object? categoryId = null,Object? createdAt = null,Object? updatedAt = null,}) {
   return _then(_self.copyWith(
 noteId: null == noteId ? _self.noteId : noteId // ignore: cast_nullable_to_non_nullable
 as String,categoryId: null == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
-as String,
+as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime,updatedAt: null == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
+as DateTime,
   ));
 }
 
@@ -162,10 +166,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String noteId,  String categoryId)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String noteId,  String categoryId,  DateTime createdAt,  DateTime updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _NoteCategoryEntity() when $default != null:
-return $default(_that.noteId,_that.categoryId);case _:
+return $default(_that.noteId,_that.categoryId,_that.createdAt,_that.updatedAt);case _:
   return orElse();
 
 }
@@ -183,10 +187,10 @@ return $default(_that.noteId,_that.categoryId);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String noteId,  String categoryId)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String noteId,  String categoryId,  DateTime createdAt,  DateTime updatedAt)  $default,) {final _that = this;
 switch (_that) {
 case _NoteCategoryEntity():
-return $default(_that.noteId,_that.categoryId);case _:
+return $default(_that.noteId,_that.categoryId,_that.createdAt,_that.updatedAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -203,10 +207,10 @@ return $default(_that.noteId,_that.categoryId);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String noteId,  String categoryId)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String noteId,  String categoryId,  DateTime createdAt,  DateTime updatedAt)?  $default,) {final _that = this;
 switch (_that) {
 case _NoteCategoryEntity() when $default != null:
-return $default(_that.noteId,_that.categoryId);case _:
+return $default(_that.noteId,_that.categoryId,_that.createdAt,_that.updatedAt);case _:
   return null;
 
 }
@@ -218,13 +222,17 @@ return $default(_that.noteId,_that.categoryId);case _:
 @JsonSerializable()
 
 class _NoteCategoryEntity extends NoteCategoryEntity with DiagnosticableTreeMixin {
-   _NoteCategoryEntity({required this.noteId, required this.categoryId}): assert(noteId.isNotEmpty, 'Note ID cannot be empty'),assert(categoryId.isNotEmpty, 'Category ID cannot be empty'),super._();
+   _NoteCategoryEntity({required this.noteId, required this.categoryId, required this.createdAt, required this.updatedAt}): assert(noteId.isNotEmpty, 'Note ID cannot be empty'),assert(categoryId.isNotEmpty, 'Category ID cannot be empty'),super._();
   factory _NoteCategoryEntity.fromJson(Map<String, dynamic> json) => _$NoteCategoryEntityFromJson(json);
 
 /// The ID of the note
 @override final  String noteId;
 /// The ID of the category
 @override final  String categoryId;
+/// Timestamp when the relationship was created
+@override final  DateTime createdAt;
+/// Timestamp when the relationship was last updated
+@override final  DateTime updatedAt;
 
 /// Create a copy of NoteCategoryEntity
 /// with the given fields replaced by the non-null parameter values.
@@ -240,21 +248,21 @@ Map<String, dynamic> toJson() {
 void debugFillProperties(DiagnosticPropertiesBuilder properties) {
   properties
     ..add(DiagnosticsProperty('type', 'NoteCategoryEntity'))
-    ..add(DiagnosticsProperty('noteId', noteId))..add(DiagnosticsProperty('categoryId', categoryId));
+    ..add(DiagnosticsProperty('noteId', noteId))..add(DiagnosticsProperty('categoryId', categoryId))..add(DiagnosticsProperty('createdAt', createdAt))..add(DiagnosticsProperty('updatedAt', updatedAt));
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NoteCategoryEntity&&(identical(other.noteId, noteId) || other.noteId == noteId)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NoteCategoryEntity&&(identical(other.noteId, noteId) || other.noteId == noteId)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,noteId,categoryId);
+int get hashCode => Object.hash(runtimeType,noteId,categoryId,createdAt,updatedAt);
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'NoteCategoryEntity(noteId: $noteId, categoryId: $categoryId)';
+  return 'NoteCategoryEntity(noteId: $noteId, categoryId: $categoryId, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
 
@@ -265,7 +273,7 @@ abstract mixin class _$NoteCategoryEntityCopyWith<$Res> implements $NoteCategory
   factory _$NoteCategoryEntityCopyWith(_NoteCategoryEntity value, $Res Function(_NoteCategoryEntity) _then) = __$NoteCategoryEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String noteId, String categoryId
+ String noteId, String categoryId, DateTime createdAt, DateTime updatedAt
 });
 
 
@@ -282,11 +290,13 @@ class __$NoteCategoryEntityCopyWithImpl<$Res>
 
 /// Create a copy of NoteCategoryEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? noteId = null,Object? categoryId = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? noteId = null,Object? categoryId = null,Object? createdAt = null,Object? updatedAt = null,}) {
   return _then(_NoteCategoryEntity(
 noteId: null == noteId ? _self.noteId : noteId // ignore: cast_nullable_to_non_nullable
 as String,categoryId: null == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
-as String,
+as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime,updatedAt: null == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
+as DateTime,
   ));
 }
 

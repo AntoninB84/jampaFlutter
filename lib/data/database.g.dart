@@ -1112,8 +1112,37 @@ class $NoteCategoryTableTable extends NoteCategoryTable
       'REFERENCES category_table (id)',
     ),
   );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
   @override
-  List<GeneratedColumn> get $columns => [noteId, categoryId];
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    noteId,
+    categoryId,
+    createdAt,
+    updatedAt,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1142,11 +1171,23 @@ class $NoteCategoryTableTable extends NoteCategoryTable
     } else if (isInserting) {
       context.missing(_categoryIdMeta);
     }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => const {};
+  Set<GeneratedColumn> get $primaryKey => {noteId, categoryId};
   @override
   NoteCategoryEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -1158,6 +1199,14 @@ class $NoteCategoryTableTable extends NoteCategoryTable
       categoryId: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}category_id'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
       )!,
     );
   }
@@ -1171,26 +1220,36 @@ class $NoteCategoryTableTable extends NoteCategoryTable
 class NoteCategoryTableCompanion extends UpdateCompanion<NoteCategoryEntity> {
   final Value<String> noteId;
   final Value<String> categoryId;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
   final Value<int> rowid;
   const NoteCategoryTableCompanion({
     this.noteId = const Value.absent(),
     this.categoryId = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   NoteCategoryTableCompanion.insert({
     required String noteId,
     required String categoryId,
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : noteId = Value(noteId),
        categoryId = Value(categoryId);
   static Insertable<NoteCategoryEntity> custom({
     Expression<String>? noteId,
     Expression<String>? categoryId,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (noteId != null) 'note_id': noteId,
       if (categoryId != null) 'category_id': categoryId,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -1198,11 +1257,15 @@ class NoteCategoryTableCompanion extends UpdateCompanion<NoteCategoryEntity> {
   NoteCategoryTableCompanion copyWith({
     Value<String>? noteId,
     Value<String>? categoryId,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
     Value<int>? rowid,
   }) {
     return NoteCategoryTableCompanion(
       noteId: noteId ?? this.noteId,
       categoryId: categoryId ?? this.categoryId,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -1216,6 +1279,12 @@ class NoteCategoryTableCompanion extends UpdateCompanion<NoteCategoryEntity> {
     if (categoryId.present) {
       map['category_id'] = Variable<String>(categoryId.value);
     }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -1227,6 +1296,8 @@ class NoteCategoryTableCompanion extends UpdateCompanion<NoteCategoryEntity> {
     return (StringBuffer('NoteCategoryTableCompanion(')
           ..write('noteId: $noteId, ')
           ..write('categoryId: $categoryId, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -4103,12 +4174,16 @@ typedef $$NoteCategoryTableTableCreateCompanionBuilder =
     NoteCategoryTableCompanion Function({
       required String noteId,
       required String categoryId,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
       Value<int> rowid,
     });
 typedef $$NoteCategoryTableTableUpdateCompanionBuilder =
     NoteCategoryTableCompanion Function({
       Value<String> noteId,
       Value<String> categoryId,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
       Value<int> rowid,
     });
 
@@ -4176,6 +4251,16 @@ class $$NoteCategoryTableTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
   $$NoteTableTableFilterComposer get noteId {
     final $$NoteTableTableFilterComposer composer = $composerBuilder(
       composer: this,
@@ -4232,6 +4317,16 @@ class $$NoteCategoryTableTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $$NoteTableTableOrderingComposer get noteId {
     final $$NoteTableTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -4288,6 +4383,12 @@ class $$NoteCategoryTableTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
   $$NoteTableTableAnnotationComposer get noteId {
     final $$NoteTableTableAnnotationComposer composer = $composerBuilder(
       composer: this,
@@ -4370,20 +4471,28 @@ class $$NoteCategoryTableTableTableManager
               ({
                 Value<String> noteId = const Value.absent(),
                 Value<String> categoryId = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => NoteCategoryTableCompanion(
                 noteId: noteId,
                 categoryId: categoryId,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
                 rowid: rowid,
               ),
           createCompanionCallback:
               ({
                 required String noteId,
                 required String categoryId,
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => NoteCategoryTableCompanion.insert(
                 noteId: noteId,
                 categoryId: categoryId,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

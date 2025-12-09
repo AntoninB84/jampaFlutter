@@ -8,7 +8,8 @@ part 'sync_response.g.dart';
 abstract class SyncResponse with _$SyncResponse {
   const factory SyncResponse({
     /// Current server timestamp to be used as next lastSyncDate
-    required DateTime serverTimestamp,
+    /// If null, uses current client time
+    DateTime? lastSyncDate,
 
     /// Categories from the server (created or updated since lastSyncDate)
     @Default([]) List<Map<String, dynamic>> categories,
@@ -29,7 +30,7 @@ abstract class SyncResponse with _$SyncResponse {
     @Default([]) List<Map<String, dynamic>> noteCategories,
 
     /// IDs of successfully processed deletions on the server
-    @Default([]) List<String> processedDeletions,
+    @Default([]) List<String> deletions,
 
     /// Optional message from the server
     String? message,

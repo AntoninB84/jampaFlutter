@@ -21,10 +21,13 @@ class NotesRepository {
       await NoteCategoryDao.cleanRelationshipsByNoteId(insertedNote.id);
       // Then, re-establish relationships
       if(insertedNote.categories?.isNotEmpty ?? false) {
+        final now = DateTime.now();
         List<NoteCategoryEntity> noteCategories = insertedNote.categories!.map((category) {
           return NoteCategoryEntity(
             noteId: insertedNote.id,
             categoryId: category.id,
+            createdAt: now,
+            updatedAt: now,
           );
         }).toList();
         await NoteCategoryDao.saveMultipleNoteCategories(noteCategories);

@@ -4,9 +4,11 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
+import '../../data/database.dart';
 import '../../data/models/auth/auth_response.dart';
 import '../../data/models/user/user.dart';
 import '../../repository/auth_repository.dart';
+import '../../repository/sync_repository.dart';
 import '../../repository/user_repository.dart';
 
 part 'auth_event.dart';
@@ -28,6 +30,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   final AuthRepository _authRepository = serviceLocator<AuthRepository>();
   final UserRepository _userRepository = serviceLocator<UserRepository>();
+  final AppDatabase _database = serviceLocator<AppDatabase>();
+  final SyncRepository _syncRepository = serviceLocator<SyncRepository>();
 
   /// Subscribes to the authentication status stream from the AuthRepository.
   Future<void> _onSubscriptionRequested(
@@ -102,13 +106,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   /// Handles the logout event by calling the logOut method
   /// in the AuthRepository and disconnecting the current user
-  /// in the UserRepository.
+  /// in the UserRepository. Also clears all database and sync data.
   Future<void> _onLogoutPressed(
     AuthLogoutPressed event,
     Emitter<AuthState> emit,
   ) async {
     await _authRepository.logOut();
     await _userRepository.disconnectCurrentUser();
+    // Clear all sync metadata
+    await _syncRepository.clearSyncData();
+    // Clear all database tables
+    await _database.clearAllData();
   }
 
   /// Handles the token refresh request event
