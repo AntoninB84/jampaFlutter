@@ -8,6 +8,7 @@ class ReminderFormElements {
   const ReminderFormElements({
     required this.scheduleId,
     required this.reminderId,
+    required this.noteId,
     this.createdAt,
     required this.selectedOffsetNumber,
     required this.selectedOffsetType,
@@ -18,6 +19,8 @@ class ReminderFormElements {
   final String scheduleId;
   /// The ID of the reminder itself
   final String reminderId;
+  /// The ID of the note this reminder is associated with
+  final String noteId;
   /// The creation timestamp of the reminder
   final DateTime? createdAt;
 
@@ -31,6 +34,7 @@ class ReminderFormElements {
   ReminderFormElements copyWith({
     String? scheduleId,
     String? reminderId,
+    String? noteId,
     DateTime? createdAt,
     int? selectedOffsetNumber,
     ReminderOffsetType? selectedOffsetType,
@@ -39,6 +43,7 @@ class ReminderFormElements {
     return ReminderFormElements(
       scheduleId: scheduleId ?? this.scheduleId,
       reminderId: reminderId ?? this.reminderId,
+      noteId: noteId ?? this.noteId,
       createdAt: createdAt ?? this.createdAt,
       selectedOffsetNumber: selectedOffsetNumber ?? this.selectedOffsetNumber,
       selectedOffsetType: selectedOffsetType ?? this.selectedOffsetType,

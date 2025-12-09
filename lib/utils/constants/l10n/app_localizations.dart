@@ -346,12 +346,6 @@ abstract class AppLocalizations {
   /// **'Entrez votre nom d\'utilisateur'**
   String get signup_username_field_hint;
 
-  /// No description provided for @signup_email_field_hint.
-  ///
-  /// In fr, this message translates to:
-  /// **'Entrez votre adresse e-mail'**
-  String get signup_email_field_hint;
-
   /// No description provided for @signup_password_field_hint.
   ///
   /// In fr, this message translates to:
@@ -388,23 +382,11 @@ abstract class AppLocalizations {
   /// **'Êtes-vous sûr de vouloir vous déconnecter?'**
   String get logout_confirmation_message;
 
-  /// No description provided for @logout_success_feedback.
-  ///
-  /// In fr, this message translates to:
-  /// **'Déconnecté avec succès'**
-  String get logout_success_feedback;
-
   /// No description provided for @create_category_title.
   ///
   /// In fr, this message translates to:
   /// **'Créer une catégorie'**
   String get create_category_title;
-
-  /// No description provided for @create_category_name_field_title.
-  ///
-  /// In fr, this message translates to:
-  /// **'Nom de la catégorie'**
-  String get create_category_name_field_title;
 
   /// No description provided for @create_category_name_field_hint.
   ///
@@ -472,12 +454,6 @@ abstract class AppLocalizations {
   /// **'Créer un type de note'**
   String get create_note_type_title;
 
-  /// No description provided for @create_note_type_name_field_title.
-  ///
-  /// In fr, this message translates to:
-  /// **'Nom du type de note'**
-  String get create_note_type_name_field_title;
-
   /// No description provided for @create_note_type_name_field_hint.
   ///
   /// In fr, this message translates to:
@@ -544,12 +520,6 @@ abstract class AppLocalizations {
   /// **'Créer une note'**
   String get create_note_title;
 
-  /// No description provided for @create_note_title_field_title.
-  ///
-  /// In fr, this message translates to:
-  /// **'Titre de la note'**
-  String get create_note_title_field_title;
-
   /// No description provided for @create_note_title_field_hint.
   ///
   /// In fr, this message translates to:
@@ -562,23 +532,11 @@ abstract class AppLocalizations {
   /// **'Le titre de la note doit comporter entre 3 et 120 caractères'**
   String get create_note_title_invalid_length;
 
-  /// No description provided for @create_note_content_field_title.
-  ///
-  /// In fr, this message translates to:
-  /// **'Contenu de la note'**
-  String get create_note_content_field_title;
-
   /// No description provided for @create_note_content_field_hint.
   ///
   /// In fr, this message translates to:
   /// **'Entrez le contenu de la note'**
   String get create_note_content_field_hint;
-
-  /// No description provided for @create_note_content_invalid_length.
-  ///
-  /// In fr, this message translates to:
-  /// **'Le contenu de la note ne peut pas être vide'**
-  String get create_note_content_invalid_length;
 
   /// No description provided for @create_note_categories_field_title.
   ///
@@ -694,18 +652,6 @@ abstract class AppLocalizations {
     String isFromEdit,
   );
 
-  /// No description provided for @delete_date_success_feedback.
-  ///
-  /// In fr, this message translates to:
-  /// **'Date supprimée'**
-  String get delete_date_success_feedback;
-
-  /// No description provided for @delete_recurrence_success_feedback.
-  ///
-  /// In fr, this message translates to:
-  /// **'Récurrence supprimée'**
-  String get delete_recurrence_success_feedback;
-
   /// No description provided for @save_single_date_success_feedback.
   ///
   /// In fr, this message translates to:
@@ -742,42 +688,6 @@ abstract class AppLocalizations {
   /// **'Toutes les semaines, le: {weekdays}'**
   String recurrent_date_weekday_display_text(Object weekdays);
 
-  /// No description provided for @date_recurrence_days.
-  ///
-  /// In fr, this message translates to:
-  /// **'Jours'**
-  String get date_recurrence_days;
-
-  /// No description provided for @date_recurrence_weeks.
-  ///
-  /// In fr, this message translates to:
-  /// **'Semaines'**
-  String get date_recurrence_weeks;
-
-  /// No description provided for @date_recurrence_months.
-  ///
-  /// In fr, this message translates to:
-  /// **'Mois'**
-  String get date_recurrence_months;
-
-  /// No description provided for @date_recurrence_years.
-  ///
-  /// In fr, this message translates to:
-  /// **'Années'**
-  String get date_recurrence_years;
-
-  /// No description provided for @create_recurrent_date_field_title.
-  ///
-  /// In fr, this message translates to:
-  /// **'Récurrence'**
-  String get create_recurrent_date_field_title;
-
-  /// No description provided for @create_recurrent_date_interval_field_title.
-  ///
-  /// In fr, this message translates to:
-  /// **'Intervalle'**
-  String get create_recurrent_date_interval_field_title;
-
   /// No description provided for @create_recurrent_date_interval_field_hint.
   ///
   /// In fr, this message translates to:
@@ -795,12 +705,6 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Type de récurrence'**
   String get create_recurrent_date_type_field_title;
-
-  /// No description provided for @create_recurrent_date_month_day_field_title.
-  ///
-  /// In fr, this message translates to:
-  /// **'Jour du mois'**
-  String get create_recurrent_date_month_day_field_title;
 
   /// No description provided for @create_recurrent_date_month_day_field_hint.
   ///
@@ -874,29 +778,11 @@ abstract class AppLocalizations {
   /// **'Rappel'**
   String get reminder_title;
 
-  /// No description provided for @reminder_set_button.
-  ///
-  /// In fr, this message translates to:
-  /// **'Définir le rappel'**
-  String get reminder_set_button;
-
-  /// No description provided for @reminder_empty_state.
-  ///
-  /// In fr, this message translates to:
-  /// **'Aucun rappel défini'**
-  String get reminder_empty_state;
-
   /// No description provided for @reminder_display_text.
   ///
   /// In fr, this message translates to:
   /// **'Rappel {index}: {count, plural, =0{Aucun délai} one{1 {unit} avant} other{{count} {unit}s avant}}'**
   String reminder_display_text(num count, Object index, Object unit);
-
-  /// No description provided for @reminder_delete_button.
-  ///
-  /// In fr, this message translates to:
-  /// **'Supprimer le rappel'**
-  String get reminder_delete_button;
 
   /// No description provided for @save_reminder_success_feedback.
   ///
@@ -946,12 +832,6 @@ abstract class AppLocalizations {
   /// **'Type de décalage'**
   String get reminder_offset_type_field_title;
 
-  /// No description provided for @reminder_offset_value_field_title.
-  ///
-  /// In fr, this message translates to:
-  /// **'Valeur du décalage'**
-  String get reminder_offset_value_field_title;
-
   /// No description provided for @reminder_offset_value_field_hint.
   ///
   /// In fr, this message translates to:
@@ -969,12 +849,6 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Rappel silencieux'**
   String get reminder_silent_checkbox_title;
-
-  /// No description provided for @show_note.
-  ///
-  /// In fr, this message translates to:
-  /// **''**
-  String get show_note;
 
   /// No description provided for @show_note_schedules_and_reminders.
   ///
@@ -999,12 +873,6 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Aucune date programmée'**
   String get show_note_no_schedules;
-
-  /// No description provided for @sync_title.
-  ///
-  /// In fr, this message translates to:
-  /// **'Synchronisation'**
-  String get sync_title;
 
   /// No description provided for @sync_button_tooltip.
   ///
@@ -1035,48 +903,6 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Synchronisation en cours...'**
   String get sync_in_progress;
-
-  /// No description provided for @sync_last_synced.
-  ///
-  /// In fr, this message translates to:
-  /// **'Dernière synchronisation : {date}'**
-  String sync_last_synced(Object date);
-
-  /// No description provided for @sync_never_synced.
-  ///
-  /// In fr, this message translates to:
-  /// **'Synchronisez vos données avec le serveur'**
-  String get sync_never_synced;
-
-  /// No description provided for @sync_just_now.
-  ///
-  /// In fr, this message translates to:
-  /// **'À l\'instant'**
-  String get sync_just_now;
-
-  /// No description provided for @sync_minutes_ago.
-  ///
-  /// In fr, this message translates to:
-  /// **'{count} minutes il y a'**
-  String sync_minutes_ago(Object count);
-
-  /// No description provided for @sync_hours_ago.
-  ///
-  /// In fr, this message translates to:
-  /// **'{count} heures il y a'**
-  String sync_hours_ago(Object count);
-
-  /// No description provided for @sync_settings_title.
-  ///
-  /// In fr, this message translates to:
-  /// **'Synchroniser les données'**
-  String get sync_settings_title;
-
-  /// No description provided for @sync_settings_subtitle.
-  ///
-  /// In fr, this message translates to:
-  /// **'Synchronisez vos données avec le serveur'**
-  String get sync_settings_subtitle;
 }
 
 class _AppLocalizationsDelegate

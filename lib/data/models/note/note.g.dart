@@ -17,9 +17,6 @@ _NoteEntity _$NoteEntityFromJson(Map<String, dynamic> json) => _NoteEntity(
   createdAt: DateTime.parse(json['createdAt'] as String),
   updatedAt: DateTime.parse(json['updatedAt'] as String),
   noteTypeId: json['noteTypeId'] as String?,
-  noteType: json['noteType'] == null
-      ? null
-      : NoteTypeEntity.fromJson(json['noteType'] as Map<String, dynamic>),
   userId: json['userId'] as String?,
   categories: (json['categories'] as List<dynamic>?)
       ?.map((e) => CategoryEntity.fromJson(e as Map<String, dynamic>))
@@ -36,9 +33,7 @@ Map<String, dynamic> _$NoteEntityToJson(_NoteEntity instance) =>
       'createdAt': instance.createdAt.toIso8601String(),
       'updatedAt': instance.updatedAt.toIso8601String(),
       'noteTypeId': instance.noteTypeId,
-      'noteType': instance.noteType,
       'userId': instance.userId,
-      'categories': instance.categories,
     };
 
 const _$NoteStatusEnumEnumMap = {

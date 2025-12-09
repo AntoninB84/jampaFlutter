@@ -109,6 +109,7 @@ class InitialData {
     ReminderEntity(
         id: _uuid.v4(),
         scheduleId: schedulesIds[0],
+        noteId: noteIds[0],
         offsetType: .hours,
         offsetValue: 2,
         createdAt: .now(),
@@ -117,6 +118,7 @@ class InitialData {
     ReminderEntity(
         id: _uuid.v4(),
         scheduleId: schedulesIds[0],
+        noteId: noteIds[0],
         offsetType: .hours,
         offsetValue: 1,
         createdAt: .now(),
@@ -125,6 +127,7 @@ class InitialData {
     ReminderEntity(
         id: _uuid.v4(),
         scheduleId: schedulesIds[0],
+        noteId: noteIds[0],
         offsetType: .minutes,
         offsetValue: 30,
         createdAt: .now(),
@@ -133,6 +136,7 @@ class InitialData {
     ReminderEntity(
         id: _uuid.v4(),
         scheduleId: schedulesIds[1],
+        noteId: noteIds[0],
         offsetType: .days,
         offsetValue: 2,
         createdAt: .now(),
@@ -141,6 +145,7 @@ class InitialData {
     ReminderEntity(
         id: _uuid.v4(),
         scheduleId: schedulesIds[2],
+        noteId: noteIds[1],
         offsetType: .days,
         offsetValue: 1,
         createdAt: .now(),

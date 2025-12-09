@@ -11,10 +11,12 @@ class ReminderFormPage extends StatefulWidget {
   const ReminderFormPage({
     super.key,
     required this.scheduleId,
+    required this.noteId,
     this.reminderId,
   });
 
   final String scheduleId;
+  final String noteId;
   final String? reminderId;
 
   @override
@@ -37,6 +39,7 @@ class _ReminderFormPageState extends State<ReminderFormPage> {
         InitializeReminderFormEvent(
           reminderId: widget.reminderId,
           scheduleId: widget.scheduleId,
+          noteId: widget.noteId,
         )
       );
     });

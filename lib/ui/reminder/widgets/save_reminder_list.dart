@@ -67,6 +67,7 @@ class _SaveReminderListState extends State<SaveReminderList> {
                       onPressed: (){
                         context.pushNamed(kAppRouteReminderFormName, extra: {
                           'scheduleId': widget.scheduleId,
+                          'noteId': state.note?.id ?? '',
                         });
                       },
                       child: Text(context.strings.create_date_add_reminder_button)
@@ -100,6 +101,7 @@ class _SaveReminderListState extends State<SaveReminderList> {
                                 // Navigate to the ReminderForm for editing
                                 context.pushNamed(kAppRouteReminderFormName, extra: {
                                   'scheduleId': reminder.scheduleId,
+                                  'noteId': reminder.noteId,
                                   'reminderId': reminder.id,
                                 });
                               },

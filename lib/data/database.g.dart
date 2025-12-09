@@ -1701,6 +1701,16 @@ class $ReminderTableTable extends ReminderTable
     $customConstraints:
         'NOT NULL REFERENCES schedule_table(id) ON DELETE CASCADE',
   );
+  static const VerificationMeta _noteIdMeta = const VerificationMeta('noteId');
+  @override
+  late final GeneratedColumn<String> noteId = GeneratedColumn<String>(
+    'note_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL REFERENCES note_table(id) ON DELETE CASCADE',
+  );
   static const VerificationMeta _offsetValueMeta = const VerificationMeta(
     'offsetValue',
   );
@@ -1764,6 +1774,7 @@ class $ReminderTableTable extends ReminderTable
   List<GeneratedColumn> get $columns => [
     id,
     scheduleId,
+    noteId,
     offsetValue,
     offsetType,
     isNotification,
@@ -1794,6 +1805,14 @@ class $ReminderTableTable extends ReminderTable
       );
     } else if (isInserting) {
       context.missing(_scheduleIdMeta);
+    }
+    if (data.containsKey('note_id')) {
+      context.handle(
+        _noteIdMeta,
+        noteId.isAcceptableOrUnknown(data['note_id']!, _noteIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_noteIdMeta);
     }
     if (data.containsKey('offset_value')) {
       context.handle(
@@ -1844,6 +1863,10 @@ class $ReminderTableTable extends ReminderTable
         DriftSqlType.string,
         data['${effectivePrefix}schedule_id'],
       )!,
+      noteId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note_id'],
+      )!,
       offsetValue: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}offset_value'],
@@ -1883,6 +1906,7 @@ class $ReminderTableTable extends ReminderTable
 class ReminderTableCompanion extends UpdateCompanion<ReminderEntity> {
   final Value<String> id;
   final Value<String> scheduleId;
+  final Value<String> noteId;
   final Value<int> offsetValue;
   final Value<ReminderOffsetType> offsetType;
   final Value<bool> isNotification;
@@ -1892,6 +1916,7 @@ class ReminderTableCompanion extends UpdateCompanion<ReminderEntity> {
   const ReminderTableCompanion({
     this.id = const Value.absent(),
     this.scheduleId = const Value.absent(),
+    this.noteId = const Value.absent(),
     this.offsetValue = const Value.absent(),
     this.offsetType = const Value.absent(),
     this.isNotification = const Value.absent(),
@@ -1902,6 +1927,7 @@ class ReminderTableCompanion extends UpdateCompanion<ReminderEntity> {
   ReminderTableCompanion.insert({
     required String id,
     required String scheduleId,
+    required String noteId,
     required int offsetValue,
     required ReminderOffsetType offsetType,
     this.isNotification = const Value.absent(),
@@ -1910,11 +1936,13 @@ class ReminderTableCompanion extends UpdateCompanion<ReminderEntity> {
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        scheduleId = Value(scheduleId),
+       noteId = Value(noteId),
        offsetValue = Value(offsetValue),
        offsetType = Value(offsetType);
   static Insertable<ReminderEntity> custom({
     Expression<String>? id,
     Expression<String>? scheduleId,
+    Expression<String>? noteId,
     Expression<int>? offsetValue,
     Expression<String>? offsetType,
     Expression<bool>? isNotification,
@@ -1925,6 +1953,7 @@ class ReminderTableCompanion extends UpdateCompanion<ReminderEntity> {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (scheduleId != null) 'schedule_id': scheduleId,
+      if (noteId != null) 'note_id': noteId,
       if (offsetValue != null) 'offset_value': offsetValue,
       if (offsetType != null) 'offset_type': offsetType,
       if (isNotification != null) 'is_notification': isNotification,
@@ -1937,6 +1966,7 @@ class ReminderTableCompanion extends UpdateCompanion<ReminderEntity> {
   ReminderTableCompanion copyWith({
     Value<String>? id,
     Value<String>? scheduleId,
+    Value<String>? noteId,
     Value<int>? offsetValue,
     Value<ReminderOffsetType>? offsetType,
     Value<bool>? isNotification,
@@ -1947,6 +1977,7 @@ class ReminderTableCompanion extends UpdateCompanion<ReminderEntity> {
     return ReminderTableCompanion(
       id: id ?? this.id,
       scheduleId: scheduleId ?? this.scheduleId,
+      noteId: noteId ?? this.noteId,
       offsetValue: offsetValue ?? this.offsetValue,
       offsetType: offsetType ?? this.offsetType,
       isNotification: isNotification ?? this.isNotification,
@@ -1964,6 +1995,9 @@ class ReminderTableCompanion extends UpdateCompanion<ReminderEntity> {
     }
     if (scheduleId.present) {
       map['schedule_id'] = Variable<String>(scheduleId.value);
+    }
+    if (noteId.present) {
+      map['note_id'] = Variable<String>(noteId.value);
     }
     if (offsetValue.present) {
       map['offset_value'] = Variable<int>(offsetValue.value);
@@ -1993,6 +2027,7 @@ class ReminderTableCompanion extends UpdateCompanion<ReminderEntity> {
     return (StringBuffer('ReminderTableCompanion(')
           ..write('id: $id, ')
           ..write('scheduleId: $scheduleId, ')
+          ..write('noteId: $noteId, ')
           ..write('offsetValue: $offsetValue, ')
           ..write('offsetType: $offsetType, ')
           ..write('isNotification: $isNotification, ')
@@ -2383,6 +2418,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     WritePropagation(
       on: TableUpdateQuery.onTableName(
         'schedule_table',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('reminder_table', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'note_table',
         limitUpdateKind: UpdateKind.delete,
       ),
       result: [TableUpdate('reminder_table', kind: UpdateKind.delete)],
@@ -3088,6 +3130,24 @@ final class $$NoteTableTableReferences
       manager.$state.copyWith(prefetchedData: cache),
     );
   }
+
+  static MultiTypedResultKey<$ReminderTableTable, List<ReminderEntity>>
+  _reminderTableRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.reminderTable,
+    aliasName: $_aliasNameGenerator(db.noteTable.id, db.reminderTable.noteId),
+  );
+
+  $$ReminderTableTableProcessedTableManager get reminderTableRefs {
+    final manager = $$ReminderTableTableTableManager(
+      $_db,
+      $_db.reminderTable,
+    ).filter((f) => f.noteId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_reminderTableRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $$NoteTableTableFilterComposer
@@ -3222,6 +3282,31 @@ class $$NoteTableTableFilterComposer
           }) => $$ScheduleTableTableFilterComposer(
             $db: $db,
             $table: $db.scheduleTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> reminderTableRefs(
+    Expression<bool> Function($$ReminderTableTableFilterComposer f) f,
+  ) {
+    final $$ReminderTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.reminderTable,
+      getReferencedColumn: (t) => t.noteId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ReminderTableTableFilterComposer(
+            $db: $db,
+            $table: $db.reminderTable,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -3451,6 +3536,31 @@ class $$NoteTableTableAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> reminderTableRefs<T extends Object>(
+    Expression<T> Function($$ReminderTableTableAnnotationComposer a) f,
+  ) {
+    final $$ReminderTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.reminderTable,
+      getReferencedColumn: (t) => t.noteId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ReminderTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.reminderTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$NoteTableTableTableManager
@@ -3471,6 +3581,7 @@ class $$NoteTableTableTableManager
             bool userId,
             bool noteCategoryTableRefs,
             bool scheduleTableRefs,
+            bool reminderTableRefs,
           })
         > {
   $$NoteTableTableTableManager(_$AppDatabase db, $NoteTableTable table)
@@ -3546,12 +3657,14 @@ class $$NoteTableTableTableManager
                 userId = false,
                 noteCategoryTableRefs = false,
                 scheduleTableRefs = false,
+                reminderTableRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
                   explicitlyWatchedTables: [
                     if (noteCategoryTableRefs) db.noteCategoryTable,
                     if (scheduleTableRefs) db.scheduleTable,
+                    if (reminderTableRefs) db.reminderTable,
                   ],
                   addJoins:
                       <
@@ -3642,6 +3755,27 @@ class $$NoteTableTableTableManager
                               ),
                           typedResults: items,
                         ),
+                      if (reminderTableRefs)
+                        await $_getPrefetchedData<
+                          NoteEntity,
+                          $NoteTableTable,
+                          ReminderEntity
+                        >(
+                          currentTable: table,
+                          referencedTable: $$NoteTableTableReferences
+                              ._reminderTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$NoteTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).reminderTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.noteId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -3667,6 +3801,7 @@ typedef $$NoteTableTableProcessedTableManager =
         bool userId,
         bool noteCategoryTableRefs,
         bool scheduleTableRefs,
+        bool reminderTableRefs,
       })
     >;
 typedef $$CategoryTableTableCreateCompanionBuilder =
@@ -4864,6 +4999,7 @@ typedef $$ReminderTableTableCreateCompanionBuilder =
     ReminderTableCompanion Function({
       required String id,
       required String scheduleId,
+      required String noteId,
       required int offsetValue,
       required ReminderOffsetType offsetType,
       Value<bool> isNotification,
@@ -4875,6 +5011,7 @@ typedef $$ReminderTableTableUpdateCompanionBuilder =
     ReminderTableCompanion Function({
       Value<String> id,
       Value<String> scheduleId,
+      Value<String> noteId,
       Value<int> offsetValue,
       Value<ReminderOffsetType> offsetType,
       Value<bool> isNotification,
@@ -4904,6 +5041,25 @@ final class $$ReminderTableTableReferences
       $_db.scheduleTable,
     ).filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_scheduleIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $NoteTableTable _noteIdTable(_$AppDatabase db) =>
+      db.noteTable.createAlias(
+        $_aliasNameGenerator(db.reminderTable.noteId, db.noteTable.id),
+      );
+
+  $$NoteTableTableProcessedTableManager get noteId {
+    final $_column = $_itemColumn<String>('note_id')!;
+
+    final manager = $$NoteTableTableTableManager(
+      $_db,
+      $_db.noteTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_noteIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: [item]),
@@ -4965,6 +5121,29 @@ class $$ReminderTableTableFilterComposer
           }) => $$ScheduleTableTableFilterComposer(
             $db: $db,
             $table: $db.scheduleTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$NoteTableTableFilterComposer get noteId {
+    final $$NoteTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.noteId,
+      referencedTable: $db.noteTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$NoteTableTableFilterComposer(
+            $db: $db,
+            $table: $db.noteTable,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -5036,6 +5215,29 @@ class $$ReminderTableTableOrderingComposer
     );
     return composer;
   }
+
+  $$NoteTableTableOrderingComposer get noteId {
+    final $$NoteTableTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.noteId,
+      referencedTable: $db.noteTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$NoteTableTableOrderingComposer(
+            $db: $db,
+            $table: $db.noteTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$ReminderTableTableAnnotationComposer
@@ -5094,6 +5296,29 @@ class $$ReminderTableTableAnnotationComposer
     );
     return composer;
   }
+
+  $$NoteTableTableAnnotationComposer get noteId {
+    final $$NoteTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.noteId,
+      referencedTable: $db.noteTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$NoteTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.noteTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$ReminderTableTableTableManager
@@ -5109,7 +5334,7 @@ class $$ReminderTableTableTableManager
           $$ReminderTableTableUpdateCompanionBuilder,
           (ReminderEntity, $$ReminderTableTableReferences),
           ReminderEntity,
-          PrefetchHooks Function({bool scheduleId})
+          PrefetchHooks Function({bool scheduleId, bool noteId})
         > {
   $$ReminderTableTableTableManager(_$AppDatabase db, $ReminderTableTable table)
     : super(
@@ -5126,6 +5351,7 @@ class $$ReminderTableTableTableManager
               ({
                 Value<String> id = const Value.absent(),
                 Value<String> scheduleId = const Value.absent(),
+                Value<String> noteId = const Value.absent(),
                 Value<int> offsetValue = const Value.absent(),
                 Value<ReminderOffsetType> offsetType = const Value.absent(),
                 Value<bool> isNotification = const Value.absent(),
@@ -5135,6 +5361,7 @@ class $$ReminderTableTableTableManager
               }) => ReminderTableCompanion(
                 id: id,
                 scheduleId: scheduleId,
+                noteId: noteId,
                 offsetValue: offsetValue,
                 offsetType: offsetType,
                 isNotification: isNotification,
@@ -5146,6 +5373,7 @@ class $$ReminderTableTableTableManager
               ({
                 required String id,
                 required String scheduleId,
+                required String noteId,
                 required int offsetValue,
                 required ReminderOffsetType offsetType,
                 Value<bool> isNotification = const Value.absent(),
@@ -5155,6 +5383,7 @@ class $$ReminderTableTableTableManager
               }) => ReminderTableCompanion.insert(
                 id: id,
                 scheduleId: scheduleId,
+                noteId: noteId,
                 offsetValue: offsetValue,
                 offsetType: offsetType,
                 isNotification: isNotification,
@@ -5170,7 +5399,7 @@ class $$ReminderTableTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({scheduleId = false}) {
+          prefetchHooksCallback: ({scheduleId = false, noteId = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [],
@@ -5203,6 +5432,19 @@ class $$ReminderTableTableTableManager
                               )
                               as T;
                     }
+                    if (noteId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.noteId,
+                                referencedTable: $$ReminderTableTableReferences
+                                    ._noteIdTable(db),
+                                referencedColumn: $$ReminderTableTableReferences
+                                    ._noteIdTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
 
                     return state;
                   },
@@ -5227,7 +5469,7 @@ typedef $$ReminderTableTableProcessedTableManager =
       $$ReminderTableTableUpdateCompanionBuilder,
       (ReminderEntity, $$ReminderTableTableReferences),
       ReminderEntity,
-      PrefetchHooks Function({bool scheduleId})
+      PrefetchHooks Function({bool scheduleId, bool noteId})
     >;
 
 class $AppDatabaseManager {

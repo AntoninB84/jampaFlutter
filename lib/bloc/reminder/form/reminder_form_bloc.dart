@@ -22,6 +22,7 @@ class ReminderFormBloc extends Bloc<ReminderFormEvent, ReminderFormState> {
       newReminderFormElements: ReminderFormElements(
         scheduleId: 'scheduleId',
         reminderId: 'reminderId',
+        noteId: 'noteId',
         selectedOffsetNumber: 10,
         selectedOffsetType: ReminderOffsetType.minutes,
         isNotification: true
@@ -45,6 +46,7 @@ class ReminderFormBloc extends Bloc<ReminderFormEvent, ReminderFormState> {
             newReminderFormElements: ReminderFormElements(
                 scheduleId: event.scheduleId,
                 reminderId: Uuid().v4(),
+                noteId: event.noteId,
                 selectedOffsetNumber: 10,
                 selectedOffsetType: .minutes,
                 isNotification: true

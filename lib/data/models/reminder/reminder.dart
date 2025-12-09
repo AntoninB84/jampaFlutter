@@ -7,6 +7,7 @@ import 'package:jampa_flutter/bloc/notes/form/note_form_helpers.dart';
 import '../../../utils/enums/reminder_offset_type_enum.dart';
 import '../../database.dart';
 import '../schedule/schedule.dart';
+import '../note/note.dart';
 
 part 'reminder.freezed.dart';
 part 'reminder.g.dart';
@@ -16,6 +17,7 @@ part 'reminder.g.dart';
 class ReminderTable extends drift.Table {
   drift.TextColumn get id => text()();
   drift.TextColumn get scheduleId => text().customConstraint('NOT NULL REFERENCES schedule_table(id) ON DELETE CASCADE')();
+  drift.TextColumn get noteId => text().customConstraint('NOT NULL REFERENCES note_table(id) ON DELETE CASCADE')();
   drift.IntColumn get offsetValue => integer()();
   drift.TextColumn get offsetType => textEnum<ReminderOffsetType>()();
   drift.BoolColumn get isNotification => boolean().withDefault(const drift.Constant(true))();
@@ -34,12 +36,17 @@ abstract class ReminderEntity with _$ReminderEntity {
   @Assert('id.isNotEmpty', 'Reminder id cannot be empty')
   @Assert('scheduleId.isNotEmpty', 'Schedule id cannot be empty')
   @Assert('scheduleId != null', 'Schedule id must not be null')
+  @Assert('noteId.isNotEmpty', 'Note id cannot be empty')
+  @Assert('noteId != null', 'Note id must not be null')
   factory ReminderEntity({
     /// Unique identifier for the reminder (UUID)
     required String id,
 
     /// Identifier for the parent schedule
     required String scheduleId,
+
+    /// Identifier for the parent note
+    required String noteId,
 
     /// Offset value for the reminder
     required int offsetValue,
@@ -62,6 +69,7 @@ abstract class ReminderEntity with _$ReminderEntity {
     return ReminderTableCompanion(
       id: drift.Value(id),
       scheduleId: drift.Value(scheduleId),
+      noteId: drift.Value(noteId),
       offsetValue: drift.Value(offsetValue),
       offsetType: drift.Value(offsetType),
       isNotification: drift.Value(isNotification),
@@ -81,6 +89,7 @@ abstract class ReminderEntity with _$ReminderEntity {
     return ReminderFormElements(
       scheduleId: scheduleId,
       reminderId: id,
+      noteId: noteId,
       createdAt: createdAt,
       selectedOffsetNumber: offsetValue,
       selectedOffsetType: offsetType,
@@ -93,8 +102,9 @@ abstract class ReminderEntity with _$ReminderEntity {
     return ReminderEntity(
       id: elements.reminderId,
       scheduleId: elements.scheduleId,
+      noteId: elements.noteId,
       offsetValue: elements.selectedOffsetNumber,
-      offsetType: elements.selectedOffsetType ?? ReminderOffsetType.minutes,
+      offsetType: elements.selectedOffsetType,
       isNotification: elements.isNotification,
       createdAt: elements.createdAt ?? .now(),
       updatedAt: .now(),

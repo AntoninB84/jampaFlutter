@@ -135,6 +135,7 @@ final GoRouter router = GoRouter(
                       name: kAppRouteReminderFormName,
                       builder: (context, state) => ReminderFormPage(
                         scheduleId: (state.extra as Map?)?['scheduleId'] as String,
+                        noteId: (state.extra as Map?)?['noteId'] as String,
                         reminderId: (state.extra as Map?)?['reminderId'] as String?,
                       )
                   )

@@ -10,17 +10,21 @@ sealed class ReminderFormEvent extends Equatable {
 final class InitializeReminderFormEvent extends ReminderFormEvent {
   const InitializeReminderFormEvent({
     required this.scheduleId,
+    required this.noteId,
     this.reminderId
   });
 
   /// The ID of the parent schedule.
   final String scheduleId;
+  /// The ID of the parent note.
+  final String noteId;
   /// The ID of the reminder to edit, if any.
   final String? reminderId;
 
   @override
   List<Object?> get props => [
     scheduleId,
+    noteId,
     reminderId
   ];
 }

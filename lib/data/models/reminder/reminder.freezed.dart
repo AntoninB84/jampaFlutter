@@ -17,7 +17,8 @@ mixin _$ReminderEntity implements DiagnosticableTreeMixin {
 
 /// Unique identifier for the reminder (UUID)
  String get id;/// Identifier for the parent schedule
- String get scheduleId;/// Offset value for the reminder
+ String get scheduleId;/// Identifier for the parent note
+ String get noteId;/// Offset value for the reminder
  int get offsetValue;/// Type of offset (e.g., minutes, hours, days)
  ReminderOffsetType get offsetType;/// Indicates if the reminder is a notification or alarm
  bool get isNotification;/// Timestamp when the reminder was created
@@ -36,21 +37,21 @@ $ReminderEntityCopyWith<ReminderEntity> get copyWith => _$ReminderEntityCopyWith
 void debugFillProperties(DiagnosticPropertiesBuilder properties) {
   properties
     ..add(DiagnosticsProperty('type', 'ReminderEntity'))
-    ..add(DiagnosticsProperty('id', id))..add(DiagnosticsProperty('scheduleId', scheduleId))..add(DiagnosticsProperty('offsetValue', offsetValue))..add(DiagnosticsProperty('offsetType', offsetType))..add(DiagnosticsProperty('isNotification', isNotification))..add(DiagnosticsProperty('createdAt', createdAt))..add(DiagnosticsProperty('updatedAt', updatedAt));
+    ..add(DiagnosticsProperty('id', id))..add(DiagnosticsProperty('scheduleId', scheduleId))..add(DiagnosticsProperty('noteId', noteId))..add(DiagnosticsProperty('offsetValue', offsetValue))..add(DiagnosticsProperty('offsetType', offsetType))..add(DiagnosticsProperty('isNotification', isNotification))..add(DiagnosticsProperty('createdAt', createdAt))..add(DiagnosticsProperty('updatedAt', updatedAt));
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ReminderEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.scheduleId, scheduleId) || other.scheduleId == scheduleId)&&(identical(other.offsetValue, offsetValue) || other.offsetValue == offsetValue)&&(identical(other.offsetType, offsetType) || other.offsetType == offsetType)&&(identical(other.isNotification, isNotification) || other.isNotification == isNotification)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ReminderEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.scheduleId, scheduleId) || other.scheduleId == scheduleId)&&(identical(other.noteId, noteId) || other.noteId == noteId)&&(identical(other.offsetValue, offsetValue) || other.offsetValue == offsetValue)&&(identical(other.offsetType, offsetType) || other.offsetType == offsetType)&&(identical(other.isNotification, isNotification) || other.isNotification == isNotification)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,scheduleId,offsetValue,offsetType,isNotification,createdAt,updatedAt);
+int get hashCode => Object.hash(runtimeType,id,scheduleId,noteId,offsetValue,offsetType,isNotification,createdAt,updatedAt);
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'ReminderEntity(id: $id, scheduleId: $scheduleId, offsetValue: $offsetValue, offsetType: $offsetType, isNotification: $isNotification, createdAt: $createdAt, updatedAt: $updatedAt)';
+  return 'ReminderEntity(id: $id, scheduleId: $scheduleId, noteId: $noteId, offsetValue: $offsetValue, offsetType: $offsetType, isNotification: $isNotification, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
 
@@ -61,7 +62,7 @@ abstract mixin class $ReminderEntityCopyWith<$Res>  {
   factory $ReminderEntityCopyWith(ReminderEntity value, $Res Function(ReminderEntity) _then) = _$ReminderEntityCopyWithImpl;
 @useResult
 $Res call({
- String id, String scheduleId, int offsetValue, ReminderOffsetType offsetType, bool isNotification, DateTime createdAt, DateTime updatedAt
+ String id, String scheduleId, String noteId, int offsetValue, ReminderOffsetType offsetType, bool isNotification, DateTime createdAt, DateTime updatedAt
 });
 
 
@@ -78,10 +79,11 @@ class _$ReminderEntityCopyWithImpl<$Res>
 
 /// Create a copy of ReminderEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? scheduleId = null,Object? offsetValue = null,Object? offsetType = null,Object? isNotification = null,Object? createdAt = null,Object? updatedAt = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? scheduleId = null,Object? noteId = null,Object? offsetValue = null,Object? offsetType = null,Object? isNotification = null,Object? createdAt = null,Object? updatedAt = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,scheduleId: null == scheduleId ? _self.scheduleId : scheduleId // ignore: cast_nullable_to_non_nullable
+as String,noteId: null == noteId ? _self.noteId : noteId // ignore: cast_nullable_to_non_nullable
 as String,offsetValue: null == offsetValue ? _self.offsetValue : offsetValue // ignore: cast_nullable_to_non_nullable
 as int,offsetType: null == offsetType ? _self.offsetType : offsetType // ignore: cast_nullable_to_non_nullable
 as ReminderOffsetType,isNotification: null == isNotification ? _self.isNotification : isNotification // ignore: cast_nullable_to_non_nullable
@@ -172,10 +174,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String scheduleId,  int offsetValue,  ReminderOffsetType offsetType,  bool isNotification,  DateTime createdAt,  DateTime updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String scheduleId,  String noteId,  int offsetValue,  ReminderOffsetType offsetType,  bool isNotification,  DateTime createdAt,  DateTime updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ReminderEntity() when $default != null:
-return $default(_that.id,_that.scheduleId,_that.offsetValue,_that.offsetType,_that.isNotification,_that.createdAt,_that.updatedAt);case _:
+return $default(_that.id,_that.scheduleId,_that.noteId,_that.offsetValue,_that.offsetType,_that.isNotification,_that.createdAt,_that.updatedAt);case _:
   return orElse();
 
 }
@@ -193,10 +195,10 @@ return $default(_that.id,_that.scheduleId,_that.offsetValue,_that.offsetType,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String scheduleId,  int offsetValue,  ReminderOffsetType offsetType,  bool isNotification,  DateTime createdAt,  DateTime updatedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String scheduleId,  String noteId,  int offsetValue,  ReminderOffsetType offsetType,  bool isNotification,  DateTime createdAt,  DateTime updatedAt)  $default,) {final _that = this;
 switch (_that) {
 case _ReminderEntity():
-return $default(_that.id,_that.scheduleId,_that.offsetValue,_that.offsetType,_that.isNotification,_that.createdAt,_that.updatedAt);case _:
+return $default(_that.id,_that.scheduleId,_that.noteId,_that.offsetValue,_that.offsetType,_that.isNotification,_that.createdAt,_that.updatedAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -213,10 +215,10 @@ return $default(_that.id,_that.scheduleId,_that.offsetValue,_that.offsetType,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String scheduleId,  int offsetValue,  ReminderOffsetType offsetType,  bool isNotification,  DateTime createdAt,  DateTime updatedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String scheduleId,  String noteId,  int offsetValue,  ReminderOffsetType offsetType,  bool isNotification,  DateTime createdAt,  DateTime updatedAt)?  $default,) {final _that = this;
 switch (_that) {
 case _ReminderEntity() when $default != null:
-return $default(_that.id,_that.scheduleId,_that.offsetValue,_that.offsetType,_that.isNotification,_that.createdAt,_that.updatedAt);case _:
+return $default(_that.id,_that.scheduleId,_that.noteId,_that.offsetValue,_that.offsetType,_that.isNotification,_that.createdAt,_that.updatedAt);case _:
   return null;
 
 }
@@ -228,13 +230,15 @@ return $default(_that.id,_that.scheduleId,_that.offsetValue,_that.offsetType,_th
 @JsonSerializable()
 
 class _ReminderEntity extends ReminderEntity with DiagnosticableTreeMixin {
-   _ReminderEntity({required this.id, required this.scheduleId, required this.offsetValue, required this.offsetType, this.isNotification = true, required this.createdAt, required this.updatedAt}): assert(id.isNotEmpty, 'Reminder id cannot be empty'),assert(scheduleId.isNotEmpty, 'Schedule id cannot be empty'),assert(scheduleId != null, 'Schedule id must not be null'),super._();
+   _ReminderEntity({required this.id, required this.scheduleId, required this.noteId, required this.offsetValue, required this.offsetType, this.isNotification = true, required this.createdAt, required this.updatedAt}): assert(id.isNotEmpty, 'Reminder id cannot be empty'),assert(scheduleId.isNotEmpty, 'Schedule id cannot be empty'),assert(scheduleId != null, 'Schedule id must not be null'),assert(noteId.isNotEmpty, 'Note id cannot be empty'),assert(noteId != null, 'Note id must not be null'),super._();
   factory _ReminderEntity.fromJson(Map<String, dynamic> json) => _$ReminderEntityFromJson(json);
 
 /// Unique identifier for the reminder (UUID)
 @override final  String id;
 /// Identifier for the parent schedule
 @override final  String scheduleId;
+/// Identifier for the parent note
+@override final  String noteId;
 /// Offset value for the reminder
 @override final  int offsetValue;
 /// Type of offset (e.g., minutes, hours, days)
@@ -260,21 +264,21 @@ Map<String, dynamic> toJson() {
 void debugFillProperties(DiagnosticPropertiesBuilder properties) {
   properties
     ..add(DiagnosticsProperty('type', 'ReminderEntity'))
-    ..add(DiagnosticsProperty('id', id))..add(DiagnosticsProperty('scheduleId', scheduleId))..add(DiagnosticsProperty('offsetValue', offsetValue))..add(DiagnosticsProperty('offsetType', offsetType))..add(DiagnosticsProperty('isNotification', isNotification))..add(DiagnosticsProperty('createdAt', createdAt))..add(DiagnosticsProperty('updatedAt', updatedAt));
+    ..add(DiagnosticsProperty('id', id))..add(DiagnosticsProperty('scheduleId', scheduleId))..add(DiagnosticsProperty('noteId', noteId))..add(DiagnosticsProperty('offsetValue', offsetValue))..add(DiagnosticsProperty('offsetType', offsetType))..add(DiagnosticsProperty('isNotification', isNotification))..add(DiagnosticsProperty('createdAt', createdAt))..add(DiagnosticsProperty('updatedAt', updatedAt));
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ReminderEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.scheduleId, scheduleId) || other.scheduleId == scheduleId)&&(identical(other.offsetValue, offsetValue) || other.offsetValue == offsetValue)&&(identical(other.offsetType, offsetType) || other.offsetType == offsetType)&&(identical(other.isNotification, isNotification) || other.isNotification == isNotification)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ReminderEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.scheduleId, scheduleId) || other.scheduleId == scheduleId)&&(identical(other.noteId, noteId) || other.noteId == noteId)&&(identical(other.offsetValue, offsetValue) || other.offsetValue == offsetValue)&&(identical(other.offsetType, offsetType) || other.offsetType == offsetType)&&(identical(other.isNotification, isNotification) || other.isNotification == isNotification)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,scheduleId,offsetValue,offsetType,isNotification,createdAt,updatedAt);
+int get hashCode => Object.hash(runtimeType,id,scheduleId,noteId,offsetValue,offsetType,isNotification,createdAt,updatedAt);
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'ReminderEntity(id: $id, scheduleId: $scheduleId, offsetValue: $offsetValue, offsetType: $offsetType, isNotification: $isNotification, createdAt: $createdAt, updatedAt: $updatedAt)';
+  return 'ReminderEntity(id: $id, scheduleId: $scheduleId, noteId: $noteId, offsetValue: $offsetValue, offsetType: $offsetType, isNotification: $isNotification, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
 
@@ -285,7 +289,7 @@ abstract mixin class _$ReminderEntityCopyWith<$Res> implements $ReminderEntityCo
   factory _$ReminderEntityCopyWith(_ReminderEntity value, $Res Function(_ReminderEntity) _then) = __$ReminderEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String scheduleId, int offsetValue, ReminderOffsetType offsetType, bool isNotification, DateTime createdAt, DateTime updatedAt
+ String id, String scheduleId, String noteId, int offsetValue, ReminderOffsetType offsetType, bool isNotification, DateTime createdAt, DateTime updatedAt
 });
 
 
@@ -302,10 +306,11 @@ class __$ReminderEntityCopyWithImpl<$Res>
 
 /// Create a copy of ReminderEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? scheduleId = null,Object? offsetValue = null,Object? offsetType = null,Object? isNotification = null,Object? createdAt = null,Object? updatedAt = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? scheduleId = null,Object? noteId = null,Object? offsetValue = null,Object? offsetType = null,Object? isNotification = null,Object? createdAt = null,Object? updatedAt = null,}) {
   return _then(_ReminderEntity(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,scheduleId: null == scheduleId ? _self.scheduleId : scheduleId // ignore: cast_nullable_to_non_nullable
+as String,noteId: null == noteId ? _self.noteId : noteId // ignore: cast_nullable_to_non_nullable
 as String,offsetValue: null == offsetValue ? _self.offsetValue : offsetValue // ignore: cast_nullable_to_non_nullable
 as int,offsetType: null == offsetType ? _self.offsetType : offsetType // ignore: cast_nullable_to_non_nullable
 as ReminderOffsetType,isNotification: null == isNotification ? _self.isNotification : isNotification // ignore: cast_nullable_to_non_nullable

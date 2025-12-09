@@ -142,9 +142,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get signup_username_field_hint => 'Entrez votre nom d\'utilisateur';
 
   @override
-  String get signup_email_field_hint => 'Entrez votre adresse e-mail';
-
-  @override
   String get signup_password_field_hint => 'Entrez votre mot de passe';
 
   @override
@@ -166,13 +163,7 @@ class AppLocalizationsFr extends AppLocalizations {
       'Êtes-vous sûr de vouloir vous déconnecter?';
 
   @override
-  String get logout_success_feedback => 'Déconnecté avec succès';
-
-  @override
   String get create_category_title => 'Créer une catégorie';
-
-  @override
-  String get create_category_name_field_title => 'Nom de la catégorie';
 
   @override
   String get create_category_name_field_hint => 'Entrez le nom de la catégorie';
@@ -214,9 +205,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get create_note_type_title => 'Créer un type de note';
 
   @override
-  String get create_note_type_name_field_title => 'Nom du type de note';
-
-  @override
   String get create_note_type_name_field_hint =>
       'Entrez le nom du type de note';
 
@@ -256,9 +244,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get create_note_title => 'Créer une note';
 
   @override
-  String get create_note_title_field_title => 'Titre de la note';
-
-  @override
   String get create_note_title_field_hint => 'Entrez le titre de la note';
 
   @override
@@ -266,14 +251,7 @@ class AppLocalizationsFr extends AppLocalizations {
       'Le titre de la note doit comporter entre 3 et 120 caractères';
 
   @override
-  String get create_note_content_field_title => 'Contenu de la note';
-
-  @override
   String get create_note_content_field_hint => 'Entrez le contenu de la note';
-
-  @override
-  String get create_note_content_invalid_length =>
-      'Le contenu de la note ne peut pas être vide';
 
   @override
   String get create_note_categories_field_title => 'Catégories';
@@ -357,12 +335,6 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get delete_date_success_feedback => 'Date supprimée';
-
-  @override
-  String get delete_recurrence_success_feedback => 'Récurrence supprimée';
-
-  @override
   String get save_single_date_success_feedback => 'Date enregistrée';
 
   @override
@@ -389,24 +361,6 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get date_recurrence_days => 'Jours';
-
-  @override
-  String get date_recurrence_weeks => 'Semaines';
-
-  @override
-  String get date_recurrence_months => 'Mois';
-
-  @override
-  String get date_recurrence_years => 'Années';
-
-  @override
-  String get create_recurrent_date_field_title => 'Récurrence';
-
-  @override
-  String get create_recurrent_date_interval_field_title => 'Intervalle';
-
-  @override
   String get create_recurrent_date_interval_field_hint =>
       'Entrez l\'intervalle';
 
@@ -416,9 +370,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get create_recurrent_date_type_field_title => 'Type de récurrence';
-
-  @override
-  String get create_recurrent_date_month_day_field_title => 'Jour du mois';
 
   @override
   String get create_recurrent_date_month_day_field_hint =>
@@ -466,12 +417,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get reminder_title => 'Rappel';
 
   @override
-  String get reminder_set_button => 'Définir le rappel';
-
-  @override
-  String get reminder_empty_state => 'Aucun rappel défini';
-
-  @override
   String reminder_display_text(num count, Object index, Object unit) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -482,9 +427,6 @@ class AppLocalizationsFr extends AppLocalizations {
     );
     return 'Rappel $index: $_temp0';
   }
-
-  @override
-  String get reminder_delete_button => 'Supprimer le rappel';
 
   @override
   String get save_reminder_success_feedback => 'Rappel enregistré';
@@ -518,9 +460,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get reminder_offset_type_field_title => 'Type de décalage';
 
   @override
-  String get reminder_offset_value_field_title => 'Valeur du décalage';
-
-  @override
   String get reminder_offset_value_field_hint => 'Entrez la valeur du décalage';
 
   @override
@@ -529,9 +468,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get reminder_silent_checkbox_title => 'Rappel silencieux';
-
-  @override
-  String get show_note => '';
 
   @override
   String get show_note_schedules_and_reminders => 'Dates et rappels';
@@ -550,9 +486,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get show_note_no_schedules => 'Aucune date programmée';
 
   @override
-  String get sync_title => 'Synchronisation';
-
-  @override
   String get sync_button_tooltip => 'Synchroniser';
 
   @override
@@ -566,32 +499,4 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get sync_in_progress => 'Synchronisation en cours...';
-
-  @override
-  String sync_last_synced(Object date) {
-    return 'Dernière synchronisation : $date';
-  }
-
-  @override
-  String get sync_never_synced => 'Synchronisez vos données avec le serveur';
-
-  @override
-  String get sync_just_now => 'À l\'instant';
-
-  @override
-  String sync_minutes_ago(Object count) {
-    return '$count minutes il y a';
-  }
-
-  @override
-  String sync_hours_ago(Object count) {
-    return '$count heures il y a';
-  }
-
-  @override
-  String get sync_settings_title => 'Synchroniser les données';
-
-  @override
-  String get sync_settings_subtitle =>
-      'Synchronisez vos données avec le serveur';
 }

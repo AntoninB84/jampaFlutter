@@ -10,6 +10,7 @@ _ReminderEntity _$ReminderEntityFromJson(Map<String, dynamic> json) =>
     _ReminderEntity(
       id: json['id'] as String,
       scheduleId: json['scheduleId'] as String,
+      noteId: json['noteId'] as String,
       offsetValue: (json['offsetValue'] as num).toInt(),
       offsetType: $enumDecode(_$ReminderOffsetTypeEnumMap, json['offsetType']),
       isNotification: json['isNotification'] as bool? ?? true,
@@ -21,6 +22,7 @@ Map<String, dynamic> _$ReminderEntityToJson(_ReminderEntity instance) =>
     <String, dynamic>{
       'id': instance.id,
       'scheduleId': instance.scheduleId,
+      'noteId': instance.noteId,
       'offsetValue': instance.offsetValue,
       'offsetType': _$ReminderOffsetTypeEnumMap[instance.offsetType]!,
       'isNotification': instance.isNotification,

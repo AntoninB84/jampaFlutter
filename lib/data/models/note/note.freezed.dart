@@ -25,9 +25,9 @@ mixin _$NoteEntity implements DiagnosticableTreeMixin {
  DateTime get createdAt;/// Timestamp when the note was last updated
  DateTime get updatedAt;/// Identifier for the type of the note (optional UUID)
  String? get noteTypeId;/// The type of the note (optional)
- NoteTypeEntity? get noteType;/// Identifier for the user who owns the note (UUID). Not yet in use
+@JsonKey(includeFromJson: false, includeToJson: false) NoteTypeEntity? get noteType;/// Identifier for the user who owns the note (UUID). Not yet in use
  String? get userId;/// List of categories associated with the note (optional)
- List<CategoryEntity>? get categories;
+@JsonKey(includeFromJson: true, includeToJson: false) List<CategoryEntity>? get categories;
 /// Create a copy of NoteEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -66,7 +66,7 @@ abstract mixin class $NoteEntityCopyWith<$Res>  {
   factory $NoteEntityCopyWith(NoteEntity value, $Res Function(NoteEntity) _then) = _$NoteEntityCopyWithImpl;
 @useResult
 $Res call({
- String id, String title, String? content, bool isImportant, NoteStatusEnum status, DateTime createdAt, DateTime updatedAt, String? noteTypeId, NoteTypeEntity? noteType, String? userId, List<CategoryEntity>? categories
+ String id, String title, String? content, bool isImportant, NoteStatusEnum status, DateTime createdAt, DateTime updatedAt, String? noteTypeId,@JsonKey(includeFromJson: false, includeToJson: false) NoteTypeEntity? noteType, String? userId,@JsonKey(includeFromJson: true, includeToJson: false) List<CategoryEntity>? categories
 });
 
 
@@ -193,7 +193,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  String? content,  bool isImportant,  NoteStatusEnum status,  DateTime createdAt,  DateTime updatedAt,  String? noteTypeId,  NoteTypeEntity? noteType,  String? userId,  List<CategoryEntity>? categories)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  String? content,  bool isImportant,  NoteStatusEnum status,  DateTime createdAt,  DateTime updatedAt,  String? noteTypeId, @JsonKey(includeFromJson: false, includeToJson: false)  NoteTypeEntity? noteType,  String? userId, @JsonKey(includeFromJson: true, includeToJson: false)  List<CategoryEntity>? categories)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _NoteEntity() when $default != null:
 return $default(_that.id,_that.title,_that.content,_that.isImportant,_that.status,_that.createdAt,_that.updatedAt,_that.noteTypeId,_that.noteType,_that.userId,_that.categories);case _:
@@ -214,7 +214,7 @@ return $default(_that.id,_that.title,_that.content,_that.isImportant,_that.statu
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  String? content,  bool isImportant,  NoteStatusEnum status,  DateTime createdAt,  DateTime updatedAt,  String? noteTypeId,  NoteTypeEntity? noteType,  String? userId,  List<CategoryEntity>? categories)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  String? content,  bool isImportant,  NoteStatusEnum status,  DateTime createdAt,  DateTime updatedAt,  String? noteTypeId, @JsonKey(includeFromJson: false, includeToJson: false)  NoteTypeEntity? noteType,  String? userId, @JsonKey(includeFromJson: true, includeToJson: false)  List<CategoryEntity>? categories)  $default,) {final _that = this;
 switch (_that) {
 case _NoteEntity():
 return $default(_that.id,_that.title,_that.content,_that.isImportant,_that.status,_that.createdAt,_that.updatedAt,_that.noteTypeId,_that.noteType,_that.userId,_that.categories);case _:
@@ -234,7 +234,7 @@ return $default(_that.id,_that.title,_that.content,_that.isImportant,_that.statu
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  String? content,  bool isImportant,  NoteStatusEnum status,  DateTime createdAt,  DateTime updatedAt,  String? noteTypeId,  NoteTypeEntity? noteType,  String? userId,  List<CategoryEntity>? categories)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  String? content,  bool isImportant,  NoteStatusEnum status,  DateTime createdAt,  DateTime updatedAt,  String? noteTypeId, @JsonKey(includeFromJson: false, includeToJson: false)  NoteTypeEntity? noteType,  String? userId, @JsonKey(includeFromJson: true, includeToJson: false)  List<CategoryEntity>? categories)?  $default,) {final _that = this;
 switch (_that) {
 case _NoteEntity() when $default != null:
 return $default(_that.id,_that.title,_that.content,_that.isImportant,_that.status,_that.createdAt,_that.updatedAt,_that.noteTypeId,_that.noteType,_that.userId,_that.categories);case _:
@@ -249,7 +249,7 @@ return $default(_that.id,_that.title,_that.content,_that.isImportant,_that.statu
 @JsonSerializable()
 
 class _NoteEntity extends NoteEntity with DiagnosticableTreeMixin {
-   _NoteEntity({required this.id, required this.title, this.content, this.isImportant = false, this.status = NoteStatusEnum.todo, required this.createdAt, required this.updatedAt, this.noteTypeId, this.noteType, this.userId, this.categories}): assert(id.isNotEmpty, 'Note id cannot be empty'),assert(title.length >= 3, 'Note title must be at least 3 character long'),assert(title.length <= 120, 'Note title cannot exceed 120 characters'),super._();
+   _NoteEntity({required this.id, required this.title, this.content, this.isImportant = false, this.status = NoteStatusEnum.todo, required this.createdAt, required this.updatedAt, this.noteTypeId, @JsonKey(includeFromJson: false, includeToJson: false) this.noteType, this.userId, @JsonKey(includeFromJson: true, includeToJson: false) this.categories}): assert(id.isNotEmpty, 'Note id cannot be empty'),assert(title.length >= 3, 'Note title must be at least 3 character long'),assert(title.length <= 120, 'Note title cannot exceed 120 characters'),super._();
   factory _NoteEntity.fromJson(Map<String, dynamic> json) => _$NoteEntityFromJson(json);
 
 /// Unique identifier for the note (UUID)
@@ -270,11 +270,11 @@ class _NoteEntity extends NoteEntity with DiagnosticableTreeMixin {
 /// Identifier for the type of the note (optional UUID)
 @override final  String? noteTypeId;
 /// The type of the note (optional)
-@override final  NoteTypeEntity? noteType;
+@override@JsonKey(includeFromJson: false, includeToJson: false) final  NoteTypeEntity? noteType;
 /// Identifier for the user who owns the note (UUID). Not yet in use
 @override final  String? userId;
 /// List of categories associated with the note (optional)
-@override final  List<CategoryEntity>? categories;
+@override@JsonKey(includeFromJson: true, includeToJson: false) final  List<CategoryEntity>? categories;
 
 /// Create a copy of NoteEntity
 /// with the given fields replaced by the non-null parameter values.
@@ -315,7 +315,7 @@ abstract mixin class _$NoteEntityCopyWith<$Res> implements $NoteEntityCopyWith<$
   factory _$NoteEntityCopyWith(_NoteEntity value, $Res Function(_NoteEntity) _then) = __$NoteEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String title, String? content, bool isImportant, NoteStatusEnum status, DateTime createdAt, DateTime updatedAt, String? noteTypeId, NoteTypeEntity? noteType, String? userId, List<CategoryEntity>? categories
+ String id, String title, String? content, bool isImportant, NoteStatusEnum status, DateTime createdAt, DateTime updatedAt, String? noteTypeId,@JsonKey(includeFromJson: false, includeToJson: false) NoteTypeEntity? noteType, String? userId,@JsonKey(includeFromJson: true, includeToJson: false) List<CategoryEntity>? categories
 });
 
 

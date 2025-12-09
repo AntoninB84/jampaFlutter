@@ -63,12 +63,14 @@ abstract class NoteEntity with _$NoteEntity {
     String? noteTypeId,
 
     /// The type of the note (optional)
+    @JsonKey(includeFromJson: false, includeToJson: false)
     NoteTypeEntity? noteType,
 
     /// Identifier for the user who owns the note (UUID). Not yet in use
     String? userId,
 
     /// List of categories associated with the note (optional)
+    @JsonKey(includeFromJson: true, includeToJson: false)
     List<CategoryEntity>? categories,
   }) = _NoteEntity;
 
