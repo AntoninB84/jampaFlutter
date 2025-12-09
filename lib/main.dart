@@ -9,8 +9,7 @@ import 'package:jampa_flutter/utils/constants/l10n/app_localizations.dart';
 import 'package:jampa_flutter/utils/constants/styles/themes.dart';
 import 'package:jampa_flutter/utils/helpers/flavors.dart';
 import 'package:jampa_flutter/utils/local_notification_manager.dart';
-import 'package:jampa_flutter/utils/routers/auth_router.dart';
-import 'package:jampa_flutter/utils/routers/main_router.dart';
+import 'package:jampa_flutter/utils/routers/router.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 import 'package:jampa_flutter/workers/reminder_worker.dart';
 
@@ -68,8 +67,7 @@ class MyApp extends StatelessWidget {
               highContrastTheme: MaterialTheme.lightHighContrast,
               darkTheme: MaterialTheme.darkTheme,
               highContrastDarkTheme: MaterialTheme.darkHighContrast,
-              routerConfig: state.status == AuthStatus.authenticated
-                  ? mainRouter : authRouter,
+              routerConfig: router,
             );
           },
         ),

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/bloc/categories/categories_bloc.dart';
-import 'package:jampa_flutter/data/models/category/category.dart';
 import 'package:jampa_flutter/ui/widgets/buttons/buttons.dart';
 import 'package:jampa_flutter/ui/widgets/confirmation_dialog.dart';
 import 'package:jampa_flutter/utils/constants/data/fake_skeleton_data.dart';
 import 'package:jampa_flutter/utils/constants/styles/sizes.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
+import 'package:jampa_flutter/utils/routers/routes.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../data/objects/category_with_count.dart';
@@ -66,7 +66,9 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget> {
                           ),
                           onTap: () {
                             // Navigate to edit category page with category ID as parameter
-                            context.pushNamed("EditCategory", extra: {'id': category.id.toString()});
+                            context.pushNamed(kAppRouteEditCategoryName,
+                                extra: {'id': category.id.toString()}
+                            );
                           },
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,

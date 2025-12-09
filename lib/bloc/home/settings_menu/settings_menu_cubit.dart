@@ -2,12 +2,12 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
-import 'package:jampa_flutter/utils/routers/main_router.dart';
+import 'package:jampa_flutter/utils/routers/routes.dart';
 
 /// Represents the different entries in the settings menu.
 enum SettingsMenuEntry {
-  categories(AppRoutes.categories),
-  noteTypes(AppRoutes.noteTypes),
+  categories(kAppRouteCategoriesPath),
+  noteTypes(kAppRouteNoteTypesPath),
   none("forceNullForSettingsMenuEntry");
 
   const SettingsMenuEntry(this.path);
@@ -17,9 +17,9 @@ enum SettingsMenuEntry {
   String get routeName {
     switch (this) {
       case .categories:
-        return 'Categories';
+        return kAppRouteCategoriesName;
       case .noteTypes:
-        return 'NoteTypes';
+        return kAppRouteNoteTypesName;
       case .none:
         return path;
     }

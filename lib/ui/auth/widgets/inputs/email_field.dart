@@ -34,10 +34,14 @@ class _EmailFieldState extends State<EmailField> {
 
   @override
   void didUpdateWidget(covariant EmailField oldWidget) {
-    if(oldWidget.value != widget.value){
-      _textEditingController.text = widget.value ?? '';
-    }
     super.didUpdateWidget(oldWidget);
+    if(oldWidget.value != widget.value && _textEditingController.text != widget.value){
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _textEditingController.text = widget.value ?? '';
+        }
+      });
+    }
   }
 
   @override

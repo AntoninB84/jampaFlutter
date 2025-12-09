@@ -4,9 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jampa_flutter/bloc/notes/save/save_note_bloc.dart';
 import 'package:jampa_flutter/ui/widgets/buttons/buttons.dart';
-import 'package:jampa_flutter/utils/enums/recurrence_type_enum.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:jampa_flutter/utils/extensions/schedule_extension.dart';
+import 'package:jampa_flutter/utils/routers/routes.dart';
 
 import '../../../data/models/schedule/schedule.dart';
 import '../../../utils/constants/styles/sizes.dart';
@@ -47,7 +47,7 @@ class _SaveRecurrentDateListState extends State<SaveRecurrentDateList> {
         ElevatedButton(
             onPressed: (){
               // Navigate to the RecurrentDateForm to add a new recurrent date.
-              context.pushNamed('RecurrentDateForm', extra: {
+              context.pushNamed(kAppRouteRecurrentDateFormName, extra: {
                 'noteId': widget.noteId,
               });
             },
@@ -94,7 +94,7 @@ class _SaveRecurrentDateListState extends State<SaveRecurrentDateList> {
                     title: Text(displayText),
                     onTap: (){
                       // Navigate to the RecurrentDateForm to edit the selected recurrent date.
-                      context.pushNamed('RecurrentDateForm', extra: {
+                      context.pushNamed(kAppRouteRecurrentDateFormName, extra: {
                         'scheduleId': recurrence.id,
                         'noteId': recurrence.noteId,
                       });

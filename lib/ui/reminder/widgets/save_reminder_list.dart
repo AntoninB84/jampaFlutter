@@ -7,6 +7,7 @@ import 'package:jampa_flutter/ui/widgets/Commons.dart';
 import 'package:jampa_flutter/ui/widgets/buttons/buttons.dart';
 import 'package:jampa_flutter/ui/widgets/confirmation_dialog.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
+import 'package:jampa_flutter/utils/routers/routes.dart';
 
 import '../../../utils/constants/styles/sizes.dart';
 
@@ -64,7 +65,7 @@ class _SaveReminderListState extends State<SaveReminderList> {
                 children: [
                   ElevatedButton(
                       onPressed: (){
-                        context.pushNamed("ReminderForm", extra: {
+                        context.pushNamed(kAppRouteReminderFormName, extra: {
                           'scheduleId': widget.scheduleId,
                         });
                       },
@@ -97,7 +98,7 @@ class _SaveReminderListState extends State<SaveReminderList> {
                               title: Text(displayText),
                               onTap: (){
                                 // Navigate to the ReminderForm for editing
-                                context.pushNamed("ReminderForm", extra: {
+                                context.pushNamed(kAppRouteReminderFormName, extra: {
                                   'scheduleId': reminder.scheduleId,
                                   'reminderId': reminder.id,
                                 });

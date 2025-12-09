@@ -7,6 +7,7 @@ import 'package:jampa_flutter/ui/widgets/buttons/buttons.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/enums/ui_status.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
+import 'package:jampa_flutter/utils/routers/routes.dart';
 
 import '../../../bloc/notes/show/show_note_bloc.dart';
 import '../../../utils/constants/styles/sizes.dart';
@@ -43,7 +44,7 @@ class ShowNoteLayout extends StatelessWidget {
               context: context,
               onPressed: () {
                 // Navigate to edit note page with note ID
-                context.pushNamed("NoteForm", extra: {
+                context.pushNamed(kAppRouteNoteFormName, extra: {
                   "noteId": state.note?.id.toString() ?? ''
                 });
               },

@@ -9,6 +9,7 @@ import 'package:jampa_flutter/ui/widgets/jampa_scaffolded_app_bar_widget.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/enums/ui_status.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
+import 'package:jampa_flutter/utils/routers/routes.dart';
 
 import '../../widgets/headers.dart';
 
@@ -37,7 +38,7 @@ class CategoriesLayout extends StatelessWidget {
                 context: context,
                 title: context.strings.categories,
                 onAddPressed: (){
-                  context.pushNamed("CreateCategory");
+                  context.pushNamed(kAppRouteCreateCategoryName);
                 },
               ),
               // Categories list

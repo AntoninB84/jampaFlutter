@@ -2,11 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jampa_flutter/bloc/notes/form/note_form_helpers.dart';
 import 'package:jampa_flutter/bloc/notes/save/save_note_bloc.dart';
 import 'package:jampa_flutter/ui/widgets/buttons/buttons.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
 import 'package:jampa_flutter/utils/extensions/datetime_extension.dart';
+import 'package:jampa_flutter/utils/routers/routes.dart';
 
 import '../../../data/models/schedule/schedule.dart';
 import '../../../utils/constants/styles/sizes.dart';
@@ -46,7 +46,7 @@ class _SaveSingleDateListState extends State<SaveSingleDateList> {
         ElevatedButton(
             onPressed: (){
               // Navigate to the SingleDateForm to add a new single date schedule element.
-              context.pushNamed('SingleDateForm', extra: {
+              context.pushNamed(kAppRouteSingleDateFormName, extra: {
                 'noteId': widget.noteId,
               });
             },
@@ -74,7 +74,7 @@ class _SaveSingleDateListState extends State<SaveSingleDateList> {
                     title: Text(displayText),
                     onTap: (){
                       // Navigate to the SingleDateForm to edit the selected single date schedule element.
-                      context.pushNamed('SingleDateForm', extra: {
+                      context.pushNamed(kAppRouteSingleDateFormName, extra: {
                         'scheduleId': date.id,
                         'noteId': date.noteId,
                       });

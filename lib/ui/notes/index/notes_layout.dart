@@ -7,6 +7,7 @@ import 'package:jampa_flutter/ui/notes/widgets/lists/notes_list_widget.dart';
 import 'package:jampa_flutter/ui/widgets/headers.dart';
 import 'package:jampa_flutter/ui/widgets/jampa_scaffolded_app_bar_widget.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
+import 'package:jampa_flutter/utils/routers/routes.dart';
 
 class NotesLayout extends StatelessWidget {
   const NotesLayout({super.key});
@@ -40,7 +41,7 @@ class NotesLayout extends StatelessWidget {
                   title: context.strings.notes,
                   onAddPressed: (){
                     // Navigate to note creation form
-                    context.pushNamed("NoteForm");
+                    context.pushNamed(kAppRouteNoteFormName);
                   },
                 ),
                 Expanded(

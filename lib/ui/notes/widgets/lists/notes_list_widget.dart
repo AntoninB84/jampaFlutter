@@ -7,6 +7,7 @@ import 'package:jampa_flutter/data/database.dart';
 import 'package:jampa_flutter/utils/constants/styles/sizes.dart';
 import 'package:jampa_flutter/utils/enums/ui_status.dart';
 import 'package:jampa_flutter/utils/extensions/app_context_extension.dart';
+import 'package:jampa_flutter/utils/routers/routes.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../utils/constants/data/fake_skeleton_data.dart';
@@ -106,7 +107,7 @@ class _NotesListWidgetState extends State<NotesListWidget> {
                                 onTap: (){
                                   // Navigate to note details page upon tapping a note
                                   context.pushNamed(
-                                      'NoteDetails',
+                                      kAppRouteNoteDetailsName,
                                       extra: {'id': note.noteId.toString()}
                                   );
                                 },

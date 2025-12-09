@@ -39,12 +39,6 @@ class _HomePageState extends State<HomePage> {
     _permissionsBloc = serviceLocator<PermissionsBloc>();
     _syncBloc = serviceLocator<SyncBloc>();
 
-    // Start initial sync after a short delay
-    Future.delayed(const Duration(seconds: 2), () {
-      if (mounted) {
-        _syncBloc.add(SyncRequested());
-      }
-    });
     // Trigger permission check on load for notifications and alarms scheduling.
     _permissionsBloc.add(CheckPermissions());
   }

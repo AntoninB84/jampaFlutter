@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:jampa_flutter/data/api/auth_api_client.dart';
 import 'package:jampa_flutter/data/models/auth/auth_response.dart';
 import 'package:jampa_flutter/utils/storage/secure_storage_service.dart';
+import 'package:rxdart/rxdart.dart';
 
 /// Possible authentication statuses
 enum AuthStatus { unknown, authenticated, unauthenticated }
@@ -11,21 +12,32 @@ enum AuthStatus { unknown, authenticated, unauthenticated }
 class AuthRepository {
   final AuthApiClient _apiClient;
   final SecureStorageService _secureStorage;
-  final _controller = StreamController<AuthStatus>.broadcast();
+  final _controller = BehaviorSubject<AuthStatus>.seeded(AuthStatus.unknown);
+  AuthStatus _currentStatus = AuthStatus.unknown;
 
   AuthRepository({
     AuthApiClient? apiClient,
     SecureStorageService? secureStorage,
   })  : _apiClient = apiClient ?? AuthApiClient(),
-        _secureStorage = secureStorage ?? SecureStorageService();
+        _secureStorage = secureStorage ?? SecureStorageService() {
+    // Initialize current status asynchronously
+    _initializeStatus();
+  }
+
+  /// Get the current authentication status
+  AuthStatus get currentStatus => _currentStatus;
+
+  /// Initialize the current status from secure storage
+  Future<void> _initializeStatus() async {
+    final isAuthenticated = await _secureStorage.isAuthenticated();
+    _currentStatus = isAuthenticated ? AuthStatus.authenticated : AuthStatus.unauthenticated;
+    // Emit initial status to the stream
+    _controller.add(_currentStatus);
+  }
 
   /// Stream of authentication status changes
-  Stream<AuthStatus> get status async* {
-    // Check if user is already authenticated
-    final isAuthenticated = await _secureStorage.isAuthenticated();
-    yield isAuthenticated ? AuthStatus.authenticated : AuthStatus.unauthenticated;
-    yield* _controller.stream;
-  }
+  /// BehaviorSubject ensures new listeners get the latest value immediately
+  Stream<AuthStatus> get status => _controller.stream;
 
   /// Register a new user
   Future<UserData> register({
@@ -41,6 +53,7 @@ class AuthRepository {
       );
 
       await _saveAuthData(response);
+      _currentStatus = AuthStatus.authenticated;
       _controller.add(AuthStatus.authenticated);
       return response.user;
     } catch (e) {
@@ -60,6 +73,7 @@ class AuthRepository {
       );
 
       await _saveAuthData(response);
+      _currentStatus = AuthStatus.authenticated;
       _controller.add(AuthStatus.authenticated);
       return response.user;
     } catch (e) {
@@ -92,6 +106,7 @@ class AuthRepository {
   /// Log out the current user
   Future<void> logOut() async {
     await _secureStorage.clearAuthData();
+    _currentStatus = AuthStatus.unauthenticated;
     _controller.add(AuthStatus.unauthenticated);
   }
 

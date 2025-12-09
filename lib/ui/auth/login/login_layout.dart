@@ -5,7 +5,7 @@ import 'package:jampa_flutter/ui/auth/widgets/inputs/password_field.dart';
 import 'package:jampa_flutter/ui/widgets/jampa_scaffolded_app_bar_widget.dart';
 import 'package:jampa_flutter/ui/widgets/snackbar.dart';
 import 'package:jampa_flutter/utils/helpers/flavors.dart';
-import 'package:jampa_flutter/utils/routers/auth_router.dart';
+import 'package:jampa_flutter/utils/routers/routes.dart';
 import '../../../bloc/auth/auth_bloc.dart';
 import '../../../bloc/auth/login/login_bloc.dart';
 import '../../../repository/auth_repository.dart';
@@ -91,7 +91,7 @@ class LoginLayout extends StatelessWidget {
                   TextButton(
                     onPressed: isLoading
                         ? null
-                        : () => context.push(AuthRoutes.register),
+                        : () => context.pushNamed(kAppRouteRegisterName),
                     child: Text(context.strings.login_no_account_prompt),
                   ),
                 ],
