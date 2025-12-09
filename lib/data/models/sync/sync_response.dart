@@ -29,8 +29,11 @@ abstract class SyncResponse with _$SyncResponse {
     /// Note-Category relationships from the server
     @Default([]) List<Map<String, dynamic>> noteCategories,
 
-    /// IDs of successfully processed deletions on the server
-    @Default([]) List<String> deletions,
+    /// Deletions from the server (entities that were deleted on backend)
+    /// Format: [{"entityType": "note", "entityId": "uuid"}, ...]
+    @Default([])
+    @JsonKey(fromJson: _deletionsFromJson, toJson: _deletionsToJson)
+    List<Map<String, dynamic>> deletions,
 
     /// Optional message from the server
     String? message,
@@ -39,4 +42,16 @@ abstract class SyncResponse with _$SyncResponse {
   factory SyncResponse.fromJson(Map<String, dynamic> json) =>
       _$SyncResponseFromJson(json);
 }
+
+/// Custom fromJson for deletions to ensure proper parsing
+List<Map<String, dynamic>> _deletionsFromJson(dynamic json) {
+  if (json == null) return [];
+  if (json is List) {
+    return json.map((e) => e as Map<String, dynamic>).toList();
+  }
+  return [];
+}
+
+/// Custom toJson for deletions
+List<Map<String, dynamic>> _deletionsToJson(List<Map<String, dynamic>> deletions) => deletions;
 

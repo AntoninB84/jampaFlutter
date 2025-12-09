@@ -41,11 +41,9 @@ _SyncResponse _$SyncResponseFromJson(Map<String, dynamic> json) =>
               ?.map((e) => e as Map<String, dynamic>)
               .toList() ??
           const [],
-      deletions:
-          (json['deletions'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          const [],
+      deletions: json['deletions'] == null
+          ? const []
+          : _deletionsFromJson(json['deletions']),
       message: json['message'] as String?,
     );
 
@@ -58,6 +56,6 @@ Map<String, dynamic> _$SyncResponseToJson(_SyncResponse instance) =>
       'schedules': instance.schedules,
       'reminders': instance.reminders,
       'noteCategories': instance.noteCategories,
-      'deletions': instance.deletions,
+      'deletions': _deletionsToJson(instance.deletions),
       'message': instance.message,
     };

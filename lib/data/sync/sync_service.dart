@@ -46,8 +46,16 @@ class SyncService {
       await _storageService.saveLastSyncDate(syncTimestamp);
 
       // Clear processed deletions
+      // Extract entityIds from deletions to track what was processed
       if (response.deletions.isNotEmpty) {
-        await _storageService.removePendingDeletions(response.deletions);
+        final deletionIds = response.deletions
+            .map((d) => d['entityId'] as String?)
+            .where((id) => id != null)
+            .cast<String>()
+            .toList();
+        if (deletionIds.isNotEmpty) {
+          await _storageService.removePendingDeletions(deletionIds);
+        }
       }
 
       return true;
@@ -163,6 +171,9 @@ class SyncService {
 
   /// Process sync response and update local database
   Future<void> _processSyncResponse(SyncResponse response) async {
+    // First, process deletions from the server
+    await _processDeletions(response.deletions);
+
     // Process categories
     for (final categoryJson in response.categories) {
       final deletedAt = categoryJson['deletedAt'];
@@ -255,6 +266,50 @@ class SyncService {
         await _database.into(_database.noteCategoryTable).insertOnConflictUpdate(
           noteCategory.toCompanion(),
         );
+      }
+    }
+  }
+
+  /// Process deletions sent from the server
+  /// Deletions are in format: [{"entityType": "note", "entityId": "uuid"}, ...]
+  Future<void> _processDeletions(List<Map<String, dynamic>> deletions) async {
+    for (final deletion in deletions) {
+      final entityType = deletion['entityType'] as String;
+      final entityId = deletion['entityId'] as String;
+
+      // Delete the entity from the appropriate table based on type
+      switch (entityType) {
+        case 'category':
+          await (_database.delete(_database.categoryTable)
+            ..where((tbl) => tbl.id.equals(entityId))).go();
+          break;
+        case 'noteType':
+          await (_database.delete(_database.noteTypeTable)
+            ..where((tbl) => tbl.id.equals(entityId))).go();
+          break;
+        case 'note':
+          await (_database.delete(_database.noteTable)
+            ..where((tbl) => tbl.id.equals(entityId))).go();
+          break;
+        case 'schedule':
+          await (_database.delete(_database.scheduleTable)
+            ..where((tbl) => tbl.id.equals(entityId))).go();
+          break;
+        case 'reminder':
+          await (_database.delete(_database.reminderTable)
+            ..where((tbl) => tbl.id.equals(entityId))).go();
+          break;
+        case 'noteCategory':
+          // For noteCategory, entityId might be a composite key
+          // Format could be "noteId:categoryId" or separate handling needed
+          final parts = entityId.split(':');
+          if (parts.length == 2) {
+            await (_database.delete(_database.noteCategoryTable)
+              ..where((tbl) => tbl.noteId.equals(parts[0]) & tbl.categoryId.equals(parts[1]))).go();
+          }
+          break;
+        default:
+          print('Unknown entity type for deletion: $entityType');
       }
     }
   }

@@ -23,8 +23,9 @@ mixin _$SyncResponse {
  List<Map<String, dynamic>> get notes;/// Schedules from the server
  List<Map<String, dynamic>> get schedules;/// Reminders from the server
  List<Map<String, dynamic>> get reminders;/// Note-Category relationships from the server
- List<Map<String, dynamic>> get noteCategories;/// IDs of successfully processed deletions on the server
- List<String> get deletions;/// Optional message from the server
+ List<Map<String, dynamic>> get noteCategories;/// Deletions from the server (entities that were deleted on backend)
+/// Format: [{"entityType": "note", "entityId": "uuid"}, ...]
+@JsonKey(fromJson: _deletionsFromJson, toJson: _deletionsToJson) List<Map<String, dynamic>> get deletions;/// Optional message from the server
  String? get message;
 /// Create a copy of SyncResponse
 /// with the given fields replaced by the non-null parameter values.
@@ -58,7 +59,7 @@ abstract mixin class $SyncResponseCopyWith<$Res>  {
   factory $SyncResponseCopyWith(SyncResponse value, $Res Function(SyncResponse) _then) = _$SyncResponseCopyWithImpl;
 @useResult
 $Res call({
- DateTime? lastSyncDate, List<Map<String, dynamic>> categories, List<Map<String, dynamic>> noteTypes, List<Map<String, dynamic>> notes, List<Map<String, dynamic>> schedules, List<Map<String, dynamic>> reminders, List<Map<String, dynamic>> noteCategories, List<String> deletions, String? message
+ DateTime? lastSyncDate, List<Map<String, dynamic>> categories, List<Map<String, dynamic>> noteTypes, List<Map<String, dynamic>> notes, List<Map<String, dynamic>> schedules, List<Map<String, dynamic>> reminders, List<Map<String, dynamic>> noteCategories,@JsonKey(fromJson: _deletionsFromJson, toJson: _deletionsToJson) List<Map<String, dynamic>> deletions, String? message
 });
 
 
@@ -85,7 +86,7 @@ as List<Map<String, dynamic>>,schedules: null == schedules ? _self.schedules : s
 as List<Map<String, dynamic>>,reminders: null == reminders ? _self.reminders : reminders // ignore: cast_nullable_to_non_nullable
 as List<Map<String, dynamic>>,noteCategories: null == noteCategories ? _self.noteCategories : noteCategories // ignore: cast_nullable_to_non_nullable
 as List<Map<String, dynamic>>,deletions: null == deletions ? _self.deletions : deletions // ignore: cast_nullable_to_non_nullable
-as List<String>,message: freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+as List<Map<String, dynamic>>,message: freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -171,7 +172,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( DateTime? lastSyncDate,  List<Map<String, dynamic>> categories,  List<Map<String, dynamic>> noteTypes,  List<Map<String, dynamic>> notes,  List<Map<String, dynamic>> schedules,  List<Map<String, dynamic>> reminders,  List<Map<String, dynamic>> noteCategories,  List<String> deletions,  String? message)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( DateTime? lastSyncDate,  List<Map<String, dynamic>> categories,  List<Map<String, dynamic>> noteTypes,  List<Map<String, dynamic>> notes,  List<Map<String, dynamic>> schedules,  List<Map<String, dynamic>> reminders,  List<Map<String, dynamic>> noteCategories, @JsonKey(fromJson: _deletionsFromJson, toJson: _deletionsToJson)  List<Map<String, dynamic>> deletions,  String? message)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SyncResponse() when $default != null:
 return $default(_that.lastSyncDate,_that.categories,_that.noteTypes,_that.notes,_that.schedules,_that.reminders,_that.noteCategories,_that.deletions,_that.message);case _:
@@ -192,7 +193,7 @@ return $default(_that.lastSyncDate,_that.categories,_that.noteTypes,_that.notes,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( DateTime? lastSyncDate,  List<Map<String, dynamic>> categories,  List<Map<String, dynamic>> noteTypes,  List<Map<String, dynamic>> notes,  List<Map<String, dynamic>> schedules,  List<Map<String, dynamic>> reminders,  List<Map<String, dynamic>> noteCategories,  List<String> deletions,  String? message)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( DateTime? lastSyncDate,  List<Map<String, dynamic>> categories,  List<Map<String, dynamic>> noteTypes,  List<Map<String, dynamic>> notes,  List<Map<String, dynamic>> schedules,  List<Map<String, dynamic>> reminders,  List<Map<String, dynamic>> noteCategories, @JsonKey(fromJson: _deletionsFromJson, toJson: _deletionsToJson)  List<Map<String, dynamic>> deletions,  String? message)  $default,) {final _that = this;
 switch (_that) {
 case _SyncResponse():
 return $default(_that.lastSyncDate,_that.categories,_that.noteTypes,_that.notes,_that.schedules,_that.reminders,_that.noteCategories,_that.deletions,_that.message);case _:
@@ -212,7 +213,7 @@ return $default(_that.lastSyncDate,_that.categories,_that.noteTypes,_that.notes,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( DateTime? lastSyncDate,  List<Map<String, dynamic>> categories,  List<Map<String, dynamic>> noteTypes,  List<Map<String, dynamic>> notes,  List<Map<String, dynamic>> schedules,  List<Map<String, dynamic>> reminders,  List<Map<String, dynamic>> noteCategories,  List<String> deletions,  String? message)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( DateTime? lastSyncDate,  List<Map<String, dynamic>> categories,  List<Map<String, dynamic>> noteTypes,  List<Map<String, dynamic>> notes,  List<Map<String, dynamic>> schedules,  List<Map<String, dynamic>> reminders,  List<Map<String, dynamic>> noteCategories, @JsonKey(fromJson: _deletionsFromJson, toJson: _deletionsToJson)  List<Map<String, dynamic>> deletions,  String? message)?  $default,) {final _that = this;
 switch (_that) {
 case _SyncResponse() when $default != null:
 return $default(_that.lastSyncDate,_that.categories,_that.noteTypes,_that.notes,_that.schedules,_that.reminders,_that.noteCategories,_that.deletions,_that.message);case _:
@@ -227,7 +228,7 @@ return $default(_that.lastSyncDate,_that.categories,_that.noteTypes,_that.notes,
 @JsonSerializable()
 
 class _SyncResponse implements SyncResponse {
-  const _SyncResponse({this.lastSyncDate, final  List<Map<String, dynamic>> categories = const [], final  List<Map<String, dynamic>> noteTypes = const [], final  List<Map<String, dynamic>> notes = const [], final  List<Map<String, dynamic>> schedules = const [], final  List<Map<String, dynamic>> reminders = const [], final  List<Map<String, dynamic>> noteCategories = const [], final  List<String> deletions = const [], this.message}): _categories = categories,_noteTypes = noteTypes,_notes = notes,_schedules = schedules,_reminders = reminders,_noteCategories = noteCategories,_deletions = deletions;
+  const _SyncResponse({this.lastSyncDate, final  List<Map<String, dynamic>> categories = const [], final  List<Map<String, dynamic>> noteTypes = const [], final  List<Map<String, dynamic>> notes = const [], final  List<Map<String, dynamic>> schedules = const [], final  List<Map<String, dynamic>> reminders = const [], final  List<Map<String, dynamic>> noteCategories = const [], @JsonKey(fromJson: _deletionsFromJson, toJson: _deletionsToJson) final  List<Map<String, dynamic>> deletions = const [], this.message}): _categories = categories,_noteTypes = noteTypes,_notes = notes,_schedules = schedules,_reminders = reminders,_noteCategories = noteCategories,_deletions = deletions;
   factory _SyncResponse.fromJson(Map<String, dynamic> json) => _$SyncResponseFromJson(json);
 
 /// Current server timestamp to be used as next lastSyncDate
@@ -287,10 +288,12 @@ class _SyncResponse implements SyncResponse {
   return EqualUnmodifiableListView(_noteCategories);
 }
 
-/// IDs of successfully processed deletions on the server
- final  List<String> _deletions;
-/// IDs of successfully processed deletions on the server
-@override@JsonKey() List<String> get deletions {
+/// Deletions from the server (entities that were deleted on backend)
+/// Format: [{"entityType": "note", "entityId": "uuid"}, ...]
+ final  List<Map<String, dynamic>> _deletions;
+/// Deletions from the server (entities that were deleted on backend)
+/// Format: [{"entityType": "note", "entityId": "uuid"}, ...]
+@override@JsonKey(fromJson: _deletionsFromJson, toJson: _deletionsToJson) List<Map<String, dynamic>> get deletions {
   if (_deletions is EqualUnmodifiableListView) return _deletions;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_deletions);
@@ -332,7 +335,7 @@ abstract mixin class _$SyncResponseCopyWith<$Res> implements $SyncResponseCopyWi
   factory _$SyncResponseCopyWith(_SyncResponse value, $Res Function(_SyncResponse) _then) = __$SyncResponseCopyWithImpl;
 @override @useResult
 $Res call({
- DateTime? lastSyncDate, List<Map<String, dynamic>> categories, List<Map<String, dynamic>> noteTypes, List<Map<String, dynamic>> notes, List<Map<String, dynamic>> schedules, List<Map<String, dynamic>> reminders, List<Map<String, dynamic>> noteCategories, List<String> deletions, String? message
+ DateTime? lastSyncDate, List<Map<String, dynamic>> categories, List<Map<String, dynamic>> noteTypes, List<Map<String, dynamic>> notes, List<Map<String, dynamic>> schedules, List<Map<String, dynamic>> reminders, List<Map<String, dynamic>> noteCategories,@JsonKey(fromJson: _deletionsFromJson, toJson: _deletionsToJson) List<Map<String, dynamic>> deletions, String? message
 });
 
 
@@ -359,7 +362,7 @@ as List<Map<String, dynamic>>,schedules: null == schedules ? _self._schedules : 
 as List<Map<String, dynamic>>,reminders: null == reminders ? _self._reminders : reminders // ignore: cast_nullable_to_non_nullable
 as List<Map<String, dynamic>>,noteCategories: null == noteCategories ? _self._noteCategories : noteCategories // ignore: cast_nullable_to_non_nullable
 as List<Map<String, dynamic>>,deletions: null == deletions ? _self._deletions : deletions // ignore: cast_nullable_to_non_nullable
-as List<String>,message: freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+as List<Map<String, dynamic>>,message: freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

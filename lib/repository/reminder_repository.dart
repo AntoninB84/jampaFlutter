@@ -86,6 +86,9 @@ class ReminderRepository {
 
   /// Deletes all reminders associated with a specific schedule ID.
   Future<void> deleteRemindersByScheduleId(String scheduleId) async {
-    await ReminderDao.deleteRemindersByScheduleId(scheduleId);
+    List<ReminderEntity> reminders = await getAllRemindersByScheduleId(scheduleId);
+    for(var reminder in reminders) {
+      await deleteReminderById(reminder.id);
+    }
   }
 }
