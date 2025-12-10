@@ -143,14 +143,20 @@ extension ScheduleExtension on ScheduleEntity {
             // RecurrenceDay is a int containing all the days of the week the schedule occurs on
             // For example, if the schedule occurs on Monday, Wednesday and Friday, recurrenceDay = 135
             // We need to find the next occurrence based on the current day of the week
-            int analysedWeekday = currentlyAnalysedDate.weekday; // 1 = Monday
             List<int> daysOfWeek = recurrenceDayAsList;
 
             // Move to the next day until we find a matching weekday
-            if(daysOfWeek.contains(analysedWeekday)){
-              currentlyAnalysedDate = currentlyAnalysedDate.add(
-                  Duration(days: 1)
-              );
+            // Start by moving at least one day forward to find the next occurrence
+            currentlyAnalysedDate = currentlyAnalysedDate.add(Duration(days: 1));
+
+            // Keep advancing until we find a day that matches one of the scheduled weekdays
+            while(!daysOfWeek.contains(currentlyAnalysedDate.weekday)){
+              currentlyAnalysedDate = currentlyAnalysedDate.add(Duration(days: 1));
+
+              // Safety check: if we've moved more than 7 days, break to avoid infinite loop
+              if(currentlyAnalysedDate.difference(startDateTime!).inDays > 365 * 10){
+                return null;
+              }
             }
           }
           default: return null;
