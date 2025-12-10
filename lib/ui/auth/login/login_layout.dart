@@ -34,9 +34,16 @@ class LoginLayout extends StatelessWidget {
                 // Reset form on successful login
                 context.read<LoginBloc>().add(const LoginFormReset());
               } else if (state.errorMessage != null) {
-                FlavorConfig.appFlavor.isProduction ?
-                SnackBarX.showError(context, context.strings.generic_error_message) :
-                SnackBarX.showError(context, state.errorMessage!);
+                // Get localized error message
+                String errorMessage;
+                if (state.errorMessage == 'login_invalid_credentials_error') {
+                  errorMessage = context.strings.login_invalid_credentials_error;
+                } else if (FlavorConfig.appFlavor.isProduction) {
+                  errorMessage = context.strings.generic_error_message;
+                } else {
+                  errorMessage = state.errorMessage!;
+                }
+                SnackBarX.showError(context, errorMessage);
               }
             },
           ),

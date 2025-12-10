@@ -49,6 +49,7 @@
     "signup_confirm_password_field_hint": "Confirmez votre mot de passe",
     "signup_success_feedback": "Inscription réussie.",
     "signup_username_invalid_length_error": "Le nom d'utilisateur doit comporter entre 3 et 120 caractères",
+    "signup_email_already_exists_error": "Cette adresse e-mail est déjà utilisée",
 
     "@logout": {},
     "logout_confirmation_title": "Se déconnecter",

@@ -45,20 +45,16 @@ class AuthRepository {
     required String email,
     required String password,
   }) async {
-    try {
-      final response = await _apiClient.register(
-        username: username,
-        email: email,
-        password: password,
-      );
+    final response = await _apiClient.register(
+      username: username,
+      email: email,
+      password: password,
+    );
 
-      await _saveAuthData(response);
-      _currentStatus = AuthStatus.authenticated;
-      _controller.add(AuthStatus.authenticated);
-      return response.user;
-    } catch (e) {
-      throw AuthException('Registration failed: ${e.toString()}');
-    }
+    await _saveAuthData(response);
+    _currentStatus = AuthStatus.authenticated;
+    _controller.add(AuthStatus.authenticated);
+    return response.user;
   }
 
   /// Log in an existing user
@@ -66,19 +62,15 @@ class AuthRepository {
     required String email,
     required String password,
   }) async {
-    try {
-      final response = await _apiClient.login(
-        email: email,
-        password: password,
-      );
+    final response = await _apiClient.login(
+      email: email,
+      password: password,
+    );
 
-      await _saveAuthData(response);
-      _currentStatus = AuthStatus.authenticated;
-      _controller.add(AuthStatus.authenticated);
-      return response.user;
-    } catch (e) {
-      throw AuthException('Login failed: ${e.toString()}');
-    }
+    await _saveAuthData(response);
+    _currentStatus = AuthStatus.authenticated;
+    _controller.add(AuthStatus.authenticated);
+    return response.user;
   }
 
   /// Refresh the access token

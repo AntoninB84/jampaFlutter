@@ -156,6 +156,10 @@ class AppLocalizationsFr extends AppLocalizations {
       'Le nom d\'utilisateur doit comporter entre 3 et 120 caractères';
 
   @override
+  String get signup_email_already_exists_error =>
+      'Cette adresse e-mail est déjà utilisée';
+
+  @override
   String get logout_confirmation_title => 'Se déconnecter';
 
   @override

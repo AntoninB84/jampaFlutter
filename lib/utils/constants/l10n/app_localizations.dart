@@ -370,6 +370,12 @@ abstract class AppLocalizations {
   /// **'Le nom d\'utilisateur doit comporter entre 3 et 120 caractères'**
   String get signup_username_invalid_length_error;
 
+  /// No description provided for @signup_email_already_exists_error.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette adresse e-mail est déjà utilisée'**
+  String get signup_email_already_exists_error;
+
   /// No description provided for @logout_confirmation_title.
   ///
   /// In fr, this message translates to:

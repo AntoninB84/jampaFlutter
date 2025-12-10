@@ -33,9 +33,16 @@ class RegisterLayout extends StatelessWidget {
                 // Reset form on successful registration
                 context.read<RegisterBloc>().add(const RegisterFormReset());
               } else if (state.errorMessage != null) {
-                FlavorConfig.appFlavor.isProduction ?
-                SnackBarX.showError(context, context.strings.generic_error_message) :
-                SnackBarX.showError(context, state.errorMessage!);
+                // Get localized error message
+                String errorMessage;
+                if (state.errorMessage == 'signup_email_already_exists_error') {
+                  errorMessage = context.strings.signup_email_already_exists_error;
+                } else if (FlavorConfig.appFlavor.isProduction) {
+                  errorMessage = context.strings.generic_error_message;
+                } else {
+                  errorMessage = state.errorMessage!;
+                }
+                SnackBarX.showError(context, errorMessage);
               }
             },
           ),

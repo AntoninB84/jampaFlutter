@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:jampa_flutter/utils/service_locator.dart';
 
+import '../../data/api/auth_api_client.dart';
 import '../../data/database.dart';
 import '../../data/models/auth/auth_response.dart';
 import '../../data/models/user/user.dart';
@@ -75,6 +76,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await _saveUserFromAuthData(userData);
 
       // State will be updated by the status stream subscription
+    } on AuthApiException catch (e) {
+      // Handle specific status codes
+      if (e.statusCode == 401) {
+        emit(const AuthState.error('login_invalid_credentials_error'));
+      } else {
+        emit(AuthState.error(e.message));
+      }
+      emit(const AuthState.unauthenticated());
     } catch (e) {
       emit(AuthState.error(e.toString()));
       emit(const AuthState.unauthenticated());
@@ -98,6 +107,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await _saveUserFromAuthData(userData);
 
       // State will be updated by the status stream subscription
+    } on AuthApiException catch (e) {
+      // Handle specific status codes
+      if (e.statusCode == 409) {
+        emit(const AuthState.error('signup_email_already_exists_error'));
+      } else {
+        emit(AuthState.error(e.message));
+      }
+      emit(const AuthState.unauthenticated());
     } catch (e) {
       emit(AuthState.error(e.toString()));
       emit(const AuthState.unauthenticated());
