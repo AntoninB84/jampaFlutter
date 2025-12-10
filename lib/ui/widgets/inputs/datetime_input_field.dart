@@ -38,8 +38,12 @@ class _DatetimeInputFieldState extends State<DatetimeInputField> {
   void didUpdateWidget(covariant DatetimeInputField oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.initialDateTime != widget.initialDateTime) {
-      setState(() {
-        selectedDateTime = widget.initialDateTime;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if(mounted){
+          setState(() {
+            selectedDateTime = widget.initialDateTime;
+          });
+        }
       });
     }
   }

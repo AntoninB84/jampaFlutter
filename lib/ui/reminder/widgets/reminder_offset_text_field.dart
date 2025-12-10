@@ -34,10 +34,14 @@ class _ReminderOffsetTextFieldState extends State<ReminderOffsetTextField> {
 
   @override
   void didUpdateWidget(covariant ReminderOffsetTextField oldWidget) {
-    if(oldWidget.value != widget.value && widget.value != null){
-      _textEditingController.text = widget.value!;
-    }
     super.didUpdateWidget(oldWidget);
+    if(oldWidget.value != widget.value && _textEditingController.text != widget.value){
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _textEditingController.text = widget.value ?? '';
+        }
+      });
+    }
   }
 
   @override

@@ -50,10 +50,14 @@ class _RecurrenceIntervalTextFieldState extends State<RecurrenceIntervalTextFiel
 
   @override
   void didUpdateWidget(covariant RecurrenceIntervalTextField oldWidget) {
-    if(oldWidget.value != widget.value && widget.value != null){
-      _textEditingController.text = widget.value!;
-    }
     super.didUpdateWidget(oldWidget);
+    if(oldWidget.value != widget.value && _textEditingController.text != widget.value){
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _textEditingController.text = widget.value ?? '';
+        }
+      });
+    }
   }
 
   @override

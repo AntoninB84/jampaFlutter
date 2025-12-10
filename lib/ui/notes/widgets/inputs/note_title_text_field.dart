@@ -34,10 +34,14 @@ class _NoteTitleTextFieldState extends State<NoteTitleTextField> {
 
   @override
   void didUpdateWidget(covariant NoteTitleTextField oldWidget) {
-    if(oldWidget.value != widget.value){
-      _textEditingController.text = widget.value ?? '';
-    }
     super.didUpdateWidget(oldWidget);
+    if(oldWidget.value != widget.value && _textEditingController.text != widget.value){
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _textEditingController.text = widget.value ?? '';
+        }
+      });
+    }
   }
 
   @override
