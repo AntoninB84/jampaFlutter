@@ -18,11 +18,14 @@ class SaveReminderList extends StatefulWidget {
   const SaveReminderList({
     super.key,
     required this.scheduleId,
+    required this.noteId,
     this.isEditing = false,
   });
 
   /// The ID of the schedule to which the reminders are associated.
   final String scheduleId;
+  /// The ID of the note to which the reminders are associated.
+  final String noteId;
 
   /// A flag indicating whether the reminders are being edited.
   /// This is used to customize the delete confirmation message.
@@ -67,7 +70,7 @@ class _SaveReminderListState extends State<SaveReminderList> {
                       onPressed: (){
                         context.pushNamed(kAppRouteReminderFormName, extra: {
                           'scheduleId': widget.scheduleId,
-                          'noteId': state.note?.id ?? '',
+                          'noteId': widget.noteId,
                         });
                       },
                       child: Text(context.strings.create_date_add_reminder_button)

@@ -90,5 +90,5 @@ void setupServiceLocator() async {
     ),
   );
   serviceLocator.registerLazySingleton<ReminderCubit>(() => ReminderCubit());
-  serviceLocator.registerFactory(() => SaveNoteBloc());
+  serviceLocator.registerLazySingleton(() => SaveNoteBloc());
 }

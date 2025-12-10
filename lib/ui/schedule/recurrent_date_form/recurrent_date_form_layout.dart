@@ -213,6 +213,7 @@ class RecurrentDateFormLayout extends StatelessWidget {
                   // Reminder list for the recurrent date
                   SaveReminderList(
                     scheduleId: state.newRecurrentDateFormElements.scheduleId,
+                    noteId: state.newRecurrentDateFormElements.noteId,
                     isEditing: state.isEditing,
                   ),
                   const SizedBox(height: kGap32,),

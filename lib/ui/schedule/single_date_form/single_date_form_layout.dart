@@ -91,6 +91,7 @@ class SingleDateFormLayout extends StatelessWidget {
                   // Reminder List Widget for the single date
                   SaveReminderList(
                     scheduleId: state.newSingleDateFormElements.scheduleId,
+                    noteId: state.newSingleDateFormElements.noteId,
                     isEditing: state.isEditing,
                   ),
                   const SizedBox(height: kGap32,),
