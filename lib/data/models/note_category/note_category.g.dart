@@ -11,7 +11,6 @@ _NoteCategoryEntity _$NoteCategoryEntityFromJson(Map<String, dynamic> json) =>
       noteId: json['noteId'] as String,
       categoryId: json['categoryId'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
     );
 
 Map<String, dynamic> _$NoteCategoryEntityToJson(_NoteCategoryEntity instance) =>
@@ -19,5 +18,4 @@ Map<String, dynamic> _$NoteCategoryEntityToJson(_NoteCategoryEntity instance) =>
       'noteId': instance.noteId,
       'categoryId': instance.categoryId,
       'createdAt': instance.createdAt.toIso8601String(),
-      'updatedAt': instance.updatedAt.toIso8601String(),
     };

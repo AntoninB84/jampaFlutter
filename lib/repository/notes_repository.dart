@@ -27,7 +27,6 @@ class NotesRepository {
             noteId: insertedNote.id,
             categoryId: category.id,
             createdAt: now,
-            updatedAt: now,
           );
         }).toList();
         await NoteCategoryDao.saveMultipleNoteCategories(noteCategories);

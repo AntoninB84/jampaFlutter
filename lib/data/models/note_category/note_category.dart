@@ -16,7 +16,6 @@ class NoteCategoryTable extends drift.Table {
   drift.TextColumn get noteId => text().references(NoteTable, #id)();
   drift.TextColumn get categoryId => text().references(CategoryTable, #id)();
   drift.DateTimeColumn get createdAt => dateTime().withDefault(drift.currentDateAndTime)();
-  drift.DateTimeColumn get updatedAt => dateTime().withDefault(drift.currentDateAndTime)();
 
   @override
   Set<drift.Column<Object>> get primaryKey => {noteId, categoryId};
@@ -36,8 +35,6 @@ abstract class NoteCategoryEntity with _$NoteCategoryEntity {
     required String categoryId,
     /// Timestamp when the relationship was created
     required DateTime createdAt,
-    /// Timestamp when the relationship was last updated
-    required DateTime updatedAt,
   }) = _NoteCategoryEntity;
 
   /// Converts the entity to a companion object for database operations
@@ -46,7 +43,6 @@ abstract class NoteCategoryEntity with _$NoteCategoryEntity {
       noteId: drift.Value(noteId),
       categoryId: drift.Value(categoryId),
       createdAt: drift.Value(createdAt),
-      updatedAt: drift.Value(updatedAt),
     );
   }
 

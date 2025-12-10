@@ -163,9 +163,9 @@ class SyncService {
       return await (_database.select(_database.noteCategoryTable).get());
     }
 
-    // Get note categories updated after lastSyncDate
+    // Get note categories created after lastSyncDate
     return await (_database.select(_database.noteCategoryTable)
-          ..where((tbl) => tbl.updatedAt.isBiggerThanValue(lastSyncDate)))
+          ..where((tbl) => tbl.createdAt.isBiggerThanValue(lastSyncDate)))
         .get();
   }
 
